@@ -1,0 +1,123 @@
+{
+  "home": {
+    "portfolio_stable": "Your portfolio is stable today.",
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening"
+  },
+  "navigation": {
+    "home": "Home"
+  },
+  "shortcuts": {
+    "coffee": "Coffee",
+    "transport": "Transport",
+    "dining": "Dining",
+    "retail": "Retail",
+    "utility": "Utility",
+    "fuel": "Fuel",
+    "custom": "Custom"
+  },
+  "history": {
+    "title": "History",
+    "empty": "No transactions yet",
+    "search": "Search...",
+    "total_spent": "Total spent",
+    "total_income": "Total income",
+    "high_badge": "High"
+  },
+  "reports": {
+    "title": "Reports",
+    "financial_health": "Financial Health",
+    "cash_flow": "Cash Flow",
+    "allocation": "Allocation",
+    "velocity": "Velocity",
+    "budget_title": "Active Budgets",
+    "income": "Income",
+    "expenses": "Expenses",
+    "net": "Net",
+    "download_csv": "Download CSV",
+    "alert": "Alert",
+    "good": "Good",
+    "no_data": "No data"
+  },
+  "accounts": {
+    "title": "Accounts",
+    "add": "Add",
+    "balance": "Balance",
+    "recurring_bills": "Recurring Bills",
+    "mark_paid": "Mark paid",
+    "pay_now": "Pay Now",
+    "pending_badge": "Pending",
+    "recent_transactions": "Recent Transactions",
+    "view_all": "View All",
+    "due_soon": "Due Soon"
+  },
+  "goals": {
+    "title": "Goals",
+    "tagline": "Your future, curated.",
+    "add": "New Goal",
+    "add_funds": "Add Funds",
+    "target": "Goal",
+    "current": "Current",
+    "completed": "Completed",
+    "progress": "Progress",
+    "remaining": "Remaining",
+    "boost_savings": "Boost Savings",
+    "victories": "Victories",
+    "estimated": "Estimated",
+    "low_progress": "Low Progress"
+  },
+  "categories": {
+    "food": "Food",
+    "transport": "Transport",
+    "drinks": "Drinks",
+    "shopping": "Shopping",
+    "health": "Health",
+    "entertainment": "Entertainment",
+    "home": "Home",
+    "education": "Education",
+    "travel": "Travel",
+    "salary": "Salary",
+    "freelance": "Freelance",
+    "gift": "Gift",
+    "investment": "Investment",
+    "other": "Other"
+  },
+  "toast": {
+    "added": "✓ Added",
+    "deleted": "Deleted",
+    "saved": "Saved",
+    "exported": "Exported",
+    "goal_updated": "Goal updated",
+    "paid_marked": "Marked as paid"
+  },
+  "status": {
+    "cleared": "Cleared",
+    "pending": "Pending",
+    "failed": "Failed"
+  },
+  "frequency": {
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "yearly": "Yearly"
+  },
+  "profile": {
+    "title": "Profile",
+    "display": "Display",
+    "language": "Language",
+    "currency": "Currency",
+    "dark_mode": "Dark Mode",
+    "hide_balances": "Hide Balances",
+    "budget": "Budget",
+    "monthly_budget": "Monthly Budget",
+    "daily_budget": "Daily Budget",
+    "notifications": "Notifications",
+    "shortcuts": "Shortcuts",
+    "data": "Data",
+    "export": "Export CSV",
+    "reset_all": "Reset All Data",
+    "about": "About",
+    "version": "Version"
+  }
+}

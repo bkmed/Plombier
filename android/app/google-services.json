@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "26819369963",
+    "project_id": "plombier-ce455",
+    "storage_bucket": "plombier-ce455.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:26819369963:android:44e76d6180721c9be597ae",
+        "android_client_info": {
+          "package_name": "com.bk.plombier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi--WAHldCJ-0glp4EBSjpCV9YkmyzZtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
