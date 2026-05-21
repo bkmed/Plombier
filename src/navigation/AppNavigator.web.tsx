@@ -1,1720 +1,3203 @@
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../store';
+import { toggleFavoriteAction, addListing, updateListing, deleteListing } from '../store/slices/partsSlice';
+import { addCategory, updateCategory, deleteCategory } from '../store/slices/categoriesSlice';
+import { addUser, updateUser } from '../store/slices/usersSlice';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { authService } from '../services/authService';
-import {
-  addTransaction,
-  selectTotalBalance,
-  selectTransactions,
-  selectAccounts,
-  selectRecurringRules,
-  selectOverdueBills,
-  selectWalletSettings,
-  markRecurringPaid,
-} from '../store/slices/walletSlice';
-import {
-  selectActiveGoals,
-  selectCompletedGoals,
-  addToGoal,
-} from '../store/slices/goalsSlice';
-import {
-  selectUnreadCount,
-} from '../store/slices/notificationsSlice';
 
-// Core Tab Names
-type TabName = 'Home' | 'Reports' | 'Accounts' | 'Goals' | 'Profile';
+// ==========================================
+// BRAND LOGO SVG
+// ==========================================
+const LogoSVG = ({ size = 44, className = "" }: { size?: number; className?: string }) => {
+  return (
+    <svg 
+      width={size} 
+      height={size} 
+      viewBox="0 0 100 100" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <circle cx="50" cy="50" r="48" fill="#1E3A5F" />
+      <line x1="30" y1="70" x2="70" y2="30" stroke="white" strokeWidth="16" strokeLinecap="round" />
+      <line x1="30" y1="70" x2="70" y2="30" stroke="#1E3A5F" strokeWidth="6" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="50" y2="12" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="50" y2="88" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="12" y2="50" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="88" y2="50" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="23" y2="23" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="77" y2="23" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="23" y2="77" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <line x1="50" y1="50" x2="77" y2="77" stroke="#F97316" strokeWidth="4.5" strokeLinecap="round" />
+      <circle cx="50" cy="50" r="8" stroke="#F97316" strokeWidth="4" fill="#1E3A5F" />
+    </svg>
+  );
+};
 
-// Outline SVG renderers for Quick Log matching mockups
-const renderQuickLogIcon = (category: string) => {
-  const strokeColor = '#005994';
-  switch (category) {
-    case 'coffee':
-      return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-          <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-          <line x1="6" y1="1" x2="6" y2="4" />
-          <line x1="10" y1="1" x2="10" y2="4" />
-          <line x1="14" y1="1" x2="14" y2="4" />
-        </svg>
-      );
-    case 'transport':
-      return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="5" y="2" width="14" height="16" rx="2" ry="2" />
-          <line x1="5" y1="10" x2="19" y2="10" />
-          <line x1="9" y1="18" x2="9" y2="18.01" />
-          <line x1="15" y1="18" x2="15" y2="18.01" />
-          <path d="M19 14H5" />
-          <path d="M4 22h3" />
-          <path d="M17 22h3" />
-        </svg>
-      );
-    case 'dining':
-      return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2" />
-          <line x1="7" y1="2" x2="7" y2="8" />
-          <line x1="21" y1="2" x2="21" y2="22" />
-          <path d="M21 2c-3 0-5 2-5 5v5c0 1 1 2 2 2h3" />
-          <line x1="7" y1="11" x2="7" y2="22" />
-        </svg>
-      );
-    case 'utility':
-    case 'utilities':
-      return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-          <polyline points="14 2 14 8 20 8" />
-          <line x1="16" y1="13" x2="8" y2="13" />
-          <line x1="16" y1="17" x2="8" y2="17" />
-          <polyline points="10 9 9 9 8 9" />
-        </svg>
-      );
-    case 'retail':
-      return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <path d="M16 10a4 4 0 0 1-8 0" />
-        </svg>
-      );
-    default:
-      return (
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" />
-        </svg>
-      );
+// ==========================================
+// HIGH-FIDELITY PRODUCT SVGS FOR MARKETPLACE
+// ==========================================
+const FaucetSVG = ({ className = "w-16 h-16" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M25 80 h50" strokeWidth="4" stroke="#475569" />
+    <path d="M40 80 V42 c0 -12 8 -22 22 -22 h8" strokeWidth="6" stroke="#64748B" />
+    <path d="M70 20 v8" strokeWidth="5" stroke="#94A3B8" />
+    <path d="M66 28 h8" strokeWidth="2" stroke="#475569" />
+    <path d="M32 50 h12" strokeWidth="4.5" stroke="#334155" />
+    <circle cx="32" cy="50" r="3.5" fill="#EF4444" stroke="none" />
+    <circle cx="44" cy="50" r="3.5" fill="#3B82F6" stroke="none" />
+    <path d="M43 35 c0 -5 5 -10 10 -10" stroke="white" strokeWidth="1.5" opacity="0.6" />
+  </svg>
+);
+
+const BoilerSVG = ({ className = "w-16 h-16" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="25" y="15" width="50" height="66" rx="6" fill="#F8FAFC" stroke="#334155" strokeWidth="3" />
+    <rect x="42" y="24" width="16" height="4" rx="1" fill="#1E3A5F" stroke="none" />
+    <rect x="38" y="55" width="24" height="12" rx="2" fill="#0F172A" stroke="#475569" strokeWidth="1.5" />
+    <circle cx="44" cy="72" r="2.5" fill="#64748B" />
+    <circle cx="56" cy="72" r="2.5" fill="#64748B" />
+    <path d="M35 81 v10" stroke="#B45309" strokeWidth="4.5" />
+    <path d="M50 81 v10" stroke="#CBD5E1" strokeWidth="4" />
+    <path d="M65 81 v10" stroke="#B45309" strokeWidth="4.5" />
+    <circle cx="35" cy="86" r="3.5" fill="#EF4444" stroke="none" />
+    <circle cx="65" cy="86" r="3.5" fill="#06B6D4" stroke="none" />
+  </svg>
+);
+
+const CopperFittingsSVG = ({ className = "w-16 h-16" }: { className?: string }) => (
+  <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 28 h32 v32" stroke="#EA580C" strokeWidth="8" strokeLinecap="square" />
+    <circle cx="22" cy="28" r="5" fill="#C2410C" stroke="none" />
+    <circle cx="54" cy="60" r="5" fill="#C2410C" stroke="none" />
+    <path d="M52 35 h32 M68 35 v30" stroke="#EA580C" strokeWidth="7" />
+    <circle cx="52" cy="35" r="4.5" fill="#C2410C" stroke="none" />
+    <circle cx="84" cy="35" r="4.5" fill="#C2410C" stroke="none" />
+    <circle cx="68" cy="65" r="4.5" fill="#C2410C" stroke="none" />
+    <rect x="30" y="72" width="28" height="10" rx="1.5" fill="#EA580C" stroke="#C2410C" strokeWidth="1.5" />
+  </svg>
+);
+
+// ==========================================
+// LOCAL MODELS & TRANSLATIONS
+// ==========================================
+type Role = 'anonyme' | 'user' | 'admin';
+
+interface Product {
+  id: string;
+  title: string;
+  subtitle: string;
+  price: number;
+  condition: 'comme neuf' | 'bon état' | 'pour pièces';
+  category: string;
+  description: string;
+  image: string; // 'faucet' | 'boiler' | 'copper_fittings'
+  isFeatured?: boolean;
+  isAvailable?: boolean;
+}
+
+interface LocalCategory {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const translations = {
+  FR: {
+    accueil: "Accueil",
+    services: "Services",
+    zones: "Zone d'intervention",
+    pieces: "Pièces d'occasion",
+    mon_profil: "Profil",
+    paiement: "Paiement",
+    admin: "Admin",
+    tagline: "Plomberie · Climatisation · Gaz · Chauffage",
+    whatsapp_msg: "Bonjour, j'ai besoin d'un plombier.",
+    devis_msg: "Bonjour, je souhaite demander un devis pour le service : ",
+    call: "Appeler",
+    whatsapp: "WhatsApp",
+    demander_devis: "Demander un devis",
+    maintenance: "BIENTÔT DISPONIBLE",
+    bientot_dispo: "Paiement en ligne",
+    maintenance_desc: "Nous mettons en place notre passerelle de paiement sécurisé pour la Tunisie (ClicToPay / Sobflous). Bientôt, commandez vos pièces d'occasion avec livraison à domicile !",
+    avertir: "M'avertir",
+    progression: "Avancement de l'intégration",
+    retour_accueil: "Retour à l'accueil",
+    resume_commande: "Résumé de la commande",
+    tableau_bord: "Tableau de Bord",
+    tableau_bord_desc: "Gérez vos informations personnelles et retrouvez vos pièces de rechange coup de cœur.",
+    compte_particulier: "Client Particulier",
+    securite: "Sécurité & Mot de Passe",
+    mdp_actuel: "Mot de passe actuel",
+    nouveau_mdp: "Nouveau mot de passe",
+    mettre_a_jour: "Mettre à jour le mot de passe",
+    mes_favoris: "Mes Favoris",
+    parcourir_market: "Parcourir le catalogue",
+    plus_favoris: "Envie d'autres pièces ?",
+    plus_favoris_desc: "Ajoutez un cœur à nos articles d'occasion pour les sauvegarder instantanément ici.",
+    consulter: "Fiche technique",
+    nos_expertises: "Nos Expertises Techniques",
+    expertises_desc: "Dépannages et rénovations sanitaires professionnelles sur tout le Grand Tunis et le Sahel.",
+    plomberie_generale: "Plomberie Générale",
+    plomberie_desc_1: "Détection de fuites par caméra thermique",
+    plomberie_desc_2: "Installation de robinetterie haut de gamme",
+    plomberie_desc_3: "Remplacement de colonnes d'évacuation",
+    climatisation: "Climatisation",
+    clim_desc_1: "Recharge de gaz réfrigérant R410/R32",
+    clim_desc_2: "Nettoyage antibactérien certifié",
+    clim_desc_3: "Optimisation de consommation énergétique",
+    installation_gaz: "Installation Gaz",
+    gaz_desc_1: "Mise en conformité des installations STEG",
+    gaz_desc_2: "Pose de détecteurs de monoxyde de carbone",
+    gaz_desc_3: "Raccordement sécurisé cuisinières/chaudières",
+    chauffage_central: "Chauffage Central",
+    chauffage_desc_1: "Entretien annuel complet de chaudière",
+    chauffage_desc_2: "Désembouage hydrodynamique de circuit",
+    chauffage_desc_3: "Régulation intelligente par thermostat connecté",
+    experience_val: "15+",
+    experience_lbl: "Années d'Expérience",
+    dispo_val: "24/7",
+    dispo_lbl: "Disponibilité",
+    gov_val: "24",
+    gov_lbl: "Gouvernorats Couverts",
+    satisfaction_val: "100%",
+    satisfaction_lbl: "Satisfaction Client",
+    credits: "© 2026 Plombier Tunisie. Tous droits réservés.",
+    foot_desc: "Le premier écosystème professionnel en Tunisie spécialisé dans le dépannage de plomberie express et la revente de pièces de rechange révisées.",
+    navigation: "Navigation",
+    informations: "Informations",
+    politique: "Politique de confidentialité",
+    conditions_util: "Conditions d'utilisation",
+    plan_site: "Plan du site",
+    boutique_acces: "Accéder au marketplace",
+    filtres: "Filtres",
+    toutes_categories: "Toutes les catégories",
+    rechercher: "Rechercher une pièce...",
+    prix: "Prix",
+    etat: "État",
+    tous: "Tous",
+    tri: "Trier par",
+    nouveautes: "Nouveautés",
+    prix_croissant: "Prix : bas à élevé",
+    prix_decroissant: "Prix : élevé à bas",
+    recommande: "Recommandés",
+    aucun_produit: "Aucun article ne correspond à votre recherche.",
+    contactez_experts: "Demander une Intervention Immédiate",
+    zone_tagline: "Des équipes d'artisans plombiers prêtes à intervenir en urgence sur le Grand Tunis et le Sahel. Intervention garantie sous 30 minutes.",
+    demande_intervention: "Formulaire d'intervention urgente",
+    contact_immediat: "Appel d'Urgence",
+    carte_interactive: "Zone de Couverture Directe",
+    ouvrir_maps: "Google Maps direct",
+    envoyer_demande: "Soumettre ma demande d'urgence",
+    zones_directes: "Intervention Immédiate 24h/24",
+    appelez_nous: "Appelez-nous"
+  },
+  AR: {
+    accueil: "الرئيسية",
+    services: "الخدمات",
+    zones: "مناطق التدخل",
+    pieces: "قطع غيار مستعملة",
+    mon_profil: "الملف الشخصي",
+    paiement: "الدفع الإلكتروني",
+    admin: "الإدارة",
+    tagline: "ترصيص · تكييف · غاز · تدفئة مركزية",
+    whatsapp_msg: "مرحباً، أحتاج إلى سباك محترف.",
+    devis_msg: "مرحباً، أود طلب كشف وتقدير لخدمة: ",
+    call: "اتصال مباشر",
+    whatsapp: "واتساب",
+    demander_devis: "طلب تقدير سعر",
+    maintenance: "قريباً جداً",
+    bientot_dispo: "الدفع الإلكتروني الآمن",
+    maintenance_desc: "نحن بصدد دمج بوابة دفع إلكتروني تونسية آمنة (ClicToPay / Sobflous). قريباً، ستتمكن من طلب قطع الغيار المستعملة مباشرة والدفع عبر الإنترنت مع التوصيل لباب منزلك !",
+    avertir: "أعلمني عند الإطلاق",
+    progression: "نسبة تقدم الإنجاز",
+    retour_accueil: "العودة للرئيسية",
+    resume_commande: "ملخص الطلبية",
+    tableau_bord: "لوحة التحكم",
+    tableau_bord_desc: "قم بإدارة بياناتك الشخصية واستعرض قطع الغيار التي أضفتها للمفضلة.",
+    compte_particulier: "حساب حريف",
+    securite: "الأمان وكلمة المرور",
+    mdp_actuel: "كلمة المرور الحالية",
+    nouveau_mdp: "كلمة المرور الجديدة",
+    mettre_a_jour: "تحديث كلمة المرور",
+    mes_favoris: "المفضلة لدي",
+    parcourir_market: "تصفح كتالوج قطع الغيار",
+    plus_favoris: "تبحث عن قطع أخرى ؟",
+    plus_favoris_desc: "قم بإضافة إعجاب (قلب) على قطع الغيار لحفظها هنا والرجوع إليها بسهولة.",
+    consulter: "التفاصيل التقنية",
+    nos_expertises: "خبراتنا الفنية المعتمدة",
+    expertises_desc: "خدمات ترصيص وتصليح سريعة ومحترفة في تونس الكبرى وجهة الساحل.",
+    plomberie_generale: "الترصيص العام والسباكة",
+    plomberie_desc_1: "كشف التسربات بالكاميرا الحرارية الحديثة",
+    plomberie_desc_2: "تركيب خلاطات وصنابير مياه راقية وذكية",
+    plomberie_desc_3: "تجديد وصيانة شبكات الصرف الصحي بالكامل",
+    climatisation: "تكييف الهواء وتبريده",
+    clim_desc_1: "شحن غاز التبريد R410/R32 للمكيفات",
+    clim_desc_2: "تنظيف وتعقيم دوري مضاد للبكتيريا",
+    clim_desc_3: "تعديل وصيانة المكيفات لتوفير استهلاك الكهرباء",
+    installation_gaz: "تركيبات الغاز المنزلي",
+    gaz_desc_1: "مطابقة التوصيلات لمعايير الشركة التونسية للكهرباء والغاز",
+    gaz_desc_2: "تركيب أجهزة إنذار متطورة لكشف تسرب أحادي أكسيد الكربون",
+    gaz_desc_3: "توصيل الغاز بأمان تام للطباخات والمراجل",
+    chauffage_central: "التدفئة المركزية والمراجل",
+    chauffage_desc_1: "الصيانة السنوية الشاملة للمراجل والمشعات",
+    chauffage_desc_2: "تنظيف وإزالة الترسبات الكلسية من الأنابيب",
+    chauffage_desc_3: "التحكم الذكي والتحكم عن بعد في درجة الحرارة",
+    experience_val: "+15",
+    experience_lbl: "سنة من الخبرة",
+    dispo_val: "24/7",
+    dispo_lbl: "جاهزية تامة",
+    gov_val: "24",
+    gov_lbl: "ولاية مغطاة",
+    satisfaction_val: "100%",
+    satisfaction_lbl: "رضا الحرفاء التام",
+    credits: "© 2026 سباك تونس. جميع الحقوق محفوظة.",
+    foot_desc: "أول شبكة خدمات وتجارة إلكترونية في تونس متخصصة في التدخلات السريعة لترصيص المياه وتوفير قطع الغيار المضمونة والمجربة.",
+    navigation: "أقسام الموقع",
+    informations: "معلومات قانونية",
+    politique: "سياسة الخصوصية والأمان",
+    conditions_util: "شروط الاستخدام العامة",
+    plan_site: "خريطة الموقع التقنية",
+    boutique_acces: "الذهاب إلى سوق قطع الغيار",
+    filtres: "تصفية البحث",
+    toutes_categories: "جميع الأصناف",
+    rechercher: "ابحث عن قطعة...",
+    prix: "السعر",
+    etat: "الحالة",
+    tous: "الكل",
+    tri: "ترتيب حسب",
+    nouveautes: "المضافة حديثاً",
+    prix_croissant: "السعر: من الأقل للأعلى",
+    prix_decroissant: "السعر: من الأعلى للأقل",
+    recommande: "المميزة",
+    aucun_produit: "لم نجد أي قطعة تتطابق مع معايير البحث.",
+    contactez_experts: "طلب تدخل طارئ وفوري",
+    zone_tagline: "فرقنا الفنية جاهزة للتدخل العاجل والسريع في كامل ولايات تونس الكبرى والساحل. نصلك في غضون 30 دقيقة كأقصى تقدير.",
+    demande_intervention: "استمارة طلب تدخل عاجل",
+    contact_immediat: "خط الطوارئ الساخن",
+    carte_interactive: "مناطق التغطية المباشرة",
+    ouvrir_maps: "فتح خرائط جوجل مباشرة",
+    envoyer_demande: "إرسال طلب التدخل العاجل",
+    zones_directes: "التدخل الفوري على مدار الساعة",
+    appelez_nous: "اتصل بنا فوراً"
+  },
+  EN: {
+    accueil: "Home",
+    services: "Services",
+    zones: "Service Areas",
+    pieces: "Used Parts",
+    mon_profil: "Profile",
+    paiement: "Payment",
+    admin: "Admin",
+    tagline: "Plumbing · Air Conditioning · Gaz · Heating",
+    whatsapp_msg: "Hello, I need a plumber.",
+    devis_msg: "Hello, I would like to request a quote for: ",
+    call: "Call",
+    whatsapp: "WhatsApp",
+    demander_devis: "Request a Quote",
+    maintenance: "COMING SOON",
+    bientot_dispo: "Online Payment",
+    maintenance_desc: "We are setting up our secure online payment gateway for Tunisia (ClicToPay / Sobflous). Soon you will be able to order used parts with home delivery!",
+    avertir: "Notify Me",
+    progression: "Integration Progress",
+    retour_accueil: "Back to Home",
+    resume_commande: "Order Summary",
+    tableau_bord: "Dashboard",
+    tableau_bord_desc: "Manage your personal information and view your favorite spare parts.",
+    compte_particulier: "Individual Customer",
+    securite: "Security & Password",
+    mdp_actuel: "Current password",
+    nouveau_mdp: "New password",
+    mettre_a_jour: "Update password",
+    mes_favoris: "My Favorites",
+    parcourir_market: "Browse Catalog",
+    plus_favoris: "Looking for more parts?",
+    plus_favoris_desc: "Add a heart to our used items to save them here instantly.",
+    consulter: "Technical Details",
+    nos_expertises: "Our Technical Expertise",
+    expertises_desc: "Professional plumbing repairs and renovations across Greater Tunis and the Sahel region.",
+    plomberie_generale: "General Plumbing",
+    plomberie_desc_1: "Thermal camera leak detection",
+    plomberie_desc_2: "High-end faucet installation",
+    plomberie_desc_3: "Drain pipe replacement",
+    climatisation: "Air Conditioning",
+    clim_desc_1: "R410/R32 refrigerant gas recharge",
+    clim_desc_2: "Certified anti-bacterial cleaning",
+    clim_desc_3: "Energy consumption optimization",
+    installation_gaz: "Gas Installation",
+    gaz_desc_1: "STEG compliance checks",
+    gaz_desc_2: "Carbon monoxide detector installation",
+    gaz_desc_3: "Safe connection for stoves and boilers",
+    chauffage_central: "Central Heating",
+    chauffage_desc_1: "Full annual boiler maintenance",
+    chauffage_desc_2: "Hydrodynamic loop flushing",
+    chauffage_desc_3: "Smart regulation with connected thermostat",
+    experience_val: "15+",
+    experience_lbl: "Years of Experience",
+    dispo_val: "24/7",
+    dispo_lbl: "Availability",
+    gov_val: "24",
+    gov_lbl: "Governorates Covered",
+    satisfaction_val: "100%",
+    satisfaction_lbl: "Customer Satisfaction",
+    credits: "© 2026 Plumber Tunisia. All rights reserved.",
+    foot_desc: "The premier professional ecosystem in Tunisia specialized in express plumbing troubleshooting and certified used spare parts reselling.",
+    navigation: "Navigation",
+    informations: "Legal Information",
+    politique: "Privacy Policy",
+    conditions_util: "Terms of Service",
+    plan_site: "Site Map",
+    boutique_acces: "Access Marketplace",
+    filtres: "Filters",
+    toutes_categories: "All Categories",
+    rechercher: "Search for a part...",
+    prix: "Price",
+    etat: "Condition",
+    tous: "All",
+    tri: "Sort by",
+    nouveautes: "New Arrivals",
+    prix_croissant: "Price: low to high",
+    prix_decroissant: "Price: high to low",
+    recommande: "Recommended",
+    aucun_produit: "No articles found matching your criteria.",
+    contactez_experts: "Request Immediate Intervention",
+    zone_tagline: "Teams of skilled plumbers ready to intervene immediately in Greater Tunis and the Sahel. Guaranteed response within 30 minutes.",
+    demande_intervention: "Emergency Request Form",
+    contact_immediat: "Emergency Hot Line",
+    carte_interactive: "Direct Coverage Zone",
+    ouvrir_maps: "Open Google Maps",
+    envoyer_demande: "Submit Emergency Request",
+    zones_directes: "Immediate 24/7 Intervention",
+    appelez_nous: "Call Us Now"
   }
 };
 
 export const AppNavigator = () => {
-  const dispatch = useDispatch();
-  const { user, signIn, signUp, signOut, isLoading } = useAuth();
+  const { signOut } = useAuth();
   const { showToast } = useToast();
 
-  // ---- Real Redux selectors ----
-  const totalBalance = useSelector(selectTotalBalance);
-  const transactions = useSelector(selectTransactions);
-  const accounts = useSelector(selectAccounts);
-  const recurringRules = useSelector(selectRecurringRules);
-  const overdueBills = useSelector(selectOverdueBills);
-  const settings = useSelector(selectWalletSettings);
-  const activeGoals = useSelector(selectActiveGoals);
-  const completedGoals = useSelector(selectCompletedGoals);
-  const unreadNotifCount = useSelector(selectUnreadCount);
+  const dispatch = useDispatch();
+  const products = useSelector((state: RootState) => state.parts.listings);
+  const favorites = useSelector((state: RootState) => state.parts.favorites);
+  const reduxCategories = useSelector((state: RootState) => state.categories.items);
+  const usersList = useSelector((state: RootState) => state.users.items);
 
-  const currency = settings.currency || 'DT';
-
-  // Unified Active Tab State for Web SPA feel
-  const [activeTab, setActiveTab] = useState<TabName>('Home');
-  const [txFilter, setTxFilter] = useState<'all'|'sent'|'received'>('all');
-
-  // Form states for transaction add modal
-  const [showAddTx, setShowAddTx] = useState(false);
-  const [txType, setTxType] = useState<'income' | 'expense'>('expense');
-  const [txAmount, setTxAmount] = useState('');
-  const [txLabel, setTxLabel] = useState('');
-  const [txCategory, setTxCategory] = useState('food');
-  const [txEmoji, setTxEmoji] = useState('🍽️');
-  const [txAccountId, setTxAccountId] = useState(settings.defaultAccountId || 'acc_cash');
-
-  // Add-to-goal modal
-  const [showAddToGoal, setShowAddToGoal] = useState(false);
-  const [goalFundId, setGoalFundId] = useState('');
-  const [goalFundAmount, setGoalFundAmount] = useState('');
-
-  // Auth form states (when user is null)
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
-  const [authEmail, setAuthEmail] = useState('');
-  const [authPassword, setAuthPassword] = useState('');
-  const [authName, setAuthName] = useState('');
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authError, setAuthError] = useState('');
-
-  // Shortcuts from real settings
-  const quickLogShortcuts = settings.shortcuts.slice(0, 4).map(s => ({
-    id: s.id,
-    label: s.customLabel || s.i18nKey?.split('.')[1] || 'Item',
-    emoji: s.emoji,
-    category: s.category,
-    amount: s.defaultAmount,
-    accountId: s.accountId,
-  }));
-
-  const quickLogMobile = settings.shortcuts.slice(0, 5).map(s => ({
-    id: s.id,
-    label: s.customLabel || s.i18nKey?.split('.')[1] || 'Item',
-    emoji: s.emoji,
-    category: s.category,
-    amount: s.defaultAmount,
-    accountId: s.accountId,
-  }));
-
-  // ---- Auth handlers ----
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthLoading(true);
-    setAuthError('');
-    try {
-      const u = await authService.login(authEmail, authPassword);
-      await signIn(u);
-      showToast(`Welcome back, ${u.name}!`, 'success');
-    } catch (err: any) {
-      setAuthError(err.message || 'Invalid credentials');
-    } finally {
-      setAuthLoading(false);
+  // Initial Seed for Categories inside Redux on Mount
+  useEffect(() => {
+    if (reduxCategories.length === 0) {
+      const initialCats: LocalCategory[] = [
+        { id: 'cat-1', name: 'Robinetterie', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'cat-2', name: 'Chauffe-eau', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'cat-3', name: 'Canalisation', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'cat-4', name: 'Climatisation', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'cat-5', name: 'Radiateurs', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'cat-6', name: 'Vannes', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        { id: 'cat-7', name: 'Autre', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }
+      ];
+      initialCats.forEach(cat => dispatch(addCategory(cat)));
     }
-  };
+  }, [reduxCategories, dispatch]);
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setAuthLoading(true);
-    setAuthError('');
-    try {
-      const u = await authService.register(authName, authEmail, authPassword);
-      await signUp(u);
-      showToast(`Welcome, ${u.name}!`, 'success');
-    } catch (err: any) {
-      setAuthError(err.message || 'Registration failed');
-    } finally {
-      setAuthLoading(false);
+  // Main Authentication State
+  const [sessionUser, setSessionUser] = useState<{ name: string; email: string; role: Role; phone?: string; city?: string } | null>(null);
+  const [bypassAuth, setBypassAuth] = useState(false);
+  const [currentRole, setCurrentRole] = useState<Role>('anonyme');
+
+  // Splash Screen
+  const [showSplash, setShowSplash] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  // Theme & Language
+  const [currentLang, setCurrentLang] = useState<'FR' | 'AR' | 'EN'>('FR');
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+
+  // Active Tab
+  // User tabs: 'Accueil' | 'Services' | 'Zones' | 'Marketplace' | 'Profile' | 'Payment'
+  // Admin tabs: 'AdminAccueil' | 'GestionAnnonce' | 'GestionCategorie' | 'GestionUser' | 'AdminProfile' | 'Analytics'
+  const [activeTab, setActiveTab] = useState<string>('Accueil');
+
+  // Auth Forms
+  const [authTab, setAuthTab] = useState<'signin' | 'signup'>('signin');
+  const [signinEmail, setSigninEmail] = useState('');
+  const [signinPassword, setSigninPassword] = useState('');
+
+  const [signupName, setSignupName] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPhone, setSignupPhone] = useState('');
+  const [signupCity, setSignupCity] = useState('Tunis');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupConfirmPassword, setSignupConfirmPassword] = useState('');
+
+  // Profile forms
+  const [profileName, setProfileName] = useState('');
+  const [profileEmail, setProfileEmail] = useState('');
+  const [profilePhone, setProfilePhone] = useState('');
+  const [profileCity, setProfileCity] = useState('');
+  const [currentMdp, setCurrentMdp] = useState('');
+  const [newMdp, setNewMdp] = useState('');
+
+  // Marketplace Modal & Filters
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('Toutes');
+  const [selectedConditionFilter, setSelectedConditionFilter] = useState('Tous');
+  const [priceMax, setPriceMax] = useState(600);
+  const [sortBy, setSortBy] = useState('featured');
+
+  // Interactive SVG Map click tracker
+  const [selectedGovernorat, setSelectedGovernorat] = useState<string | null>(null);
+
+  // Intervention Quick Form
+  const [interventionName, setInterventionName] = useState('');
+  const [interventionPhone, setInterventionPhone] = useState('');
+  const [interventionGov, setInterventionGov] = useState('Tunis');
+  const [interventionProblem, setInterventionProblem] = useState("Fuite d'eau");
+  const [interventionDetails, setInterventionDetails] = useState('');
+
+  // Newsletter form
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+
+  // Admin announcement modal/form state
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [annonceTitle, setAnnonceTitle] = useState('');
+  const [annonceSubtitle, setAnnonceSubtitle] = useState('');
+  const [annonceCategory, setAnnonceCategory] = useState('Robinetterie');
+  const [annoncePrice, setAnnoncePrice] = useState(0);
+  const [annonceCondition, setAnnonceCondition] = useState<'comme neuf' | 'bon état' | 'pour pièces'>('comme neuf');
+  const [annonceDescription, setAnnonceDescription] = useState('');
+  const [annonceImage, setAnnonceImage] = useState('faucet');
+  const [annonceIsFeatured, setAnnonceIsFeatured] = useState(false);
+  const [annonceIsAvailable, setAnnonceIsAvailable] = useState(true);
+
+  // Admin Category form state
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [editingCategory, setEditingCategory] = useState<LocalCategory | null>(null);
+  const [editCategoryName, setEditCategoryName] = useState('');
+
+  // Quick WhatsApp pre-filled technical messages
+  const t = translations[currentLang];
+  const isRTL = currentLang === 'AR';
+
+  // Splash Screen progress timer
+  useEffect(() => {
+    let prog = 0;
+    const interval = setInterval(() => {
+      prog += Math.random() * 22 + 9;
+      if (prog >= 100) {
+        prog = 100;
+        setLoadingProgress(100);
+        clearInterval(interval);
+        setTimeout(() => setShowSplash(false), 450);
+      } else {
+        setLoadingProgress(Math.round(prog));
+      }
+    }, 120);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Sync profile forms when user session changes
+  useEffect(() => {
+    if (sessionUser) {
+      setProfileName(sessionUser.name);
+      setProfileEmail(sessionUser.email);
+      setProfilePhone(sessionUser.phone || '+216 22 456 789');
+      setProfileCity(sessionUser.city || 'Tunis');
     }
-  };
+  }, [sessionUser]);
 
-  // ---- Transaction handlers ----
-  const handleQuickLog = (shortcut: typeof quickLogShortcuts[0]) => {
-    dispatch(
-      addTransaction({
-        type: 'expense',
-        amount: shortcut.amount,
-        label: shortcut.label,
-        category: shortcut.category as any,
-        emoji: shortcut.emoji,
-        accountId: shortcut.accountId || settings.defaultAccountId,
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toTimeString().slice(0, 5),
-        tags: [],
-        isRecurring: false,
-        isPaid: true,
-        status: 'cleared',
-      })
-    );
-    showToast(`Logged ${shortcut.amount.toFixed(2)} ${currency} for ${shortcut.label}`, 'success');
-  };
+  // Synchronize currentTheme with html root element to enable Tailwind's dark: variant class
+  useEffect(() => {
+    if (currentTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [currentTheme]);
 
-  const handleCreateTransaction = (e: React.FormEvent) => {
-    e.preventDefault();
-    const amt = parseFloat(txAmount);
-    if (!txAmount || isNaN(amt) || amt <= 0) {
-      showToast('Please enter a valid amount', 'error');
+  // Favorite hearts handler
+  const toggleFavorite = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (currentRole === 'anonyme') {
+      showToast(currentLang === 'AR' ? 'يرجى تسجيل الدخول لحفظ المفضلة' : 'Veuillez vous connecter pour gérer vos favoris.', 'info');
       return;
     }
-    dispatch(
-      addTransaction({
-        type: txType,
-        amount: amt,
-        label: txLabel || (txType === 'income' ? 'Income' : 'Expense'),
-        category: txCategory as any,
-        emoji: txEmoji,
-        accountId: txAccountId,
-        date: new Date().toISOString().split('T')[0],
-        time: new Date().toTimeString().slice(0, 5),
-        tags: [],
-        isRecurring: false,
-        isPaid: true,
-        status: 'cleared',
-      })
-    );
-    showToast(`Added ${txType}: ${amt.toFixed(2)} ${currency}`, 'success');
-    setShowAddTx(false);
-    setTxAmount('');
-    setTxLabel('');
+    dispatch(toggleFavoriteAction(id));
+    if (favorites.includes(id)) {
+      showToast(currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris', 'info');
+    } else {
+      showToast(currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !', 'success');
+    }
   };
 
-  const handlePayBill = (ruleId: string, label: string) => {
-    dispatch(markRecurringPaid(ruleId));
-    showToast(`Paid "${label}" successfully!`, 'success');
-  };
-
-  const handleAddToGoal = (e: React.FormEvent) => {
+  // Sign In submit handler
+  const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-    const amt = parseFloat(goalFundAmount);
-    if (!goalFundAmount || isNaN(amt) || amt <= 0) {
-      showToast('Enter a valid amount', 'error');
+    if (!signinEmail || !signinPassword) {
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' : 'Veuillez remplir tous les champs', 'error');
       return;
     }
-    dispatch(addToGoal({ id: goalFundId, amount: amt }));
-    showToast(`Added ${amt.toFixed(2)} ${currency} to goal!`, 'success');
-    setShowAddToGoal(false);
-    setGoalFundAmount('');
+
+    // Demo Admin Check
+    if (signinEmail.toLowerCase() === 'admin@stouchy.com' && signinPassword === 'admin123') {
+      const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role };
+      setSessionUser(adminSession);
+      setCurrentRole('admin');
+      setBypassAuth(true);
+      setActiveTab('AdminAccueil');
+      showToast(currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !', 'success');
+      return;
+    }
+
+    // Demo User Check
+    if (signinEmail.toLowerCase() === 'user@stouchy.com' && signinPassword === 'user123') {
+      const userSession = { name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user' as Role, phone: '+216 22 456 789', city: 'Ariana' };
+      setSessionUser(userSession);
+      setCurrentRole('user');
+      setBypassAuth(true);
+      setActiveTab('Accueil');
+      showToast(currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !', 'success');
+      return;
+    }
+
+    // Check custom registrations in Redux list
+    const foundUser = usersList.find(u => u.email.toLowerCase() === signinEmail.toLowerCase());
+    if (foundUser) {
+      if (foundUser.status === 'blocked') {
+        showToast(currentLang === 'AR' ? 'هذا الحساب معطل مؤقتاً' : 'Ce compte est suspendu ou bloqué.', 'error');
+        return;
+      }
+      const customSession = { name: foundUser.name, email: foundUser.email, role: foundUser.role as Role, phone: foundUser.phone, city: foundUser.addresses?.[0] || 'Tunis' };
+      setSessionUser(customSession);
+      setCurrentRole(foundUser.role as Role);
+      setBypassAuth(true);
+      setActiveTab(foundUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
+      showToast(currentLang === 'AR' ? `أهلاً بك ${foundUser.name}` : `Connexion réussie. Bienvenue, ${foundUser.name} !`, 'success');
+      return;
+    }
+
+    showToast(currentLang === 'AR' ? 'بيانات الاعتماد خاطئة' : 'Identifiants invalides ou incorrects.', 'error');
   };
 
-  // ---- Loading state ----
-  if (isLoading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-[#F4F6FA]">
-        <div className="text-sm font-bold text-slate-400 animate-pulse uppercase tracking-wider">Loading Plombier...</div>
-      </div>
-    );
-  }
+  // Sign Up submit handler
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signupName || !signupEmail || !signupPhone || !signupPassword || !signupConfirmPassword) {
+      showToast(currentLang === 'AR' ? 'الرجاء تعبئة كافة الفراغات' : 'Veuillez remplir tous les champs obligatoires.', 'error');
+      return;
+    }
+    if (signupPassword !== signupConfirmPassword) {
+      showToast(currentLang === 'AR' ? 'كلمات المرور غير متطابقة' : 'Les mots de passe ne correspondent pas.', 'error');
+      return;
+    }
 
-  // ---- AUTH SCREEN (when user is null) ----
-  if (!user) {
-    return (
-      <div className="flex h-screen w-screen bg-[#F4F6FA] items-center justify-center font-sans antialiased">
-        <div className="w-full max-w-md bg-white rounded-3xl border border-slate-200 p-8 shadow-xl text-left mx-4">
-          {/* Logo */}
-          <div className="flex items-center justify-center gap-1.5 mb-6 select-none">
-            <span className="text-2xl font-extrabold tracking-tight text-[#A80000] leading-none">ST★UCHI</span>
-            <span className="text-xl font-bold text-[#005994] leading-none mt-[-8px]">*</span>
-          </div>
+    // Check if email already taken
+    const exists = usersList.find(u => u.email.toLowerCase() === signupEmail.toLowerCase());
+    if (exists) {
+      showToast(currentLang === 'AR' ? 'هذا البريد الإلكتروني مسجل بالفعل' : 'Cette adresse email est déjà enregistrée.', 'error');
+      return;
+    }
 
-          <h1 className="text-2xl font-black text-slate-850 text-center mb-1">
-            {authMode === 'login' ? 'Welcome Back' : 'Create Account'}
-          </h1>
-          <p className="text-xs text-slate-400 font-semibold text-center mb-6">
-            {authMode === 'login' ? 'Sign in to your wallet' : 'Start your financial journey'}
-          </p>
+    // Create account inside usersSlice Redux store
+    const newUserObj = {
+      id: 'usr-' + Date.now(),
+      name: signupName,
+      email: signupEmail.toLowerCase(),
+      phone: signupPhone,
+      role: 'user',
+      status: 'active' as const,
+      addresses: [signupCity],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    dispatch(addUser(newUserObj));
 
-          {authError && (
-            <div className="bg-[#FFF1F1] border border-red-200 text-[#A80000] text-xs font-bold rounded-xl p-3 mb-4 text-center">{authError}</div>
-          )}
+    // Sign in immediately
+    const customSession = { name: signupName, email: signupEmail.toLowerCase(), role: 'user' as Role, phone: signupPhone, city: signupCity };
+    setSessionUser(customSession);
+    setCurrentRole('user');
+    setBypassAuth(true);
+    setActiveTab('Accueil');
+    showToast(currentLang === 'AR' ? 'تم إنشاء حسابك وتفعيله بنجاح !' : 'Votre compte a été créé avec succès. Bienvenue !', 'success');
 
-          <form onSubmit={authMode === 'login' ? handleLogin : handleSignUp} className="space-y-4">
-            {authMode === 'signup' && (
-              <div>
-                <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Full Name</label>
-                <input type="text" required value={authName} onChange={(e) => setAuthName(e.target.value)}
-                  placeholder="Ahmed Ben Ali"
-                  className="w-full border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005994] bg-slate-50" />
-              </div>
-            )}
-            <div>
-              <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Email Address</label>
-              <input type="email" required value={authEmail} onChange={(e) => setAuthEmail(e.target.value)}
-                placeholder="admin@demo.com"
-                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005994] bg-slate-50" />
-            </div>
-            <div>
-              <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Password</label>
-              <input type="password" required value={authPassword} onChange={(e) => setAuthPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full border border-slate-200 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005994] bg-slate-50" />
-            </div>
-            <button type="submit" disabled={authLoading}
-              className="w-full bg-[#005994] hover:bg-[#004775] text-white font-extrabold text-xs py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider disabled:opacity-60">
-              {authLoading ? 'Loading...' : authMode === 'login' ? 'Sign In' : 'Create Account'}
-            </button>
-          </form>
+    // Reset fields
+    setSignupName('');
+    setSignupEmail('');
+    setSignupPhone('');
+    setSignupPassword('');
+    setSignupConfirmPassword('');
+  };
 
-          {/* Demo credentials quick fill */}
-          {authMode === 'login' && (
-            <div className="mt-4 bg-slate-50 border border-slate-100 rounded-xl p-3 text-center">
-              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-2">Quick Demo Access</p>
-              <div className="flex gap-2">
-                <button onClick={() => { setAuthEmail('admin@demo.com'); setAuthPassword('admin123'); }}
-                  className="flex-1 bg-white border border-slate-200 hover:border-[#005994] text-slate-700 font-bold text-[10px] py-2 rounded-lg transition">
-                  Admin
-                </button>
-                <button onClick={() => { setAuthEmail('user@demo.com'); setAuthPassword('user123'); }}
-                  className="flex-1 bg-white border border-slate-200 hover:border-[#005994] text-slate-700 font-bold text-[10px] py-2 rounded-lg transition">
-                  User
-                </button>
-              </div>
-            </div>
-          )}
+  // Logout handler
+  const handleLogout = () => {
+    setSessionUser(null);
+    setCurrentRole('anonyme');
+    setBypassAuth(false);
+    setActiveTab('Accueil');
+    signOut();
+    showToast(currentLang === 'AR' ? 'تم تسجيل خروجك بنجاح' : 'Déconnexion réussie ! A bientôt.', 'info');
+  };
 
-          <div className="text-center mt-5">
-            <span className="text-xs text-slate-400">
-              {authMode === 'login' ? "Don't have an account? " : 'Already have an account? '}
-            </span>
-            <button onClick={() => { setAuthMode(authMode === 'login' ? 'signup' : 'login'); setAuthError(''); }}
-              className="text-xs font-bold text-[#005994] hover:underline">
-              {authMode === 'login' ? 'Sign Up' : 'Log In'}
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Filters logic
+  const filteredProducts = products.filter(p => {
+    const matchesSearch = searchQuery === '' || 
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+      p.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategoryFilter === 'Toutes' || p.category === selectedCategoryFilter;
+    const matchesCondition = selectedConditionFilter === 'Tous' || p.condition === selectedConditionFilter;
+    const matchesPrice = p.price <= priceMax;
+    return matchesSearch && matchesCategory && matchesCondition && matchesPrice;
+  });
 
-  // ---- DASHBOARD (when user is authenticated) ----
-  // Computed values from real data
-  const overdueTotal = overdueBills.reduce((s, b) => s + b.amount, 0);
-  const todayStr = new Date().toISOString().split('T')[0];
-  const monthStr = todayStr.slice(0, 7);
-  const monthExpenses = transactions.filter(t => t.date.startsWith(monthStr) && t.type === 'expense').reduce((s, t) => s + t.amount, 0);
-  const monthIncome = transactions.filter(t => t.date.startsWith(monthStr) && t.type === 'income').reduce((s, t) => s + t.amount, 0);
-  const budgetUsed = settings.monthlyBudget > 0 ? Math.min(100, Math.round((monthExpenses / settings.monthlyBudget) * 100)) : 0;
-  const unpaidBills = recurringRules.filter(r => !r.isPaid && r.type === 'expense');
-  const goalsTotalSaved = activeGoals.reduce((s, g) => s + g.currentAmount, 0);
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'price_asc') return a.price - b.price;
+    if (sortBy === 'price_desc') return b.price - a.price;
+    return 0; // Default featured sort order
+  });
 
-  // Common inner screen render switcher based on activeTab
-  const renderActiveScreenContent = () => {
-    switch (activeTab) {
-      case 'Reports':
-        return renderWebReportsTab(transactions, accounts, settings, monthStr, currency);
-      case 'Accounts':
-        return renderWebAccountsTab(accounts, transactions, unpaidBills, currency, dispatch, handlePayBill, () => { setTxType('expense'); setShowAddTx(true); }, showToast, setActiveTab, txFilter, setTxFilter);
-      case 'Goals':
-        return renderWebGoalsTab(activeGoals, completedGoals, goalsTotalSaved, currency, dispatch, showToast, (id: string) => { setGoalFundId(id); setShowAddToGoal(true); });
-      case 'Profile':
-        return renderWebProfileTab(user, signOut, showToast);
-      default:
-        return null;
+  // Admin Announcement CRUD operations
+  const openAddAnnonce = () => {
+    setEditingProduct(null);
+    setAnnonceTitle('');
+    setAnnonceSubtitle('');
+    setAnnonceCategory(reduxCategories[0]?.name || 'Robinetterie');
+    setAnnoncePrice(25);
+    setAnnonceCondition('comme neuf');
+    setAnnonceDescription('');
+    setAnnonceImage('faucet');
+    setAnnonceIsFeatured(false);
+    setAnnonceIsAvailable(true);
+    setShowAdminModal(true);
+  };
+
+  const openEditAnnonce = (prod: Product) => {
+    setEditingProduct(prod);
+    setAnnonceTitle(prod.title);
+    setAnnonceSubtitle(prod.subtitle);
+    setAnnonceCategory(prod.category);
+    setAnnoncePrice(prod.price);
+    setAnnonceCondition(prod.condition);
+    setAnnonceDescription(prod.description);
+    setAnnonceImage(prod.image);
+    setAnnonceIsFeatured(!!prod.isFeatured);
+    setAnnonceIsAvailable(!!prod.isAvailable);
+    setShowAdminModal(true);
+  };
+
+  const handleSaveAnnonce = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!annonceTitle || !annonceDescription || annoncePrice <= 0) {
+      showToast(currentLang === 'AR' ? 'الرجاء تعبئة بيانات الإعلان بشكل صحيح' : 'Données d\'annonce incomplètes.', 'error');
+      return;
+    }
+
+    if (editingProduct) {
+      // Modify Listing Redux
+      const updatedItem: Product = {
+        ...editingProduct,
+        title: annonceTitle,
+        subtitle: annonceSubtitle.toUpperCase() || annonceCategory.toUpperCase(),
+        category: annonceCategory,
+        price: Number(annoncePrice),
+        condition: annonceCondition,
+        description: annonceDescription,
+        image: annonceImage,
+        isFeatured: annonceIsFeatured,
+        isAvailable: annonceIsAvailable
+      };
+      dispatch(updateListing(updatedItem));
+      showToast(currentLang === 'AR' ? 'تم تحديث الإعلان بنجاح !' : 'L\'annonce a été modifiée avec succès !', 'success');
+    } else {
+      // Create new Listing Redux
+      const newItem: Product = {
+        id: 'prod-' + Date.now(),
+        title: annonceTitle,
+        subtitle: annonceSubtitle.toUpperCase() || annonceCategory.toUpperCase(),
+        category: annonceCategory,
+        price: Number(annoncePrice),
+        condition: annonceCondition,
+        description: annonceDescription,
+        image: annonceImage,
+        isFeatured: annonceIsFeatured,
+        isAvailable: annonceIsAvailable
+      };
+      dispatch(addListing(newItem));
+      showToast(currentLang === 'AR' ? 'تم إضافة الإعلان بنجاح !' : 'Nouvelle annonce publiée avec succès !', 'success');
+    }
+
+    setShowAdminModal(false);
+  };
+
+  const handleDeleteAnnonce = (id: string) => {
+    if (window.confirm(currentLang === 'AR' ? 'هل أنت متأكد من حذف هذا الإعلان ؟' : 'Voulez-vous vraiment supprimer cette annonce ?')) {
+      dispatch(deleteListing(id));
+      showToast(currentLang === 'AR' ? 'تم حذف الإعلان' : 'Annonce supprimée !', 'info');
     }
   };
 
-  // Determine sidebar visibility
-  const isSidebarVisible = activeTab === 'Home' || activeTab === 'Goals';
+  // Admin dynamic Categories operations
+  const handleAddCategory = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newCategoryName.trim()) return;
+
+    // Check duplicates
+    if (reduxCategories.find(c => c.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
+      showToast(currentLang === 'AR' ? 'هذا الصنف موجود بالفعل' : 'Catégorie déjà existante.', 'error');
+      return;
+    }
+
+    const newCat = {
+      id: 'cat-' + Date.now(),
+      name: newCategoryName.trim(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    dispatch(addCategory(newCat));
+    showToast(currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !', 'success');
+    setNewCategoryName('');
+  };
+
+  const handleRenameCategory = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingCategory || !editCategoryName.trim()) return;
+
+    const renamed = {
+      ...editingCategory,
+      name: editCategoryName.trim(),
+      updatedAt: new Date().toISOString()
+    };
+    dispatch(updateCategory(renamed));
+    showToast(currentLang === 'AR' ? 'تمت إعادة تسمية الصنف !' : 'Catégorie modifiée !', 'success');
+    setEditingCategory(null);
+    setEditCategoryName('');
+  };
+
+  const handleDeleteCategory = (id: string, name: string) => {
+    if (window.confirm(currentLang === 'AR' ? `هل أنت متأكد من حذف صنف "${name}" ؟` : `Voulez-vous supprimer la catégorie "${name}" ?`)) {
+      dispatch(deleteCategory(id));
+      showToast(currentLang === 'AR' ? 'تم حذف الصنف' : 'Catégorie supprimée !', 'info');
+    }
+  };
+
+  // Admin User status toggles
+  const handleToggleUserRole = (userId: string, currentVal: string) => {
+    const target = usersList.find(u => u.id === userId);
+    if (!target) return;
+
+    const updated = {
+      ...target,
+      role: currentVal === 'admin' ? 'user' : 'admin',
+      updatedAt: new Date().toISOString()
+    };
+    dispatch(updateUser(updated));
+    showToast(currentLang === 'AR' ? 'تم تغيير رتبة المستخدم' : 'Rôle de l\'utilisateur modifié !', 'success');
+  };
+
+  const handleToggleUserStatus = (userId: string, currentStatus: string) => {
+    const target = usersList.find(u => u.id === userId);
+    if (!target) return;
+
+    // Check that we aren't locking ourselves
+    if (sessionUser && target.email.toLowerCase() === sessionUser.email.toLowerCase()) {
+      showToast(currentLang === 'AR' ? 'لا يمكنك حظر حسابك الخاص !' : 'Impossible de bloquer votre propre compte admin !', 'error');
+      return;
+    }
+
+    const updated = {
+      ...target,
+      status: (currentStatus === 'active' ? 'blocked' : 'active') as 'active' | 'blocked',
+      updatedAt: new Date().toISOString()
+    };
+    dispatch(updateUser(updated));
+    showToast(
+      currentLang === 'AR' 
+        ? (currentStatus === 'active' ? 'تم حظر المستخدم بنجاح' : 'تم تنشيط حساب المستخدم') 
+        : (currentStatus === 'active' ? 'Utilisateur bloqué avec succès !' : 'Compte réactivé !'), 
+      'info'
+    );
+  };
+
+  // Product Visual visual components
+  const ProductVisual = ({ image, className = "w-16 h-16" }: { image: string; className?: string }) => {
+    if (image === 'faucet') return <FaucetSVG className={className} />;
+    if (image === 'boiler') return <BoilerSVG className={className} />;
+    return <CopperFittingsSVG className={className} />;
+  };
 
   return (
-    <div className="w-full h-full relative">
-      {/* ----------------------------------------------------
-          DESKTOP CONTAINER (Visible >= 1024px)
-          ---------------------------------------------------- */}
-      <div className="hidden lg:flex h-screen w-screen overflow-hidden bg-[#F4F6FA] text-[#404751] font-sans antialiased">
-        
-        {/* Dynamic Sidebar Left (Only visible on Home and Goals) */}
-        {isSidebarVisible && (
-          <aside className="w-72 flex-shrink-0 flex flex-col justify-between border-r border-[#E2E8F0] bg-white px-8 py-10">
-            <div>
-              {/* ST)UCHI* Vector-rendered Star Logo matching mockup */}
-              <div className="flex items-center gap-1.5 mb-10 pl-2 select-none">
-                <span className="text-2xl font-extrabold tracking-tight text-[#A80000] leading-none flex items-center">
-                  ST
-                  <span className="w-5.5 h-5.5 rounded-full bg-[#A80000] flex items-center justify-center mx-0.5">
-                    <MaterialIcons name="star" size={14} color="#FFFFFF" />
-                  </span>
-                  UCHI
-                </span>
-                <span className="text-xl font-bold text-[#A80000] leading-none mt-[-8px]">*</span>
-              </div>
-
-              {/* Sidebar navigation items */}
-              <div className="space-y-2">
-                {[
-                  { name: 'Home', icon: 'home', label: 'Portfolio' },
-                  { name: 'Accounts', icon: 'account-balance-wallet', label: 'Accounts' },
-                  { name: 'Reports', icon: 'bar-chart', label: 'Reports' },
-                  { name: 'Goals', icon: 'track-changes', label: 'Goals' },
-                  { name: 'Profile', icon: 'person', label: 'Actions' },
-                ].map((item) => {
-                  const isActive = activeTab === item.name;
-                  return (
-                    <button
-                      key={item.name}
-                      onClick={() => setActiveTab(item.name as TabName)}
-                      className={`w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-200 text-left font-bold text-sm ${
-                        isActive
-                          ? 'bg-[#005994] text-white shadow-[0_6px_20px_rgba(0,89,148,0.18)]'
-                          : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
-                      }`}
-                    >
-                      <MaterialIcons name={item.icon} size={18} color={isActive ? '#FFFFFF' : '#8E9CAE'} />
-                      <span>{item.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+    <div 
+      className={`min-h-screen font-sans antialiased transition-colors duration-300 ${
+        currentTheme === 'dark' ? 'bg-[#0B0F19] text-slate-100' : 'bg-slate-50 text-slate-800'
+      }`} 
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      {/* ==========================================
+          SPLASH SCREEN
+          ========================================== */}
+      {showSplash && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: '#0F2942',
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)
+            `,
+            backgroundSize: '32px 32px',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            transition: 'opacity 0.4s ease',
+            opacity: loadingProgress === 100 ? 0 : 1,
+          }}
+        >
+          <div className="mb-8 transform hover:scale-105 transition-transform duration-300">
+            <LogoSVG size={96} />
+          </div>
+          <div className="text-center mb-8">
+            <div className="text-white text-3xl font-black tracking-tight leading-tight">
+              {currentLang === 'AR' ? 'سباك تونس' : 'Plombier Tunisie'}
             </div>
+            <div className="text-[#F97316] text-[10px] sm:text-xs font-black tracking-widest uppercase mt-2.5">
+              {t.tagline}
+            </div>
+            <div className="text-slate-400/60 text-xs font-bold mt-2 font-arabic">
+              سباكة · تكييف · غاز · تدفئة مركزية
+            </div>
+          </div>
 
-            {/* Bottom user profile card inside sidebar - Ahmed Ben Ali for Goals, Sami for Home */}
-            <div className="flex items-center gap-3 border-t border-slate-100 pt-6">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop"
-                alt="Avatar"
-                className="w-10 h-10 rounded-full object-cover border border-slate-100"
+          {/* Loading bar */}
+          <div className="w-56 mt-4 mb-3">
+            <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div
+                style={{
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #F97316, #ea580c)',
+                  borderRadius: 99,
+                  width: `${loadingProgress}%`,
+                  transition: 'width 0.15s ease'
+                }}
               />
-              <div className="text-left select-none">
-                <div className="text-xs font-black text-slate-800 leading-none mb-0.5">
-                  {activeTab === 'Goals' ? 'Ahmed Ben Ali' : 'Sami Admin'}
+            </div>
+          </div>
+          <div className="text-slate-400 text-[10px] font-black uppercase tracking-wider">
+            {currentLang === 'AR' ? 'جاري تحميل التطبيق الفاخر...' : 'Chargement premium...'} {loadingProgress}%
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          FIRST PAGE AUTHENTICATION FLOW
+          ========================================== */}
+      {!bypassAuth && !sessionUser && (
+        <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12 bg-slate-50 dark:bg-[#0B0F19] text-slate-800 dark:text-slate-100 transition-colors duration-300">
+          {/* Left panel branding visual presentation (desktop only) */}
+          <div className="hidden lg:flex lg:col-span-5 relative bg-gradient-to-br from-[#0F2942] to-[#0A1724] p-12 flex-col justify-between overflow-hidden border-r border-slate-200 dark:border-slate-800">
+            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_20%,#F97316_0%,transparent_50%)] pointer-events-none" />
+            
+            <div className="flex items-center gap-3 relative z-10">
+              <LogoSVG size={52} />
+              <div className="text-left">
+                <span className="text-2xl font-black tracking-tight text-white">Plombier Tunisie</span>
+                <p className="text-[9px] text-[#F97316] font-extrabold tracking-widest uppercase mt-0.5">{translations.FR.tagline}</p>
+              </div>
+            </div>
+
+            <div className="my-auto space-y-6 relative z-10 text-left">
+              <span className="bg-[#F97316] text-white text-[9px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-wider leading-none">
+                PLATEFORME ARTISANALE & MARKETPLACE
+              </span>
+              <h2 className="text-4xl sm:text-5xl font-black text-white leading-tight">
+                Le leader de la plomberie express en Tunisie.
+              </h2>
+              <p className="text-slate-350 text-sm leading-relaxed font-semibold">
+                Bénéficiez de dépannages sanitaires immédiats par des plombiers agréés et d'un marketplace premium pour acheter des pièces détachées d'occasion révisées et garanties.
+              </p>
+              <div className="grid grid-cols-2 gap-6 pt-6">
+                <div>
+                  <div className="text-2xl font-black text-[#F97316]">24h/24</div>
+                  <div className="text-[10px] text-slate-400 font-extrabold uppercase mt-1">Intervention Urgente</div>
                 </div>
-                <div className="text-[9px] text-slate-400 font-extrabold uppercase tracking-wide">
-                  {activeTab === 'Goals' ? 'Premium Member' : 'Admin'}
+                <div>
+                  <div className="text-2xl font-black text-[#F97316]">100% testé</div>
+                  <div className="text-[10px] text-slate-400 font-extrabold uppercase mt-1">Garantie Pièces</div>
                 </div>
               </div>
             </div>
-          </aside>
-        )}
 
-        {/* Center/Main Container */}
-        <div className="flex-1 flex flex-col overflow-hidden">
-          
-          {/* Top Bar Header (Hidden only on Goals, custom clean header on Goals) */}
-          {activeTab !== 'Goals' && (
-            <header className="h-20 flex-shrink-0 flex items-center justify-between border-b border-[#E2E8F0] bg-white px-12 z-10">
+            <div className="text-xs text-slate-500 font-bold relative z-10">
+              © 2026 Plombier Tunisie. Développé pour les particuliers et professionnels.
+            </div>
+          </div>
+
+          {/* Right panel login/register panel */}
+          <div className="lg:col-span-7 flex items-center justify-center p-6 sm:p-12 bg-slate-100 dark:bg-[#080B11] transition-colors duration-300">
+            <div className="w-full max-w-md space-y-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative transition-all duration-300">
               
-              {/* STOUCHI Header Logo on Left for Reports/Accounts tabs */}
-              {!isSidebarVisible ? (
-                <div className="flex items-center gap-1.5 select-none">
-                  <span className="text-2xl font-extrabold tracking-tight text-[#A80000] leading-none flex items-center">
-                    ST
-                    <span className="w-5.5 h-5.5 rounded-full bg-[#A80000] flex items-center justify-center mx-0.5">
-                      <MaterialIcons name="star" size={14} color="#FFFFFF" />
-                    </span>
-                    UCHI
-                  </span>
-                  <span className="text-xl font-bold text-[#A80000] leading-none mt-[-8px]">*</span>
-                </div>
-              ) : <div />}
-
-              {/* Navigation Tabs in the middle for top bar view */}
-              <div className="flex items-center gap-8 font-extrabold text-sm select-none">
-                {[
-                  { name: 'Home', label: 'Portfolio' },
-                  { name: 'Accounts', label: 'Accounts' },
-                  { name: 'Reports', label: 'Reports' },
-                  { name: 'Goals', label: 'Goals' }
-                ].map((tab) => {
-                  const isActive = activeTab === tab.name;
-                  return (
-                    <button
-                      key={tab.name}
-                      onClick={() => setActiveTab(tab.name as TabName)}
-                      className={`py-2 transition-colors relative font-bold text-sm ${
-                        isActive ? 'text-[#005994]' : 'text-slate-500 hover:text-slate-850'
-                      }`}
-                    >
-                      <span>{tab.label}</span>
-                      {isActive && (
-                        <span className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-[#005994] rounded-full" />
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Header Right Controls */}
-              <div className="flex items-center gap-6">
-                <button
-                  onClick={() => showToast('No new notifications', 'info')}
-                  className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 border border-slate-200 text-slate-500 relative hover:bg-slate-100 transition-colors"
+              {/* Premium Floating Preferences Toolbar */}
+              <div className="absolute top-6 right-6 flex items-center gap-2">
+                {/* Language button */}
+                <button 
+                  type="button"
+                  onClick={() => setCurrentLang(currentLang === 'FR' ? 'AR' : 'FR')}
+                  className="px-2.5 py-1.5 rounded-lg border text-[10px] font-black tracking-wider uppercase transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
-                  <MaterialIcons name="notifications" size={18} color="#5A6578" />
-                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-[#A80000] rounded-full" />
+                  {currentLang === 'FR' ? 'العربية' : 'Français'}
                 </button>
-                <div className="flex items-center gap-3 border-l border-slate-200 pl-6">
-                  <img
-                    src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
-                    alt="Avatar"
-                    className="w-10 h-10 rounded-full object-cover border border-slate-100"
-                  />
-                  <div className="text-left hidden xl:block select-none">
-                    <div className="text-xs font-black text-slate-800 leading-none mb-0.5">Sami Admin</div>
-                    <button onClick={() => signOut()} className="text-[10px] text-slate-400 font-bold hover:text-slate-600">Sign Out</button>
-                  </div>
-                </div>
+
+                {/* Dark Mode toggle icon button */}
+                <button 
+                  type="button"
+                  onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+                  className="w-8 h-8 rounded-lg border flex items-center justify-center transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
+                  title={currentTheme === 'light' ? 'Activer Mode Sombre' : 'Activer Mode Clair'}
+                >
+                  {currentTheme === 'light' ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-amber-400">
+                      <circle cx="12" cy="12" r="5" />
+                      <line x1="12" y1="1" x2="12" y2="3" />
+                      <line x1="12" y1="21" x2="12" y2="23" />
+                      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                      <line x1="1" y1="12" x2="3" y2="12" />
+                      <line x1="21" y1="12" x2="23" y2="12" />
+                    </svg>
+                  )}
+                </button>
               </div>
-            </header>
-          )}
 
-          {/* Tab Screen Content wrapper */}
-          <main className="flex-1 overflow-y-auto px-12 py-10 bg-[#F4F6FA]">
-            {activeTab === 'Home' ? (
-              <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 max-w-7xl mx-auto animate-fade-in">
-                {/* Columns 1 & 2: Middle Content Cards */}
-                <div className="xl:col-span-2 space-y-8">
-                  {/* Balance Card (Ocean Blue Gradient) */}
-                  <div className="rounded-[24px] bg-gradient-to-r from-[#005994] to-[#007CBF] p-8 text-white relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[200px] text-left">
-                    <div className="absolute right-[-30px] top-[-30px] w-40 h-40 bg-white/5 rounded-full pointer-events-none" />
-                    <div>
-                      <div className="text-[10px] font-extrabold tracking-[2px] text-white/75 uppercase mb-1">TOTAL LIQUIDITY BALANCE</div>
-                      <div className="text-4xl font-extrabold tracking-tight">
-                        {totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })} <span className="text-2xl font-bold opacity-90">{currency}</span>
-                      </div>
-                    </div>
-                    <div className="flex flex-wrap items-center justify-between mt-6 gap-4 z-10">
-                      <div className="bg-white/15 px-3 py-1.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase">
-                        ↗ +4.2% this month
-                      </div>
-                      <div className="flex gap-3">
-                        <button
-                          onClick={() => {
-                            setTxType('income');
-                            setShowAddTx(true);
-                          }}
-                          className="bg-white/10 hover:bg-white/20 transition px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 border border-white/10"
-                        >
-                          <MaterialIcons name="transfer" size={14} color="#FFFFFF" />
-                          <span>Transfer Funds</span>
-                        </button>
-                        <button
-                          onClick={() => showToast('Statement generated!', 'success')}
-                          className="bg-white text-[#005994] hover:bg-slate-50 transition px-4 py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm"
-                        >
-                          <MaterialIcons name="statement" size={14} color="#005994" />
-                          <span>Statement</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Overdue Card & Budget Health side by side */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Overdue Card */}
-                    <div className="border border-red-500/10 border-l-4 border-l-[#A80000] bg-[#FFF1F1] rounded-2xl p-5 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.01)] text-left">
-                      <div className="flex items-center gap-3.5">
-                        <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#A80000] text-white">
-                          <MaterialIcons name="priority-high" size={20} color="#FFFFFF" />
-                        </div>
-                        <div>
-                          <h4 className="font-extrabold text-slate-800 text-sm">{overdueBills.length > 0 ? `${overdueBills.length} Overdue Bills` : 'No Overdue Bills'}</h4>
-                          <p className="text-[11px] text-slate-400 font-semibold mt-0.5">{overdueTotal > 0 ? `${overdueTotal.toFixed(2)} ${currency} pending` : 'All bills paid'}</p>
-                        </div>
-                      </div>
-                      {overdueBills.length > 0 && <button
-                        onClick={() => setActiveTab('Accounts')}
-                        className="bg-[#A80000] hover:bg-[#8B0000] text-white font-extrabold text-[10px] tracking-wider uppercase px-3 py-2 rounded-xl transition shadow-sm"
-                      >
-                        Pay Now
-                      </button>}
-                    </div>
-
-                    {/* Budget Health Card */}
-                    <div className="border border-slate-200 bg-white rounded-2xl p-5 text-left shadow-[0_8px_30px_rgba(0,0,0,0.01)]">
-                      <div className="flex justify-between items-center mb-3">
-                        <h4 className="font-bold text-slate-850 text-sm">Budget Health</h4>
-                        <span className={`text-xs font-bold ${budgetUsed > 80 ? 'text-[#A80000]' : 'text-[#008A5D]'}`}>{budgetUsed}% Used</span>
-                      </div>
-                      <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mb-3">
-                        <div className={`h-full rounded-full ${budgetUsed > 80 ? 'bg-[#A80000]' : 'bg-[#005994]'}`} style={{ width: `${budgetUsed}%` }} />
-                      </div>
-                      <div className="flex items-center gap-1.5 text-[9px] font-extrabold text-slate-400 uppercase tracking-wider">
-                        <MaterialIcons name="info" size={11} color="#94A3B8" />
-                        <span>{monthExpenses > 0 ? `${monthExpenses.toFixed(0)} ${currency} SPENT / ${settings.monthlyBudget} ${currency} BUDGET` : 'NO EXPENSES THIS MONTH'}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Quick Log section with curated outline blue SVG icons */}
-                  <div className="text-left">
-                    <h3 className="text-base font-extrabold text-slate-800 tracking-wide mb-4">Quick Log</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {quickLogShortcuts.map((shortcut) => (
-                        <button
-                          key={shortcut.id}
-                          onClick={() => handleQuickLog(shortcut)}
-                          className="bg-white border border-[#E2E8F0] hover:border-[#005994] hover:shadow-sm transition-all duration-200 p-5 rounded-2xl text-center group flex flex-col items-center justify-center"
-                        >
-                          <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#005994]/5 group-hover:bg-[#E6F0FA] transition mb-3">
-                            {renderQuickLogIcon(shortcut.category)}
-                          </div>
-                          <span className="text-xs font-extrabold text-slate-800 tracking-wide uppercase">{shortcut.label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+              {/* Welcome Header */}
+              <div className="text-center pt-2">
+                <div className="lg:hidden mx-auto mb-4 flex justify-center">
+                  <LogoSVG size={56} />
                 </div>
+                <h3 className="text-2xl font-black text-slate-950 dark:text-white">
+                  {authTab === 'signin' 
+                    ? (currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion') 
+                    : (currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Inscription')}
+                </h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 font-semibold">
+                  {authTab === 'signin'
+                    ? (currentLang === 'AR' ? 'سجل دخولك للوصول إلى حسابك الفاخر' : 'Connectez-vous pour accéder à votre espace premium.')
+                    : (currentLang === 'AR' ? 'قم بإنشاء حسابك المجاني في ثوانٍ معدودة' : 'Créez votre compte client gratuit en quelques secondes.')}
+                </p>
+              </div>
 
-                {/* Column 3: Right Sidebar widgets */}
-                <div className="space-y-8">
-                  {/* Recent Activity List */}
-                  <div className="bg-white border border-[#E2E8F0] rounded-2xl p-6 text-left shadow-[0_8px_30px_rgba(0,0,0,0.01)]">
-                    <div className="flex justify-between items-center mb-6">
-                      <h3 className="font-extrabold text-slate-800 text-sm uppercase tracking-wide">Recent Activity</h3>
-                      <button
-                        onClick={() => showToast('Opening history...', 'info')}
-                        className="text-xs font-bold text-[#005994] hover:underline uppercase"
+              {/* SIGN IN FORM */}
+              {authTab === 'signin' && (
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                      {currentLang === 'AR' ? 'البريد الإلكتروني' : 'Adresse Email'}
+                    </label>
+                    <input 
+                      type="email"
+                      required
+                      placeholder="exemple@email.com"
+                      value={signinEmail}
+                      onChange={(e) => setSigninEmail(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] text-left transition-colors"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                      {currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe'}
+                    </label>
+                    <input 
+                      type="password"
+                      required
+                      placeholder="••••••••"
+                      value={signinPassword}
+                      onChange={(e) => setSigninPassword(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] text-left transition-colors"
+                    />
+                  </div>
+
+                  <button 
+                    type="submit"
+                    className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
+                  >
+                    {currentLang === 'AR' ? 'دخول آمن' : 'Connexion Sécurisée'}
+                  </button>
+
+                  {/* PRE-FILL BUTTONS */}
+                  <div className="border-t border-slate-200 dark:border-slate-800 pt-4 mt-6">
+                    <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center font-bold mb-2.5">
+                      {currentLang === 'AR' ? 'حسابات التجربة الفورية' : 'COMPTES DE DÉMO DE PLOMBERIE (ACCÈS DIRECT)'}
+                    </p>
+                    <div className="grid grid-cols-2 gap-3 text-center">
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setSigninEmail('user@stouchy.com');
+                          setSigninPassword('user123');
+                          showToast("Connexion en cours...", "info");
+                          setTimeout(() => {
+                            const userSession = { name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user' as Role, phone: '+216 22 456 789', city: 'Ariana' };
+                            setSessionUser(userSession);
+                            setCurrentRole('user');
+                            setBypassAuth(true);
+                            setActiveTab('Accueil');
+                            showToast(currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !', 'success');
+                          }, 250);
+                        }}
+                        className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 border border-slate-250 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-black py-2.5 rounded-lg transition"
                       >
-                        See All
+                        Client (Ahmed Ben Ali)
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setSigninEmail('admin@stouchy.com');
+                          setSigninPassword('admin123');
+                          showToast("Connexion en cours...", "info");
+                          setTimeout(() => {
+                            const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role };
+                            setSessionUser(adminSession);
+                            setCurrentRole('admin');
+                            setBypassAuth(true);
+                            setActiveTab('AdminAccueil');
+                            showToast(currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !', 'success');
+                          }, 250);
+                        }}
+                        className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 border border-slate-250 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-black py-2.5 rounded-lg transition"
+                      >
+                        Admin Plombier
                       </button>
                     </div>
+                  </div>
 
-                    <div className="space-y-4">
-                      {transactions.slice(0, 4).map((tx: any) => {
-                        const isExpense = tx.amount < 0;
-                        return (
-                          <div key={tx.id} className="flex items-center justify-between border-b border-slate-50 pb-3 last:border-b-0 last:pb-0">
-                            <div className="flex items-center gap-3">
-                              <div className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 border border-slate-100">
-                                <span className="text-base">{tx.emoji}</span>
-                              </div>
-                              <div>
-                                <div className="text-xs font-bold text-slate-800 leading-tight">{tx.label}</div>
-                                <div className="text-[10px] text-slate-400 mt-0.5">{tx.date}</div>
-                              </div>
-                            </div>
-                            <span className={`text-xs font-black ${isExpense ? 'text-[#A80000]' : 'text-[#008A5D]'}`}>
-                              {isExpense ? '' : '+'}{tx.amount.toFixed(2)}
-                            </span>
-                          </div>
-                        );
-                      })}
+                  {/* LINK TO SIGN UP SCREEN */}
+                  <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+                      {currentLang === 'AR' ? 'ليس لديك حساب؟' : 'Nouveau sur Plombier Tunisie ?'}{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuthTab('signup');
+                          setSigninEmail('');
+                          setSigninPassword('');
+                        }}
+                        className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
+                      >
+                        {currentLang === 'AR' ? 'أنشئ حساباً جديداً' : 'Créer un compte'}
+                      </button>
+                    </p>
+                  </div>
+                </form>
+              )}
+
+              {/* SIGN UP FORM */}
+              {authTab === 'signup' && (
+                <form onSubmit={handleSignUp} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                      {currentLang === 'AR' ? 'الاسم الكامل' : 'Nom Complet'}
+                    </label>
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Ahmed Ben Salem"
+                      value={signupName}
+                      onChange={(e) => setSignupName(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] transition-colors"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                        {currentLang === 'AR' ? 'البريد الإلكتروني' : 'Email'}
+                      </label>
+                      <input 
+                        type="email"
+                        required
+                        placeholder="nom@email.tn"
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] transition-colors"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                        {currentLang === 'AR' ? 'الهاتف' : 'Téléphone'}
+                      </label>
+                      <input 
+                        type="text"
+                        required
+                        placeholder="+216 22 111 222"
+                        value={signupPhone}
+                        onChange={(e) => setSignupPhone(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] transition-colors"
+                      />
                     </div>
                   </div>
 
-                  {/* Portfolio Growth graphics card */}
-                  <div className="bg-gradient-to-br from-[#0B2545] to-[#134074] rounded-2xl p-6 text-white text-left relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[200px]">
-                    <div className="absolute inset-0 z-0 opacity-30 flex items-end pointer-events-none">
-                      <svg viewBox="0 0 1440 320" className="w-full h-24" preserveAspectRatio="none">
-                        <path
-                          fill="#00E5FF"
-                          fillOpacity="1"
-                          d="M0,224L48,197.3C96,171,192,117,288,112C384,107,480,149,576,149.3C672,149,768,107,864,117.3C960,128,1056,192,1152,208C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                        />
-                        <path
-                          fill="#005994"
-                          fillOpacity="0.5"
-                          d="M0,96L48,117.3C96,139,192,181,288,176C384,171,480,117,576,128C672,139,768,213,864,229.3C960,245,1056,203,1152,197.3C1248,192,1344,224,1392,240L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-                        />
-                      </svg>
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                      {currentLang === 'AR' ? 'المدينة / الولاية' : 'Ville / Gouvernorat'}
+                    </label>
+                    <select
+                      value={signupCity}
+                      onChange={(e) => setSignupCity(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none transition-colors"
+                    >
+                      <option value="Tunis">Tunis</option>
+                      <option value="Ariana">Ariana</option>
+                      <option value="Ben Arous">Ben Arous</option>
+                      <option value="Sousse">Sousse</option>
+                      <option value="Sfax">Sfax</option>
+                      <option value="Monastir">Monastir</option>
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                        {currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe'}
+                      </label>
+                      <input 
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] transition-colors"
+                      />
                     </div>
-
-                    <div className="z-10">
-                      <h4 className="text-[10px] font-bold tracking-[2px] text-sky-300 uppercase">Portfolio Growth</h4>
-                      <p className="text-[9px] text-slate-400 mt-1">Real-time asset projection values.</p>
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                        {currentLang === 'AR' ? 'تأكيد كلمة المرور' : 'Confirmation'}
+                      </label>
+                      <input 
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={signupConfirmPassword}
+                        onChange={(e) => setSignupConfirmPassword(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] transition-colors"
+                      />
                     </div>
-
-                    <div className="z-10 flex items-baseline justify-between mt-12">
-                      <span className="text-xl font-bold tracking-tight">PORTFOLIO GROWTH</span>
-                      <span className="bg-[#00E5FF]/20 text-[#00E5FF] font-bold text-[9px] px-2.5 py-0.5 rounded-full border border-[#00E5FF]/30 leading-none">Active</span>
-                    </div>
                   </div>
-                </div>
-              </div>
-            ) : (
-              <div className="max-w-7xl mx-auto">{renderActiveScreenContent()}</div>
-            )}
-          </main>
-        </div>
-      </div>
 
-      {/* ----------------------------------------------------
-          MOBILE CONTAINER (Visible < 1024px)
-          ---------------------------------------------------- */}
-      <div className="lg:hidden flex h-screen w-screen flex-col overflow-hidden bg-[#F4F6FA] text-[#404751] font-sans antialiased pb-24">
-        {/* Mobile Top Bar Header */}
-        <header className="h-16 flex-shrink-0 flex items-center justify-between bg-white px-5 border-b border-[#E2E8F0] shadow-[0_2px_10px_rgba(0,0,0,0.01)]">
-          <div className="flex items-center gap-2.5">
-            <img
-              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop"
-              alt="Avatar"
-              className="w-9 h-9 rounded-full object-cover border border-slate-100"
-            />
-            <span className="text-lg font-extrabold text-[#005994] select-none">Plombier</span>
-          </div>
-          <button
-            onClick={() => showToast('No notifications', 'info')}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-50 text-slate-500 border border-slate-100"
-          >
-            <MaterialIcons name="notifications" size={16} color="#5A6578" />
-          </button>
-        </header>
+                  <button 
+                    type="submit"
+                    className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3.5 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
+                  >
+                    {currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Créer mon compte client'}
+                  </button>
 
-        {/* Scrollable Mobile Body */}
-        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-6">
-          {activeTab === 'Home' ? (
-            <>
-              {/* Greetings */}
-              <div className="text-left px-0.5">
-                <h2 className="text-2xl font-black text-slate-800 leading-tight">Good Morning, Sami</h2>
-                <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Your artisan portfolio is looking stable today.</p>
-              </div>
+                  {/* LINK TO SIGN IN SCREEN */}
+                  <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+                      {currentLang === 'AR' ? 'لديك حساب بالفعل؟' : 'Déjà inscrit ?'}{' '}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setAuthTab('signin');
+                          setSignupName('');
+                          setSignupEmail('');
+                          setSignupPhone('');
+                          setSignupPassword('');
+                          setSignupConfirmPassword('');
+                        }}
+                        className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
+                      >
+                        {currentLang === 'AR' ? 'تسجيل الدخول' : 'Se connecter'}
+                      </button>
+                    </p>
+                  </div>
+                </form>
+              )}
 
-              {/* Liquidity Card (Clean layout, NO statement/transfer buttons) */}
-              <div className="rounded-[24px] bg-gradient-to-b from-[#005994] to-[#007CBF] p-6 text-white relative overflow-hidden shadow-sm min-h-[140px] flex flex-col justify-between text-left">
-                <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-white/5 rounded-full pointer-events-none" />
-                <div className="flex justify-between items-start">
-                  <div className="text-[9px] font-extrabold tracking-[2px] text-white/75 uppercase">TOTAL LIQUIDITY</div>
-                  <MaterialIcons name="account-balance-wallet" size={18} color="rgba(255,255,255,0.4)" />
-                </div>
-                <div>
-                  <div className="text-3xl font-extrabold tracking-tight mb-2">
-                    {totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2 })} {currency}
-                  </div>
-                  <div className="inline-block bg-white/20 px-2.5 py-1 rounded-full text-[9px] font-extrabold tracking-wide uppercase leading-none">
-                    ↗ +4.2% THIS MONTH
-                  </div>
-                </div>
-              </div>
-
-              {/* Overdue Badge */}
-              <div className="border border-red-500/10 border-l-4 border-l-[#A80000] bg-[#FFF1F1] rounded-2xl p-4 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.01)] text-left">
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-[#A80000] text-white">
-                    <MaterialIcons name="priority-high" size={16} color="#FFFFFF" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-slate-800 text-xs">{overdueBills.length > 0 ? `${overdueBills.length} Overdue` : 'Bills OK'}</h4>
-                    <p className="text-[10px] text-slate-400 font-semibold mt-0.5">{overdueTotal > 0 ? `${overdueTotal.toFixed(2)} ${currency} pending` : 'All paid'}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setActiveTab('Accounts')}
-                  className="bg-[#A80000] hover:bg-[#8B0000] text-white font-extrabold text-[9px] px-3 py-2 rounded-xl uppercase tracking-wider transition shadow-sm leading-none"
+              {/* BYPASS AUTH / CONTINUE AS GUEST */}
+              <div className="border-t border-slate-200 dark:border-slate-850 pt-5 text-center flex flex-col gap-3">
+                <button 
+                  onClick={() => {
+                    setBypassAuth(true);
+                    setCurrentRole('anonyme');
+                    setSessionUser(null);
+                    setActiveTab('Accueil');
+                    showToast(currentLang === 'AR' ? 'تصفح بصفتك زائر' : 'Accès Invité autorisé.', 'info');
+                  }}
+                  className="w-full bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-300 dark:border-slate-850 text-slate-650 hover:text-slate-800 dark:text-slate-350 dark:hover:text-white text-xs font-black py-3.5 rounded-xl transition flex items-center justify-center gap-2 hover:scale-[1.01] transform"
                 >
-                  PAY NOW
+                  <span>{currentLang === 'AR' ? 'المواصلة كزائر (مجهول) ←' : 'Continuer en tant qu\'invité (Anonyme) →'}</span>
                 </button>
               </div>
 
-              {/* Quick Log Horizontal Slider */}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          HEADER NAVBAR & PREFERENCES
+          ========================================== */}
+      {(bypassAuth || sessionUser) && (
+        <header className={`sticky top-0 z-50 border-b transition-colors backdrop-blur-md ${
+          currentTheme === 'dark' ? 'bg-[#0F172A]/90 border-slate-800' : 'bg-white/95 border-slate-200'
+        } shadow-sm`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            {/* Logo area */}
+            <button 
+              onClick={() => {
+                if (currentRole === 'admin') {
+                  setActiveTab('AdminAccueil');
+                } else {
+                  setActiveTab('Accueil');
+                }
+              }} 
+              className="flex items-center gap-3 focus:outline-none"
+            >
+              <LogoSVG size={44} />
               <div className="text-left">
-                <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-3 px-0.5">Quick Log</h3>
-                <div className="flex overflow-x-auto gap-3.5 no-scrollbar pb-1">
-                  {quickLogMobile.map((shortcut) => (
-                    <button
-                      key={shortcut.id}
-                      onClick={() => handleQuickLog(shortcut)}
-                      className="flex-shrink-0 flex flex-col items-center justify-center bg-white border border-[#E2E8F0] p-4 rounded-2xl w-20 text-center shadow-[0_4px_12px_rgba(0,0,0,0.01)]"
+                <span className={`text-xl font-black tracking-tight ${isRTL ? 'font-arabic font-extrabold' : ''}`}>
+                  {currentLang === 'AR' ? 'سباك تونس' : 'Plombier Tunisie'}
+                </span>
+                <p className="text-[9px] text-[#F97316] font-bold tracking-widest uppercase mt-0.5 leading-none">
+                  {t.tagline}
+                </p>
+              </div>
+            </button>
+
+            {/* Navigation Tabs based on Role */}
+            <nav className="hidden lg:flex items-center gap-7 font-black text-xs uppercase tracking-wider">
+              {currentRole === 'admin' ? (
+                // ADMIN PANELS: Accueil | Gestion Annonce | Gestion Catégorie | Gestion User | Profil | Analytics
+                [
+                  { id: 'AdminAccueil', label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' },
+                  { id: 'GestionAnnonce', label: currentLang === 'AR' ? 'إدارة الإعلانات' : 'Gestion Annonce' },
+                  { id: 'GestionCategorie', label: currentLang === 'AR' ? 'إدارة الأصناف' : 'Gestion Catégorie' },
+                  { id: 'GestionUser', label: currentLang === 'AR' ? 'إدارة المستخدمين' : 'Gestion User' },
+                  { id: 'AdminProfile', label: currentLang === 'AR' ? 'ملف الإدارة' : 'Profil' },
+                  { id: 'Analytics', label: currentLang === 'AR' ? 'التحليلات الماليّة' : 'Analytics' }
+                ].map(link => (
+                  <button 
+                    key={link.id}
+                    onClick={() => setActiveTab(link.id)}
+                    className={`transition-colors py-2.5 relative leading-none ${
+                      activeTab === link.id ? 'text-[#F97316]' : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {activeTab === link.id && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                    )}
+                  </button>
+                ))
+              ) : (
+                // USER PANELS: Accueil | Services | Zone d'intervention | Pièces d'occasion | Profil | Paiement
+                [
+                  { id: 'Accueil', label: t.accueil },
+                  { id: 'Services', label: t.services },
+                  { id: 'Zones', label: t.zones },
+                  { id: 'Marketplace', label: t.pieces },
+                  { id: 'Profile', label: t.mon_profil },
+                  { id: 'Payment', label: t.paiement }
+                ].map(link => (
+                  <button 
+                    key={link.id}
+                    onClick={() => setActiveTab(link.id)}
+                    className={`transition-colors py-2.5 relative leading-none ${
+                      activeTab === link.id ? 'text-[#F97316]' : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200'
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {activeTab === link.id && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316] rounded-full" />
+                    )}
+                  </button>
+                ))
+              )}
+            </nav>
+
+            {/* Utility Preferences Header Right */}
+            <div className="flex items-center gap-4">
+              
+              {/* Language toggle button */}
+              <button 
+                onClick={() => setCurrentLang(currentLang === 'FR' ? 'AR' : 'FR')}
+                className="px-2.5 py-1.5 rounded-lg border text-[11px] font-black shadow-sm bg-slate-50 dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+              >
+                {currentLang === 'FR' ? 'AR' : 'FR'}
+              </button>
+
+              {/* Dark mode toggler */}
+              <button 
+                onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+                className="w-9 h-9 rounded-lg border flex items-center justify-center bg-slate-50 dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750 transition"
+              >
+                {currentTheme === 'light' ? (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                  </svg>
+                ) : (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-amber-400">
+                    <circle cx="12" cy="12" r="5" />
+                    <line x1="12" y1="1" x2="12" y2="3" />
+                    <line x1="12" y1="21" x2="12" y2="23" />
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                    <line x1="1" y1="12" x2="3" y2="12" />
+                    <line x1="21" y1="12" x2="23" y2="12" />
+                  </svg>
+                )}
+              </button>
+
+              {/* Logged user badge & Logout option */}
+              <div className="flex items-center gap-2">
+                {currentRole === 'anonyme' ? (
+                  <button 
+                    onClick={() => {
+                      setBypassAuth(false);
+                      setSessionUser(null);
+                    }}
+                    className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4.5 py-2.5 rounded-xl transition shadow-md"
+                  >
+                    {currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion / S\'inscrire'}
+                  </button>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <span className="hidden md:inline text-xs font-black bg-[#1E3A5F]/5 dark:bg-[#1E3A5F]/20 text-[#1E3A5F] dark:text-sky-400 px-3 py-1.5 rounded-lg border border-[#1E3A5F]/10">
+                      {sessionUser?.name} ({currentRole.toUpperCase()})
+                    </span>
+                    <button 
+                      onClick={handleLogout}
+                      className="bg-rose-600 hover:bg-rose-700 text-white text-xs font-black px-3.5 py-2.5 rounded-xl transition shadow-md"
+                      title="Déconnexion"
                     >
-                      <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#005994]/5 mb-2.5">
-                        {renderQuickLogIcon(shortcut.category)}
+                      {currentLang === 'AR' ? 'خروج' : 'Déconnexion'}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          </div>
+
+          {/* Dynamic Mobile Nav Header Toggles */}
+          <div className="lg:hidden flex overflow-x-auto border-t border-slate-200 dark:border-slate-800 px-4 py-2 gap-3 text-center no-scrollbar">
+            {currentRole === 'admin' ? (
+              [
+                { id: 'AdminAccueil', label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' },
+                { id: 'GestionAnnonce', label: currentLang === 'AR' ? 'الإعلانات' : 'Annonces' },
+                { id: 'GestionCategorie', label: currentLang === 'AR' ? 'الأصناف' : 'Catégories' },
+                { id: 'GestionUser', label: currentLang === 'AR' ? 'المستخدمين' : 'Membres' },
+                { id: 'AdminProfile', label: currentLang === 'AR' ? 'الملف' : 'Profil' },
+                { id: 'Analytics', label: currentLang === 'AR' ? 'التحليلات' : 'Analytics' }
+              ].map(link => (
+                <button
+                  key={link.id}
+                  onClick={() => setActiveTab(link.id)}
+                  className={`px-3 py-1.5 rounded-full text-[11px] font-black whitespace-nowrap transition ${
+                    activeTab === link.id ? 'bg-[#F97316] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  }`}
+                >
+                  {link.label}
+                </button>
+              ))
+            ) : (
+              [
+                { id: 'Accueil', label: t.accueil },
+                { id: 'Services', label: t.services },
+                { id: 'Zones', label: t.zones },
+                { id: 'Marketplace', label: t.pieces },
+                { id: 'Profile', label: t.mon_profil },
+                { id: 'Payment', label: t.paiement }
+              ].map(link => (
+                <button
+                  key={link.id}
+                  onClick={() => setActiveTab(link.id)}
+                  className={`px-3 py-1.5 rounded-full text-[11px] font-black whitespace-nowrap transition ${
+                    activeTab === link.id ? 'bg-[#F97316] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  }`}
+                >
+                  {link.label}
+                </button>
+              ))
+            )}
+          </div>
+        </header>
+      )}
+
+      {/* ==========================================
+          MAIN VIEWS ROUTER & SWITCHER
+          ========================================== */}
+      {(bypassAuth || sessionUser) && (
+        <main className="min-h-[calc(100vh-280px)]">
+
+          {/* ------------------------------------------
+              USER TAB 1: ACCUEIL (HOME VIEW)
+              ------------------------------------------ */}
+          {activeTab === 'Accueil' && (
+            <div className="animate-fade-in text-left">
+              {/* Premium Hero Banner */}
+              <section className="relative bg-[#0F172A] text-white py-24 sm:py-32 overflow-hidden">
+                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_30%,#F97316_0%,transparent_50%)] pointer-events-none" />
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                  <div className="max-w-3xl">
+                    <span className="bg-[#F97316] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
+                      Tunisie Dépannage Express 24h/7j
+                    </span>
+                    <h1 className="text-4xl sm:text-6xl font-black tracking-tight mt-6 leading-tight">
+                      {currentLang === 'AR' ? 'أفضل وأسرع خدمات الترصيص والصيانة في تونس' : 'Vos Urgences Plomberie Réglées en un Record'}
+                    </h1>
+                    <p className="text-slate-300 text-base sm:text-lg font-medium mt-4 max-w-xl">
+                      {currentLang === 'AR' 
+                        ? 'نحن هنا لتلبية جميع احتياجاتكم في صيانة الترصيص، تكييف الهواء، والتدفئة المركزية مع توفير سوق قطع غيار مستعملة وموثوقة.' 
+                        : 'Artisans plombiers qualifiés à votre service pour les fuites, pannes thermiques et raccordements gaz dans tout le pays.'}
+                    </p>
+                    
+                    {/* Action buttons CTAs */}
+                    <div className="flex flex-wrap items-center gap-4 mt-10">
+                      <button 
+                        onClick={() => setActiveTab('Zones')}
+                        className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
+                      >
+                        <span>{t.contactez_experts}</span>
+                      </button>
+
+                      <a 
+                        href={`https://wa.me/21622456789?text=${encodeURIComponent(t.whatsapp_msg)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
+                      >
+                        <span>{t.whatsapp} Support 24/7</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Trust Stats Bar */}
+              <section className="bg-slate-150 dark:bg-slate-900/60 py-10 border-y border-slate-200 dark:border-slate-800">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                    {[
+                      { val: t.experience_val, lbl: t.experience_lbl, color: 'text-[#1E3A5F] dark:text-sky-400' },
+                      { val: t.dispo_val, lbl: t.dispo_lbl, color: 'text-[#F97316]' },
+                      { val: t.gov_val, lbl: t.gov_lbl, color: 'text-[#1E3A5F] dark:text-sky-400' },
+                      { val: t.satisfaction_val, lbl: t.satisfaction_lbl, color: 'text-emerald-500' }
+                    ].map((stat, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className={`text-3xl sm:text-4xl font-black tracking-tight ${stat.color}`}>
+                          {stat.val}
+                        </div>
+                        <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                          {stat.lbl}
+                        </p>
                       </div>
-                      <span className="text-[9px] font-extrabold tracking-wide text-slate-800 uppercase">{shortcut.label}</span>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* Technical Services Key Cards */}
+              <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center max-w-2xl mx-auto mb-16">
+                  <h2 className="text-3xl font-black tracking-tight">
+                    {currentLang === 'AR' ? 'تخصصاتنا الفنية الرئيسية' : 'Nos Prestations Clés'}
+                  </h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
+                    {t.expertises_desc}
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                  {[
+                    { title: t.plomberie_generale, icon: "plumbing", desc: currentLang === 'AR' ? 'إصلاح التسربات وتجديد شبكات المياه المنزلية والعمومية.' : 'Recherche de fuites, installations de sanitaires et de chauffe-eau.' },
+                    { title: t.climatisation, icon: "ac", desc: currentLang === 'AR' ? 'تركيب المكيفات، صيانة شاملة وشحن الغاز المعتمد.' : 'Installation de climatiseurs split, recharges de gaz et entretien.' },
+                    { title: t.installation_gaz, icon: "gas", desc: currentLang === 'AR' ? 'تمديد وتوصيل مواسير الغاز المنزلي مع السلامة الكلية.' : 'Tuyauteries de gaz conformes, branchements et détection de fuites.' },
+                    { title: t.chauffage_central, icon: "heater", desc: currentLang === 'AR' ? 'صيانة وضبط المراجل الحرارية والمشعات للتوفير.' : 'Chaudières, détartrages de radiateurs et régulations connectées.' }
+                  ].map((serv, idx) => (
+                    <button 
+                      key={idx}
+                      onClick={() => setActiveTab('Services')}
+                      className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm hover:border-[#F97316] hover:shadow-lg transition-all duration-300 text-left group hover:-translate-y-1 transform focus:outline-none"
+                    >
+                      <div className="w-12 h-12 rounded-2xl bg-[#1E3A5F]/5 dark:bg-[#1E3A5F]/20 flex items-center justify-center text-[#1E3A5F] dark:text-sky-400 group-hover:bg-[#F97316]/10 group-hover:text-[#F97316] transition-colors mb-5">
+                        🛠️
+                      </div>
+                      <h3 className="text-base font-black group-hover:text-[#F97316] transition-colors">{serv.title}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">{serv.desc}</p>
                     </button>
                   ))}
-                  <button
-                    onClick={() => {
-                      setTxType('expense');
-                      setShowAddTx(true);
-                    }}
-                    className="flex-shrink-0 flex flex-col items-center justify-center bg-white border border-dashed border-slate-300 p-4 rounded-2xl w-20 text-center"
-                  >
-                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 mb-2.5 text-slate-400">
-                      <MaterialIcons name="add" size={16} color="currentColor" />
+                </div>
+              </section>
+
+              {/* Used Parts Showcase Grid */}
+              <section className="bg-slate-100 dark:bg-slate-900/60 py-20 border-t border-slate-200 dark:border-slate-800">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
+                    <div>
+                      <h2 className="text-3xl font-black tracking-tight">{t.pieces}</h2>
+                      <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
+                        {currentLang === 'AR' 
+                          ? 'استعرض أحدث قطع الغيار المستعملة المضمونة المتوفرة في الكتالوج لدينا.' 
+                          : 'Équipez-vous au meilleur prix avec nos pièces d\'occasion révisées et testées.'}
+                      </p>
                     </div>
-                    <span className="text-[9px] font-extrabold tracking-wide text-slate-400 uppercase">Custom</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Recent Activity mobile list */}
-              <div className="text-left">
-                <div className="flex justify-between items-center mb-4 px-0.5">
-                  <h3 className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">Recent Activity</h3>
-                  <button onClick={() => showToast('Opening history...', 'info')} className="text-[10px] font-extrabold text-[#005994] uppercase tracking-wide">VIEW ALL</button>
-                </div>
-
-                <div className="space-y-2.5">
-                  {transactions.slice(0, 3).map((tx: any) => {
-                    const isExpense = tx.amount < 0;
-                    return (
-                      <div key={tx.id} className="bg-white border border-[#E2E8F0] rounded-2xl p-4 flex items-center justify-between shadow-[0_8px_30px_rgba(0,0,0,0.01)]">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8.5 h-8.5 flex items-center justify-center rounded-full bg-slate-50 border border-slate-100">
-                            <span className="text-base">{tx.emoji}</span>
-                          </div>
-                          <div>
-                            <div className="text-xs font-bold text-slate-800 leading-tight">{tx.label}</div>
-                            <div className="text-[9px] text-slate-400 mt-0.5">{tx.date || 'Today'}</div>
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-end gap-1">
-                          <span className={`text-xs font-black ${isExpense ? 'text-[#A80000]' : 'text-[#008A5D]'}`}>
-                            {isExpense ? '' : '+'}${Math.abs(tx.amount).toFixed(2)}
-                          </span>
-                          <span className={`text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase leading-none ${
-                            tx.status === 'completed' || tx.status === 'cleared'
-                              ? 'bg-[#EBFDF5] text-[#008A5D]'
-                              : 'bg-amber-50 text-amber-600'
-                          }`}>
-                            {tx.status || 'Cleared'}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="pb-10">{renderActiveScreenContent()}</div>
-          )}
-        </div>
-
-        {/* Floating Bottom Tab Bar Navigation (Perfectly Proportioned) */}
-        <nav className="fixed bottom-6 left-6 right-6 h-18 bg-white/95 backdrop-blur-md border border-slate-200/50 rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex items-center justify-around px-2.5 z-50">
-          {[
-            { name: 'Home', icon: 'home', label: 'Home' },
-            { name: 'Reports', icon: 'bar-chart', label: 'Reports' },
-            { name: 'Accounts', icon: 'account-balance', label: 'Accounts' },
-            { name: 'Goals', icon: 'track-changes', label: 'Goals' },
-            { name: 'Profile', icon: 'person', label: 'Profile' },
-          ].map((tab) => {
-            const isActive = activeTab === tab.name;
-            return (
-              <button
-                key={tab.name}
-                onClick={() => setActiveTab(tab.name as TabName)}
-                className="flex flex-col items-center justify-center w-12 h-12 relative"
-              >
-                <div className={`w-9 h-9 flex items-center justify-center rounded-xl transition ${
-                  isActive ? 'bg-[#005994] text-white shadow-sm' : 'text-slate-400'
-                }`}>
-                  <MaterialIcons name={tab.icon} size={16} color="currentColor" />
-                </div>
-                <span className={`text-[7px] font-bold tracking-wider uppercase mt-1 transition ${
-                  isActive ? 'text-[#005994]' : 'text-slate-400'
-                }`}>{tab.label}</span>
-              </button>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* Add Transaction Modal Box */}
-      {showAddTx && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-5 z-[99999] backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-[24px] p-6 max-w-sm w-full shadow-2xl text-left">
-            <div className="flex justify-between items-center mb-5">
-              <h3 className="font-extrabold text-lg text-slate-800">Add Transaction</h3>
-              <button
-                onClick={() => setShowAddTx(false)}
-                className="w-7 h-7 rounded-full flex items-center justify-center bg-slate-50 hover:bg-slate-100 text-slate-400"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateTransaction} className="space-y-4">
-              <div>
-                <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Type</label>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setTxType('expense')}
-                    className={`py-2 rounded-lg font-bold text-xs text-center border transition ${
-                      txType === 'expense'
-                        ? 'bg-[#A80000]/10 border-[#A80000] text-[#A80000]'
-                        : 'bg-slate-50 border-slate-200 text-slate-500'
-                    }`}
-                  >
-                    Expense
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTxType('income')}
-                    className={`py-2 rounded-lg font-bold text-xs text-center border transition ${
-                      txType === 'income'
-                        ? 'bg-[#008A5D]/10 border-[#008A5D] text-[#008A5D]'
-                        : 'bg-slate-50 border-slate-200 text-slate-500'
-                    }`}
-                  >
-                    Income
-                  </button>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Amount ({currency})</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  required
-                  placeholder="0.00"
-                  value={txAmount}
-                  onChange={(e) => setTxAmount(e.target.value)}
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005994]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Label</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Zara City Mall"
-                  value={txLabel}
-                  onChange={(e) => setTxLabel(e.target.value)}
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005994]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Category</label>
-                  <select
-                    value={txCategory}
-                    onChange={(e) => setTxCategory(e.target.value)}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-xs font-semibold text-slate-850 focus:outline-none focus:border-[#005994]"
-                  >
-                    <option value="dining">Dining</option>
-                    <option value="retail">Retail</option>
-                    <option value="transport">Transport</option>
-                    <option value="utility">Utility</option>
-                    <option value="fuel">Fuel</option>
-                    <option value="salary">Salary</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Emoji</label>
-                  <select
-                    value={txEmoji}
-                    onChange={(e) => setTxEmoji(e.target.value)}
-                    className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-xs font-semibold text-slate-850 focus:outline-none focus:border-[#005994]"
-                  >
-                    <option value="🍽️">🍽️ Dining</option>
-                    <option value="🛍️">🛍️ Retail</option>
-                    <option value="🚌">🚌 Transport</option>
-                    <option value="🧾">🧾 Utility</option>
-                    <option value="⛽">⛽ Fuel</option>
-                    <option value="🏦">🏦 Salary</option>
-                  </select>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-[#005994] hover:bg-[#004775] transition text-white font-extrabold text-xs py-3 rounded-lg shadow-sm mt-5 uppercase tracking-wider"
-              >
-                Add Transaction
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Add To Goal Modal */}
-      {showAddToGoal && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-5 z-[99999] backdrop-blur-sm animate-fade-in">
-          <div className="bg-white border border-slate-200 rounded-[24px] p-6 max-w-sm w-full shadow-2xl text-left">
-            <div className="flex justify-between items-center mb-5">
-              <h3 className="font-extrabold text-lg text-slate-800">Add Funds to Goal</h3>
-              <button
-                onClick={() => setShowAddToGoal(false)}
-                className="w-7 h-7 rounded-full flex items-center justify-center bg-slate-50 hover:bg-slate-100 text-slate-400"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleAddToGoal} className="space-y-4">
-              <div>
-                <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Amount ({currency})</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  required
-                  placeholder="0.00"
-                  value={goalFundAmount}
-                  onChange={(e) => setGoalFundAmount(e.target.value)}
-                  className="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-xs font-semibold text-slate-800 focus:outline-none focus:border-[#005994]"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-[#005994] hover:bg-[#004775] transition text-white font-extrabold text-xs py-3 rounded-lg shadow-sm mt-5 uppercase tracking-wider"
-              >
-                Add Funds
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-// ----------------------------------------------------
-// HIGH-FIDELITY WEB TAB RENDERING HELPER: REPORTS TAB
-// ----------------------------------------------------
-const renderWebReportsTab = (transactions: any[], accounts: any[], settings: any, monthStr: string, currency: string) => {
-  const monthExpenses = transactions.filter((t: any) => t.date.startsWith(monthStr) && t.type === 'expense').reduce((s: number, t: any) => s + t.amount, 0);
-  const monthIncome = transactions.filter((t: any) => t.date.startsWith(monthStr) && t.type === 'income').reduce((s: number, t: any) => s + t.amount, 0);
-  const activeAccounts = accounts.filter((a: any) => !a.isArchived);
-  const totalBal = activeAccounts.reduce((s: number, a: any) => s + a.balance, 0);
-  const catSpend: Record<string, number> = {};
-  transactions.filter((t: any) => t.date.startsWith(monthStr) && t.type === 'expense').forEach((t: any) => { catSpend[t.category] = (catSpend[t.category] || 0) + t.amount; });
-  return (
-    <div className="max-w-7xl mx-auto space-y-8 text-left animate-fade-in">
-      {/* Title Header area */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div>
-          <span className="text-[10px] font-bold tracking-[2px] text-slate-400 uppercase">ARCHITECTURAL INSIGHTS</span>
-          <h1 className="text-3xl font-black text-slate-850 mt-1">Financial Reports</h1>
-        </div>
-        
-        {/* Monthly/Quarterly/Yearly toggle & Date */}
-        <div className="flex items-center gap-3">
-          <div className="bg-slate-100 p-1.5 rounded-2xl flex items-center gap-1 shadow-inner">
-            {['Monthly', 'Quarterly', 'Yearly'].map((period) => (
-              <button
-                key={period}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 ${
-                  period === 'Monthly'
-                    ? 'bg-white text-[#005994] shadow-sm'
-                    : 'text-slate-500 hover:text-slate-850'
-                }`}
-              >
-                {period}
-              </button>
-            ))}
-          </div>
-          
-          <button className="bg-white border border-slate-200 hover:bg-slate-50 px-4 py-3 rounded-2xl text-xs font-bold flex items-center gap-2 text-slate-700 shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-            <MaterialIcons name="calendar-today" size={14} color="#8E9CAE" />
-            <span>Aug 2024</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Grid Layout */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        
-        {/* Left Column (xl:col-span-2) */}
-        <div className="xl:col-span-2 space-y-8">
-          
-          {/* Cash Flow Overview */}
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)]">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h3 className="text-base font-extrabold text-slate-850">Cash Flow Overview</h3>
-                <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Net inflows remained positive with 12% growth</p>
-              </div>
-              <div className="flex items-center gap-4 text-[10px] font-bold tracking-wide uppercase">
-                <span className="flex items-center gap-1.5 text-slate-500">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#005994]" /> INCOME
-                </span>
-                <span className="flex items-center gap-1.5 text-slate-500">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#A80000]" /> EXPENSES
-                </span>
-              </div>
-            </div>
-            
-            {/* SVG Bars Chart */}
-            <div className="h-64 w-full flex items-end justify-between pt-4 px-2">
-              {[
-                { m: 'JAN', inc: 45, exp: 25 },
-                { m: 'FEB', inc: 60, exp: 30 },
-                { m: 'MAR', inc: 55, exp: 35 },
-                { m: 'APR', inc: 70, exp: 40 },
-                { m: 'MAY', inc: 85, exp: 45 },
-                { m: 'JUN', inc: 90, exp: 50 },
-                { m: 'JUL', inc: 80, exp: 40 },
-                { m: 'AUG', inc: 95, exp: 35 },
-              ].map((item, idx) => (
-                <div key={idx} className="flex-1 flex flex-col items-center gap-3 group">
-                  <div className="w-full flex items-end justify-center gap-1 h-48 relative">
-                    {/* Expense Bar */}
-                    <div 
-                      className="w-3 rounded-t-md bg-[#A80000] hover:opacity-90 transition-all duration-300 relative group-hover:scale-y-105 origin-bottom" 
-                      style={{ height: `${item.exp}%` }}
+                    <button 
+                      onClick={() => setActiveTab('Marketplace')}
+                      className="text-xs font-black text-[#F97316] hover:underline flex items-center gap-1.5"
                     >
-                      <div className="absolute top-[-25px] left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-20 shadow">
-                        ${(item.exp * 40).toLocaleString()}
-                      </div>
-                    </div>
-                    {/* Income Bar */}
-                    <div 
-                      className="w-3 rounded-t-md bg-[#005994] hover:opacity-90 transition-all duration-300 relative group-hover:scale-y-105 origin-bottom" 
-                      style={{ height: `${item.inc}%` }}
-                    >
-                      <div className="absolute top-[-25px] left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-[9px] font-bold px-1.5 py-0.5 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap z-20 shadow">
-                        ${(item.inc * 40).toLocaleString()}
-                      </div>
-                    </div>
+                      <span>{t.boutique_acces}</span>
+                    </button>
                   </div>
-                  <span className="text-[10px] font-black text-slate-400 tracking-wider">{item.m}</span>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Spending Velocity & Active Budgets side by side */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            {/* Spending Velocity */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between min-h-[320px]">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-sm font-extrabold text-slate-850 uppercase tracking-wider">Spending Velocity</h3>
-                <span className="text-[10px] font-extrabold text-[#A80000] bg-[#FFF1F1] px-2.5 py-1 rounded-full border border-red-500/10 leading-none">
-                  ↗ +4.2%
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    {products.slice(0, 4).map(prod => (
+                      <div 
+                        key={prod.id} 
+                        onClick={() => setSelectedProduct(prod)}
+                        className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg hover:border-[#1E3A5F] dark:hover:border-slate-500 transition-all duration-300 group flex flex-col justify-between cursor-pointer"
+                      >
+                        {/* Product visual wrapper */}
+                        <div className="bg-slate-50 dark:bg-slate-900 py-10 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 relative">
+                          <span className="absolute top-3 right-3 z-10 bg-slate-200 dark:bg-slate-750 text-slate-700 dark:text-slate-350 text-[8.5px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+                            {prod.condition}
+                          </span>
+
+                          {/* Heart favorite toggle */}
+                          <button 
+                            onClick={(e) => toggleFavorite(prod.id, e)}
+                            className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
+                          >
+                            <svg 
+                              width="14" height="14" viewBox="0 0 24 24" 
+                              fill={favorites.includes(prod.id) ? "currentColor" : "none"} 
+                              stroke="currentColor" strokeWidth="2.5"
+                              className={favorites.includes(prod.id) ? "text-rose-500" : ""}
+                            >
+                              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                          </button>
+
+                          <ProductVisual image={prod.image} />
+                        </div>
+
+                        <div className="p-4 text-left flex-1 flex flex-col justify-between">
+                          <div>
+                            <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">{prod.category}</span>
+                            <h4 className="text-xs sm:text-sm font-black text-slate-850 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
+                              {prod.title}
+                            </h4>
+                          </div>
+
+                          <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
+                            <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200">
+                              {prod.price} <span className="text-[9px] font-bold">DT</span>
+                            </div>
+                            
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedProduct(prod);
+                              }}
+                              className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
+                            >
+                              {currentLang === 'AR' ? 'اتصل لشراء' : 'Commander'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              USER TAB 2: SERVICES VIEW
+              ------------------------------------------ */}
+          {activeTab === 'Services' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
+                  {t.nos_expertises}
                 </span>
-              </div>
-              
-              {/* Smooth Line Chart Graphic */}
-              <div className="h-32 w-full relative overflow-hidden flex items-end">
-                <svg viewBox="0 0 300 100" className="w-full h-full" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="velocityGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#A80000" stopOpacity="0.12" />
-                      <stop offset="100%" stopColor="#A80000" stopOpacity="0.0" />
-                    </linearGradient>
-                  </defs>
-                  {/* Filled area */}
-                  <path
-                    d="M0,80 Q50,70 100,50 T200,30 T300,10 L300,100 L0,100 Z"
-                    fill="url(#velocityGrad)"
-                  />
-                  {/* Stroke path */}
-                  <path
-                    d="M0,80 Q50,70 100,50 T200,30 T300,10"
-                    fill="none"
-                    stroke="#A80000"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                  />
-                  {/* Highlight point */}
-                  <circle cx="200" cy="30" r="4.5" fill="#A80000" stroke="#FFFFFF" strokeWidth="1.5" />
-                </svg>
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
+                  {t.nos_expertises}
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
+                  {t.expertises_desc}
+                </p>
               </div>
 
-              {/* Detail Metrics */}
-              <div className="grid grid-cols-3 gap-2 border-t border-slate-100 pt-4 mt-4">
-                <div>
-                  <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">PEAK DAY</div>
-                  <div className="text-xs font-black text-slate-800 mt-1.5">Aug 14</div>
-                </div>
-                <div>
-                  <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">AVG DAILY</div>
-                  <div className="text-xs font-black text-slate-800 mt-1.5">$142.00</div>
-                </div>
-                <div>
-                  <div className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">STATUS</div>
-                  <div className="text-xs font-black text-[#A80000] mt-1.5">Accelerating</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Active Budgets list */}
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between min-h-[320px]">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-sm font-extrabold text-slate-850 uppercase tracking-wider">Active Budgets</h3>
-                <button className="text-xs font-extrabold text-[#005994] hover:underline uppercase tracking-wide">
-                  Adjust Limits &gt;
-                </button>
-              </div>
-
-              <div className="space-y-5">
+              {/* List of 4 Services with before/after comparative graphics */}
+              <div className="space-y-16">
                 {[
-                  { name: 'Sidi Bou Said Restoration', val: 8450, total: 12000, color: '#005994', note: 'On track • 22 days remaining', percent: 70, isDanger: false },
-                  { name: 'Mediterranean Tour', val: 3890, total: 4000, color: '#A80000', note: 'Critical: 97% utilized • Alert active', percent: 97, isDanger: true },
-                  { name: 'Lifestyle & Dining', val: 1200, total: 2500, color: '#005994', note: 'Under budget • Trending lower', percent: 48, isDanger: false },
-                ].map((b, idx) => (
-                  <div key={idx} className="space-y-1.5 text-left">
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-slate-800">{b.name}</span>
-                      <span className="text-slate-700">${b.val.toLocaleString()} <span className="text-slate-400">/ ${b.total / 1000}k</span></span>
+                  { 
+                    name: t.plomberie_generale, 
+                    desc: currentLang === 'AR' ? 'تركيب وتصليح جميع الأجهزة الصحية المنزلية من حنفيات، مصارف، كشف تسرب المياه المجهول وحل المشاكل التقنية المعقدة.' : "Installation, réparation et maintenance de tous vos systèmes sanitaires. Nous intervenons sur les fuites complexes, le débouchage de canalisations, et la rénovation complète de salles de bain.",
+                    pts: [t.plomberie_desc_1, t.plomberie_desc_2, t.plomberie_desc_3],
+                    whatsapp_text: t.devis_msg + t.plomberie_generale,
+                    imgBefore: currentLang === 'AR' ? 'أنابيب نحاسية قديمة ومتآكلة وتسريب مياه مستمر' : "Réseau cuivre vétuste avec fuites régulières",
+                    imgAfter: currentLang === 'AR' ? 'شبكة أنابيب نحاسية جديدة وملحومة بمعايير عالية' : "Tubes cuivre neufs avec soudures professionnelles"
+                  },
+                  { 
+                    name: t.climatisation, 
+                    desc: currentLang === 'AR' ? 'صيانة دورية للمكيفات وتركيب الوحدات وشحن غاز التبريد لضمان استهلاك طاقة مثالي وتبريد ممتاز في الصيف.' : "Expertise complète en systèmes de refroidissement. De l'installation de splits muraux à la maintenance de centrales de climatisation, nous assurons une température optimale.",
+                    pts: [t.clim_desc_1, t.clim_desc_2, t.clim_desc_3],
+                    whatsapp_text: t.devis_msg + t.climatisation,
+                    imgBefore: currentLang === 'AR' ? 'مروحة مكيف متسخة ومترسبة بالغبار والبكتيريا' : "Filtres encrassés provoquant une surconsommation",
+                    imgAfter: currentLang === 'AR' ? 'مكيف نظيف ومعقم بالكامل وتبريد ممتاز' : "Turbine nettoyée et désinfectée de fond en comble"
+                  },
+                  { 
+                    name: t.installation_gaz, 
+                    desc: currentLang === 'AR' ? 'تركيب شبكات الغاز الطبيعي المنزلي والصناعي مع اختبارات صارمة لمنع تسرب الغاز وضمان مطابقتها للمواصفات الحكومية.' : "La sécurité est notre priorité absolue. Nous réalisons vos installations de gaz de ville ou bouteille selon les normes de sécurité les plus strictes de la STEG.",
+                    pts: [t.gaz_desc_1, t.gaz_desc_2, t.gaz_desc_3],
+                    whatsapp_text: t.devis_msg + t.installation_gaz,
+                    imgBefore: currentLang === 'AR' ? 'خرطوم غاز قديم جداً ومهترئ يشكل خطراً كبيراً' : "Raccord souple expiré et robinet de gaz oxydé",
+                    imgAfter: currentLang === 'AR' ? 'تمديدات نحاسية ملحومة وآمنة مع صمام أمان نحاسي' : "Tuyauterie cuivre rigide soudée aux normes STEG"
+                  },
+                  { 
+                    name: t.chauffage_central, 
+                    desc: currentLang === 'AR' ? 'ضبط وصيانة المراجل وشبكات التدفئة المركزية وتطهير المشعات من الرواسب الكلسية لتدفئة متجانسة وقوية.' : "Solutions de chauffage performantes pour un hiver serein. Nous installons des chaudières à condensation haute performance et des radiateurs révisés.",
+                    pts: [t.chauffage_desc_1, t.chauffage_desc_2, t.chauffage_desc_3],
+                    whatsapp_text: t.devis_msg + t.chauffage_central,
+                    imgBefore: currentLang === 'AR' ? 'مشع تدفئة مليء بالرواسب الكلسية والمياه الطينية' : "Radiateurs froids par embouage du circuit d'eau",
+                    imgAfter: currentLang === 'AR' ? 'دورة تدفئة مطهرة بالكامل وتدفئة ممتازة' : "Désembouage hydrodynamique et chauffage parfait"
+                  }
+                ].map((serv, idx) => (
+                  <div 
+                    key={idx}
+                    className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center border-b border-slate-200 dark:border-slate-800 pb-16 last:border-b-0 last:pb-0 ${
+                      idx % 2 === 1 ? 'lg:flex-row-reverse' : ''
+                    }`}
+                  >
+                    {/* Descriptions */}
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#1E3A5F] flex items-center justify-center text-white font-extrabold text-sm">
+                          {idx + 1}
+                        </div>
+                        <h2 className="text-xl sm:text-2xl font-black text-slate-850 dark:text-slate-100">{serv.name}</h2>
+                      </div>
+                      
+                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-405 leading-relaxed font-semibold">
+                        {serv.desc}
+                      </p>
+
+                      <ul className="space-y-2.5 font-bold text-xs text-slate-650 dark:text-slate-300">
+                        {serv.pts.map((pt, pIdx) => (
+                          <li key={pIdx} className="flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* WhatsApp quotation request trigger */}
+                      <a
+                        href={`https://wa.me/21622456789?text=${encodeURIComponent(serv.whatsapp_text)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-md hover:scale-[1.02] transform"
+                      >
+                        <span>{t.demander_devis}</span>
+                      </a>
                     </div>
-                    <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="h-full rounded-full" style={{ width: `${b.percent}%`, backgroundColor: b.color }} />
+
+                    {/* BEFORE / AFTER VISUAL SLOTS */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
+                        <span className="absolute top-2.5 left-2.5 bg-slate-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
+                          {currentLang === 'AR' ? 'قبل التدخل' : 'AVANT'}
+                        </span>
+                        <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
+                          {serv.imgBefore}
+                        </div>
+                        <div className="h-1 bg-amber-500 rounded-full w-full" />
+                      </div>
+
+                      <div className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
+                        <span className="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
+                          {currentLang === 'AR' ? 'بعد التدخل' : 'APRÈS'}
+                        </span>
+                        <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
+                          {serv.imgAfter}
+                        </div>
+                        <div className="h-1 bg-emerald-500 rounded-full w-full" />
+                      </div>
                     </div>
-                    <p className={`text-[9px] font-semibold ${b.isDanger ? 'text-[#A80000]' : 'text-slate-400'}`}>{b.note}</p>
                   </div>
                 ))}
               </div>
             </div>
+          )}
 
-          </div>
-        </div>
-
-        {/* Right Column: Asset Allocation Donut Chart */}
-        <div className="space-y-8">
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] min-h-[420px] flex flex-col justify-between">
-            <h3 className="text-sm font-extrabold text-slate-855 uppercase tracking-wider text-left mb-6">Asset Allocation</h3>
-            
-            {/* SVG Donut Chart */}
-            <div className="relative flex items-center justify-center h-48 my-4">
-              <svg width="180" height="180" viewBox="0 0 36 36" className="transform -rotate-90">
-                {/* Real Estate: 60% (#005994) */}
-                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#005994" strokeWidth="3" strokeDasharray="60 40" strokeDashoffset="0" />
-                {/* Liquid Equities: 25% (#134074) */}
-                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#134074" strokeWidth="3.2" strokeDasharray="25 75" strokeDashoffset="-60" />
-                {/* Commodities: 15% (#A80000) */}
-                <circle cx="18" cy="18" r="15.915" fill="none" stroke="#A80000" strokeWidth="3" strokeDasharray="15 85" strokeDashoffset="-85" />
-              </svg>
-              
-              {/* Inner wealth labels */}
-              <div className="absolute text-center select-none">
-                <div className="text-[9px] font-black text-slate-400 uppercase tracking-wider leading-none">TOTAL WEALTH</div>
-                <div className="text-2xl font-black text-slate-850 mt-1 leading-none">$242k</div>
-              </div>
-            </div>
-
-            {/* Legends */}
-            <div className="space-y-3.5 border-t border-slate-100 pt-6 mt-4 text-left">
-              {[
-                { label: 'Real Estate', pct: '60%', color: 'bg-[#005994]' },
-                { label: 'Liquid Equities', pct: '25%', color: 'bg-[#134074]' },
-                { label: 'Commodities', pct: '15%', color: 'bg-[#A80000]' },
-              ].map((lg, idx) => (
-                <div key={idx} className="flex justify-between items-center text-xs font-bold">
-                  <div className="flex items-center gap-2.5">
-                    <span className={`w-2.5 h-2.5 rounded-full ${lg.color}`} />
-                    <span className="text-slate-500">{lg.label}</span>
-                  </div>
-                  <span className="text-slate-850">{lg.pct}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Expert Insight Banner */}
-      <div className="bg-gradient-to-r from-[#0B2545] to-[#134074] rounded-3xl p-8 text-white text-left relative overflow-hidden shadow-sm flex flex-col md:flex-row items-center justify-between gap-8 mt-4">
-        {/* Background circular vectors */}
-        <div className="absolute right-[-30px] top-[-30px] w-64 h-64 bg-white/5 rounded-full pointer-events-none" />
-        
-        <div className="space-y-3 max-w-3xl z-10">
-          <span className="bg-[#A80000] text-white font-extrabold text-[9px] px-3 py-1 rounded-full uppercase tracking-widest leading-none">
-            EXPERT INSIGHT
-          </span>
-          <h2 className="text-2xl font-black tracking-tight mt-2">Portfolio Efficiency is currently at 94%</h2>
-          <p className="text-xs text-slate-300 leading-relaxed font-semibold">
-            Based on your recent architectural investments in the Northern Coast, we recommend re-balancing 5% of your liquid assets into emerging commodities.
-          </p>
-        </div>
-
-        <button 
-          onClick={() => alert('Strategy loaded!')}
-          className="bg-white hover:bg-slate-50 text-[#0B2545] font-black text-xs px-6 py-3.5 rounded-2xl shadow-md transition whitespace-nowrap z-10"
-        >
-          View Recommended Strategy
-        </button>
-      </div>
-    </div>
-  );
-};
-
-// ----------------------------------------------------
-// HIGH-FIDELITY WEB TAB RENDERING HELPER: ACCOUNTS TAB
-// ----------------------------------------------------
-const renderWebAccountsTab = (accounts: any[], transactions: any[], unpaidBills: any[], currency: string, dispatch: any, handlePayBill: (id: string, label: string) => void, openAddTx: () => void, showToast: any, setActiveTab: any, txFilter: 'all'|'sent'|'received', setTxFilter: React.Dispatch<React.SetStateAction<'all'|'sent'|'received'>>) => {
-  const primaryAccount = accounts.find((a: any) => a.type === 'cash' && !a.isArchived) || accounts[0];
-  const otherAccounts = accounts.filter((a: any) => a.id !== primaryAccount?.id && !a.isArchived);
-  const filteredTx = transactions.filter((t: any) => {
-    if (txFilter === 'sent') return t.type === 'expense';
-    if (txFilter === 'received') return t.type === 'income';
-    return true;
-  });
-  return (
-    <div className="max-w-7xl mx-auto space-y-8 text-left animate-fade-in">
-      {/* Title Header area matching Accounts mockup */}
-      <div>
-        <span className="text-[10px] font-bold tracking-[2px] text-slate-400 uppercase">MANAGING {accounts.filter((a: any) => !a.isArchived).length} ACCOUNTS</span>
-        <h1 className="text-3xl font-black text-slate-850 mt-1">Accounts Overview</h1>
-      </div>
-
-      {/* Main Grid: Sidi Bou Said Card & Savings on Left, Recurring on Right */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        
-        {/* Left Area (xl:col-span-2) */}
-        <div className="xl:col-span-2 space-y-8">
-          
-          {/* Primary Account Card */}
-          <div className="rounded-3xl bg-gradient-to-r from-[#005994] to-[#007CBF] p-8 text-white relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[220px]">
-            <div className="absolute right-[-20px] top-[-20px] w-36 h-36 bg-white/5 rounded-full pointer-events-none" />
-            
-            <div className="flex justify-between items-start z-10">
-              <div>
-                <span className="text-[9px] font-bold tracking-[2px] text-white/70 uppercase">PRIMARY {primaryAccount?.type?.toUpperCase()} ACCOUNT</span>
-                <h3 className="text-xl font-extrabold tracking-tight mt-1">{primaryAccount?.emoji} {primaryAccount?.name}</h3>
-              </div>
-              <div className="w-10 h-10 flex items-center justify-center rounded-2xl bg-white/10 text-white">
-                <MaterialIcons name="account-balance-wallet" size={20} color="#FFFFFF" />
-              </div>
-            </div>
-
-            <div className="z-10 mt-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <span className="text-[9px] font-bold text-white/60 tracking-wider">Available Balance</span>
-                <div className="text-4xl font-extrabold tracking-tight mt-1">
-                  {primaryAccount?.balance?.toLocaleString('en-US', { minimumFractionDigits: 2 })} <span className="text-2xl font-bold opacity-90">{currency}</span>
-                </div>
-              </div>
-              
-              <div className="flex gap-3">
-                <button
-                  onClick={() => alert('Funds transfer screen loaded')}
-                  className="bg-white hover:bg-slate-50 text-[#005994] font-black text-xs px-5 py-3 rounded-2xl shadow-sm transition"
-                >
-                  Transfer Funds
-                </button>
-                <button
-                  onClick={() => alert('Viewing transaction history...')}
-                  className="bg-white/10 hover:bg-white/20 text-white font-black text-xs px-5 py-3 rounded-2xl border border-white/15 transition"
-                >
-                  History
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Other Accounts */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {otherAccounts.map((acc: any) => (
-              <button key={acc.id}
-                onClick={() => showToast(`Viewing ${acc.name} details`, 'info')}
-                className="bg-white border border-slate-200 hover:border-[#005994] p-5 rounded-2xl flex items-center justify-between transition shadow-[0_4px_15px_rgba(0,0,0,0.005)]"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 flex items-center justify-center rounded-2xl text-xl" style={{ backgroundColor: acc.color + '15' }}>
-                    {acc.emoji}
-                  </div>
-                  <div className="text-left">
-                    <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none">{acc.name}</span>
-                    <div className="text-base font-extrabold text-slate-850 mt-1.5 leading-none">{acc.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })} {currency}</div>
-                  </div>
-                </div>
-                <MaterialIcons name="chevron-right" size={18} color="#8E9CAE" />
-              </button>
-            ))}
-          </div>
-
-          {/* Recent Transactions List Card */}
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] text-left">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-              <h3 className="text-sm font-extrabold text-slate-850 uppercase tracking-wider">Recent Transactions</h3>
-              
-              {/* Filters */}
-              <div className="flex items-center gap-2">
-                <div className="bg-slate-100 p-1 rounded-xl flex items-center gap-0.5">
-                  {['All', 'Sent', 'Received'].map((filter) => {
-                    const filterKey = filter.toLowerCase() as 'all' | 'sent' | 'received';
-                    return (
-                    <button
-                      key={filter}
-                      onClick={() => setTxFilter(filterKey)}
-                      className={`px-3 py-1.5 rounded-lg text-[10px] font-extrabold uppercase transition-all duration-200 ${
-                        txFilter === filterKey
-                          ? 'bg-white text-slate-800 shadow-sm'
-                          : 'text-slate-400 hover:text-slate-700'
-                      }`}
-                    >
-                      {filter}
-                    </button>
-                    );
-                  })}
-                </div>
-                <button className="w-8 h-8 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100">
-                  <MaterialIcons name="filter-list" size={14} color="currentColor" />
-                </button>
-              </div>
-            </div>
-
-            {/* Transactions items matching table design exactly */}
-            <div className="space-y-4">
-              {filteredTx.length === 0 ? (
-                <p className="text-xs text-slate-400 py-4 text-center">No transactions found.</p>
-              ) : filteredTx.map((tx: any) => (
-                <div key={tx.id} className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-50 pb-4 last:border-0 last:pb-0 gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <div className="w-10 h-10 flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-100 text-slate-500 text-lg">
-                      {tx.emoji}
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-black text-slate-800 leading-tight">{tx.label || 'Transaction'}</h4>
-                      <p className="text-[10px] text-slate-400 mt-0.5">
-                        {tx.accountId ? accounts.find((a: any) => a.id === tx.accountId)?.name : 'Account'}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between md:justify-end gap-10 flex-1">
-                    <span className="bg-slate-100 text-slate-500 text-[8.5px] font-black px-2.5 py-0.5 rounded-full uppercase leading-none">
-                      {tx.categoryId || 'GENERAL'}
-                    </span>
-                    <span className="text-[10px] font-semibold text-slate-400 tracking-wider">
-                      {new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </span>
-                    <span className={`text-xs font-black tracking-tight text-right w-24 ${tx.type === 'expense' ? 'text-[#A80000]' : 'text-[#008A5D]'}`}>
-                      {tx.type === 'expense' ? '-' : '+'}{tx.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })} {currency}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* View All link */}
-            <button 
-              onClick={() => alert('Opening transactions registry...')}
-              className="w-full text-center text-xs font-black text-[#005994] hover:underline uppercase border-t border-slate-50 pt-5 mt-5 tracking-wider block"
-            >
-              View All Transactions
-            </button>
-          </div>
-
-        </div>
-
-        {/* Right Area (xl:col-span-1) */}
-        <div className="space-y-8">
-          
-          {/* Recurring Bills list */}
-          <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] relative min-h-[360px] flex flex-col justify-between text-left">
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xs font-extrabold text-slate-850 uppercase tracking-wider">Recurring Bills</h3>
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
-                  {unpaidBills.length} UNPAID
+          {/* ------------------------------------------
+              USER TAB 3: ZONES D'INTERVENTION (MAP + LEADS FORM)
+              ------------------------------------------ */}
+          {activeTab === 'Zones' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="text-center max-w-3xl mx-auto mb-16">
+                <span className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
+                  {t.zones_directes}
                 </span>
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
+                  {t.zones}
+                </h1>
+                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
+                  {t.zone_tagline}
+                </p>
               </div>
 
-              <div className="space-y-5">
-                {unpaidBills.length === 0 ? (
-                  <p className="text-xs text-slate-400 text-center py-6">All bills are paid! 🎉</p>
-                ) : unpaidBills.map((rule: any) => {
-                  const isOverdue = rule.nextDueDate < new Date().toISOString().split('T')[0];
-                  return (
-                  <div key={rule.id} className="space-y-1.5">
-                    <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-slate-855">{rule.emoji} {rule.label}</span>
-                      <span className={isOverdue ? 'text-[#A80000]' : 'text-slate-700'}>{rule.amount.toFixed(2)} {currency}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className={`text-[9px] font-extrabold uppercase leading-none ${isOverdue ? 'text-[#A80000]' : 'text-slate-400'}`}>
-                        {isOverdue ? 'OVERDUE' : `Due: ${rule.nextDueDate}`}
-                      </p>
-                      <button
-                        onClick={() => handlePayBill(rule.id, rule.label)}
-                        className={`text-[8px] font-black px-2.5 py-1 rounded-lg uppercase leading-none transition ${isOverdue ? 'bg-[#A80000] text-white hover:bg-[#8B0000]' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                      >
-                        Pay
-                      </button>
-                    </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Visual SVG Map representation (lg:col-span-7) */}
+                <div className="lg:col-span-7 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
+                  <div>
+                    <h3 className="text-base font-black text-slate-850 dark:text-slate-100">{t.carte_interactive}</h3>
+                    <p className="text-slate-400 text-xs mt-1 font-semibold">
+                      {currentLang === 'AR' ? 'انقر على الولاية المظللة بالبرتقالي لعرض تفاصيل التغطية الفورية لدينا.' : 'Cliquez sur les gouvernorats oranges pour voir notre temps de réponse moyen.'}
+                    </p>
                   </div>
-                  );
-                })}
-              </div>
-            </div>
 
-            {/* Plus red floating button */}
-            <div className="flex justify-end mt-4">
-              <button 
-                onClick={openAddTx}
-                className="w-11 h-11 flex items-center justify-center rounded-full bg-[#A80000] text-white hover:bg-[#8B0000] shadow-md transition"
-              >
-                <MaterialIcons name="add" size={20} color="#FFFFFF" />
-              </button>
-            </div>
-          </div>
+                  {/* Stylized vector SVG of Tunisia coverage areas */}
+                  <div className="flex justify-center py-8 relative">
+                    <svg width="220" height="380" viewBox="0 0 100 180" fill="none" className="filter drop-shadow-md">
+                      {/* Interactive Areas represented as custom shapes */}
+                      {/* Bizerte & North */}
+                      <path 
+                        d="M38 12 C 43 8, 48 9, 52 14 L 46 22 Z" 
+                        fill={selectedGovernorat === 'Grand Tunis' ? '#f97316' : '#1e3a5f'} 
+                        className="cursor-pointer transition hover:opacity-85" 
+                        onClick={() => setSelectedGovernorat('Grand Tunis')}
+                      />
+                      {/* Grand Tunis */}
+                      <path 
+                        d="M48 20 C 53 18, 55 24, 52 28 L 45 26 Z" 
+                        fill={selectedGovernorat === 'Grand Tunis' ? '#F97316' : '#2563EB'} 
+                        className="cursor-pointer transition hover:scale-105 transform origin-center" 
+                        onClick={() => setSelectedGovernorat('Grand Tunis')}
+                      />
+                      {/* Cap Bon */}
+                      <path 
+                        d="M53 23 C 58 18, 68 20, 61 31 L 52 28 Z" 
+                        fill={selectedGovernorat === 'Sahel' ? '#F97316' : '#3B82F6'} 
+                        className="cursor-pointer transition hover:opacity-85" 
+                        onClick={() => setSelectedGovernorat('Sahel')}
+                      />
+                      {/* Sahel (Sousse, Monastir, Mahdia) */}
+                      <path 
+                        d="M52 30 C 58 31, 62 42, 57 52 L 48 40 Z" 
+                        fill={selectedGovernorat === 'Sahel' ? '#F97316' : '#1D4ED8'} 
+                        className="cursor-pointer transition hover:scale-105 transform origin-center" 
+                        onClick={() => setSelectedGovernorat('Sahel')}
+                      />
+                      {/* Sfax */}
+                      <path 
+                        d="M46 54 C 54 58, 58 70, 52 82 L 38 72 Z" 
+                        fill={selectedGovernorat === 'Sfax' ? '#F97316' : '#60A5FA'} 
+                        className="cursor-pointer transition hover:opacity-85" 
+                        onClick={() => setSelectedGovernorat('Sfax')}
+                      />
+                      {/* Rest of Tunisia (Grey representation) */}
+                      <path d="M36 24 L44 38 L38 52 L36 68 L22 88 L14 118 L24 140 L38 170 L52 145 L48 112 L44 86 L40 70 Z" fill="#E2E8F0" className="opacity-30 pointer-events-none" />
+                    </svg>
 
-          {/* Spending Analytics Projector */}
-          <div className="bg-gradient-to-br from-[#0B2545] to-[#134074] rounded-3xl p-6 text-white text-left relative overflow-hidden min-h-[220px] flex flex-col justify-between shadow-sm">
-            <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-white/5 rounded-full pointer-events-none" />
-            
-            <div>
-              <span className="text-[8px] font-bold tracking-[2.5px] text-sky-200 uppercase">SPENDING ANALYTICS</span>
-              <h3 className="text-base font-extrabold tracking-tight mt-2">Monthly Projection</h3>
-              <p className="text-xs text-slate-300 leading-relaxed mt-2.5 font-semibold">
-                Based on your recurring bills, you will spend 1,240 TND more this month.
-              </p>
-            </div>
-
-            <button 
-              onClick={() => setActiveTab('Reports')}
-              className="w-full bg-[#005994] hover:bg-[#004775] text-white font-extrabold text-xs py-3.5 rounded-xl transition text-center shadow-sm"
-            >
-              Review Budget
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// ----------------------------------------------------
-// HIGH-FIDELITY WEB TAB RENDERING HELPER: GOALS TAB
-// ----------------------------------------------------
-const renderWebGoalsTab = (activeGoals: any[], completedGoals: any[], totalSaved: number, currency: string, dispatch: any, showToast: any, onAddFunds: (goalId: string) => void) => {
-  return (
-    <div className="max-w-7xl mx-auto space-y-8 text-left animate-fade-in">
-      {/* Title Header area matching Goals mockup */}
-      <div className="flex items-center justify-between gap-4">
-        <div>
-          <span className="text-[10px] font-bold tracking-[2px] text-slate-400 uppercase">PORTFOLIO OVERVIEW</span>
-          <h1 className="text-3xl font-black text-slate-850 mt-1">Wealth Horizons</h1>
-        </div>
-        
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={() => alert('Add funds screen loaded')}
-            className="bg-[#005994] hover:bg-[#004775] text-white font-extrabold text-xs px-5 py-3 rounded-2xl flex items-center gap-1.5 shadow-sm transition"
-          >
-            <MaterialIcons name="add" size={14} color="#FFFFFF" />
-            <span>Add Funds</span>
-          </button>
-          
-          <button 
-            onClick={() => alert('Viewing notifications...')}
-            className="w-11 h-11 flex items-center justify-center rounded-2xl bg-white border border-slate-200 text-slate-500 hover:bg-slate-50 transition"
-          >
-            <MaterialIcons name="notifications" size={18} color="#5A6578" />
-          </button>
-        </div>
-      </div>
-
-      {/* Aggregate Progress Overview & Insight Card */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Left aggregate info */}
-        <div className="lg:col-span-2 bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between min-h-[160px]">
-          <div>
-            <span className="text-[9px] font-extrabold tracking-[2px] text-slate-400 uppercase">AGGREGATE PROGRESS</span>
-            <div className="text-3xl font-extrabold text-slate-850 mt-1">{totalSaved.toLocaleString('en-US')} <span className="text-xl font-bold opacity-80">{currency}</span></div>
-          </div>
-          <p className="text-xs text-slate-400 leading-relaxed mt-4 font-semibold">
-            Your total architectural capital is currently optimized across 4 primary objectives. You are 68% towards your quarterly milestone.
-          </p>
-        </div>
-
-        {/* Right Optimization Insight banner */}
-        <div className="bg-[#005994] text-white rounded-3xl p-6 relative overflow-hidden shadow-sm flex flex-col justify-between min-h-[160px]">
-          {/* Circular decorations */}
-          <div className="absolute right-[-20px] top-[-20px] w-24 h-24 bg-white/5 rounded-full pointer-events-none" />
-          
-          <div className="flex items-center gap-2 text-sky-200">
-            <MaterialIcons name="insights" size={18} color="currentColor" />
-            <h4 className="text-xs font-black uppercase tracking-wider">Optimization Insight</h4>
-          </div>
-          
-          <p className="text-xs leading-relaxed mt-3 text-slate-100 font-semibold">
-            Allocating an additional 450 TND to 'Summer Retreat' this month would reach your target 12 days early.
-          </p>
-        </div>
-      </div>
-
-      {/* Active Ambitions */}
-      <div>
-        <div className="flex items-center gap-3.5 mb-6">
-          <h3 className="text-lg font-extrabold text-slate-855 tracking-wide uppercase">Active Ambitions</h3>
-          <span className="bg-slate-200 text-slate-700 font-extrabold text-[9px] px-2.5 py-0.5 rounded-full leading-none">
-            4 Active
-          </span>
-          <span className="bg-[#FFF1F1] text-[#A80000] border border-red-500/10 font-extrabold text-[9px] px-2.5 py-0.5 rounded-full leading-none">
-            1 Urgent
-          </span>
-        </div>
-
-        {/* Goals cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
-          {activeGoals.map((goal: any) => {
-            const pct = Math.min(100, Math.round((goal.currentAmount / goal.targetAmount) * 100));
-            const isUrgent = goal.deadline && new Date(goal.deadline) < new Date(new Date().setDate(new Date().getDate() + 30));
-            return (
-              <div key={goal.id} className="bg-white border border-slate-200 rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] flex flex-col justify-between text-left min-h-[260px]">
-                <div>
-                  <div className="flex justify-between items-start">
-                    <div className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#E6F0FA] text-[#005994] text-xl">
-                      {goal.emoji}
-                    </div>
-                    {isUrgent ? (
-                      <span className="bg-[#FFF1F1] text-[#A80000] border border-red-500/10 font-extrabold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider leading-none">
-                        Urgent
-                      </span>
-                    ) : (
-                      <span className="text-[10px] font-black text-slate-400 tracking-wider">{goal.deadline || 'No Deadline'}</span>
+                    {/* coverage popover overlay */}
+                    {selectedGovernorat && (
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-900/95 text-white p-4.5 rounded-2xl border border-[#F97316]/30 shadow-xl max-w-[220px] backdrop-blur-sm animate-fade-in text-center">
+                        <span className="text-[10px] font-black text-[#F97316] uppercase tracking-wider">{selectedGovernorat}</span>
+                        <h4 className="text-xs font-black mt-1">Intervention Express</h4>
+                        <p className="text-[10.5px] text-slate-350 mt-1 leading-relaxed">
+                          {selectedGovernorat === 'Grand Tunis' 
+                            ? 'Disponible à Tunis, Ariana, Ben Arous et La Manouba. Artisans sur place en moins de 30 minutes.' 
+                            : selectedGovernorat === 'Sahel' 
+                              ? 'Disponible à Sousse, Monastir et Mahdia. Temps de réponse moyen de 40 minutes.'
+                              : 'Disponible sur commande. Planifiez votre visite technique ou expédiez vos pièces.'}
+                        </p>
+                        <button 
+                          onClick={() => setSelectedGovernorat(null)}
+                          className="mt-2.5 text-[9px] font-black text-rose-500 uppercase tracking-widest block mx-auto underline"
+                        >
+                          Fermer
+                        </button>
+                      </div>
                     )}
                   </div>
-                  
-                  <h4 className="text-base font-extrabold text-slate-855 mt-4">{goal.title}</h4>
-                  <p className="text-xs text-slate-400 leading-relaxed mt-1 font-semibold line-clamp-2">
-                    {goal.description || 'Saving towards your goal.'}
+
+                  <div className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-500">
+                      * {currentLang === 'AR' ? 'تغطية فورية وسريعة على مدار الساعة' : 'Zone couverte par les équipes d\'intervention directes.'}
+                    </span>
+                    <a 
+                      href="https://maps.google.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-xs font-black text-[#1E3A5F] dark:text-sky-400 hover:underline"
+                    >
+                      {t.ouvrir_maps}
+                    </a>
+                  </div>
+                </div>
+
+                {/* Lead request form (lg:col-span-5) */}
+                <div className="lg:col-span-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                  <div>
+                    <span className="bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-extrabold text-[8.5px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                      {currentLang === 'AR' ? 'حالة طوارئ قصوى' : 'URGENT'}
+                    </span>
+                    <h2 className="text-xl font-black text-slate-850 dark:text-slate-100 mt-3">{t.demande_intervention}</h2>
+                  </div>
+
+                  <form 
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!interventionName || !interventionPhone) {
+                        showToast(currentLang === 'AR' ? 'الرجاء ملء الاسم والهاتف' : 'Nom et téléphone requis.', 'error');
+                        return;
+                      }
+                      showToast(
+                        currentLang === 'AR' 
+                          ? 'تم تسجيل طلبك بنجاح ! سيتصل بك الفني الآن.' 
+                          : 'Demande urgente enregistrée ! Un technicien vous appelle sous 10 min.', 
+                        'success'
+                      );
+                      setInterventionName('');
+                      setInterventionPhone('');
+                      setInterventionDetails('');
+                    }}
+                    className="space-y-4 font-semibold text-xs"
+                  >
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.nom_complet} *</label>
+                      <input 
+                        type="text"
+                        required
+                        placeholder="Ex: Mohamed Ben Khedher"
+                        value={interventionName}
+                        onChange={(e) => setInterventionName(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-455 uppercase tracking-widest">{t.telephone} *</label>
+                      <input 
+                        type="text"
+                        required
+                        placeholder="+216 22 456 789"
+                        value={interventionPhone}
+                        onChange={(e) => setInterventionPhone(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Gouvernorat</label>
+                        <select
+                          value={interventionGov}
+                          onChange={(e) => setInterventionGov(e.target.value)}
+                          className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
+                        >
+                          <option value="Tunis">Tunis</option>
+                          <option value="Ariana">Ariana</option>
+                          <option value="Ben Arous">Ben Arous</option>
+                          <option value="Sousse">Sousse</option>
+                          <option value="Sfax">Sfax</option>
+                          <option value="Monastir">Monastir</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Type Problème</label>
+                        <select
+                          value={interventionProblem}
+                          onChange={(e) => setInterventionProblem(e.target.value)}
+                          className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
+                        >
+                          <option value="Fuite d'eau">Fuite d'eau / Tuyau cassé</option>
+                          <option value="Panne Chauffe-eau">Chauffe-eau en panne</option>
+                          <option value="Climatisation">Problème Climatiseur</option>
+                          <option value="Gaz STEG">Tuyauterie Gaz / Sécurité</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Description</label>
+                      <textarea 
+                        rows={3}
+                        placeholder="Précisez votre adresse, étage, ou problème..."
+                        value={interventionDetails}
+                        onChange={(e) => setInterventionDetails(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+
+                    <button 
+                      type="submit"
+                      className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider hover:scale-[1.01] transform"
+                    >
+                      {t.envoyer_demande}
+                    </button>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              USER TAB 4: PIECES D'OCCASION (MARKETPLACE SHOP)
+              ------------------------------------------ */}
+          {activeTab === 'Marketplace' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+                <div>
+                  <h1 className="text-3xl font-black tracking-tight">{t.pieces}</h1>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
+                    {currentLang === 'AR' ? 'ابحث واشتر قطع غيار الترصيص المستعملة المضمونة والمجربة من قبل حرفيينا.' : 'Recherchez et filtrez nos pièces de rechange de plomberie d\'occasion certifiées.'}
                   </p>
                 </div>
 
-                <div>
-                  <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden my-4">
-                    <div className={`h-full rounded-full ${isUrgent ? 'bg-gradient-to-r from-purple-600 to-[#A80000]' : 'bg-[#005994]'}`} style={{ width: `${pct}%` }} />
-                  </div>
-                  
-                  <div className="flex justify-between border-t border-slate-50 pt-3 text-[9px] font-black tracking-widest text-slate-400 uppercase">
-                    <div>
-                      <div>SAVED AMOUNT</div>
-                      <div className="text-xs font-black text-slate-800 mt-1">{goal.currentAmount.toLocaleString()} <span className="text-[10px]">{currency}</span></div>
+                {/* Sorting options */}
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.tri} :</span>
+                  <select 
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-850 dark:text-slate-250 focus:outline-none"
+                  >
+                    <option value="featured">{t.recommande}</option>
+                    <option value="price_asc">{t.prix_croissant}</option>
+                    <option value="price_desc">{t.prix_decroissant}</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Sidebar filter & Product Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                {/* Filters Sidebar (lg:col-span-3) */}
+                <div className="lg:col-span-3 space-y-6">
+                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
+                    <h3 className="text-sm font-black uppercase tracking-wider">{t.filtres}</h3>
+
+                    {/* Search query input */}
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.rechercher}</label>
+                      <input 
+                        type="text"
+                        placeholder={currentLang === 'AR' ? 'ابحث عن قطعة...' : 'Grohe, boiler, radiateur...'}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+                      />
                     </div>
-                    <div className="text-right">
-                      <div>OBJECTIVE</div>
-                      <div className="text-xs font-black text-slate-800 mt-1">{goal.targetAmount.toLocaleString()} <span className="text-[10px]">{currency}</span></div>
+
+                    {/* Dynamic categories filter list */}
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Catégories</label>
+                      <div className="space-y-1.5">
+                        <button
+                          onClick={() => setSelectedCategoryFilter('Toutes')}
+                          className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                            selectedCategoryFilter === 'Toutes'
+                              ? 'bg-[#1E3A5F] text-white shadow-sm'
+                              : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
+                          }`}
+                        >
+                          {t.toutes_categories}
+                        </button>
+                        {reduxCategories.map(cat => (
+                          <button
+                            key={cat.id}
+                            onClick={() => setSelectedCategoryFilter(cat.name)}
+                            className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition ${
+                              selectedCategoryFilter === cat.name
+                                ? 'bg-[#1E3A5F] text-white shadow-sm'
+                                : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
+                            }`}
+                          >
+                            {cat.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Condition selector filter */}
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.etat}</label>
+                      <div className="grid grid-cols-2 gap-2 text-center">
+                        {['Tous', 'comme neuf', 'bon état', 'pour pièces'].map(cond => (
+                          <button
+                            key={cond}
+                            onClick={() => setSelectedConditionFilter(cond)}
+                            className={`px-2 py-2 rounded-xl border text-[10px] font-black capitalize transition leading-none ${
+                              selectedConditionFilter === cond 
+                                ? 'bg-[#1E3A5F] border-[#1E3A5F] text-white' 
+                                : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-350'
+                            }`}
+                          >
+                            {cond === 'Tous' ? t.tous : cond}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Price Max slider */}
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <span>{t.prix} Max</span>
+                        <span className="text-[#F97316]">{priceMax} DT</span>
+                      </div>
+                      <input 
+                        type="range"
+                        min="10"
+                        max="1000"
+                        step="10"
+                        value={priceMax}
+                        onChange={(e) => setPriceMax(Number(e.target.value))}
+                        className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#F97316]"
+                      />
                     </div>
                   </div>
+                </div>
+
+                {/* Products Listings Grid (lg:col-span-9) */}
+                <div className="lg:col-span-9">
+                  {sortedProducts.length === 0 ? (
+                    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
+                      <p className="text-sm text-slate-400 font-bold">{t.aucun_produit}</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                      {sortedProducts.map(prod => (
+                        <div 
+                          key={prod.id}
+                          onClick={() => setSelectedProduct(prod)}
+                          className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg hover:border-[#1E3A5F] dark:hover:border-slate-500 transition-all duration-300 group flex flex-col justify-between cursor-pointer"
+                        >
+                          <div className="bg-slate-50 dark:bg-slate-900 py-10 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 relative">
+                            <span className="absolute top-3 right-3 z-10 bg-slate-200 dark:bg-slate-750 text-slate-700 dark:text-slate-350 text-[8.5px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+                              {prod.condition}
+                            </span>
+
+                            {/* Heart favorites toggle */}
+                            <button 
+                              onClick={(e) => toggleFavorite(prod.id, e)}
+                              className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
+                            >
+                              <svg 
+                                width="14" height="14" viewBox="0 0 24 24" 
+                                fill={favorites.includes(prod.id) ? "currentColor" : "none"} 
+                                stroke="currentColor" strokeWidth="2.5"
+                                className={favorites.includes(prod.id) ? "text-rose-500" : ""}
+                              >
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                              </svg>
+                            </button>
+
+                            <ProductVisual image={prod.image} />
+                          </div>
+
+                          <div className="p-4 text-left flex-1 flex flex-col justify-between">
+                            <div>
+                              <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">{prod.category}</span>
+                              <h4 className="text-xs sm:text-sm font-black text-slate-850 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
+                                {prod.title}
+                              </h4>
+                              <p className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">{prod.subtitle}</p>
+                            </div>
+
+                            <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
+                              <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-250">
+                                {prod.price} <span className="text-[9.5px] font-bold">DT</span>
+                              </div>
+                              
+                              <button 
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedProduct(prod);
+                                }}
+                                className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition"
+                              >
+                                {currentLang === 'AR' ? 'شراء' : 'Commander'}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              USER TAB 5: PROFILE (TABLEAU DE BORD CLIENT OR GUEST PROMPT)
+              ------------------------------------------ */}
+          {activeTab === 'Profile' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              {currentRole === 'anonyme' ? (
+                // GUEST CONNEXION PROMPT STATE
+                <div className="max-w-xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] p-8 sm:p-12 text-center shadow-lg space-y-6">
+                  <div className="w-16 h-16 rounded-full bg-[#1E3A5F]/5 dark:bg-[#1E3A5F]/20 flex items-center justify-center text-[#1E3A5F] dark:text-sky-400 mx-auto">
+                    🔒
+                  </div>
+                  <h2 className="text-2xl font-black text-slate-850 dark:text-slate-100">
+                    {currentLang === 'AR' ? 'سجل دخولك لتفعيل حسابك الشخصي' : 'Identification Requise'}
+                  </h2>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed font-semibold">
+                    {currentLang === 'AR' 
+                      ? 'لإضافة قطع غيار للمفضلة وتعديل بياناتك، يرجى تسجيل الدخول أو إنشاء حساب جديد.' 
+                      : 'Rejoignez Plombier Tunisie pour sauvegarder vos pièces favorites, demander des interventions immédiates en priorité et modifier votre mot de passe.'}
+                  </p>
                   
-                  <div className="flex justify-between mt-3 text-[9px] font-extrabold uppercase leading-none">
-                    <span className={isUrgent ? 'text-[#A80000]' : 'text-[#005994]'}>{pct}% Completed</span>
-                    <button onClick={() => onAddFunds(goal.id)} className={`px-3 py-1.5 rounded-lg text-white ${isUrgent ? 'bg-[#A80000] hover:bg-[#8B0000]' : 'bg-[#005994] hover:bg-[#004775]'}`}>
-                      Add Funds
+                  <div className="pt-4 flex flex-col gap-3">
+                    <button 
+                      onClick={() => {
+                        setBypassAuth(false);
+                        setSigninEmail('');
+                        setSigninPassword('');
+                      }}
+                      className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
+                    >
+                      {currentLang === 'AR' ? 'تسجيل الدخول / إنشاء حساب' : 'Accéder à l\'écran de connexion'}
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('Accueil')}
+                      className="text-xs font-black text-slate-400 hover:text-slate-650"
+                    >
+                      {t.retour_accueil}
                     </button>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              ) : (
+                // LOGGED CLIENT INTERFACE
+                <div>
+                  <h1 className="text-3xl font-black tracking-tight">{t.tableau_bord}</h1>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
+                    {t.tableau_bord_desc}
+                  </p>
 
-        </div>
-      </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10 items-start">
+                    
+                    {/* Left details (lg:col-span-4) */}
+                    <div className="lg:col-span-4 space-y-6">
+                      
+                      {/* Client Card */}
+                      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6 text-center">
+                        <div className="w-24 h-24 mx-auto rounded-full bg-gradient-to-tr from-[#1E3A5F] to-[#F97316] p-1 shadow-md">
+                          <div className="w-full h-full rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-800 dark:text-slate-200 font-black text-2xl">
+                            {profileName.charAt(0) || 'U'}
+                          </div>
+                        </div>
 
-      {/* Victories Section */}
-      <div>
-        <h3 className="text-lg font-extrabold text-slate-850 tracking-wide uppercase mb-4">Victories</h3>
-        <div className="space-y-3">
-          {completedGoals.length === 0 ? (
-            <p className="text-xs text-slate-400 text-left py-2">No completed goals yet. Keep saving!</p>
-          ) : completedGoals.map((item: any) => (
-            <div key={item.id} className="bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between shadow-[0_4px_15px_rgba(0,0,0,0.005)]">
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 border border-slate-100 text-[#005994] text-xl">
-                  {item.emoji}
+                        <div>
+                          <h3 className="text-base font-black text-slate-850 dark:text-slate-100">{profileName}</h3>
+                          <span className="inline-block mt-1 text-[9px] font-black px-3 py-1 rounded-full uppercase bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/10">
+                            {t.compte_particulier}
+                          </span>
+                        </div>
+
+                        {/* Profile information */}
+                        <div className="border-t border-slate-100 dark:border-slate-700 pt-5 space-y-3.5 text-left font-semibold text-xs text-slate-500 dark:text-slate-450">
+                          <div className="space-y-1">
+                            <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">Email</span>
+                            <p className="font-black text-slate-800 dark:text-slate-200">{profileEmail}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">{t.telephone}</span>
+                            <p className="font-black text-slate-800 dark:text-slate-200">{profilePhone}</p>
+                          </div>
+                          <div className="space-y-1">
+                            <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">{t.ville}</span>
+                            <p className="font-black text-slate-800 dark:text-slate-200">{profileCity}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Security details updates */}
+                      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
+                        <h3 className="text-sm font-black uppercase tracking-wider">{t.securite}</h3>
+                        
+                        <form 
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!currentMdp || !newMdp) return;
+                            showToast(currentLang === 'AR' ? 'تم تحديث كلمة المرور بنجاح' : 'Sécurité mise à jour avec succès !', 'success');
+                            setCurrentMdp('');
+                            setNewMdp('');
+                          }}
+                          className="space-y-4"
+                        >
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.mdp_actuel}</label>
+                            <input 
+                              type="password"
+                              required
+                              value={currentMdp}
+                              onChange={(e) => setCurrentMdp(e.target.value)}
+                              className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.nouveau_mdp}</label>
+                            <input 
+                              type="password"
+                              required
+                              value={newMdp}
+                              onChange={(e) => setNewMdp(e.target.value)}
+                              className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
+                            />
+                          </div>
+
+                          <button 
+                            type="submit"
+                            className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[11px] font-black py-3 rounded-xl transition shadow-sm uppercase tracking-wider"
+                          >
+                            {t.mettre_a_jour}
+                          </button>
+                        </form>
+                      </div>
+
+                    </div>
+
+                    {/* Right Favorites grid (lg:col-span-8) */}
+                    <div className="lg:col-span-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                      <div className="flex justify-between items-center">
+                        <h3 className="text-sm font-black uppercase tracking-wider">{t.mes_favoris}</h3>
+                        <button 
+                          onClick={() => setActiveTab('Marketplace')}
+                          className="text-xs font-black text-[#F97316] hover:underline"
+                        >
+                          {t.parcourir_market}
+                        </button>
+                      </div>
+
+                      {favorites.length === 0 ? (
+                        <div className="border border-dashed border-slate-350 dark:border-slate-700 rounded-2xl p-10 text-center space-y-3">
+                          <p className="text-xs text-slate-400 font-bold">{t.plus_favoris_desc}</p>
+                          <button 
+                            onClick={() => setActiveTab('Marketplace')}
+                            className="bg-slate-100 dark:bg-slate-750 px-4 py-2 rounded-xl text-xs font-black"
+                          >
+                            {t.boutique_acces}
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                          {favorites.map(id => {
+                            const prod = products.find(p => p.id === id);
+                            if (!prod) return null;
+                            return (
+                              <div 
+                                key={prod.id}
+                                className="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden flex flex-col justify-between"
+                              >
+                                <div className="bg-slate-50 dark:bg-slate-900 py-6 flex items-center justify-center relative">
+                                  <button 
+                                    onClick={(e) => toggleFavorite(prod.id, e)}
+                                    className="absolute top-2 right-2 w-7.5 h-7.5 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-rose-500 hover:scale-110 transition"
+                                  >
+                                    ✕
+                                  </button>
+                                  <ProductVisual image={prod.image} className="w-12 h-12" />
+                                </div>
+
+                                <div className="p-4 space-y-4">
+                                  <div>
+                                    <div className="flex justify-between items-start gap-2">
+                                      <h4 className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 leading-tight">
+                                        {prod.title}
+                                      </h4>
+                                      <span className="text-xs font-black text-[#F97316] whitespace-nowrap">
+                                        {prod.price} DT
+                                      </span>
+                                    </div>
+                                    <p className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                                      {prod.description}
+                                    </p>
+                                  </div>
+
+                                  <button 
+                                    onClick={() => setSelectedProduct(prod)}
+                                    className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black py-2.5 rounded-lg transition"
+                                  >
+                                    {t.consulter}
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                  </div>
                 </div>
-                <div className="text-left">
-                  <h4 className="font-extrabold text-slate-800 text-xs">{item.title}</h4>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Completed • {item.targetAmount.toLocaleString()} {currency}</p>
+              )}
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              USER TAB 6: PAIEMENT (SOON / INTEGRATION PAGE)
+              ------------------------------------------ */}
+          {activeTab === 'Payment' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] p-8 sm:p-12 shadow-sm space-y-8 text-center relative overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1E3A5F] via-[#F97316] to-[#1E3A5F]" />
+                
+                <span className="bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-extrabold text-[9px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                  {t.maintenance}
+                </span>
+
+                <h1 className="text-3xl font-black text-slate-850 dark:text-slate-100 mt-4">
+                  {t.bientot_dispo}
+                </h1>
+                
+                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-semibold">
+                  {t.maintenance_desc}
+                </p>
+
+                {/* Premium Integration Progress Bar */}
+                <div className="space-y-3 pt-6 max-w-md mx-auto">
+                  <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <span>{t.progression}</span>
+                    <span className="text-[#F97316]">85%</span>
+                  </div>
+                  <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-gradient-to-r from-[#1E3A5F] to-[#F97316] rounded-full" 
+                      style={{ width: '85%' }}
+                    />
+                  </div>
+                  <p className="text-[9px] text-slate-450 dark:text-slate-500 font-bold uppercase tracking-wide">
+                    Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.
+                  </p>
+                </div>
+
+                {/* Newsletter alert form */}
+                <div className="border-t border-slate-100 dark:border-slate-700 pt-8 mt-8 space-y-4 max-w-md mx-auto">
+                  <h4 className="text-[10px] font-bold text-slate-450 uppercase tracking-widest text-center">
+                    M'avertir lors de la mise en service
+                  </h4>
+                  <form 
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      if (!newsletterEmail) return;
+                      showToast(currentLang === 'AR' ? 'شكراً ! سيتم إعلامك بالبريد الإلكتروني.' : 'Merci ! Vous recevrez une alerte prioritaire.', 'success');
+                      setNewsletterEmail('');
+                    }}
+                    className="flex gap-2.5"
+                  >
+                    <input 
+                      type="email"
+                      required
+                      placeholder="votre.email@domaine.tn"
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
+                    />
+                    <button 
+                      type="submit"
+                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-md"
+                    >
+                      {t.avertir}
+                    </button>
+                  </form>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto pt-6 border-t border-slate-100 dark:border-slate-700">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl text-center border border-slate-200 dark:border-slate-800">
+                    <span className="text-xl block mb-2">🔒</span>
+                    <span className="text-[8.5px] font-black uppercase text-slate-500 dark:text-slate-400">Cryptage SSL 256 bits</span>
+                  </div>
+                  <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl text-center border border-slate-200 dark:border-slate-800">
+                    <span className="text-xl block mb-2">🚚</span>
+                    <span className="text-[8.5px] font-black uppercase text-slate-500 dark:text-slate-400">Livraison express 24h</span>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setActiveTab('Accueil')}
+                  className="text-xs font-black text-slate-400 hover:text-slate-650 inline-flex items-center gap-1.5 pt-4"
+                >
+                  <span>{isRTL ? '→' : '←'}</span>
+                  <span>{t.retour_accueil}</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              ADMIN TAB 1: ACCUEIL (DASHBOARD METRICS)
+              ------------------------------------------ */}
+          {activeTab === 'AdminAccueil' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <h1 className="text-3xl font-black tracking-tight text-slate-850 dark:text-white">
+                {currentLang === 'AR' ? 'لوحة قيادة المدير' : 'Tableau de Bord Administration'}
+              </h1>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
+                {currentLang === 'AR' ? 'إليك مؤشرات النشاط الحالية ومستجدات العمل لسباك تونس.' : 'Suivez l\'état général des stocks de pièces détachées et des membres inscrits.'}
+              </p>
+
+              {/* Metrics cards row */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+                {[
+                  { title: currentLang === 'AR' ? 'إجمالي القطع المعروضة' : 'Annonces Actives', val: products.length, desc: currentLang === 'AR' ? 'قطعة غيار مستعملة' : 'Pièces en catalogue', color: 'border-l-4 border-blue-500' },
+                  { title: currentLang === 'AR' ? 'الأصناف المتوفرة' : 'Catégories', val: reduxCategories.length, desc: currentLang === 'AR' ? 'صنفاً ديناميكياً' : 'Familles de produits', color: 'border-l-4 border-amber-500' },
+                  { title: currentLang === 'AR' ? 'حسابات الأعضاء' : 'Membres Inscrits', val: usersList.length, desc: currentLang === 'AR' ? 'حساباً مسجلاً' : 'Clients enregistrés', color: 'border-l-4 border-emerald-500' },
+                  { title: currentLang === 'AR' ? 'طلبات الصيانة الواردة' : 'Urgences Leads', val: 12, desc: currentLang === 'AR' ? 'طلب تدخل سريع' : 'Demandes d\'interventions', color: 'border-l-4 border-rose-500' }
+                ].map((m, idx) => (
+                  <div key={idx} className={`bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm ${m.color}`}>
+                    <span className="text-[10px] font-black text-slate-450 dark:text-slate-400 uppercase tracking-widest">{m.title}</span>
+                    <h3 className="text-3xl font-black text-slate-850 dark:text-white mt-2 leading-none">{m.val}</h3>
+                    <p className="text-[10px] text-slate-400 mt-2 font-semibold">{m.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Activity Ledgers / System logs */}
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm mt-10">
+                <h3 className="text-base font-black text-slate-850 dark:text-white mb-6">
+                  {currentLang === 'AR' ? 'سجل العمليات الأخير للرئيس' : 'Historique Récents des Actions Admin'}
+                </h3>
+                
+                <div className="space-y-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                  {[
+                    { log: currentLang === 'AR' ? 'قام أحمد بن علي بطلب تدخل سريع بجهة أريانة.' : "Ahmed Ben Ali (user@stouchy.com) a sollicité une intervention plomberie d'urgence à Ariana.", time: "Il y a 5 minutes", badge: "Intervention", color: "bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400" },
+                    { log: currentLang === 'AR' ? 'تمت إضافة قطعة غيار جديدة : "مزيج مطبخ غروهي".' : "Nouvelle pièce ajoutée : Mélangeur Cuisine Grohe dans le catalogue.", time: "Il y a 20 minutes", badge: "Catalogue", color: "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400" },
+                    { log: currentLang === 'AR' ? 'تمت إضافة صنف جديد : "مضخات مياه".' : "Catégorie 'Pompes de circulation' créée par Admin.", time: "Il y a 2 heures", badge: "Catégorie", color: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400" },
+                    { log: currentLang === 'AR' ? 'تم تحديث دور المستخدم "user@stouchy.com" لرتبة عميل.' : "Statut réactivé pour le client user@stouchy.com.", time: "Il y a 1 jour", badge: "Utilisateur", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400" }
+                  ].map((l, idx) => (
+                    <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-750 pb-3 last:border-b-0 last:pb-0">
+                      <div className="flex items-center gap-3">
+                        <span className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-wider ${l.badge === 'Intervention' ? 'bg-rose-100 text-rose-600' : l.badge === 'Catalogue' ? 'bg-blue-100 text-blue-600' : 'bg-slate-100 text-slate-600'}`}>
+                          {l.badge}
+                        </span>
+                        <p className="text-slate-800 dark:text-slate-200">{l.log}</p>
+                      </div>
+                      <span className="text-[10px] text-slate-400 whitespace-nowrap">{l.time}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      </div>
+          )}
 
-      {/* Bottom Inspiration Backdrop Banner */}
-      <div className="rounded-3xl min-h-[160px] relative overflow-hidden flex flex-col justify-end p-8 text-white text-left shadow-sm bg-[#0B2545]">
-        {/* Simulated Mediterranean Backdrop with deep rich colors */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-transparent z-10" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_right,rgba(0,181,204,0.1),transparent)] z-0" />
-        
-        <div className="z-20 max-w-lg space-y-1">
-          <span className="text-[9px] font-bold tracking-[2.5px] text-sky-200 uppercase">ARCHITECTURAL INSPIRATION</span>
-          <h2 className="text-xl font-black tracking-tight mt-1">Building wealth with the same precision as Mediterranean masters.</h2>
+          {/* ------------------------------------------
+              ADMIN TAB 2: GESTION ANNONCE (CRUD DISPATCHES)
+              ------------------------------------------ */}
+          {activeTab === 'GestionAnnonce' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
+                <div>
+                  <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'إدارة إعلانات قطع الغيار' : 'Gestion des Annonces'}</h1>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
+                    {currentLang === 'AR' ? 'قم بإضافة، تعديل أو حذف إعلانات قطع الغيار المعروضة في الكتالوج.' : 'Créez de nouvelles fiches produits, modifiez les descriptifs et gérez les disponibilités.'}
+                  </p>
+                </div>
+                
+                <button 
+                  onClick={openAddAnnonce}
+                  className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-md transition"
+                >
+                  {currentLang === 'AR' ? '+ إضافة إعلان جديد' : '+ Ajouter une annonce'}
+                </button>
+              </div>
+
+              {/* Listings Admin Table */}
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left font-semibold">
+                    <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
+                      <tr>
+                        <th className="px-6 py-4">{currentLang === 'AR' ? 'القطعة' : 'Pièce'}</th>
+                        <th className="px-6 py-4">{currentLang === 'AR' ? 'الصنف' : 'Catégorie'}</th>
+                        <th className="px-6 py-4">{currentLang === 'AR' ? 'السعر' : 'Prix'}</th>
+                        <th className="px-6 py-4">{currentLang === 'AR' ? 'الحالة' : 'État'}</th>
+                        <th className="px-6 py-4">{currentLang === 'AR' ? 'الوضعية' : 'Statut'}</th>
+                        <th className="px-6 py-4 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-750 text-slate-700 dark:text-slate-200">
+                      {products.map(prod => (
+                        <tr key={prod.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-750/30 transition">
+                          <td className="px-6 py-4 flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                              <ProductVisual image={prod.image} className="w-6 h-6" />
+                            </div>
+                            <div>
+                              <div className="font-black text-slate-850 dark:text-slate-100">{prod.title}</div>
+                              <span className="text-[10px] text-slate-400 font-semibold">{prod.subtitle}</span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{prod.category}</td>
+                          <td className="px-6 py-4 font-black">{prod.price} TND</td>
+                          <td className="px-6 py-4">
+                            <span className="bg-slate-150 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-350">
+                              {prod.condition}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
+                              prod.isAvailable 
+                                ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-500/10' 
+                                : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-500/10'
+                            }`}>
+                              {prod.isAvailable ? (currentLang === 'AR' ? 'متوفر' : 'Disponible') : (currentLang === 'AR' ? 'مباع' : 'Vendu')}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <div className="flex justify-center gap-2">
+                              <button 
+                                onClick={() => openEditAnnonce(prod)}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition"
+                              >
+                                {currentLang === 'AR' ? 'تعديل' : 'Modifier'}
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteAnnonce(prod.id)}
+                                className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition"
+                              >
+                                {currentLang === 'AR' ? 'حذف' : 'Supprimer'}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              ADMIN TAB 3: GESTION CATEGORIE (LIVE DYNAMIC TABLE)
+              ------------------------------------------ */}
+          {activeTab === 'GestionCategorie' && (
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'إدارة أصناف المنتجات' : 'Gestion des Catégories'}</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
+                {currentLang === 'AR' ? 'تحكم في القائمة الديناميكية للأصناف المستعملة في الفرز.' : 'Ajoutez de nouvelles familles de produits et réorganisez le catalogue.'}
+              </p>
+
+              {/* Add form */}
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm mt-8">
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
+                  {editingCategory ? (currentLang === 'AR' ? 'تعديل الصنف الحالي' : 'Modifier la catégorie') : (currentLang === 'AR' ? 'إضافة صنف جديد' : 'Créer une nouvelle catégorie')}
+                </h3>
+                
+                {editingCategory ? (
+                  <form onSubmit={handleRenameCategory} className="flex gap-3">
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Nouveau nom..."
+                      value={editCategoryName}
+                      onChange={(e) => setEditCategoryName(e.target.value)}
+                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
+                    />
+                    <button 
+                      type="submit"
+                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition"
+                    >
+                      Enregistrer
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => setEditingCategory(null)}
+                      className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-4 py-3 rounded-xl transition"
+                    >
+                      Annuler
+                    </button>
+                  </form>
+                ) : (
+                  <form onSubmit={handleAddCategory} className="flex gap-3">
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Ex: Pompes et Accessoires..."
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
+                    />
+                    <button 
+                      type="submit"
+                      className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
+                    >
+                      + Ajouter
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Categories list table */}
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
+                <table className="w-full text-xs text-left font-semibold">
+                  <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
+                    <tr>
+                      <th className="px-6 py-4">Nom de la Catégorie</th>
+                      <th className="px-6 py-4">Nombre d'Articles</th>
+                      <th className="px-6 py-4 text-center">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-750 text-slate-700 dark:text-slate-200">
+                    {reduxCategories.map(cat => {
+                      const count = products.filter(p => p.category === cat.name).length;
+                      return (
+                        <tr key={cat.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-750/30 transition">
+                          <td className="px-6 py-4 font-black">{cat.name}</td>
+                          <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{count} articles</td>
+                          <td className="px-6 py-4 text-center">
+                            <div className="flex justify-center gap-2">
+                              <button 
+                                onClick={() => {
+                                  setEditingCategory(cat);
+                                  setEditCategoryName(cat.name);
+                                }}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
+                              >
+                                {currentLang === 'AR' ? 'تعديل الاسم' : 'Renommer'}
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteCategory(cat.id, cat.name)}
+                                className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
+                              >
+                                Supprimer
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              ADMIN TAB 4: GESTION USER (MEMBERS & STATUS TOGGLES)
+              ------------------------------------------ */}
+          {activeTab === 'GestionUser' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'إدارة حسابات المستخدمين' : 'Gestion des Comptes Membres'}</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
+                {currentLang === 'AR' ? 'استعرض الأعضاء المسجلين وقم بترقية أدوارهم أو تجميد حساباتهم.' : 'Visualisez la liste des inscrits, modifiez les rôles ou désactivez temporairement des accès.'}
+              </p>
+
+              {/* Users table */}
+              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs text-left font-semibold">
+                    <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
+                      <tr>
+                        <th className="px-6 py-4">{t.nom_complet}</th>
+                        <th className="px-6 py-4">Adresse Email</th>
+                        <th className="px-6 py-4">{t.telephone}</th>
+                        <th className="px-6 py-4">Rôle</th>
+                        <th className="px-6 py-4">Statut</th>
+                        <th className="px-6 py-4 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 dark:divide-slate-750 text-slate-700 dark:text-slate-200">
+                      {usersList.map(u => (
+                        <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-750/30 transition">
+                          <td className="px-6 py-4 font-black">{u.name}</td>
+                          <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{u.email}</td>
+                          <td className="px-6 py-4">{u.phone || 'N/A'}</td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2.5 py-1 rounded text-[9.5px] font-black uppercase ${
+                              u.role === 'admin' 
+                                ? 'bg-amber-100 text-amber-700' 
+                                : 'bg-blue-100 text-blue-700'
+                            }`}>
+                              {u.role}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
+                              u.status === 'active' 
+                                ? 'bg-emerald-50 text-emerald-600' 
+                                : 'bg-rose-50 text-rose-600'
+                            }`}>
+                              {u.status}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <div className="flex justify-center gap-2">
+                              <button 
+                                onClick={() => handleToggleUserRole(u.id, u.role)}
+                                className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-650 text-slate-700 dark:text-white px-2.5 py-1 rounded transition"
+                              >
+                                {u.role === 'admin' ? 'Rétrograder en Client' : 'Promouvoir Admin'}
+                              </button>
+                              <button 
+                                onClick={() => handleToggleUserStatus(u.id, u.status)}
+                                className={`px-2.5 py-1 rounded text-white transition font-black ${
+                                  u.status === 'active' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'
+                                }`}
+                              >
+                                {u.status === 'active' ? 'Bloquer' : 'Activer'}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              ADMIN TAB 5: ADMIN PROFILE
+              ------------------------------------------ */}
+          {activeTab === 'AdminProfile' && (
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'إعدادات حساب المدير' : 'Profil Administrateur Principal'}</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
+                {currentLang === 'AR' ? 'تحكم ببيانات الأمان وخيارات التحكم لمدير التطبيق.' : 'Gérez vos accès de sécurité et configurez vos préférences de contact.'}
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 items-start">
+                {/* Details card */}
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 text-center shadow-sm space-y-6">
+                  <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-[#F97316] mx-auto border-2 border-[#F97316]">
+                    ★
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-slate-850 dark:text-slate-100">{sessionUser?.name}</h3>
+                    <span className="inline-block mt-1 text-[8.5px] font-black px-3 py-1 rounded-full uppercase bg-amber-100 text-amber-700">
+                      Administrateur
+                    </span>
+                  </div>
+                  <div className="text-left text-xs font-semibold text-slate-400 space-y-2 border-t border-slate-100 dark:border-slate-700 pt-4">
+                    <div>Email: <span className="font-black text-slate-700 dark:text-slate-200">{sessionUser?.email}</span></div>
+                    <div>Statut: <span className="font-black text-emerald-500">Actif principal</span></div>
+                  </div>
+                </div>
+
+                {/* Edit Form */}
+                <div className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                  <h3 className="text-sm font-black uppercase tracking-wider">{t.securite}</h3>
+                  
+                  <form 
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      showToast("Mot de passe admin mis à jour !", "success");
+                    }}
+                    className="space-y-4"
+                  >
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nouveau mot de passe administrateur</label>
+                      <input 
+                        type="password"
+                        required
+                        placeholder="Ex: admin123"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Confirmation</label>
+                      <input 
+                        type="password"
+                        required
+                        placeholder="Ex: admin123"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                      />
+                    </div>
+                    <button 
+                      type="submit"
+                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
+                    >
+                      Mettre à jour la sécurité
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              ADMIN TAB 6: ANALYTICS (styled premium graphics)
+              ------------------------------------------ */}
+          {activeTab === 'Analytics' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'مؤشرات الأداء الماليّة والخدمية' : 'Indicateurs Financiers & Performance'}</h1>
+              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
+                {currentLang === 'AR' ? 'استعرض التقارير البيانية حول الأرباح المحققة وطلبات الصيانة.' : 'Analysez la répartition des ventes de pièces et le taux d\'intervention régionale.'}
+              </p>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
+                
+                {/* Revenue report bar graphics */}
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                  <h3 className="text-sm font-black uppercase tracking-wider">Évolution du Chiffre d'Affaires Mensuel (TND)</h3>
+                  
+                  <div className="space-y-4 pt-4">
+                    {[
+                      { month: "Janvier", val: 3400, percent: "45%" },
+                      { month: "Février", val: 4800, percent: "60%" },
+                      { month: "Mars", val: 5100, percent: "65%" },
+                      { month: "Avril", val: 6800, percent: "80%" },
+                      { month: "Mai (Encours)", val: 8200, percent: "100%" }
+                    ].map((row, idx) => (
+                      <div key={idx} className="space-y-1.5 text-xs font-semibold">
+                        <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                          <span>{row.month}</span>
+                          <span className="font-black text-slate-800 dark:text-white">{row.val.toFixed(3)} DT</span>
+                        </div>
+                        <div className="h-4 bg-slate-100 dark:bg-slate-900 rounded-lg overflow-hidden relative">
+                          <div 
+                            className="h-full bg-gradient-to-r from-sky-600 to-[#1E3A5F] rounded-lg transition-all duration-500"
+                            style={{ width: row.percent }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Category Breakdown & regional pie logs representation */}
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+                  <h3 className="text-sm font-black uppercase tracking-wider">Répartition des Demandes par Services (%)</h3>
+                  
+                  <div className="space-y-5 pt-4 text-xs font-bold text-slate-500">
+                    {[
+                      { name: t.plomberie_generale, share: 45, color: "bg-blue-500" },
+                      { name: t.chauffage_central, share: 25, color: "bg-amber-500" },
+                      { name: t.climatisation, share: 20, color: "bg-emerald-500" },
+                      { name: t.installation_gaz, share: 10, color: "bg-rose-500" }
+                    ].map((row, idx) => (
+                      <div key={idx} className="space-y-1">
+                        <div className="flex justify-between items-center text-slate-700 dark:text-slate-200">
+                          <span className="flex items-center gap-2">
+                            <span className={`w-2.5 h-2.5 rounded-full ${row.color}`} />
+                            <span>{row.name}</span>
+                          </span>
+                          <span>{row.share}%</span>
+                        </div>
+                        <div className="h-2 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
+                          <div className={`h-full ${row.color}`} style={{ width: `${row.share}%` }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          )}
+
+        </main>
+      )}
+
+      {/* ==========================================
+          PIECES D'OCCASION DETAILED POPUP MODAL
+          ========================================== */}
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-xl w-full shadow-2xl overflow-hidden relative">
+            <button 
+              onClick={() => setSelectedProduct(null)}
+              className="absolute top-4 right-4 z-10 w-8.5 h-8.5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 flex items-center justify-center font-bold shadow transition"
+            >
+              ✕
+            </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2">
+              <div className="bg-slate-50 dark:bg-slate-900 py-14 flex items-center justify-center border-b sm:border-b-0 sm:border-r border-slate-200 dark:border-slate-700">
+                <ProductVisual image={selectedProduct.image} className="w-24 h-24" />
+              </div>
+
+              <div className="p-6 sm:p-8 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div>
+                    <span className="text-[9px] font-black text-slate-450 uppercase tracking-widest">{selectedProduct.category}</span>
+                    <h2 className="text-xl font-black text-slate-850 dark:text-slate-100 mt-1">{selectedProduct.title}</h2>
+                    <p className="text-xs text-slate-450 mt-1 leading-relaxed font-semibold">{selectedProduct.subtitle}</p>
+                  </div>
+
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-medium">
+                    {selectedProduct.description}
+                  </p>
+
+                  <div className="text-xl font-black text-[#F97316]">
+                    {selectedProduct.price} <span className="text-sm font-bold">DT</span>
+                  </div>
+                </div>
+
+                {/* Direct Action links */}
+                <div className="grid grid-cols-2 gap-3 mt-6">
+                  <a 
+                    href="tel:+21622456789"
+                    className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3 rounded-xl transition text-center shadow flex items-center justify-center gap-1.5"
+                  >
+                    <span>{t.call}</span>
+                  </a>
+
+                  <a 
+                    href={`https://wa.me/21622456789?text=${encodeURIComponent(
+                      `Bonjour, je suis intéressé par l'achat de la pièce d'occasion : ${selectedProduct.title} - ${selectedProduct.price} DT.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black py-3 rounded-xl transition text-center shadow flex items-center justify-center gap-1.5"
+                  >
+                    <span>{t.whatsapp}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* ==========================================
+          ADMIN ANNONCE MODAL (ADD / EDIT)
+          ========================================== */}
+      {showAdminModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-lg w-full shadow-2xl overflow-hidden relative">
+            <button 
+              onClick={() => setShowAdminModal(false)}
+              className="absolute top-4 right-4 z-10 w-8.5 h-8.5 rounded-full bg-slate-100 dark:bg-slate-750 text-slate-500 hover:text-slate-850 dark:hover:text-slate-100 flex items-center justify-center font-bold"
+            >
+              ✕
+            </button>
+
+            <div className="p-6 sm:p-8 space-y-6">
+              <h2 className="text-xl font-black text-slate-850 dark:text-white">
+                {editingProduct ? (currentLang === 'AR' ? 'تعديل بيانات الإعلان' : 'Modifier l\'annonce') : (currentLang === 'AR' ? 'إضافة إعلان جديد' : 'Créer une annonce')}
+              </h2>
+
+              <form onSubmit={handleSaveAnnonce} className="space-y-4 text-xs font-semibold">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Titre *</label>
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Ex: Mitigeur évier"
+                      value={annonceTitle}
+                      onChange={(e) => setAnnonceTitle(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Sous-Titre / Marque</label>
+                    <input 
+                      type="text"
+                      placeholder="Ex: GROHE chromé"
+                      value={annonceSubtitle}
+                      onChange={(e) => setAnnonceSubtitle(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Catégorie</label>
+                    <select
+                      value={annonceCategory}
+                      onChange={(e) => setAnnonceCategory(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
+                    >
+                      {reduxCategories.map(c => (
+                        <option key={c.id} value={c.name}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Prix (TND) *</label>
+                    <input 
+                      type="number"
+                      required
+                      min="1"
+                      value={annoncePrice}
+                      onChange={(e) => setAnnoncePrice(Number(e.target.value))}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">État</label>
+                    <select
+                      value={annonceCondition}
+                      onChange={(e) => setAnnonceCondition(e.target.value as any)}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
+                    >
+                      <option value="comme neuf">Comme neuf</option>
+                      <option value="bon état">Bon état</option>
+                      <option value="pour pièces">Pour pièces</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Représentation Visuelle</label>
+                    <select
+                      value={annonceImage}
+                      onChange={(e) => setAnnonceImage(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
+                    >
+                      <option value="faucet">Haut-de-gamme Robinet (Faucet)</option>
+                      <option value="boiler">Chauffe-eau / Chaudière (Boiler)</option>
+                      <option value="copper_fittings">Canalisation / Raccords (Pipes)</option>
+                    </select>
+                  </div>
+
+                  <div className="flex gap-4 items-center justify-around h-full pt-5">
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-750 dark:text-slate-300">
+                      <input 
+                        type="checkbox"
+                        checked={annonceIsFeatured}
+                        onChange={(e) => setAnnonceIsFeatured(e.target.checked)}
+                        className="accent-[#F97316] w-4.5 h-4.5"
+                      />
+                      <span>En Vedette</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-750 dark:text-slate-300">
+                      <input 
+                        type="checkbox"
+                        checked={annonceIsAvailable}
+                        onChange={(e) => setAnnonceIsAvailable(e.target.checked)}
+                        className="accent-[#F97316] w-4.5 h-4.5"
+                      />
+                      <span>Disponible</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Description technique *</label>
+                  <textarea 
+                    required
+                    rows={3}
+                    placeholder="Détails du produit..."
+                    value={annonceDescription}
+                    onChange={(e) => setAnnonceDescription(e.target.value)}
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                  />
+                </div>
+
+                <button 
+                  type="submit"
+                  className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
+                >
+                  {currentLang === 'AR' ? 'حفظ الإعلان' : 'Enregistrer les modifications'}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==========================================
+          COMMON SITE FOOTER
+          ========================================== */}
+      {(bypassAuth || sessionUser) && (
+        <footer className={`border-t transition-colors ${
+          currentTheme === 'dark' ? 'bg-[#0B0F19] border-slate-800 text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-600'
+        } py-12`}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
+            
+            <div className="space-y-4">
+              <span className="text-lg font-black text-slate-850 dark:text-slate-105 flex items-center gap-2">
+                🛠️ {currentLang === 'AR' ? 'سباك تونس' : 'Plombier Tunisie'}
+              </span>
+              <p className="text-xs leading-relaxed font-semibold">
+                {t.foot_desc}
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                {t.navigation}
+              </h4>
+              <ul className="space-y-2 text-xs font-semibold">
+                <li><button onClick={() => setActiveTab(currentRole === 'admin' ? 'AdminAccueil' : 'Accueil')} className="hover:text-[#F97316] transition">{t.accueil}</button></li>
+                <li><button onClick={() => setActiveTab(currentRole === 'admin' ? 'AdminProfile' : 'Profile')} className="hover:text-[#F97316] transition">{t.mon_profil}</button></li>
+                {currentRole !== 'admin' && (
+                  <>
+                    <li><button onClick={() => setActiveTab('Services')} className="hover:text-[#F97316] transition">{t.services}</button></li>
+                    <li><button onClick={() => setActiveTab('Marketplace')} className="hover:text-[#F97316] transition">{t.pieces}</button></li>
+                  </>
+                )}
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                {t.informations}
+              </h4>
+              <ul className="space-y-2 text-xs font-semibold">
+                <li><button onClick={() => showToast(t.politique, 'info')} className="hover:text-[#F97316] transition">{t.politique}</button></li>
+                <li><button onClick={() => showToast(t.conditions_util, 'info')} className="hover:text-[#F97316] transition">{t.conditions_util}</button></li>
+                <li><button onClick={() => showToast(t.plan_site, 'info')} className="hover:text-[#F97316] transition">{t.plan_site}</button></li>
+              </ul>
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                Support
+              </h4>
+              <ul className="space-y-2 text-xs font-semibold">
+                <li className="flex items-center gap-2">
+                  <span>📞</span>
+                  <a href="tel:+21622456789" className="hover:text-[#F97316] transition">+216 22 456 789</a>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span>✉️</span>
+                  <a href="mailto:support@plombier-tunisie.tn" className="hover:text-[#F97316] transition">support@plombier-tunisie.tn</a>
+                </li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800 mt-10 pt-6 text-center text-xs font-bold">
+            {t.credits}
+          </div>
+        </footer>
+      )}
+
+      {/* ==========================================
+          FLOATING QUICK CONTACT ACTION SUPPORT
+          ========================================== */}
+      {(bypassAuth || sessionUser) && currentRole !== 'admin' && (
+        <a 
+          href={`https://wa.me/21622456789?text=${encodeURIComponent(t.whatsapp_msg)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95"
+          title="WhatsApp Support Urgent"
+        >
+          💬
+        </a>
+      )}
+
     </div>
   );
 };
-
-// ----------------------------------------------------
-// PROFILE TAB WITH REAL USER DATA
-// ----------------------------------------------------
-const renderWebProfileTab = (user: any, signOut: () => void, showToast: any) => (
-  <div className="max-w-4xl mx-auto space-y-6 text-left animate-fade-in">
-    <div>
-      <h2 className="text-xl font-extrabold text-slate-850">Profile Settings</h2>
-      <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Manage your account, security, and preferences</p>
-    </div>
-    <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)] space-y-6">
-      <div className="flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-[#005994] flex items-center justify-center text-white text-2xl font-black">
-          {user.name?.charAt(0)?.toUpperCase() || 'U'}
-        </div>
-        <div>
-          <h3 className="font-extrabold text-base text-slate-850">{user.name}</h3>
-          <p className="text-[11px] text-slate-400 mt-0.5">{user.email}</p>
-          <span className="inline-block mt-1 text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase leading-none bg-[#E6F0FA] text-[#005994]">{user.role}</span>
-        </div>
-      </div>
-      <div className="border-t border-slate-100 pt-4 space-y-3">
-        <div className="flex justify-between items-center text-xs">
-          <span className="text-slate-500 font-semibold">Status</span>
-          <span className="font-bold text-[#008A5D]">{user.status || 'Active'}</span>
-        </div>
-        <div className="flex justify-between items-center text-xs">
-          <span className="text-slate-500 font-semibold">Currency</span>
-          <span className="font-bold text-slate-800">{user.preferredCurrency || 'DT'}</span>
-        </div>
-      </div>
-      <button
-        onClick={() => { signOut(); showToast('Signed out successfully', 'info'); }}
-        className="w-full bg-[#A80000] hover:bg-[#8B0000] text-white font-extrabold text-xs py-3 rounded-xl transition shadow-sm uppercase tracking-wider"
-      >
-        Sign Out
-      </button>
-    </div>
-  </div>
-);

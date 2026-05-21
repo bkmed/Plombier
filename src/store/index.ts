@@ -21,6 +21,8 @@ import analyticsReducer from './slices/analyticsSlice';
 import usersReducer from './slices/usersSlice';
 import walletReducer from './slices/walletSlice';
 import goalsReducer from './slices/goalsSlice';
+import categoriesReducer from './slices/categoriesSlice';
+import partsReducer from './slices/partsSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -32,6 +34,8 @@ const rootReducer = combineReducers({
   users: usersReducer,
   wallet: walletReducer,
   goals: goalsReducer,
+  categories: categoriesReducer,
+  parts: partsReducer,
 });
 
 const persistConfig = {
@@ -47,6 +51,8 @@ const persistConfig = {
     'users',
     'wallet',
     'goals',
+    'categories',
+    'parts',
   ], // add slices here to persist
 };
 

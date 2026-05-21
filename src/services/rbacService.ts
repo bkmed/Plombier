@@ -12,6 +12,7 @@ export enum Permission {
 const walletRoutes = ['Home', 'History', 'Reports', 'Accounts', 'Goals', 'Profile'];
 
 class RbacService {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   hasPermission(_user: User | null, _permission: Permission): boolean {
     return true;
   }
@@ -30,6 +31,7 @@ class RbacService {
     return this.getUserRole(user) === 'admin';
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isStockManager(_user: User | null): boolean {
     return false;
   }
@@ -42,10 +44,12 @@ class RbacService {
     return !user;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canManageCatalog(_user: User | null): boolean {
     return false;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   canViewAnalytics(_user: User | null): boolean {
     return true;
   }

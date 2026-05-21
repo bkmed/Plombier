@@ -1,4 +1,4 @@
-import './src/tailwind.css';
+import './src/global.css';
 import { AppRegistry } from 'react-native';
 import App from './App';
 import { initSentry } from './src/services/sentry.web';

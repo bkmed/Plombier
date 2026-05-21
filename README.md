@@ -1,45 +1,32 @@
-# Plombier Wallet
+# Plombier Tunisie
 
-**Plombier** is a cross-platform personal finance wallet for Web, iOS, and Android. It helps users track daily spending, manage accounts, monitor recurring bills, review financial reports, and follow savings goals from one shared React Native codebase.
+**Plombier Tunisie** is a premium business showcase and second-hand plumbing parts marketplace. It allows customers to view plumbing, heating, gas, and AC services in Tunisia (Grand Tunis and Sahel), request emergency interventions via an interactive coverage zone map, browse and save second-hand plumbing parts, and contact sellers directly via phone or WhatsApp. It also features a fully functional administration panel for managing announcements, categories, user roles, and viewing analytics.
 
 ## Key Features
 
-### Wallet Core
+### Premium Web Client Showcase
+- **Accueil (Home)**: High-impact hero banner, emergency support links, technical expertise quick views, a preview grid of featured second-hand parts, and trust metrics.
+- **Services**: In-depth description of technical services (Plomberie, Climatisation, Gaz de ville, Chauffage central) with before/after comparison grids and direct quote requests.
+- **Zone d'intervention (Coverage Zones)**: Interactive Tunisia coverage zone map with an SVG/CSS mockup. Users can check covered regions (Tunis, Sousse, Sfax, Monastir, Ariana, Ben Arous) and submit quick emergency intervention forms.
+- **Pièces d'occasion (Used Parts Marketplace)**: Comprehensive marketplace for refurbished plumbing parts with category/condition filters, maximum price sliders, sorting, and direct action triggers ("📞 Appeler" / "💬 WhatsApp").
+- **Profil (Profile Settings)**: Form to view/update profile settings, password management, and a dedicated favorite items manager. Invites guests to sign up or sign in.
+- **Paiement (Online Payment - Coming Soon)**: Visual checkout mockup highlighting upcoming integrations with local secure payment methods (ClicToPay / Sobflous).
 
-- **Accounts**: Cash, bank, credit card, and savings balances.
-- **Transactions**: Expenses, income, transfers, notes, tags, status, and categories.
-- **Quick Log**: One-tap shortcuts for frequent expenses.
-- **Recurring Bills**: Due dates, reminders, pay-now flow, and overdue alerts.
-- **Savings Goals**: Active goals, progress tracking, completed victories.
-- **Reports**: Cash flow, spending allocation, budget cards, and CSV export.
-
-### User Experience
-
-- **Cross-platform UI**: Same `.tsx` screens for web and mobile.
-- **Responsive Navigation**: Bottom tabs on web, drawer navigation on mobile.
-- **Balance Privacy**: Hide or show balances globally.
-- **Multilingual Ready**: English, French, Arabic, German, Spanish, Chinese, Hindi, Turkish, and Italian.
-- **Offline-first Storage**: Web uses `localStorage`; native uses MMKV through the shared storage service.
-
-## Documentation
-
-- [Commercial Overview](Documents/Comercial.md)
-- [Use Cases](Documents/use-cases.md)
-- [Pages and Roles](Documents/pages-and-roles.md)
-- [Functional Specification](Documents/cahier_des_charges_plombier_wallet.md)
-- [Migration Notes](Documents/migration.md)
-- [To Do](Documents/ToDo.md)
+### Administration Dashboard
+- **Accueil (Overview)**: Summary metrics (listings, categories, active users, inquiries) and recent system activity logs.
+- **Gestion annonce (Announcements CRUD)**: Full management panel to publish, modify, or delete used part listings, modify availability/featured status, and update details.
+- **Gestion catégorie**: Dynamic category creation, modification, and removal tool synced to the Redux store.
+- **Gestion user**: Management table listing all registered users with administrative actions to toggle roles (user/admin) or suspend/restore accounts.
+- **Profil**: Administrator profile page for security and credential settings.
+- **Analytics**: Beautiful dashboard charts representing monthly revenue splits, category distribution, and service volumes.
 
 ## Tech Stack
 
-- **Framework**: React Native 0.82 + React Native Web
-- **UI**: NativeWind / Tailwind tokens
-- **State**: Redux Toolkit + redux-persist
-- **Persistence**: `react-native-mmkv` on native, `localStorage` on web
-- **Navigation**: React Navigation 7
-- **Analytics & Notifications**: Firebase Analytics, Crashlytics, Notifee
-- **i18n**: i18next + react-i18next
-- **Testing**: Jest, Cypress, Detox
+- **Framework**: React 19 + React Native Web (cross-platform capabilities)
+- **State Management**: Redux Toolkit (managing marketplace listings, categories, and users) + redux-persist
+- **Routing & Flow**: Custom local session navigator in `AppNavigator.web.tsx` supporting guest bypass and role-based views.
+- **Styling**: Vanilla CSS and Tailwind CSS classes for premium styling, animations, and high visual fidelity.
+- **Development Tooling**: Webpack 5, TypeScript 5, ESLint, Prettier.
 
 ## Getting Started
 
@@ -47,53 +34,35 @@
 
 - Node.js 20+
 - npm
-- React Native environment for iOS/Android builds
 
-### Install
+### Installation
 
 ```bash
 npm install
 ```
 
-### Run Web
+### Running the Web Application
+
+To run the application locally on the webpack-dev-server:
 
 ```bash
 npm run start-web-dev-nossr
 ```
 
-The dev server runs at `http://localhost:8002/` when the default port is available.
+The application will be accessible at `http://localhost:8002/`.
 
-### Run Mobile
+### Running Lint Verification
 
 ```bash
-npm start
-npm run start-ios
-npm run start-android
+npm run lint
 ```
-
-## Project Structure
-
-- `src/screens/home/`: wallet dashboard and quick log.
-- `src/screens/wallet/`: history, reports, accounts, goals, and wallet modals.
-- `src/screens/profile/`: profile, display, budgets, shortcuts, and data actions.
-- `src/components/`: shared wallet UI such as `TopAppBar` and `TransactionRow`.
-- `src/store/slices/`: Redux slices for `wallet`, `goals`, auth, notifications, messages, currencies, analytics, and users.
-- `src/services/`: auth, session, storage, analytics, notifications, permissions, and RBAC.
-- `src/i18n/`: locale files and i18next setup.
 
 ## Demo Accounts
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| Admin | `admin@demo.com` | `admin123` |
-| User | `user@demo.com` | `user123` |
-
-## Verification
-
-```bash
-npx tsc --noEmit
-npm run start-web-dev-nossr
-```
+| Admin | `admin@stouchy.com` | `admin123` |
+| User | `user@stouchy.com` | `user123` |
 
 ## License
 

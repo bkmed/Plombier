@@ -28,7 +28,7 @@ const updateFileContent = (filePath, searchValue, replaceValue) => {
         fs.writeFileSync(filePath, content, 'utf8');
         console.log(`Updated content in ${path.relative(rootDir, filePath)}`);
       }
-    } catch (e) {
+    } catch {
       // Skip binary or unreadable files
     }
   }

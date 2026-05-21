@@ -35,6 +35,7 @@ export const analyticsService = {
     data: [],
   }),
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getPersonalAnalytics: async (_userId: string): Promise<any> => ({
     totalOrders: 0,
     totalSpent: 0,
