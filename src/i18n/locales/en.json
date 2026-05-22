@@ -52,6 +52,15 @@
     "services_subtitle": "Plumbing, AC, gas, and heating interventions for reliable homes all year.",
     "view_all": "View all"
   },
+  "gallery": {
+    "title": "Gallery",
+    "emptyState": "No images yet.",
+    "adminAdd": "Add image",
+    "manageGallery": "Manage gallery"
+  },
+  "support": {
+    "whatsapp": "Call on WhatsApp"
+  },
   "announcements": {
     "addAnnouncement": "Add Announcement",
     "noAnnouncements": "No announcements yet",
@@ -1038,6 +1047,26 @@
     "goal_updated": "Goal updated",
     "paid_marked": "Marked as paid"
   },
+  "informations": "Legal Information",
+  "politique": "Privacy Policy",
+  "conditions_util": "Terms of Service",
+  "plan_site": "Site Map",
+  "informations_desc": "Find all the legal information here about how our platform operates and how we protect your data.",
+  "privacy_intro": "Your privacy is a priority. We only collect the data needed to deliver our services and improve your experience.",
+  "privacy_point_1": "Minimal data collection for service requests and orders.",
+  "privacy_point_2": "We never sell your contact details to third parties.",
+  "privacy_point_3": "Sensitive data is protected with encryption and secure storage.",
+  "terms_intro": "By using this site, you agree to the following terms of service.",
+  "terms_point_1": "Services are provided based on the displayed information and availability.",
+  "terms_point_2": "Abusive or fraudulent content is prohibited and may result in suspension.",
+  "terms_point_3": "We reserve the right to update these terms at any time.",
+  "sitemap_intro": "Quickly access the main Plombier Tunisia pages via our site map.",
+  "sitemap_page_accueil": "Home",
+  "sitemap_page_services": "Services",
+  "sitemap_page_zones": "Service Areas",
+  "sitemap_page_pieces": "Used Parts",
+  "sitemap_page_profil": "Profile",
+  "sitemap_page_contact": "Contact & Support",
   "status": {
     "cleared": "Cleared",
     "pending": "Pending",

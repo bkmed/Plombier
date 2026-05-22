@@ -52,6 +52,15 @@
     "services_subtitle": "تدخلات في الترصيص والتكييف والغاز والتدفئة لضمان منزل آمن وعملي طوال السنة.",
     "view_all": "عرض الكل"
   },
+  "gallery": {
+    "title": "المعرض",
+    "emptyState": "لا توجد صور حتى الآن.",
+    "adminAdd": "إضافة صورة",
+    "manageGallery": "إدارة المعرض"
+  },
+  "support": {
+    "whatsapp": "الاتصال عبر WhatsApp"
+  },
   "announcements": {
     "addAnnouncement": "إضافة إعلان",
     "noAnnouncements": "لا توجد إعلانات بعد",
@@ -1038,6 +1047,26 @@
     "goal_updated": "Goal updated",
     "paid_marked": "Marked as paid"
   },
+  "informations": "معلومات قانونية",
+  "politique": "سياسة الخصوصية والأمان",
+  "conditions_util": "شروط الاستخدام العامة",
+  "plan_site": "خريطة الموقع التقنية",
+  "informations_desc": "تجد هنا جميع المعلومات القانونية المتعلقة باستخدام منصتنا.",
+  "privacy_intro": "نحن نحافظ على خصوصية بياناتك ونستخدم فقط المعلومات الضرورية لتقديم الخدمة وتحسين تجربتك.",
+  "privacy_point_1": "جمع بيانات محدود فقط لطلبات التدخل والطلبات.",
+  "privacy_point_2": "لا يتم بيع بياناتك الشخصية لأي طرف ثالث.",
+  "privacy_point_3": "تشفير آمن وحفظ البيانات الحساسة في بيئة محمية.",
+  "terms_intro": "باستخدام هذا الموقع، فإنك توافق على شروط الاستخدام الموضحة أدناه.",
+  "terms_point_1": "الخدمات تُقدَّم وفق المعلومات والتوافر المعروض.",
+  "terms_point_2": "يُمنع أي محتوى مسيء أو احتيالي وقد يؤدي إلى إيقاف الحساب.",
+  "terms_point_3": "نحتفظ بحق تعديل الشروط في أي وقت.",
+  "sitemap_intro": "انتقل سريعًا إلى الصفحات الرئيسية لموقع Plombier Tunisie من خلال خريطة الموقع.",
+  "sitemap_page_accueil": "الصفحة الرئيسية",
+  "sitemap_page_services": "الخدمات",
+  "sitemap_page_zones": "مناطق الخدمة",
+  "sitemap_page_pieces": "قطع الغيار",
+  "sitemap_page_profil": "الملف الشخصي",
+  "sitemap_page_contact": "التواصل والدعم",
   "status": {
     "cleared": "Cleared",
     "pending": "Pending",

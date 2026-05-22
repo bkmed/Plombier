@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Alert, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { TopAppBar } from '../../components/TopAppBar';
 import { useAuth } from '../../context/AuthContext';
@@ -24,7 +25,8 @@ const Toggle = ({ value, onPress }: { value: boolean; onPress: () => void }) => 
 
 export const ProfileScreen = () => {
   const dispatch = useDispatch();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const navigation = useNavigation<any>();
   const { user, signOut } = useAuth();
   const settings = useSelector(selectWalletSettings);
   const transactions = useSelector(selectTransactions);
@@ -132,6 +134,27 @@ export const ProfileScreen = () => {
                 {shortcut.defaultAmount} {settings.currency}
               </Text>
             </View>
+          ))}
+        </View>
+
+        <Text className="px-5 pb-2 pt-5 font-label text-[11px] font-extrabold uppercase tracking-[2px] text-on-surface-variant">
+          {t('informations')}
+        </Text>
+        <View className="mx-5 rounded-2xl bg-surface-container-lowest shadow-editorial overflow-hidden">
+          {[
+            { page: 'info', label: t('informations') },
+            { page: 'privacy', label: t('politique') },
+            { page: 'terms', label: t('conditions_util') },
+            { page: 'sitemap', label: t('plan_site') },
+          ].map(item => (
+            <TouchableOpacity
+              key={item.page}
+              onPress={() => navigation.navigate('LegalScreen', { page: item.page })}
+              className="flex-row items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-700"
+            >
+              <Text className="font-body text-sm font-bold text-on-surface">{item.label}</Text>
+              <MaterialIcons name="chevron-right" size={20} color="#005994" />
+            </TouchableOpacity>
           ))}
         </View>
 

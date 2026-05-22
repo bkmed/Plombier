@@ -1,0 +1,195 @@
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import CategoryImageInput from '../components/CategoryImageInput';
+import {
+  addGalleryItem,
+  updateGalleryItem,
+  deleteGalleryItem,
+  selectGalleryItems,
+  GalleryItem,
+} from '../../../store/slices/gallerySlice';
+import { RootState } from '../../../store';
+
+const AdminGalleryEditor = () => {
+  const dispatch = useDispatch();
+  const items = useSelector((state: RootState) => selectGalleryItems(state)) as GalleryItem[];
+  const [title, setTitle] = useState('');
+  const [subtitle, setSubtitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [imageUri, setImageUri] = useState<string | null>(null);
+  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const resetForm = () => {
+    setTitle('');
+    setSubtitle('');
+    setDescription('');
+    setImageUri(null);
+    setEditingItem(null);
+    setErrorMessage(null);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    setStatusMessage(null);
+
+    if (!title.trim()) {
+      setErrorMessage('Le titre est requis.');
+      return;
+    }
+
+    if (!imageUri) {
+      setErrorMessage('Veuillez sélectionner une image.');
+      return;
+    }
+
+    const item: GalleryItem = {
+      id: editingItem ? editingItem.id : `gal-${Date.now()}`,
+      title: title.trim(),
+      subtitle: subtitle.trim(),
+      description: description.trim(),
+      imageUri,
+      createdAt: editingItem ? editingItem.createdAt : new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (editingItem) {
+      dispatch(updateGalleryItem(item));
+      setStatusMessage('Image de la galerie mise à jour.');
+    } else {
+      dispatch(addGalleryItem(item));
+      setStatusMessage('Image ajoutée à la galerie.');
+    }
+
+    resetForm();
+  };
+
+  const handleEdit = (item: GalleryItem) => {
+    setEditingItem(item);
+    setTitle(item.title);
+    setSubtitle(item.subtitle || '');
+    setDescription(item.description || '');
+    setImageUri(item.imageUri);
+    setErrorMessage(null);
+    setStatusMessage(null);
+  };
+
+  const handleDelete = (id: string) => {
+    dispatch(deleteGalleryItem(id));
+    if (editingItem?.id === id) {
+      resetForm();
+    }
+    setStatusMessage('Image supprimée de la galerie.');
+  };
+
+  return (
+    <div className="p-4 space-y-6">
+      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h3 className="font-black text-2xl">{editingItem ? 'Modifier une image' : 'Ajouter une image'} à la galerie</h3>
+          <p className="text-sm text-slate-500">Utilisez ce formulaire pour gérer le contenu de la galerie web.</p>
+        </div>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
+        {errorMessage && <div className="text-rose-700 bg-rose-100 border border-rose-200 rounded-xl px-4 py-3 text-sm">{errorMessage}</div>}
+        {statusMessage && <div className="text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-xl px-4 py-3 text-sm">{statusMessage}</div>}
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <input
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            placeholder="Titre"
+            required
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+          />
+          <input
+            value={subtitle}
+            onChange={e => setSubtitle(e.target.value)}
+            placeholder="Sous-titre"
+            className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+          />
+        </div>
+
+        <textarea
+          value={description}
+          onChange={e => setDescription(e.target.value)}
+          placeholder="Description"
+          className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+        />
+
+        <div>
+          <label className="block text-sm font-semibold mb-2">Image de la galerie</label>
+          <CategoryImageInput imageUri={imageUri || undefined} onImageSelected={setImageUri} />
+        </div>
+
+        <div className="flex flex-wrap gap-3 items-center">
+          <button
+            type="submit"
+            className="bg-[#F97316] text-white px-5 py-3 rounded-xl font-black hover:bg-[#e0630b] transition"
+          >
+            {editingItem ? 'Enregistrer les modifications' : 'Ajouter à la galerie'}
+          </button>
+          {editingItem && (
+            <button
+              type="button"
+              onClick={resetForm}
+              className="bg-slate-100 text-slate-700 px-4 py-3 rounded-xl font-semibold hover:bg-slate-200 transition"
+            >
+              Annuler
+            </button>
+          )}
+        </div>
+      </form>
+
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <h4 className="text-xl font-black">Liste des images de la galerie</h4>
+          <span className="text-sm text-slate-500">{items.length} élément{items.length === 1 ? '' : 's'}</span>
+        </div>
+
+        {items.length === 0 ? (
+          <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center text-sm text-slate-500">
+            Aucune image ajoutée pour le moment.
+          </div>
+        ) : (
+          <div className="grid gap-4">
+            {items.map(item => (
+              <div key={item.id} className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
+                <div className="overflow-hidden rounded-3xl bg-slate-100">
+                  <img src={item.imageUri} alt={item.title} className="h-full w-full object-cover" />
+                </div>
+                <div className="space-y-2">
+                  <div className="font-black text-slate-900">{item.title}</div>
+                  {item.subtitle ? <div className="text-sm text-slate-500">{item.subtitle}</div> : null}
+                  {item.description ? <div className="text-sm text-slate-600">{item.description}</div> : null}
+                  <div className="text-[11px] text-slate-400">Mis à jour le {new Date(item.updatedAt || item.createdAt).toLocaleDateString()}</div>
+                </div>
+                <div className="flex flex-col gap-2 justify-between">
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(item)}
+                    className="w-full bg-blue-600 text-white rounded-xl px-4 py-3 font-black hover:bg-blue-700 transition"
+                  >
+                    Modifier
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(item.id)}
+                    className="w-full bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+                  >
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default AdminGalleryEditor;

@@ -25,6 +25,7 @@ import { ReportsScreen } from '../screens/wallet/ReportsScreen';
 import { AccountsScreen } from '../screens/wallet/AccountsScreen';
 import { GoalsScreen } from '../screens/wallet/GoalsScreen';
 import { ProfileScreen } from '../screens/profile/ProfileScreen';
+import { LegalScreen } from '../screens/legal/LegalScreen';
 import { AddTransactionSheet } from '../screens/wallet/modals/AddTransactionSheet';
 import { AddGoalModal } from '../screens/wallet/modals/AddGoalModal';
 import { AddAccountModal } from '../screens/wallet/modals/AddAccountModal';
@@ -154,6 +155,7 @@ const WalletShell = () => {
       }}
     >
       <Root.Screen name="WalletTabs" component={Shell} />
+      <Root.Screen name="LegalScreen" component={LegalScreen} />
       <Root.Screen
         name="AddTransactionSheet"
         component={AddTransactionSheet}

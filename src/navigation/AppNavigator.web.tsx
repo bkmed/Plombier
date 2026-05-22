@@ -5,11 +5,21 @@ import { toggleFavoriteAction, addListing, updateListing, deleteListing } from '
 import { addCategory, updateCategory, deleteCategory } from '../store/slices/categoriesSlice';
 import { addUser, updateUser } from '../store/slices/usersSlice';
 import { updatePlombierSettings } from '../store/slices/plombierSettingsSlice';
+import { Category } from '../database/schema';
 import { useAuth } from '../context/AuthContext';
 import { User } from '../services/authService';
 import { useToast } from '../context/ToastContext';
 import { ServiceIcon, ServiceIconName } from '../components/ServiceIcon';
 import { isValidEmail, isValidPhone } from '../utils/validation';
+import FooterLinks from '../features/plombier/components/FooterLinks';
+import CategoryImageInput from '../features/plombier/components/CategoryImageInput';
+import GalleryScreen from '../features/plombier/screens/GalleryScreen';
+import AdminGalleryEditor from '../features/plombier/screens/AdminGalleryEditor';
+import ServicesScreen from '../features/plombier/screens/ServicesScreen';
+import ZonesScreen from '../features/plombier/screens/ZonesScreen';
+import MarketplaceScreen from '../features/plombier/screens/MarketplaceScreen';
+import AdminProfileScreen from '../features/plombier/screens/AdminProfileScreen';
+import AdminAnalyticsScreen from '../features/plombier/screens/AdminAnalyticsScreen';
 
 // ==========================================
 // BRAND LOGO SVG
@@ -106,12 +116,7 @@ interface Product {
   isAvailable?: boolean;
 }
 
-interface LocalCategory {
-  id: string;
-  name: string;
-  createdAt: string;
-  updatedAt: string;
-}
+type LocalCategory = Category;
 
 const translations = {
   FR: {
@@ -482,6 +487,7 @@ export const AppNavigator = () => {
   const favorites = useSelector((state: RootState) => state.parts.favorites);
   const reduxCategories = useSelector((state: RootState) => state.categories.items);
   const usersList = useSelector((state: RootState) => state.users.items);
+  const galleryItems = useSelector((state: RootState) => state.gallery.items);
   const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
 
   // Initial Seed for Categories inside Redux on Mount
@@ -540,23 +546,8 @@ export const AppNavigator = () => {
   const [currentMdp, setCurrentMdp] = useState('');
   const [newMdp, setNewMdp] = useState('');
 
-  // Marketplace Modal & Filters
+  // Marketplace and Zones have been moved to feature screens.
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('Toutes');
-  const [selectedConditionFilter, setSelectedConditionFilter] = useState('Tous');
-  const [priceMax, setPriceMax] = useState(600);
-  const [sortBy, setSortBy] = useState('featured');
-
-  // Interactive SVG Map click tracker
-  const [selectedGovernorat, setSelectedGovernorat] = useState<string | null>(null);
-
-  // Intervention Quick Form
-  const [interventionName, setInterventionName] = useState('');
-  const [interventionPhone, setInterventionPhone] = useState('');
-  const [interventionGov, setInterventionGov] = useState('Tunis');
-  const [interventionProblem, setInterventionProblem] = useState("Fuite d'eau");
-  const [interventionDetails, setInterventionDetails] = useState('');
 
   // Newsletter form
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -576,11 +567,15 @@ export const AppNavigator = () => {
 
   // Admin Category form state
   const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryImage, setNewCategoryImage] = useState<string | null>(null);
   const [editingCategory, setEditingCategory] = useState<LocalCategory | null>(null);
   const [editCategoryName, setEditCategoryName] = useState('');
+  const [categoryErrorMessage, setCategoryErrorMessage] = useState<string | null>(null);
 
   // Quick WhatsApp pre-filled technical messages
   const t = translations[currentLang];
+  const galleryTitle = (t as any).gallery?.title || 'Galerie';
+  const galleryManageLabel = (t as any).gallery?.manageGallery || 'Gérer la galerie';
   const isRTL = currentLang === 'AR';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
@@ -588,16 +583,6 @@ export const AppNavigator = () => {
   const nextLanguage = languageOrder[(languageOrder.indexOf(currentLang) + 1) % languageOrder.length];
   const supportWhatsAppNumber = profilePhone || sessionUser?.phone || '+216 22 000 111';
   const supportWhatsAppDigits = supportWhatsAppNumber.replace(/\D/g, '') || '21622000111';
-  const coverageCities = [
-    { city: 'Tunis', area: 'Grand Tunis' },
-    { city: 'Ariana', area: 'Grand Tunis' },
-    { city: 'Ben Arous', area: 'Grand Tunis' },
-    { city: 'La Manouba', area: 'Grand Tunis' },
-    { city: 'Sousse', area: 'Sahel' },
-    { city: 'Monastir', area: 'Sahel' },
-    { city: 'Mahdia', area: 'Sahel' },
-    { city: 'Sfax', area: 'Sud Est' },
-  ];
 
   const startWebSession = async (userData: WebSessionUser, tab: string) => {
     setSessionUser(userData);
@@ -661,6 +646,11 @@ export const AppNavigator = () => {
       document.documentElement.classList.remove('dark');
     }
   }, [currentTheme]);
+
+  // Update the browser title from the current business name settings
+  useEffect(() => {
+    document.title = businessName ? `${businessName} | Plombier` : 'Plombier';
+  }, [businessName]);
 
   // Favorite hearts handler
   const toggleFavorite = (id: string, e?: React.MouseEvent) => {
@@ -873,38 +863,50 @@ export const AppNavigator = () => {
   // Admin dynamic Categories operations
   const handleAddCategory = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newCategoryName.trim()) return;
+    setCategoryErrorMessage(null);
+    if (!newCategoryName.trim()) {
+      setCategoryErrorMessage(currentLang === 'AR' ? 'يرجى إدخال اسم الصنف.' : 'Veuillez saisir un nom de catégorie.');
+      return;
+    }
 
     // Check duplicates
     if (reduxCategories.find(c => c.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
-      showToast(currentLang === 'AR' ? 'هذا الصنف موجود بالفعل' : 'Catégorie déjà existante.', 'error');
+      setCategoryErrorMessage(currentLang === 'AR' ? 'هذا الصنف موجود بالفعل' : 'Catégorie déjà existante.');
       return;
     }
 
     const newCat = {
       id: 'cat-' + Date.now(),
       name: newCategoryName.trim(),
+      imageUri: newCategoryImage || undefined,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
     dispatch(addCategory(newCat));
     showToast(currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !', 'success');
     setNewCategoryName('');
+    setNewCategoryImage(null);
   };
 
   const handleRenameCategory = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!editingCategory || !editCategoryName.trim()) return;
+    setCategoryErrorMessage(null);
+    if (!editingCategory || !editCategoryName.trim()) {
+      setCategoryErrorMessage(currentLang === 'AR' ? 'يرجى إدخال اسم الصنف.' : 'Veuillez saisir un nom de catégorie.');
+      return;
+    }
 
     const renamed = {
       ...editingCategory,
       name: editCategoryName.trim(),
+      imageUri: newCategoryImage || editingCategory.imageUri,
       updatedAt: new Date().toISOString()
     };
     dispatch(updateCategory(renamed));
     showToast(currentLang === 'AR' ? 'تمت إعادة تسمية الصنف !' : 'Catégorie modifiée !', 'success');
     setEditingCategory(null);
     setEditCategoryName('');
+    setNewCategoryImage(null);
   };
 
   const handleDeleteCategory = (id: string, name: string) => {
@@ -1459,11 +1461,12 @@ export const AppNavigator = () => {
             {/* Navigation Tabs based on Role */}
             <nav className="hidden lg:flex items-center gap-7 font-black text-xs uppercase tracking-wider">
               {currentRole === 'admin' ? (
-                // ADMIN PANELS: Accueil | Gestion Annonce | Gestion Catégorie | Gestion User | Profil | Analytics
+                // ADMIN PANELS: Accueil | Gestion Annonce | Gestion Catégorie | Galerie | Gestion User | Profil | Analytics
                 [
                   { id: 'AdminAccueil', label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' },
                   { id: 'GestionAnnonce', label: currentLang === 'AR' ? 'إدارة الإعلانات' : 'Gestion Annonce' },
                   { id: 'GestionCategorie', label: currentLang === 'AR' ? 'إدارة الأصناف' : 'Gestion Catégorie' },
+                  { id: 'AdminGallery', label: currentLang === 'AR' ? 'المعرض' : galleryManageLabel },
                   { id: 'GestionUser', label: currentLang === 'AR' ? 'إدارة المستخدمين' : 'Gestion User' },
                   { id: 'AdminProfile', label: currentLang === 'AR' ? 'ملف الإدارة' : 'Profil' },
                   { id: 'Analytics', label: currentLang === 'AR' ? 'التحليلات الماليّة' : 'Analytics' }
@@ -1488,6 +1491,7 @@ export const AppNavigator = () => {
                   { id: 'Services', label: t.services },
                   { id: 'Zones', label: t.zones },
                   { id: 'Marketplace', label: t.pieces },
+                  { id: 'Gallery', label: galleryTitle },
                   { id: 'Profile', label: t.mon_profil },
                   { id: 'Payment', label: t.paiement }
                 ].map(link => (
@@ -1578,6 +1582,7 @@ export const AppNavigator = () => {
                 { id: 'AdminAccueil', label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' },
                 { id: 'GestionAnnonce', label: currentLang === 'AR' ? 'الإعلانات' : 'Annonces' },
                 { id: 'GestionCategorie', label: currentLang === 'AR' ? 'الأصناف' : 'Catégories' },
+                { id: 'AdminGallery', label: currentLang === 'AR' ? 'المعرض' : galleryManageLabel },
                 { id: 'GestionUser', label: currentLang === 'AR' ? 'المستخدمين' : 'Membres' },
                 { id: 'AdminProfile', label: currentLang === 'AR' ? 'الملف' : 'Profil' },
                 { id: 'Analytics', label: currentLang === 'AR' ? 'التحليلات' : 'Analytics' }
@@ -1598,6 +1603,7 @@ export const AppNavigator = () => {
                 { id: 'Services', label: t.services },
                 { id: 'Zones', label: t.zones },
                 { id: 'Marketplace', label: t.pieces },
+                { id: 'Gallery', label: galleryTitle },
                 { id: 'Profile', label: t.mon_profil },
                 { id: 'Payment', label: t.paiement }
               ].map(link => (
@@ -1731,6 +1737,50 @@ export const AppNavigator = () => {
                 </div>
               </section>
 
+              {/* Real Photo Gallery Preview */}
+              <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+                  <div>
+                    <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">Galerie Réalisations</span>
+                    <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">{currentLang === 'AR' ? 'صور من عملنا الحقيقي' : 'Nos Réalisations en Images'}</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 max-w-2xl">
+                      {currentLang === 'AR'
+                        ? 'استعرض صور المشاريع الحقيقية التي تم تنفيذها بواسطة فريقنا، مع عناوين ووصف موجز لكل عمل.'
+                        : 'Découvrez une sélection de projets réels ajoutés par l’administrateur, accompagnés de titres, sous-titres et descriptions.'}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setActiveTab('Gallery')}
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#F97316] bg-transparent px-6 py-3 text-xs font-black uppercase tracking-wider text-[#F97316] shadow-sm transition hover:bg-[#F97316] hover:text-white"
+                  >
+                    {currentLang === 'AR' ? 'عرض المزيد' : 'Voir la galerie'}
+                  </button>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {galleryItems.slice(0, 3).map(item => (
+                    <div key={item.id} className="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 shadow-sm">
+                      <div className="h-56 overflow-hidden">
+                        <img src={item.imageUri} alt={item.title} className="h-full w-full object-cover" />
+                      </div>
+                      <div className="p-5">
+                        <div className="text-sm font-black text-slate-900 dark:text-slate-100">{item.title}</div>
+                        {item.subtitle ? <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">{item.subtitle}</div> : null}
+                        {item.description ? <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{item.description}</p> : null}
+                      </div>
+                    </div>
+                  ))}
+
+                  {galleryItems.length === 0 && (
+                    <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 dark:bg-slate-900 p-8 text-center text-slate-500 dark:text-slate-400">
+                      {currentLang === 'AR'
+                        ? 'لم يتم إضافة أي صورة بعد. ستظهر هنا الصور الواقعية بمجرد إضافتها من قبل المسؤول.'
+                        : 'Aucune photo ajoutée pour le moment. Les réalisations réelles apparaîtront ici dès qu’elles seront publiées par l’administrateur.'}
+                    </div>
+                  )}
+                </div>
+              </section>
+
               {/* Used Parts Showcase Grid */}
               <section className="bg-slate-100 dark:bg-slate-900/60 py-20 border-t border-slate-200 dark:border-slate-800">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1818,553 +1868,43 @@ export const AppNavigator = () => {
               USER TAB 2: SERVICES VIEW
               ------------------------------------------ */}
           {activeTab === 'Services' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left bg-slate-50 dark:bg-transparent">
-              <div className="text-center max-w-3xl mx-auto mb-16">
-                <span className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
-                  {t.nos_services}
-                </span>
-                <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
-                  {t.nos_services}
-                </h1>
-                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
-                  {t.nos_services_subtitle}
-                </p>
-              </div>
-
-              {/* List of 4 Services with before/after comparative graphics */}
-              <div className="space-y-16">
-                {([
-                  { 
-                    name: t.plomberie_generale, 
-                    icon: 'plumbing',
-                    desc: currentLang === 'AR' ? 'تركيب وتصليح جميع الأجهزة الصحية المنزلية من حنفيات، مصارف، كشف تسرب المياه المجهول وحل المشاكل التقنية المعقدة.' : "Installation, réparation et maintenance de tous vos systèmes sanitaires. Nous intervenons sur les fuites complexes, le débouchage de canalisations, et la rénovation complète de salles de bain.",
-                    pts: [t.plomberie_desc_1, t.plomberie_desc_2, t.plomberie_desc_3],
-                    whatsapp_text: t.devis_msg + t.plomberie_generale,
-                    imgBefore: currentLang === 'AR' ? 'أنابيب نحاسية قديمة ومتآكلة وتسريب مياه مستمر' : "Réseau cuivre vétuste avec fuites régulières",
-                    imgAfter: currentLang === 'AR' ? 'شبكة أنابيب نحاسية جديدة وملحومة بمعايير عالية' : "Tubes cuivre neufs avec soudures professionnelles"
-                  },
-                  { 
-                    name: t.climatisation, 
-                    icon: 'ac',
-                    desc: currentLang === 'AR' ? 'صيانة دورية للمكيفات وتركيب الوحدات وشحن غاز التبريد لضمان استهلاك طاقة مثالي وتبريد ممتاز في الصيف.' : "Expertise complète en systèmes de refroidissement. De l'installation de splits muraux à la maintenance de centrales de climatisation, nous assurons une température optimale.",
-                    pts: [t.clim_desc_1, t.clim_desc_2, t.clim_desc_3],
-                    whatsapp_text: t.devis_msg + t.climatisation,
-                    imgBefore: currentLang === 'AR' ? 'مروحة مكيف متسخة ومترسبة بالغبار والبكتيريا' : "Filtres encrassés provoquant une surconsommation",
-                    imgAfter: currentLang === 'AR' ? 'مكيف نظيف ومعقم بالكامل وتبريد ممتاز' : "Turbine nettoyée et désinfectée de fond en comble"
-                  },
-                  { 
-                    name: t.installation_gaz, 
-                    icon: 'gas',
-                    desc: currentLang === 'AR' ? 'تركيب شبكات الغاز الطبيعي المنزلي والصناعي مع اختبارات صارمة لمنع تسرب الغاز وضمان مطابقتها للمواصفات الحكومية.' : "La sécurité est notre priorité absolue. Nous réalisons vos installations de gaz de ville ou bouteille selon les normes de sécurité les plus strictes de la STEG.",
-                    pts: [t.gaz_desc_1, t.gaz_desc_2, t.gaz_desc_3],
-                    whatsapp_text: t.devis_msg + t.installation_gaz,
-                    imgBefore: currentLang === 'AR' ? 'خرطوم غاز قديم جداً ومهترئ يشكل خطراً كبيراً' : "Raccord souple expiré et robinet de gaz oxydé",
-                    imgAfter: currentLang === 'AR' ? 'تمديدات نحاسية ملحومة وآمنة مع صمام أمان نحاسي' : "Tuyauterie cuivre rigide soudée aux normes STEG"
-                  },
-                  { 
-                    name: t.chauffage_central, 
-                    icon: 'heater',
-                    desc: currentLang === 'AR' ? 'ضبط وصيانة المراجل وشبكات التدفئة المركزية وتطهير المشعات من الرواسب الكلسية لتدفئة متجانسة وقوية.' : "Solutions de chauffage performantes pour un hiver serein. Nous installons des chaudières à condensation haute performance et des radiateurs révisés.",
-                    pts: [t.chauffage_desc_1, t.chauffage_desc_2, t.chauffage_desc_3],
-                    whatsapp_text: t.devis_msg + t.chauffage_central,
-                    imgBefore: currentLang === 'AR' ? 'مشع تدفئة مليء بالرواسب الكلسية والمياه الطينية' : "Radiateurs froids par embouage du circuit d'eau",
-                    imgAfter: currentLang === 'AR' ? 'دورة تدفئة مطهرة بالكامل وتدفئة ممتازة' : "Désembouage hydrodynamique et chauffage parfait"
-                  }
-                ] as Array<{ name: string; icon: ServiceIconName; desc: string; pts: string[]; whatsapp_text: string; imgBefore: string; imgAfter: string }>).map((serv, idx) => (
-                  <div 
-                    key={idx}
-                    className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center border-b border-slate-200 dark:border-slate-800 pb-16 last:border-b-0 last:pb-0 ${
-                      idx % 2 === 1 ? 'lg:flex-row-reverse' : ''
-                    }`}
-                  >
-                    {/* Descriptions */}
-                    <div className="space-y-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-[#1E3A5F] flex items-center justify-center text-white font-extrabold text-sm">
-                          <ServiceIcon name={serv.icon} className="w-5 h-5" title={serv.name} />
-                        </div>
-                        <h2 className="text-xl sm:text-2xl font-black text-slate-850 dark:text-slate-100">{serv.name}</h2>
-                      </div>
-                      
-                      <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-405 leading-relaxed font-semibold">
-                        {serv.desc}
-                      </p>
-
-                      <ul className="space-y-2.5 font-bold text-xs text-slate-650 dark:text-slate-300">
-                        {serv.pts.map((pt, pIdx) => (
-                          <li key={pIdx} className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                            <span>{pt}</span>
-                          </li>
-                        ))}
-                      </ul>
-
-                      {/* WhatsApp quotation request trigger */}
-                      <a
-                        href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(serv.whatsapp_text)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-md hover:scale-[1.02] transform"
-                      >
-                        <span>{t.demander_devis}</span>
-                      </a>
-                    </div>
-
-                    {/* BEFORE / AFTER VISUAL SLOTS */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
-                        <span className="absolute top-2.5 left-2.5 bg-slate-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
-                          {currentLang === 'AR' ? 'قبل التدخل' : 'AVANT'}
-                        </span>
-                        <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
-                          {serv.imgBefore}
-                        </div>
-                        <div className="h-1 bg-amber-500 rounded-full w-full" />
-                      </div>
-
-                      <div className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
-                        <span className="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
-                          {currentLang === 'AR' ? 'بعد التدخل' : 'APRÈS'}
-                        </span>
-                        <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
-                          {serv.imgAfter}
-                        </div>
-                        <div className="h-1 bg-emerald-500 rounded-full w-full" />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <ServicesScreen
+              currentLang={currentLang}
+              t={t}
+              supportWhatsAppDigits={supportWhatsAppDigits}
+            />
           )}
 
           {/* ------------------------------------------
               USER TAB 3: ZONES D'INTERVENTION (MAP + LEADS FORM)
               ------------------------------------------ */}
           {activeTab === 'Zones' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
-              <div className="text-center max-w-3xl mx-auto mb-16">
-                <span className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
-                  {t.zones_directes}
-                </span>
-                <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
-                  {t.zones}
-                </h1>
-                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
-                  {t.zone_tagline}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
-                {/* Visual SVG Map representation (lg:col-span-7) */}
-                <div className="lg:col-span-7 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
-                  <div>
-                    <h3 className="text-base font-black text-slate-850 dark:text-slate-100">{t.carte_interactive}</h3>
-                    <p className="text-slate-400 text-xs mt-1 font-semibold">
-                      {currentLang === 'AR' ? 'انقر على الولاية المظللة بالبرتقالي لعرض تفاصيل التغطية الفورية لدينا.' : 'Cliquez sur les gouvernorats oranges pour voir notre temps de réponse moyen.'}
-                    </p>
-                  </div>
-
-                  {/* Stylized vector SVG of Tunisia coverage areas */}
-                  <div className="flex justify-center py-8 relative">
-                    <svg width="220" height="380" viewBox="0 0 100 180" fill="none" className="filter drop-shadow-md">
-                      {/* Interactive Areas represented as custom shapes */}
-                      {/* Bizerte & North */}
-                      <path 
-                        d="M38 12 C 43 8, 48 9, 52 14 L 46 22 Z" 
-                        fill={selectedGovernorat === 'Grand Tunis' ? '#f97316' : '#1e3a5f'} 
-                        className="cursor-pointer transition hover:opacity-85" 
-                        onClick={() => setSelectedGovernorat('Grand Tunis')}
-                      />
-                      {/* Grand Tunis */}
-                      <path 
-                        d="M48 20 C 53 18, 55 24, 52 28 L 45 26 Z" 
-                        fill={selectedGovernorat === 'Grand Tunis' ? '#F97316' : '#2563EB'} 
-                        className="cursor-pointer transition hover:scale-105 transform origin-center" 
-                        onClick={() => setSelectedGovernorat('Grand Tunis')}
-                      />
-                      {/* Cap Bon */}
-                      <path 
-                        d="M53 23 C 58 18, 68 20, 61 31 L 52 28 Z" 
-                        fill={selectedGovernorat === 'Sahel' ? '#F97316' : '#3B82F6'} 
-                        className="cursor-pointer transition hover:opacity-85" 
-                        onClick={() => setSelectedGovernorat('Sahel')}
-                      />
-                      {/* Sahel (Sousse, Monastir, Mahdia) */}
-                      <path 
-                        d="M52 30 C 58 31, 62 42, 57 52 L 48 40 Z" 
-                        fill={selectedGovernorat === 'Sahel' ? '#F97316' : '#1D4ED8'} 
-                        className="cursor-pointer transition hover:scale-105 transform origin-center" 
-                        onClick={() => setSelectedGovernorat('Sahel')}
-                      />
-                      {/* Sfax */}
-                      <path 
-                        d="M46 54 C 54 58, 58 70, 52 82 L 38 72 Z" 
-                        fill={selectedGovernorat === 'Sfax' ? '#F97316' : '#60A5FA'} 
-                        className="cursor-pointer transition hover:opacity-85" 
-                        onClick={() => setSelectedGovernorat('Sfax')}
-                      />
-                      {/* Rest of Tunisia (Grey representation) */}
-                      <path d="M36 24 L44 38 L38 52 L36 68 L22 88 L14 118 L24 140 L38 170 L52 145 L48 112 L44 86 L40 70 Z" fill="#E2E8F0" className="opacity-30 pointer-events-none" />
-                    </svg>
-
-                    {/* coverage popover overlay */}
-                    {selectedGovernorat && (
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-900/95 text-white p-4.5 rounded-2xl border border-[#F97316]/30 shadow-xl max-w-[220px] backdrop-blur-sm animate-fade-in text-center">
-                        <span className="text-[10px] font-black text-[#F97316] uppercase tracking-wider">{selectedGovernorat}</span>
-                        <h4 className="text-xs font-black mt-1">Intervention Express</h4>
-                        <p className="text-[10.5px] text-slate-350 mt-1 leading-relaxed">
-                          {selectedGovernorat === 'Grand Tunis' 
-                            ? 'Disponible à Tunis, Ariana, Ben Arous et La Manouba. Artisans sur place en moins de 30 minutes.' 
-                            : selectedGovernorat === 'Sahel' 
-                              ? 'Disponible à Sousse, Monastir et Mahdia. Temps de réponse moyen de 40 minutes.'
-                              : 'Disponible sur commande. Planifiez votre visite technique ou expédiez vos pièces.'}
-                        </p>
-                        <button 
-                          onClick={() => setSelectedGovernorat(null)}
-                          className="mt-2.5 text-[9px] font-black text-rose-500 uppercase tracking-widest block mx-auto underline"
-                        >
-                          Fermer
-                        </button>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">
-                        {t.villes_couvertes}
-                      </h4>
-                      <a
-                        href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(t.whatsapp_msg)}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex min-h-[40px] items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white transition hover:bg-emerald-700"
-                      >
-                        {t.appeler_whatsapp}: {supportWhatsAppNumber}
-                      </a>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      {coverageCities.map((item) => (
-                        <div key={item.city} className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2">
-                          <div className="text-xs font-black text-slate-800 dark:text-slate-100">{item.city}</div>
-                          <div className="text-[9px] font-bold uppercase tracking-wide text-slate-400">{item.area}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-500">
-                      * {currentLang === 'AR' ? 'تغطية فورية وسريعة على مدار الساعة' : 'Zone couverte par les équipes d\'intervention directes.'}
-                    </span>
-                    <a 
-                      href="https://maps.google.com" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="text-xs font-black text-[#1E3A5F] dark:text-sky-400 hover:underline"
-                    >
-                      {t.ouvrir_maps}
-                    </a>
-                  </div>
-                </div>
-
-                {/* Lead request form (lg:col-span-5) */}
-                <div className="lg:col-span-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                  <div>
-                    <span className="bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-extrabold text-[8.5px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-                      {currentLang === 'AR' ? 'حالة طوارئ قصوى' : 'URGENT'}
-                    </span>
-                    <h2 className="text-xl font-black text-slate-850 dark:text-slate-100 mt-3">{t.demande_intervention}</h2>
-                  </div>
-
-                  <form 
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (!interventionName || !interventionPhone) {
-                        showToast(currentLang === 'AR' ? 'الرجاء ملء الاسم والهاتف' : 'Nom et téléphone requis.', 'error');
-                        return;
-                      }
-                      showToast(
-                        currentLang === 'AR' 
-                          ? 'تم تسجيل طلبك بنجاح ! سيتصل بك الفني الآن.' 
-                          : 'Demande urgente enregistrée ! Un technicien vous appelle sous 10 min.', 
-                        'success'
-                      );
-                      setInterventionName('');
-                      setInterventionPhone('');
-                      setInterventionDetails('');
-                    }}
-                    className="space-y-4 font-semibold text-xs"
-                  >
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.nom_complet} *</label>
-                      <input 
-                        type="text"
-                        required
-                        placeholder="Ex: Mohamed Ben Khedher"
-                        value={interventionName}
-                        onChange={(e) => setInterventionName(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-455 uppercase tracking-widest">{t.telephone} *</label>
-                      <input 
-                        type="text"
-                        required
-                        placeholder="+216 22 456 789"
-                        value={interventionPhone}
-                        onChange={(e) => setInterventionPhone(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Gouvernorat</label>
-                        <select
-                          value={interventionGov}
-                          onChange={(e) => setInterventionGov(e.target.value)}
-                          className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
-                        >
-                          <option value="Tunis">Tunis</option>
-                          <option value="Ariana">Ariana</option>
-                          <option value="Ben Arous">Ben Arous</option>
-                          <option value="Sousse">Sousse</option>
-                          <option value="Sfax">Sfax</option>
-                          <option value="Monastir">Monastir</option>
-                        </select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Type Problème</label>
-                        <select
-                          value={interventionProblem}
-                          onChange={(e) => setInterventionProblem(e.target.value)}
-                          className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
-                        >
-                          <option value="Fuite d'eau">Fuite d'eau / Tuyau cassé</option>
-                          <option value="Panne Chauffe-eau">Chauffe-eau en panne</option>
-                          <option value="Climatisation">Problème Climatiseur</option>
-                          <option value="Gaz STEG">Tuyauterie Gaz / Sécurité</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Description</label>
-                      <textarea 
-                        rows={3}
-                        placeholder="Précisez votre adresse, étage, ou problème..."
-                        value={interventionDetails}
-                        onChange={(e) => setInterventionDetails(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-
-                    <button 
-                      type="submit"
-                      className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider hover:scale-[1.01] transform"
-                    >
-                      {t.envoyer_demande}
-                    </button>
-                  </form>
-                </div>
-
-              </div>
-            </div>
+            <ZonesScreen
+              currentLang={currentLang}
+              t={t}
+              supportWhatsAppDigits={supportWhatsAppDigits}
+              supportWhatsAppNumber={supportWhatsAppNumber}
+            />
           )}
 
           {/* ------------------------------------------
               USER TAB 4: PIECES D'OCCASION (MARKETPLACE SHOP)
               ------------------------------------------ */}
           {activeTab === 'Marketplace' && (
+            <MarketplaceScreen
+              currentLang={currentLang}
+              t={t}
+              supportWhatsAppDigits={supportWhatsAppDigits}
+              setSelectedProduct={setSelectedProduct}
+            />
+          )}
+
+          {/* ------------------------------------------
+              USER TAB : GALERIE D'IMAGES
+              ------------------------------------------ */}
+          {activeTab === 'Gallery' && (
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-              
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-                <div>
-                  <h1 className="text-3xl font-black tracking-tight">{t.pieces}</h1>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
-                    {currentLang === 'AR' ? 'ابحث واشتر قطع غيار الترصيص المستعملة المضمونة والمجربة من قبل حرفيينا.' : 'Recherchez et filtrez nos pièces de rechange de plomberie d\'occasion certifiées.'}
-                  </p>
-                </div>
-
-                {/* Sorting options */}
-                <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.tri} :</span>
-                  <select 
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-850 dark:text-slate-250 focus:outline-none"
-                  >
-                    <option value="featured">{t.recommande}</option>
-                    <option value="price_asc">{t.prix_croissant}</option>
-                    <option value="price_desc">{t.prix_decroissant}</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Sidebar filter & Product Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-                
-                {/* Filters Sidebar (lg:col-span-3) */}
-                <div className="lg:col-span-3 space-y-6">
-                  <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
-                    <h3 className="text-sm font-black uppercase tracking-wider">{t.filtres}</h3>
-
-                    {/* Search query input */}
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.rechercher}</label>
-                      <input 
-                        type="text"
-                        placeholder={currentLang === 'AR' ? 'ابحث عن قطعة...' : 'Grohe, boiler, radiateur...'}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-
-                    {/* Dynamic categories filter list */}
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Catégories</label>
-                      <div className="space-y-1.5">
-                        <button
-                          onClick={() => setSelectedCategoryFilter('Toutes')}
-                          className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                            selectedCategoryFilter === 'Toutes'
-                              ? 'bg-[#1E3A5F] text-white shadow-sm'
-                              : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
-                          }`}
-                        >
-                          {t.toutes_categories}
-                        </button>
-                        {reduxCategories.map(cat => (
-                          <button
-                            key={cat.id}
-                            onClick={() => setSelectedCategoryFilter(cat.name)}
-                            className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition ${
-                              selectedCategoryFilter === cat.name
-                                ? 'bg-[#1E3A5F] text-white shadow-sm'
-                                : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
-                            }`}
-                          >
-                            {cat.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Condition selector filter */}
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.etat}</label>
-                      <div className="grid grid-cols-2 gap-2 text-center">
-                        {['Tous', 'comme neuf', 'bon état', 'pour pièces'].map(cond => (
-                          <button
-                            key={cond}
-                            onClick={() => setSelectedConditionFilter(cond)}
-                            className={`px-2 py-2 rounded-xl border text-[10px] font-black capitalize transition leading-none ${
-                              selectedConditionFilter === cond 
-                                ? 'bg-[#1E3A5F] border-[#1E3A5F] text-white' 
-                                : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-350'
-                            }`}
-                          >
-                            {cond === 'Tous' ? t.tous : cond}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Price Max slider */}
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                        <span>{t.prix} Max</span>
-                        <span className="text-[#F97316]">{priceMax} DT</span>
-                      </div>
-                      <input 
-                        type="range"
-                        min="10"
-                        max="1000"
-                        step="10"
-                        value={priceMax}
-                        onChange={(e) => setPriceMax(Number(e.target.value))}
-                        className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#F97316]"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Products Listings Grid (lg:col-span-9) */}
-                <div className="lg:col-span-9">
-                  {sortedProducts.length === 0 ? (
-                    <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
-                      <p className="text-sm text-slate-400 font-bold">{t.aucun_produit}</p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                      {sortedProducts.map(prod => (
-                        <div 
-                          key={prod.id}
-                          onClick={() => setSelectedProduct(prod)}
-                          className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg hover:border-[#1E3A5F] dark:hover:border-slate-500 transition-all duration-300 group flex flex-col justify-between cursor-pointer"
-                        >
-                          <div className="bg-slate-50 dark:bg-slate-900 py-10 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 relative">
-                            <span className="absolute top-3 right-3 z-10 bg-slate-200 dark:bg-slate-750 text-slate-700 dark:text-slate-350 text-[8.5px] font-extrabold uppercase px-2 py-0.5 rounded-full">
-                              {prod.condition}
-                            </span>
-
-                            {/* Heart favorites toggle */}
-                            <button 
-                              onClick={(e) => toggleFavorite(prod.id, e)}
-                              className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
-                            >
-                              <svg 
-                                width="14" height="14" viewBox="0 0 24 24" 
-                                fill={favorites.includes(prod.id) ? "currentColor" : "none"} 
-                                stroke="currentColor" strokeWidth="2.5"
-                                className={favorites.includes(prod.id) ? "text-rose-500" : ""}
-                              >
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                              </svg>
-                            </button>
-
-                            <ProductVisual image={prod.image} />
-                          </div>
-
-                          <div className="p-4 text-left flex-1 flex flex-col justify-between">
-                            <div>
-                              <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">{prod.category}</span>
-                              <h4 className="text-xs sm:text-sm font-black text-slate-850 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
-                                {prod.title}
-                              </h4>
-                              <p className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">{prod.subtitle}</p>
-                            </div>
-
-                            <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
-                              <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-250">
-                                {prod.price} <span className="text-[9.5px] font-bold">DT</span>
-                              </div>
-                              
-                              <button 
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setSelectedProduct(prod);
-                                }}
-                                className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition"
-                              >
-                                {currentLang === 'AR' ? 'شراء' : 'Commander'}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-              </div>
+              <GalleryScreen />
             </div>
           )}
 
@@ -2941,33 +2481,47 @@ export const AppNavigator = () => {
                 <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
                   {editingCategory ? (currentLang === 'AR' ? 'تعديل الصنف الحالي' : 'Modifier la catégorie') : (currentLang === 'AR' ? 'إضافة صنف جديد' : 'Créer une nouvelle catégorie')}
                 </h3>
-                
+                {categoryErrorMessage && (
+                  <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                    {categoryErrorMessage}
+                  </div>
+                )}
+
                 {editingCategory ? (
-                  <form onSubmit={handleRenameCategory} className="flex gap-3">
-                    <input 
-                      type="text"
-                      required
-                      placeholder="Nouveau nom..."
-                      value={editCategoryName}
-                      onChange={(e) => setEditCategoryName(e.target.value)}
-                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
-                    />
-                    <button 
-                      type="submit"
-                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition"
-                    >
-                      Enregistrer
-                    </button>
-                    <button 
-                      type="button"
-                      onClick={() => setEditingCategory(null)}
-                      className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-4 py-3 rounded-xl transition"
-                    >
-                      Annuler
-                    </button>
+                  <form onSubmit={handleRenameCategory} className="grid gap-3 md:grid-cols-[1.7fr_1fr] items-end">
+                    <div className="space-y-3">
+                      <input 
+                        type="text"
+                        required
+                        placeholder="Nouveau nom..."
+                        value={editCategoryName}
+                        onChange={(e) => setEditCategoryName(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
+                      />
+                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
+                    </div>
+                    <div className="flex flex-wrap gap-3 justify-end">
+                      <button 
+                        type="submit"
+                        className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition"
+                      >
+                        Enregistrer
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setEditingCategory(null);
+                          setNewCategoryImage(null);
+                          setCategoryErrorMessage(null);
+                        }}
+                        className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-4 py-3 rounded-xl transition"
+                      >
+                        Annuler
+                      </button>
+                    </div>
                   </form>
                 ) : (
-                  <form onSubmit={handleAddCategory} className="flex gap-3">
+                  <form onSubmit={handleAddCategory} className="flex items-center gap-3">
                     <input 
                       type="text"
                       required
@@ -2976,6 +2530,9 @@ export const AppNavigator = () => {
                       onChange={(e) => setNewCategoryName(e.target.value)}
                       className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
                     />
+                    <div>
+                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
+                    </div>
                     <button 
                       type="submit"
                       className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
@@ -3001,7 +2558,16 @@ export const AppNavigator = () => {
                       const count = products.filter(p => p.category === cat.name).length;
                       return (
                         <tr key={cat.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-750/30 transition">
-                          <td className="px-6 py-4 font-black">{cat.name}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              {cat.imageUri ? (
+                                <img src={cat.imageUri} alt={cat.name} className="h-10 w-10 rounded-xl object-cover border border-slate-200 dark:border-slate-700" />
+                              ) : (
+                                <div className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+                              )}
+                              <span className="font-black">{cat.name}</span>
+                            </div>
+                          </td>
                           <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{count} articles</td>
                           <td className="px-6 py-4 text-center">
                             <div className="flex justify-center gap-2">
@@ -3009,6 +2575,8 @@ export const AppNavigator = () => {
                                 onClick={() => {
                                   setEditingCategory(cat);
                                   setEditCategoryName(cat.name);
+                                  setNewCategoryImage(cat.imageUri || null);
+                                  setCategoryErrorMessage(null);
                                 }}
                                 className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
                               >
@@ -3028,6 +2596,15 @@ export const AppNavigator = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
+              ADMIN TAB : GALERIE (EDITOR)
+              ------------------------------------------ */}
+          {activeTab === 'AdminGallery' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <AdminGalleryEditor />
             </div>
           )}
 
@@ -3110,259 +2687,14 @@ export const AppNavigator = () => {
               ADMIN TAB 5: ADMIN PROFILE
               ------------------------------------------ */}
           {activeTab === 'AdminProfile' && (
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-              <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'إعدادات حساب المدير' : 'Profil Administrateur Principal'}</h1>
-              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
-                {currentLang === 'AR' ? 'تحكم ببيانات الأمان وخيارات التحكم لمدير التطبيق.' : 'Gérez vos accès de sécurité et configurez vos préférences de contact.'}
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 items-start">
-                {/* Details card */}
-                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 text-center shadow-sm space-y-6">
-                  <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-[#F97316] mx-auto border-2 border-[#F97316]">
-                    ★
-                  </div>
-                  <div>
-                    <h3 className="text-base font-black text-slate-850 dark:text-slate-100">{sessionUser?.name}</h3>
-                    <span className="inline-block mt-1 text-[8.5px] font-black px-3 py-1 rounded-full uppercase bg-amber-100 text-amber-700">
-                      Administrateur
-                    </span>
-                  </div>
-                  <div className="text-left text-xs font-semibold text-slate-400 space-y-2 border-t border-slate-100 dark:border-slate-700 pt-4">
-                    <div>Email: <span className="font-black text-slate-700 dark:text-slate-200">{profileEmail}</span></div>
-                    <div>{t.support_whatsapp}: <span className="font-black text-slate-700 dark:text-slate-200">{profilePhone}</span></div>
-                    <div>Statut: <span className="font-black text-emerald-500">Actif principal</span></div>
-                  </div>
-                </div>
-
-                {/* Edit Form */}
-                <div className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                  <h3 className="text-sm font-black uppercase tracking-wider">{currentLang === 'AR' ? 'بيانات الاتصال والأمان' : 'Coordonnées & Sécurité'}</h3>
-
-                  <form onSubmit={handleAdminBrandSettingsUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                        {currentLang === 'AR' ? 'اسم الموقع / الاسم واللقب' : 'Titre du site / nom et prénom'}
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={businessNameInput}
-                        onChange={(e) => setBusinessNameInput(e.target.value)}
-                        placeholder="Ex: Mohamed Ben Khedher"
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                        {currentLang === 'AR' ? 'سنوات الخبرة' : 'Années d’expérience'}
-                      </label>
-                      <input
-                        type="number"
-                        required
-                        min="1"
-                        max="80"
-                        value={experienceYearsInput}
-                        onChange={(e) => setExperienceYearsInput(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <button
-                        type="submit"
-                        className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
-                      >
-                        {currentLang === 'AR' ? 'حفظ هوية الموقع' : 'Enregistrer l’identité du site'}
-                      </button>
-                    </div>
-                  </form>
-                  
-                  <form onSubmit={handleAdminProfileUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.admin_edit_email}</label>
-                      <input
-                        type="email"
-                        required
-                        value={profileEmail}
-                        onChange={(e) => setProfileEmail(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.admin_edit_phone}</label>
-                      <input
-                        type="tel"
-                        required
-                        value={profilePhone}
-                        onChange={(e) => setProfilePhone(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <button
-                        type="submit"
-                        className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
-                      >
-                        {currentLang === 'AR' ? 'حفظ بيانات الاتصال' : 'Enregistrer les coordonnées'}
-                      </button>
-                    </div>
-                  </form>
-                  
-                  <form 
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      showToast("Mot de passe admin mis à jour !", "success");
-                    }}
-                    className="space-y-4"
-                  >
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Nouveau mot de passe administrateur</label>
-                      <input 
-                        type="password"
-                        required
-                        placeholder="Ex: admin123"
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">Confirmation</label>
-                      <input 
-                        type="password"
-                        required
-                        placeholder="Ex: admin123"
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
-                      />
-                    </div>
-                    <button 
-                      type="submit"
-                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
-                    >
-                      Mettre à jour la sécurité
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
+            <AdminProfileScreen currentLang={currentLang} t={t} />
           )}
 
           {/* ------------------------------------------
               ADMIN TAB 6: ANALYTICS (styled premium graphics)
               ------------------------------------------ */}
           {activeTab === 'Analytics' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-              <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'مؤشرات الأداء الماليّة والخدمية' : 'Indicateurs Financiers & Performance'}</h1>
-              <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
-                {currentLang === 'AR' ? 'استعرض التقارير البيانية حول الأرباح المحققة وطلبات الصيانة.' : 'Analysez la répartition des ventes de pièces et le taux d\'intervention régionale.'}
-              </p>
-
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
-                {[
-                  { label: currentLang === 'AR' ? 'متوسط زمن الرد' : 'Temps de réponse moyen', value: '18 min', detail: currentLang === 'AR' ? 'طلبات عاجلة' : 'Demandes urgentes' },
-                  { label: currentLang === 'AR' ? 'قيمة الطلب المتوسطة' : 'Panier moyen', value: '164 DT', detail: currentLang === 'AR' ? 'قطع مستعملة' : 'Pièces d\'occasion' },
-                  { label: currentLang === 'AR' ? 'الطلبات المفتوحة' : 'Leads ouverts', value: '27', detail: currentLang === 'AR' ? 'هذا الأسبوع' : 'Cette semaine' },
-                  { label: currentLang === 'AR' ? 'معدل التحويل' : 'Taux de conversion', value: '31%', detail: currentLang === 'AR' ? 'واتساب إلى طلب' : 'WhatsApp vers commande' },
-                ].map((metric, idx) => (
-                  <div key={idx} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-sm">
-                    <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400">{metric.label}</span>
-                    <strong className="mt-2 block text-2xl font-black text-slate-850 dark:text-white">{metric.value}</strong>
-                    <span className="mt-1 block text-[10px] font-bold text-slate-500 dark:text-slate-400">{metric.detail}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
-                
-                {/* Revenue report bar graphics */}
-                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                  <h3 className="text-sm font-black uppercase tracking-wider">Évolution du Chiffre d'Affaires Mensuel (TND)</h3>
-                  
-                  <div className="space-y-4 pt-4">
-                    {[
-                      { month: "Janvier", val: 3400, percent: "45%" },
-                      { month: "Février", val: 4800, percent: "60%" },
-                      { month: "Mars", val: 5100, percent: "65%" },
-                      { month: "Avril", val: 6800, percent: "80%" },
-                      { month: "Mai (Encours)", val: 8200, percent: "100%" }
-                    ].map((row, idx) => (
-                      <div key={idx} className="space-y-1.5 text-xs font-semibold">
-                        <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
-                          <span>{row.month}</span>
-                          <span className="font-black text-slate-800 dark:text-white">{row.val.toFixed(3)} DT</span>
-                        </div>
-                        <div className="h-4 bg-slate-100 dark:bg-slate-900 rounded-lg overflow-hidden relative">
-                          <div 
-                            className="h-full bg-gradient-to-r from-sky-600 to-[#1E3A5F] rounded-lg transition-all duration-500"
-                            style={{ width: row.percent }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Category Breakdown & regional pie logs representation */}
-                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                  <h3 className="text-sm font-black uppercase tracking-wider">Répartition des Demandes par Services (%)</h3>
-                  
-                  <div className="space-y-5 pt-4 text-xs font-bold text-slate-500">
-                    {[
-                      { name: t.plomberie_generale, share: 45, color: "bg-blue-500" },
-                      { name: t.chauffage_central, share: 25, color: "bg-amber-500" },
-                      { name: t.climatisation, share: 20, color: "bg-emerald-500" },
-                      { name: t.installation_gaz, share: 10, color: "bg-rose-500" }
-                    ].map((row, idx) => (
-                      <div key={idx} className="space-y-1">
-                        <div className="flex justify-between items-center text-slate-700 dark:text-slate-200">
-                          <span className="flex items-center gap-2">
-                            <span className={`w-2.5 h-2.5 rounded-full ${row.color}`} />
-                            <span>{row.name}</span>
-                          </span>
-                          <span>{row.share}%</span>
-                        </div>
-                        <div className="h-2 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
-                          <div className={`h-full ${row.color}`} style={{ width: `${row.share}%` }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-                <div className="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm">
-                  <h3 className="text-sm font-black uppercase tracking-wider">Performance par région</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
-                    {[
-                      { region: 'Grand Tunis', requests: 42, satisfaction: '98%' },
-                      { region: 'Sahel', requests: 26, satisfaction: '96%' },
-                      { region: 'Sfax', requests: 14, satisfaction: '94%' },
-                    ].map((row) => (
-                      <div key={row.region} className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{row.region}</span>
-                        <div className="mt-3 text-xl font-black text-slate-850 dark:text-white">{row.requests}</div>
-                        <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{row.satisfaction} satisfaction</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm">
-                  <h3 className="text-sm font-black uppercase tracking-wider">Alertes stock</h3>
-                  <div className="space-y-3 mt-6 text-xs font-semibold">
-                    {[
-                      'Robinetterie: 3 références à renouveler',
-                      'Chauffe-eau: forte demande cette semaine',
-                      'Vannes: marge moyenne +12%',
-                    ].map((item) => (
-                      <div key={item} className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900 px-3 py-2 text-amber-700 dark:text-amber-300">
-                        {item}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <AdminAnalyticsScreen currentLang={currentLang} t={t} />
           )}
 
         </main>
@@ -3591,49 +2923,12 @@ export const AppNavigator = () => {
               </p>
             </div>
 
-            <div className="space-y-3">
-              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
-                {t.navigation}
-              </h4>
-              <ul className="space-y-2 text-xs font-semibold">
-                <li><button onClick={() => setActiveTab(currentRole === 'admin' ? 'AdminAccueil' : 'Accueil')} className="hover:text-[#F97316] transition">{t.accueil}</button></li>
-                <li><button onClick={() => setActiveTab(currentRole === 'admin' ? 'AdminProfile' : 'Profile')} className="hover:text-[#F97316] transition">{t.mon_profil}</button></li>
-                {currentRole !== 'admin' && (
-                  <>
-                    <li><button onClick={() => setActiveTab('Services')} className="hover:text-[#F97316] transition">{t.services}</button></li>
-                    <li><button onClick={() => setActiveTab('Marketplace')} className="hover:text-[#F97316] transition">{t.pieces}</button></li>
-                  </>
-                )}
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
-                {t.informations}
-              </h4>
-              <ul className="space-y-2 text-xs font-semibold">
-                <li><button onClick={() => setActiveTab('Informations')} className="hover:text-[#F97316] transition">{t.informations}</button></li>
-                <li><button onClick={() => setActiveTab('Politique')} className="hover:text-[#F97316] transition">{t.politique}</button></li>
-                <li><button onClick={() => setActiveTab('Conditions')} className="hover:text-[#F97316] transition">{t.conditions_util}</button></li>
-                <li><button onClick={() => setActiveTab('PlanSite')} className="hover:text-[#F97316] transition">{t.plan_site}</button></li>
-              </ul>
-            </div>
-
-            <div className="space-y-3">
-              <h4 className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
-                Support
-              </h4>
-              <ul className="space-y-2 text-xs font-semibold">
-                <li className="flex items-center gap-2">
-                  <span>📞</span>
-                  <a href="tel:+21622456789" className="hover:text-[#F97316] transition">+216 22 456 789</a>
-                </li>
-                <li className="flex items-center gap-2">
-                  <span>✉️</span>
-                  <a href="mailto:support@plombier-tunisie.tn" className="hover:text-[#F97316] transition">support@plombier-tunisie.tn</a>
-                </li>
-              </ul>
-            </div>
+            <FooterLinks
+              setActiveTab={setActiveTab}
+              currentRole={currentRole}
+              supportWhatsAppDigits={supportWhatsAppDigits}
+              supportWhatsAppNumber={supportWhatsAppNumber}
+            />
 
           </div>
 
