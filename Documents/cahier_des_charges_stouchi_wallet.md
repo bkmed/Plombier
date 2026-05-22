@@ -1,10 +1,10 @@
-# Cahier des Charges - Plombier Wallet
+# Cahier des Charges - Plombier Tunisie / Wallet
 
 ## 1. Contexte
 
-Plombier Wallet est une application de finance personnelle cross-platform. Elle permet a un utilisateur de suivre ses comptes, ses transactions, ses factures recurrentes, ses budgets et ses objectifs d'epargne depuis le web, iOS et Android.
+Plombier Tunisie / Wallet est une application cross-platform React Native + React Native Web. Elle couvre deux surfaces produit: vitrine/marketplace plomberie et wallet personnel.
 
-Le projet conserve une seule base de code React Native / React Native Web afin de reduire les couts de maintenance et garantir une experience coherente.
+Le projet conserve une seule base de code afin de reduire les couts de maintenance et garantir une experience coherente sur web, iOS et Android. Le web actuel est visuellement valide mais doit etre extrait du fichier monolithique `AppNavigator.web.tsx` vers des composants partages.
 
 ## 2. Objectifs
 
@@ -16,6 +16,9 @@ Le projet conserve une seule base de code React Native / React Native Web afin d
 - Suivre des objectifs d'epargne.
 - Fonctionner sur web et mobile avec les memes fichiers `.tsx`.
 - Conserver les donnees localement via redux-persist.
+- Restaurer la session apres refresh web et relance mobile.
+- Eviter les fichiers de plus de 300 lignes.
+- Supprimer le code inutilise et les doublons web-only.
 
 ## 3. Plateformes
 
@@ -53,6 +56,8 @@ Le projet conserve une seule base de code React Native / React Native Web afin d
 - SafeAreaProvider
 - AppNavigator
 
+Regle d'architecture: `AppNavigator.web.tsx` ne doit pas contenir de gros ecrans ni de logique metier. Il doit devenir un wrapper fin ou etre remplace par le navigator partage.
+
 ### 5.2 Navigation
 
 Routes principales:
@@ -71,6 +76,8 @@ Web:
 Mobile:
 
 - drawer navigation.
+
+Les routes web et mobile doivent appeler les memes ecrans partages. Les differences doivent rester dans le shell de navigation.
 
 Modals:
 
@@ -91,6 +98,10 @@ Slices principaux:
 - `currencies`
 - `analytics`
 - `users`
+
+Tout etat durable passe par Redux persist: session, role, profil, annonces, categories, favoris, zones couvertes, nom public du site, annees d'experience, WhatsApp support, preferences UI et donnees wallet.
+
+Le state local est reserve aux formulaires temporaires, modals, filtres et interactions non persistantes.
 
 ## 6. Fonctionnalites
 
@@ -204,6 +215,8 @@ Slices principaux:
 ## 9. Exigences Non Fonctionnelles
 
 - Une seule base de code.
+- Aucun nouvel ecran monolithique.
+- Chaque composant/refactor vise moins de 300 lignes.
 - Pas de nouveau package npm sans validation.
 - NativeWind pour les nouveaux ecrans.
 - Donnees persistantes localement.
@@ -221,3 +234,7 @@ Slices principaux:
 - Le masquage des soldes fonctionne partout.
 - Les objectifs sont affiches.
 - Les anciens modules metier ne sont plus references par la navigation.
+- Un refresh web ne deconnecte pas l'utilisateur.
+- Le profil admin permet de modifier l'email et le WhatsApp support.
+- Le profil admin permet de modifier le titre public du site et les annees d'experience.
+- La page Zone affiche les villes couvertes et le numero WhatsApp support.

@@ -17,19 +17,33 @@
 - **Gestion annonce (Announcements CRUD)**: Full management panel to publish, modify, or delete used part listings, modify availability/featured status, and update details.
 - **Gestion catégorie**: Dynamic category creation, modification, and removal tool synced to the Redux store.
 - **Gestion user**: Management table listing all registered users with administrative actions to toggle roles (user/admin) or suspend/restore accounts.
-- **Profil**: Administrator profile page for security, credential settings, editable email/phone contact details, and client-side validation.
+- **Profil**: Administrator profile page for security, credential settings, editable public site title, years of experience, email/support WhatsApp contact details, and client-side validation.
 - **Analytics**: Dashboard charts representing monthly revenue splits, category distribution, service volumes, regional performance, stock alerts, response times, open leads, average basket, and conversion rate.
 
 ### Web Translation Keys
 - Local web navigation strings in `AppNavigator.web.tsx` now include `nos_services`, `nos_services_subtitle`, `voir_tout`, `services_title`, `services_subtitle`, `view_all`, `admin_edit_email`, and `admin_edit_phone`.
 - Shared locale files also expose these values under `webServices` and `admin` for FR/EN translation coverage.
 
+## Architecture Target
+
+- **Single app codebase**: React Native + React Native Web. Web and mobile should share screens, Redux slices, validation helpers, and UI components.
+- **No monolith screens**: new or refactored files should stay under 300 lines. Large views must be split into sections, cards, forms, hooks, and data modules.
+- **Redux as source of truth**: auth session, users, listings, categories, favorites, wallet data, settings, public business name, years of experience, admin email, and support WhatsApp should be persisted through Redux Toolkit + redux-persist.
+- **Platform-specific code stays thin**: web/mobile differences belong in shell/navigation wrappers, not in duplicated business logic.
+- **Cleanup rule**: remove unused old screens, duplicate local state, dead helpers, and web-only mock logic once shared replacements exist.
+
+## Current Migration Notes
+
+- The current web showcase is functional but still resolves through `AppNavigator.web.tsx`.
+- Web auth/demo sessions now sync to Redux auth persistence so refresh does not disconnect the user.
+- The next target is splitting services, zones, marketplace, admin profile, analytics, auth, and shell layout into shared React Native components.
+
 ## Tech Stack
 
-- **Framework**: React 19 + React Native Web (cross-platform capabilities)
-- **State Management**: Redux Toolkit (managing marketplace listings, categories, and users) + redux-persist
-- **Routing & Flow**: Custom local session navigator in `AppNavigator.web.tsx` supporting guest bypass and role-based views.
-- **Styling**: Vanilla CSS and Tailwind CSS classes for premium styling, animations, and high visual fidelity.
+- **Framework**: React 19 + React Native 0.82 + React Native Web
+- **State Management**: Redux Toolkit + redux-persist
+- **Routing & Flow**: React Navigation with platform-aware shell wrappers
+- **Styling**: NativeWind/Tailwind utility classes
 - **Development Tooling**: Webpack 5, TypeScript 5, ESLint, Prettier.
 
 ## Getting Started

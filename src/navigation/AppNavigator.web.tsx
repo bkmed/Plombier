@@ -4,7 +4,9 @@ import { RootState } from '../store';
 import { toggleFavoriteAction, addListing, updateListing, deleteListing } from '../store/slices/partsSlice';
 import { addCategory, updateCategory, deleteCategory } from '../store/slices/categoriesSlice';
 import { addUser, updateUser } from '../store/slices/usersSlice';
+import { updatePlombierSettings } from '../store/slices/plombierSettingsSlice';
 import { useAuth } from '../context/AuthContext';
+import { User } from '../services/authService';
 import { useToast } from '../context/ToastContext';
 import { ServiceIcon, ServiceIconName } from '../components/ServiceIcon';
 import { isValidEmail, isValidPhone } from '../utils/validation';
@@ -86,6 +88,10 @@ const CopperFittingsSVG = ({ className = "w-16 h-16" }: { className?: string }) 
 // LOCAL MODELS & TRANSLATIONS
 // ==========================================
 type Role = 'anonyme' | 'user' | 'admin';
+
+type WebSessionUser = User & {
+  city?: string;
+};
 
 interface Product {
   id: string;
@@ -420,7 +426,7 @@ const translations = {
 };
 
 export const AppNavigator = () => {
-  const { signOut } = useAuth();
+  const { user: authUser, signIn, signOut } = useAuth();
   const { showToast } = useToast();
 
   const dispatch = useDispatch();
@@ -428,6 +434,7 @@ export const AppNavigator = () => {
   const favorites = useSelector((state: RootState) => state.parts.favorites);
   const reduxCategories = useSelector((state: RootState) => state.categories.items);
   const usersList = useSelector((state: RootState) => state.users.items);
+  const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
 
   // Initial Seed for Categories inside Redux on Mount
   useEffect(() => {
@@ -446,7 +453,7 @@ export const AppNavigator = () => {
   }, [reduxCategories, dispatch]);
 
   // Main Authentication State
-  const [sessionUser, setSessionUser] = useState<{ name: string; email: string; role: Role; phone?: string; city?: string } | null>(null);
+  const [sessionUser, setSessionUser] = useState<WebSessionUser | null>(null);
   const [bypassAuth, setBypassAuth] = useState(false);
   const [currentRole, setCurrentRole] = useState<Role>('anonyme');
 
@@ -480,6 +487,8 @@ export const AppNavigator = () => {
   const [profileEmail, setProfileEmail] = useState('');
   const [profilePhone, setProfilePhone] = useState('');
   const [profileCity, setProfileCity] = useState('');
+  const [businessNameInput, setBusinessNameInput] = useState('');
+  const [experienceYearsInput, setExperienceYearsInput] = useState('');
   const [currentMdp, setCurrentMdp] = useState('');
   const [newMdp, setNewMdp] = useState('');
 
@@ -525,6 +534,8 @@ export const AppNavigator = () => {
   // Quick WhatsApp pre-filled technical messages
   const t = translations[currentLang];
   const isRTL = currentLang === 'AR';
+  const businessName = plombierSettings.businessName || 'Plombier Tunisie';
+  const experienceYears = plombierSettings.experienceYears || 15;
   const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
   const nextLanguage = languageOrder[(languageOrder.indexOf(currentLang) + 1) % languageOrder.length];
   const supportWhatsAppNumber = profilePhone || sessionUser?.phone || '+216 22 000 111';
@@ -539,6 +550,14 @@ export const AppNavigator = () => {
     { city: 'Mahdia', area: 'Sahel' },
     { city: 'Sfax', area: 'Sud Est' },
   ];
+
+  const startWebSession = async (userData: WebSessionUser, tab: string) => {
+    setSessionUser(userData);
+    setCurrentRole(userData.role);
+    setBypassAuth(true);
+    setActiveTab(tab);
+    await signIn(userData);
+  };
 
   // Splash Screen progress timer
   useEffect(() => {
@@ -567,6 +586,25 @@ export const AppNavigator = () => {
     }
   }, [sessionUser]);
 
+  useEffect(() => {
+    setBusinessNameInput(businessName);
+    setExperienceYearsInput(String(experienceYears));
+  }, [businessName, experienceYears]);
+
+  useEffect(() => {
+    if (!authUser || sessionUser) return;
+
+    const restoredUser: WebSessionUser = {
+      ...authUser,
+      role: authUser.role as Role,
+      city: authUser.addresses?.[0] || 'Tunis',
+    };
+    setSessionUser(restoredUser);
+    setCurrentRole(restoredUser.role);
+    setBypassAuth(true);
+    setActiveTab(restoredUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
+  }, [authUser, sessionUser]);
+
   // Synchronize currentTheme with html root element to enable Tailwind's dark: variant class
   useEffect(() => {
     if (currentTheme === 'dark') {
@@ -592,7 +630,7 @@ export const AppNavigator = () => {
   };
 
   // Sign In submit handler
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signinEmail || !signinPassword) {
       showToast(currentLang === 'AR' ? 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' : 'Veuillez remplir tous les champs', 'error');
@@ -601,22 +639,16 @@ export const AppNavigator = () => {
 
     // Demo Admin Check
     if (signinEmail.toLowerCase() === 'admin@stouchy.com' && signinPassword === 'admin123') {
-      const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role, phone: '+216 22 000 111' };
-      setSessionUser(adminSession);
-      setCurrentRole('admin');
-      setBypassAuth(true);
-      setActiveTab('AdminAccueil');
+      const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
+      await startWebSession(adminSession, 'AdminAccueil');
       showToast(currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !', 'success');
       return;
     }
 
     // Demo User Check
     if (signinEmail.toLowerCase() === 'user@stouchy.com' && signinPassword === 'user123') {
-      const userSession = { name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user' as Role, phone: '+216 22 456 789', city: 'Ariana' };
-      setSessionUser(userSession);
-      setCurrentRole('user');
-      setBypassAuth(true);
-      setActiveTab('Accueil');
+      const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
+      await startWebSession(userSession, 'Accueil');
       showToast(currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !', 'success');
       return;
     }
@@ -628,11 +660,8 @@ export const AppNavigator = () => {
         showToast(currentLang === 'AR' ? 'هذا الحساب معطل مؤقتاً' : 'Ce compte est suspendu ou bloqué.', 'error');
         return;
       }
-      const customSession = { name: foundUser.name, email: foundUser.email, role: foundUser.role as Role, phone: foundUser.phone, city: foundUser.addresses?.[0] || 'Tunis' };
-      setSessionUser(customSession);
-      setCurrentRole(foundUser.role as Role);
-      setBypassAuth(true);
-      setActiveTab(foundUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
+      const customSession: WebSessionUser = { id: foundUser.id, name: foundUser.name, email: foundUser.email, role: foundUser.role as Role, phone: foundUser.phone, status: foundUser.status, addresses: foundUser.addresses, city: foundUser.addresses?.[0] || 'Tunis' };
+      await startWebSession(customSession, foundUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
       showToast(currentLang === 'AR' ? `أهلاً بك ${foundUser.name}` : `Connexion réussie. Bienvenue, ${foundUser.name} !`, 'success');
       return;
     }
@@ -641,7 +670,7 @@ export const AppNavigator = () => {
   };
 
   // Sign Up submit handler
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signupName || !signupEmail || !signupPhone || !signupPassword || !signupConfirmPassword) {
       showToast(currentLang === 'AR' ? 'الرجاء تعبئة كافة الفراغات' : 'Veuillez remplir tous les champs obligatoires.', 'error');
@@ -674,11 +703,8 @@ export const AppNavigator = () => {
     dispatch(addUser(newUserObj));
 
     // Sign in immediately
-    const customSession = { name: signupName, email: signupEmail.toLowerCase(), role: 'user' as Role, phone: signupPhone, city: signupCity };
-    setSessionUser(customSession);
-    setCurrentRole('user');
-    setBypassAuth(true);
-    setActiveTab('Accueil');
+    const customSession: WebSessionUser = { id: newUserObj.id, name: signupName, email: signupEmail.toLowerCase(), role: 'user', phone: signupPhone, status: 'active', addresses: [signupCity], city: signupCity };
+    await startWebSession(customSession, 'Accueil');
     showToast(currentLang === 'AR' ? 'تم إنشاء حسابك وتفعيله بنجاح !' : 'Votre compte a été créé avec succès. Bienvenue !', 'success');
 
     // Reset fields
@@ -690,12 +716,12 @@ export const AppNavigator = () => {
   };
 
   // Logout handler
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setSessionUser(null);
     setCurrentRole('anonyme');
     setBypassAuth(false);
     setActiveTab('Accueil');
-    signOut();
+    await signOut();
     showToast(currentLang === 'AR' ? 'تم تسجيل خروجك بنجاح' : 'Déconnexion réussie ! A bientôt.', 'info');
   };
 
@@ -898,8 +924,10 @@ export const AppNavigator = () => {
         ...sessionUser,
         email: trimmedEmail,
         phone: trimmedPhone,
+        addresses: sessionUser.addresses?.length ? sessionUser.addresses : [profileCity || 'Tunis'],
       };
       setSessionUser(updatedSession);
+      signIn(updatedSession);
 
       const storedAdmin = usersList.find(user => user.role === 'admin' && user.email.toLowerCase() === sessionUser.email.toLowerCase());
       if (storedAdmin) {
@@ -913,6 +941,28 @@ export const AppNavigator = () => {
     }
 
     showToast(currentLang === 'AR' ? 'تم تحديث بيانات المدير بنجاح' : 'Coordonnées administrateur mises à jour !', 'success');
+  };
+
+  const handleAdminBrandSettingsUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedBusinessName = businessNameInput.trim();
+    const years = Number(experienceYearsInput);
+
+    if (!trimmedBusinessName) {
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال اسم العرض' : 'Veuillez saisir le nom affiché.', 'error');
+      return;
+    }
+
+    if (!Number.isFinite(years) || years < 1 || years > 80) {
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال عدد سنوات صحيح' : 'Veuillez saisir une expérience valide.', 'error');
+      return;
+    }
+
+    dispatch(updatePlombierSettings({
+      businessName: trimmedBusinessName,
+      experienceYears: Math.round(years),
+    }));
+    showToast(currentLang === 'AR' ? 'تم تحديث هوية الموقع' : 'Identité du site mise à jour !', 'success');
   };
 
   // Product Visual visual components
@@ -953,7 +1003,7 @@ export const AppNavigator = () => {
           </div>
           <div className="text-center mb-8">
             <div className="text-white text-3xl font-black tracking-tight leading-tight">
-              {currentLang === 'AR' ? 'سباك تونس' : 'Plombier Tunisie'}
+              {businessName}
             </div>
             <div className="text-[#F97316] text-[10px] sm:text-xs font-black tracking-widest uppercase mt-2.5">
               {t.tagline}
@@ -995,7 +1045,7 @@ export const AppNavigator = () => {
             <div className="flex items-center gap-3 relative z-10">
               <LogoSVG size={52} />
               <div className="text-left">
-                <span className="text-2xl font-black tracking-tight text-white">Plombier Tunisie</span>
+                <span className="text-2xl font-black tracking-tight text-white">{businessName}</span>
                 <p className="text-[9px] text-[#F97316] font-extrabold tracking-widest uppercase mt-0.5">{translations.FR.tagline}</p>
               </div>
             </div>
@@ -1023,7 +1073,7 @@ export const AppNavigator = () => {
             </div>
 
             <div className="text-xs text-slate-500 font-bold relative z-10">
-              © 2026 Plombier Tunisie. Développé pour les particuliers et professionnels.
+              © 2026 {businessName}. Développé pour les particuliers et professionnels.
             </div>
           </div>
 
@@ -1135,11 +1185,8 @@ export const AppNavigator = () => {
                           setSigninPassword('user123');
                           showToast("Connexion en cours...", "info");
                           setTimeout(() => {
-                            const userSession = { name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user' as Role, phone: '+216 22 456 789', city: 'Ariana' };
-                            setSessionUser(userSession);
-                            setCurrentRole('user');
-                            setBypassAuth(true);
-                            setActiveTab('Accueil');
+                            const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
+                            startWebSession(userSession, 'Accueil');
                             showToast(currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !', 'success');
                           }, 250);
                         }}
@@ -1154,11 +1201,8 @@ export const AppNavigator = () => {
                           setSigninPassword('admin123');
                           showToast("Connexion en cours...", "info");
                           setTimeout(() => {
-                            const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role, phone: '+216 22 000 111' };
-                            setSessionUser(adminSession);
-                            setCurrentRole('admin');
-                            setBypassAuth(true);
-                            setActiveTab('AdminAccueil');
+                            const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
+                            startWebSession(adminSession, 'AdminAccueil');
                             showToast(currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !', 'success');
                           }, 250);
                         }}
@@ -1172,7 +1216,7 @@ export const AppNavigator = () => {
                   {/* LINK TO SIGN UP SCREEN */}
                   <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
                     <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                      {currentLang === 'AR' ? 'ليس لديك حساب؟' : 'Nouveau sur Plombier Tunisie ?'}{' '}
+                      {currentLang === 'AR' ? 'ليس لديك حساب؟' : `Nouveau sur ${businessName} ?`}{' '}
                       <button
                         type="button"
                         onClick={() => {
@@ -1356,7 +1400,7 @@ export const AppNavigator = () => {
               <LogoSVG size={44} />
               <div className="text-left">
                 <span className={`text-xl font-black tracking-tight ${isRTL ? 'font-arabic font-extrabold' : ''}`}>
-                  {currentLang === 'AR' ? 'سباك تونس' : 'Plombier Tunisie'}
+                  {businessName}
                 </span>
                 <p className="text-[9px] text-[#F97316] font-bold tracking-widest uppercase mt-0.5 leading-none">
                   {t.tagline}
@@ -1579,7 +1623,7 @@ export const AppNavigator = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                     {[
-                      { val: t.experience_val, lbl: t.experience_lbl, color: 'text-[#1E3A5F] dark:text-sky-400' },
+                      { val: `${experienceYears}+`, lbl: t.experience_lbl, color: 'text-[#1E3A5F] dark:text-sky-400' },
                       { val: t.dispo_val, lbl: t.dispo_lbl, color: 'text-[#F97316]' },
                       { val: t.gov_val, lbl: t.gov_lbl, color: 'text-[#1E3A5F] dark:text-sky-400' },
                       { val: t.satisfaction_val, lbl: t.satisfaction_lbl, color: 'text-emerald-500' }
@@ -2293,7 +2337,7 @@ export const AppNavigator = () => {
                   <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed font-semibold">
                     {currentLang === 'AR' 
                       ? 'لإضافة قطع غيار للمفضلة وتعديل بياناتك، يرجى تسجيل الدخول أو إنشاء حساب جديد.' 
-                      : 'Rejoignez Plombier Tunisie pour sauvegarder vos pièces favorites, demander des interventions immédiates en priorité et modifier votre mot de passe.'}
+                      : `Rejoignez ${businessName} pour sauvegarder vos pièces favorites, demander des interventions immédiates en priorité et modifier votre mot de passe.`}
                   </p>
                   
                   <div className="pt-4 flex flex-col gap-3">
@@ -2583,7 +2627,7 @@ export const AppNavigator = () => {
                 {currentLang === 'AR' ? 'لوحة قيادة المدير' : 'Tableau de Bord Administration'}
               </h1>
               <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
-                {currentLang === 'AR' ? 'إليك مؤشرات النشاط الحالية ومستجدات العمل لسباك تونس.' : 'Suivez l\'état général des stocks de pièces détachées et des membres inscrits.'}
+                {currentLang === 'AR' ? `إليك مؤشرات النشاط الحالية ومستجدات العمل لـ ${businessName}.` : 'Suivez l\'état général des stocks de pièces détachées et des membres inscrits.'}
               </p>
 
               {/* Metrics cards row */}
@@ -2930,6 +2974,44 @@ export const AppNavigator = () => {
                 {/* Edit Form */}
                 <div className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
                   <h3 className="text-sm font-black uppercase tracking-wider">{currentLang === 'AR' ? 'بيانات الاتصال والأمان' : 'Coordonnées & Sécurité'}</h3>
+
+                  <form onSubmit={handleAdminBrandSettingsUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        {currentLang === 'AR' ? 'اسم الموقع / الاسم واللقب' : 'Titre du site / nom et prénom'}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={businessNameInput}
+                        onChange={(e) => setBusinessNameInput(e.target.value)}
+                        placeholder="Ex: Mohamed Ben Khedher"
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                        {currentLang === 'AR' ? 'سنوات الخبرة' : 'Années d’expérience'}
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        min="1"
+                        max="80"
+                        value={experienceYearsInput}
+                        onChange={(e) => setExperienceYearsInput(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <button
+                        type="submit"
+                        className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
+                      >
+                        {currentLang === 'AR' ? 'حفظ هوية الموقع' : 'Enregistrer l’identité du site'}
+                      </button>
+                    </div>
+                  </form>
                   
                   <form onSubmit={handleAdminProfileUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
                     <div className="space-y-2">
@@ -3338,7 +3420,7 @@ export const AppNavigator = () => {
             
             <div className="space-y-4">
               <span className="text-lg font-black text-slate-850 dark:text-slate-105 flex items-center gap-2">
-                🛠️ {currentLang === 'AR' ? 'سباك تونس' : 'Plombier Tunisie'}
+                🛠️ {businessName}
               </span>
               <p className="text-xs leading-relaxed font-semibold">
                 {t.foot_desc}

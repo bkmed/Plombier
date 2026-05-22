@@ -73,8 +73,16 @@ Une version premium peut inclure:
 
 ## Arguments Techniques
 
-- React Native Web et React Native pour accelerer le delivery.
-- Redux Toolkit pour un etat predictible.
-- redux-persist pour conserver les donnees.
+- React Native Web et React Native avec une seule base de code partagee.
+- Composants decomposes, reutilisables web/mobile, avec une limite cible de 300 lignes par fichier.
+- Redux Toolkit pour un etat predictible et une session restaurable.
+- redux-persist pour conserver session, profil, wallet, favoris, annonces, categories et support WhatsApp.
 - Firebase Analytics et Notifee pour analytics et notifications.
 - NativeWind pour une UI coherente et maintenable.
+
+## Engagement Qualite
+
+- Le web ne doit plus dependre d'un seul fichier contenant toute l'application.
+- Le rendu web valide doit etre conserve pendant la migration.
+- Les memes composants doivent fonctionner sur mobile quand la feature est partagee.
+- Les refresh web et relances mobile ne doivent pas deconnecter l'utilisateur.

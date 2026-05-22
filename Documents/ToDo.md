@@ -1,8 +1,27 @@
-de meme pour la selection dans home nos prestations cles et sous sous titre son ui nes pa ok et meme les item en dessous repare. le ui,
-d meme analytic admin rajoute ce que il existe aussi dans intefafaces/admin/analytic
+# ToDo - Plombier Tunisie / Wallet
 
-add en also
-dans le profil de admin il peu changer l'email et le numero du supprot la zone mettre les nom de ville et le numero wathsup
+## Fait
+
+- Corriger le bloc noir en light mode sur le web.
+- Ajouter le cycle langue `FR -> AR -> EN`.
+- Ajouter `ServiceIcon` et remplacer les emojis services.
+- Ajouter le bouton `Voir tout`.
+- Ajouter les cles de traduction web services/admin.
+- Ajouter edition email admin et WhatsApp support avec validation.
+- Ajouter edition du titre public et des annees d'experience par admin.
+- Ajouter villes couvertes + bouton WhatsApp support dans Zones.
+- Ajouter donnees supplementaires dans Analytics admin.
+- Persister la session web dans Redux auth pour eviter la deconnexion au refresh.
+- Mettre a jour README et documents projet.
+
+## A Faire
+
+- Decouper `AppNavigator.web.tsx` en composants partages web/mobile.
+- Garder les nouveaux fichiers sous 300 lignes.
+- Migrer Services, Zones, Marketplace, AdminProfile et AdminAnalytics vers `src/features/plombier`.
+- Remplacer le state local durable par Redux persist.
+- Supprimer le code inutilise apres migration.
+- Verifier web et mobile apres chaque tranche.
 
  Update heading and subtitle in AppNavigator.web.tsx (Nos Services)
 
