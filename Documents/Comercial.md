@@ -1,8 +1,8 @@
-# Plombier Wallet - Presentation Commerciale
+# Plombier - Presentation Commerciale
 
 ## Positionnement
 
-**Plombier Wallet** est une application de gestion financière personnelle concue pour aider les utilisateurs a comprendre leur argent au quotidien: depenses, revenus, comptes, factures recurrentes, budgets et objectifs d'epargne.
+**Plombier ** est une application de gestion financière personnelle concue pour aider les utilisateurs a comprendre leur argent au quotidien: depenses, revenus, comptes, factures recurrentes, budgets et objectifs d'epargne.
 
 Le produit cible les utilisateurs qui veulent une experience simple, rapide et elegante, sans devoir manipuler un tableur ou une application bancaire trop complexe.
 

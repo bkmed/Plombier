@@ -14,7 +14,7 @@ interface AdminProfileScreenProps {
 const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
   const { user, updateProfile } = useAuth();
   const dispatch = useDispatch();
-  const toast = useToast();
+  const { showToast } = useToast();
   const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
 
   const [businessNameInput, setBusinessNameInput] = useState('');
@@ -34,19 +34,19 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
   const handleAdminProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profileEmail) {
-      toast(currentLang === 'AR' ? 'الرجاء إدخال بريد إلكتروني صحيح' : 'Veuillez saisir une adresse email valide.', 'error');
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال بريد إلكتروني صحيح' : 'Veuillez saisir une adresse email valide.', 'error');
       return;
     }
     if (!profilePhone) {
-      toast(currentLang === 'AR' ? 'الرجاء إدخال رقم هاتف صحيح' : 'Veuillez saisir un numéro de téléphone valide.', 'error');
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال رقم هاتف صحيح' : 'Veuillez saisir un numéro de téléphone valide.', 'error');
       return;
     }
 
     try {
       await updateProfile({ email: profileEmail, phone: profilePhone });
-      toast(currentLang === 'AR' ? 'تم تحديث بيانات المدير بنجاح' : 'Coordonnées administrateur mises à jour !', 'success');
+      showToast(currentLang === 'AR' ? 'تم تحديث بيانات المدير بنجاح' : 'Coordonnées administrateur mises à jour !', 'success');
     } catch (error) {
-      toast(currentLang === 'AR' ? 'حدث خطأ أثناء تحديث الملف' : 'Erreur lors de la mise à jour du profil.', 'error');
+      showToast(currentLang === 'AR' ? 'حدث خطأ أثناء تحديث الملف' : 'Erreur lors de la mise à jour du profil.', 'error');
     }
   };
 
@@ -56,12 +56,12 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
     const years = Number(experienceYearsInput);
 
     if (!trimmedBusinessName) {
-      toast(currentLang === 'AR' ? 'الرجاء إدخال اسم العرض' : 'Veuillez saisir le nom affiché.', 'error');
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال اسم العرض' : 'Veuillez saisir le nom affiché.', 'error');
       return;
     }
 
     if (!Number.isFinite(years) || years < 1 || years > 80) {
-      toast(currentLang === 'AR' ? 'الرجاء إدخال عدد سنوات صحيح' : 'Veuillez saisir une expérience valide.', 'error');
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال عدد سنوات صحيح' : 'Veuillez saisir une expérience valide.', 'error');
       return;
     }
 
@@ -71,7 +71,7 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
         experienceYears: Math.round(years),
       }),
     );
-    toast(currentLang === 'AR' ? 'تم تحديث هوية الموقع' : 'Identité du site mise à jour !', 'success');
+    showToast(currentLang === 'AR' ? 'تم تحديث هوية الموقع' : 'Identité du site mise à jour !', 'success');
   };
 
   return (
@@ -176,7 +176,7 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              toast('Mot de passe admin mis à jour !', 'success');
+              showToast('Mot de passe admin mis à jour !', 'success');
             }}
             className="space-y-4"
           >

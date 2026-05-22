@@ -64,7 +64,8 @@ La session ne doit pas dependre uniquement d'un `useState` local.
 6. Supprimer le code mort et les imports inutilises.
 
 ## Acceptance
-
+- `npm run format` passe.
+- `npm run verify-translations` passe.
 - `npm run lint` passe.
 - `npm test` passe.
 - `npx tsc --noEmit` passe.

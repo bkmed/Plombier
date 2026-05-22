@@ -1,23 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { toggleFavoriteAction } from '../../../store/slices/partsSlice';
+import { toggleFavoriteAction, type Product } from '../../../store/slices/partsSlice';
 import { useToast } from '../../../context/ToastContext';
 
 type Lang = 'FR' | 'AR' | 'EN';
-
-interface Product {
-  id: string;
-  title: string;
-  subtitle: string;
-  price: number;
-  condition: string;
-  category: string;
-  description: string;
-  image: string;
-  isFeatured?: boolean;
-  isAvailable?: boolean;
-}
 
 interface MarketplaceScreenProps {
   currentLang: Lang;
@@ -73,7 +60,7 @@ const ProductVisual = ({ image, className = 'w-16 h-16' }: { image: string; clas
 
 const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedProduct }: MarketplaceScreenProps) => {
   const dispatch = useDispatch();
-  const toast = useToast();
+  const { showToast } = useToast();
 
   const products = useSelector((state: RootState) => state.parts.listings);
   const favorites = useSelector((state: RootState) => state.parts.favorites);
@@ -112,9 +99,9 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
     event.stopPropagation();
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
-      toast(currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris', 'info');
+      showToast(currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris', 'info');
     } else {
-      toast(currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !', 'success');
+      showToast(currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !', 'success');
     }
   };
 

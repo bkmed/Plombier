@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { RootState } from '../store';
-import { toggleFavoriteAction, addListing, updateListing, deleteListing } from '../store/slices/partsSlice';
+import { toggleFavoriteAction, addListing, updateListing, deleteListing, type Product } from '../store/slices/partsSlice';
 import { addCategory, updateCategory, deleteCategory } from '../store/slices/categoriesSlice';
-import { addUser, updateUser } from '../store/slices/usersSlice';
-import { updatePlombierSettings } from '../store/slices/plombierSettingsSlice';
-import { Category } from '../database/schema';
+import { addUser, updateUser, deleteUser } from '../store/slices/usersSlice';
+import { setCurrentLang as setCurrentLangAction, setCurrentTheme as setCurrentThemeAction, setActiveTab as setActiveTabAction, setBypassAuth as setBypassAuthAction } from '../store/slices/uiSlice';
+import { Category, UserAccount } from '../database/schema';
 import { useAuth } from '../context/AuthContext';
 import { User } from '../services/authService';
 import { useToast } from '../context/ToastContext';
 import { ServiceIcon, ServiceIconName } from '../components/ServiceIcon';
-import { isValidEmail, isValidPhone } from '../utils/validation';
 import FooterLinks from '../features/plombier/components/FooterLinks';
 import CategoryImageInput from '../features/plombier/components/CategoryImageInput';
 import GalleryScreen from '../features/plombier/screens/GalleryScreen';
@@ -102,19 +102,6 @@ type Role = 'anonyme' | 'user' | 'admin';
 type WebSessionUser = User & {
   city?: string;
 };
-
-interface Product {
-  id: string;
-  title: string;
-  subtitle: string;
-  price: number;
-  condition: 'comme neuf' | 'bon état' | 'pour pièces';
-  category: string;
-  description: string;
-  image: string; // 'faucet' | 'boiler' | 'copper_fittings'
-  isFeatured?: boolean;
-  isAvailable?: boolean;
-}
 
 type LocalCategory = Category;
 
@@ -236,6 +223,7 @@ const translations = {
     ouvrir_maps: "Google Maps direct",
     envoyer_demande: "Soumettre ma demande d'urgence",
     zones_directes: "Intervention Immédiate 24h/24",
+    gallery: { title: "Galerie", manageGallery: "Gérer la galerie" },
     appelez_nous: "Appelez-nous"
   },
   AR: {
@@ -355,6 +343,7 @@ const translations = {
     ouvrir_maps: "فتح خرائط جوجل مباشرة",
     envoyer_demande: "إرسال طلب التدخل العاجل",
     zones_directes: "التدخل الفوري على مدار الساعة",
+    gallery: { title: "المعرض", manageGallery: "إدارة المعرض" },
     appelez_nous: "اتصل بنا فوراً"
   },
   EN: {
@@ -474,6 +463,7 @@ const translations = {
     ouvrir_maps: "Open Google Maps",
     envoyer_demande: "Submit Emergency Request",
     zones_directes: "Immediate 24/7 Intervention",
+    gallery: { title: "Gallery", manageGallery: "Manage Gallery" },
     appelez_nous: "Call Us Now"
   }
 };
@@ -481,6 +471,7 @@ const translations = {
 export const AppNavigator = () => {
   const { user: authUser, signIn, signOut } = useAuth();
   const { showToast } = useToast();
+  const { t: translate, i18n } = useTranslation();
 
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.parts.listings);
@@ -489,6 +480,8 @@ export const AppNavigator = () => {
   const usersList = useSelector((state: RootState) => state.users.items);
   const galleryItems = useSelector((state: RootState) => state.gallery.items);
   const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
+  const uiState = useSelector((state: RootState) => state.ui);
+  const { currentLang, currentTheme, activeTab, bypassAuth } = uiState;
 
   // Initial Seed for Categories inside Redux on Mount
   useEffect(() => {
@@ -508,21 +501,17 @@ export const AppNavigator = () => {
 
   // Main Authentication State
   const [sessionUser, setSessionUser] = useState<WebSessionUser | null>(null);
-  const [bypassAuth, setBypassAuth] = useState(false);
   const [currentRole, setCurrentRole] = useState<Role>('anonyme');
 
   // Splash Screen
   const [showSplash, setShowSplash] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
-  // Theme & Language
-  const [currentLang, setCurrentLang] = useState<'FR' | 'AR' | 'EN'>('FR');
-  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark'>('light');
+  // Theme & Language are persisted in Redux UI state.
 
-  // Active Tab
+  // Active Tab is persisted in Redux UI state.
   // User tabs: 'Accueil' | 'Services' | 'Zones' | 'Marketplace' | 'Profile' | 'Payment'
   // Admin tabs: 'AdminAccueil' | 'GestionAnnonce' | 'GestionCategorie' | 'GestionUser' | 'AdminProfile' | 'Analytics'
-  const [activeTab, setActiveTab] = useState<string>('Accueil');
 
   // Auth Forms
   const [authTab, setAuthTab] = useState<'signin' | 'signup'>('signin');
@@ -541,8 +530,6 @@ export const AppNavigator = () => {
   const [profileEmail, setProfileEmail] = useState('');
   const [profilePhone, setProfilePhone] = useState('');
   const [profileCity, setProfileCity] = useState('');
-  const [businessNameInput, setBusinessNameInput] = useState('');
-  const [experienceYearsInput, setExperienceYearsInput] = useState('');
   const [currentMdp, setCurrentMdp] = useState('');
   const [newMdp, setNewMdp] = useState('');
 
@@ -572,10 +559,17 @@ export const AppNavigator = () => {
   const [editCategoryName, setEditCategoryName] = useState('');
   const [categoryErrorMessage, setCategoryErrorMessage] = useState<string | null>(null);
 
+  // Admin user edit state
+  const [editingUser, setEditingUser] = useState<UserAccount | null>(null);
+  const [editUserName, setEditUserName] = useState('');
+  const [editUserEmail, setEditUserEmail] = useState('');
+  const [editUserPhone, setEditUserPhone] = useState('');
+  const [editUserRole, setEditUserRole] = useState<'admin' | 'user'>('user');
+
   // Quick WhatsApp pre-filled technical messages
-  const t = translations[currentLang];
-  const galleryTitle = (t as any).gallery?.title || 'Galerie';
-  const galleryManageLabel = (t as any).gallery?.manageGallery || 'Gérer la galerie';
+  const t = translations[currentLang] || translations.FR;
+  const galleryTitle = (t as any)?.gallery?.title ?? 'Galerie';
+  const galleryManageLabel = (t as any)?.gallery?.manageGallery ?? 'Gérer la galerie';
   const isRTL = currentLang === 'AR';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
@@ -583,6 +577,11 @@ export const AppNavigator = () => {
   const nextLanguage = languageOrder[(languageOrder.indexOf(currentLang) + 1) % languageOrder.length];
   const supportWhatsAppNumber = profilePhone || sessionUser?.phone || '+216 22 000 111';
   const supportWhatsAppDigits = supportWhatsAppNumber.replace(/\D/g, '') || '21622000111';
+  const tCommon = (key: string, defaultValue: string) => translate(key, { defaultValue });
+  const setActiveTab = (tab: string) => dispatch(setActiveTabAction(tab));
+  const setCurrentLang = (lang: 'FR' | 'AR' | 'EN') => dispatch(setCurrentLangAction(lang));
+  const setCurrentTheme = (theme: 'light' | 'dark') => dispatch(setCurrentThemeAction(theme));
+  const setBypassAuth = (value: boolean) => dispatch(setBypassAuthAction(value));
 
   const startWebSession = async (userData: WebSessionUser, tab: string) => {
     setSessionUser(userData);
@@ -591,6 +590,12 @@ export const AppNavigator = () => {
     setActiveTab(tab);
     await signIn(userData);
   };
+
+  // Persist language direction and i18n locale when the currentLang changes
+  useEffect(() => {
+    i18n.changeLanguage(currentLang.toLowerCase());
+    document.documentElement.dir = translate('web.autoText1', { defaultValue: currentLang === 'AR' ? 'rtl' : 'ltr' });
+  }, [currentLang, i18n]);
 
   // Splash Screen progress timer
   useEffect(() => {
@@ -620,12 +625,11 @@ export const AppNavigator = () => {
   }, [sessionUser]);
 
   useEffect(() => {
-    setBusinessNameInput(businessName);
-    setExperienceYearsInput(String(experienceYears));
-  }, [businessName, experienceYears]);
-
-  useEffect(() => {
-    if (!authUser || sessionUser) return;
+    if (!authUser) {
+      setSessionUser(null);
+      setCurrentRole('anonyme');
+      return;
+    }
 
     const restoredUser: WebSessionUser = {
       ...authUser,
@@ -635,8 +639,10 @@ export const AppNavigator = () => {
     setSessionUser(restoredUser);
     setCurrentRole(restoredUser.role);
     setBypassAuth(true);
-    setActiveTab(restoredUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
-  }, [authUser, sessionUser]);
+    if (!sessionUser) {
+      setActiveTab(restoredUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
+    }
+  }, [authUser]);
 
   // Synchronize currentTheme with html root element to enable Tailwind's dark: variant class
   useEffect(() => {
@@ -656,14 +662,14 @@ export const AppNavigator = () => {
   const toggleFavorite = (id: string, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (currentRole === 'anonyme') {
-      showToast(currentLang === 'AR' ? 'يرجى تسجيل الدخول لحفظ المفضلة' : 'Veuillez vous connecter pour gérer vos favoris.', 'info');
+      showToast(tCommon('web.favoriteLoginRequired', translate('web.autoText2', { defaultValue: currentLang === 'AR' ? 'يرجى تسجيل الدخول لحفظ المفضلة' : 'Veuillez vous connecter pour gérer vos favoris.' })), 'info');
       return;
     }
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
-      showToast(currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris', 'info');
+      showToast(tCommon('web.favoriteRemoved', translate('web.autoText3', { defaultValue: currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris' })), 'info');
     } else {
-      showToast(currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !', 'success');
+      showToast(tCommon('web.favoriteAdded', translate('web.autoText4', { defaultValue: currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !' })), 'success');
     }
   };
 
@@ -671,7 +677,7 @@ export const AppNavigator = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signinEmail || !signinPassword) {
-      showToast(currentLang === 'AR' ? 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' : 'Veuillez remplir tous les champs', 'error');
+      showToast(translate('web.autoText5', { defaultValue: currentLang === 'AR' ? 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' : 'Veuillez remplir tous les champs' }), 'error');
       return;
     }
 
@@ -679,7 +685,7 @@ export const AppNavigator = () => {
     if (signinEmail.toLowerCase() === 'admin@stouchy.com' && signinPassword === 'admin123') {
       const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
       await startWebSession(adminSession, 'AdminAccueil');
-      showToast(currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !', 'success');
+      showToast(translate('web.autoText6', { defaultValue: currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !' }), 'success');
       return;
     }
 
@@ -687,7 +693,7 @@ export const AppNavigator = () => {
     if (signinEmail.toLowerCase() === 'user@stouchy.com' && signinPassword === 'user123') {
       const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
       await startWebSession(userSession, 'Accueil');
-      showToast(currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !', 'success');
+      showToast(translate('web.autoText7', { defaultValue: currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !' }), 'success');
       return;
     }
 
@@ -695,34 +701,34 @@ export const AppNavigator = () => {
     const foundUser = usersList.find(u => u.email.toLowerCase() === signinEmail.toLowerCase());
     if (foundUser) {
       if (foundUser.status === 'rejected') {
-        showToast(currentLang === 'AR' ? 'هذا الحساب معطل مؤقتاً' : 'Ce compte est suspendu ou bloqué.', 'error');
+        showToast(translate('web.autoText8', { defaultValue: currentLang === 'AR' ? 'هذا الحساب معطل مؤقتاً' : 'Ce compte est suspendu ou bloqué.' }), 'error');
         return;
       }
       const customSession: WebSessionUser = { id: foundUser.id, name: foundUser.name, email: foundUser.email, role: foundUser.role as Role, phone: foundUser.phone, status: foundUser.status, addresses: foundUser.addresses, city: foundUser.addresses?.[0] || 'Tunis' };
       await startWebSession(customSession, foundUser.role === 'admin' ? 'AdminAccueil' : 'Accueil');
-      showToast(currentLang === 'AR' ? `أهلاً بك ${foundUser.name}` : `Connexion réussie. Bienvenue, ${foundUser.name} !`, 'success');
+      showToast(translate('web.autoText9', { defaultValue: currentLang === 'AR' ? `أهلاً بك ${foundUser.name}` : `Connexion réussie. Bienvenue, ${foundUser.name} !` }), 'success');
       return;
     }
 
-    showToast(currentLang === 'AR' ? 'بيانات الاعتماد خاطئة' : 'Identifiants invalides ou incorrects.', 'error');
+    showToast(tCommon('web.invalidCredentials', translate('web.autoText10', { defaultValue: currentLang === 'AR' ? 'بيانات الاعتماد خاطئة' : 'Identifiants invalides ou incorrects.' })), 'error');
   };
 
   // Sign Up submit handler
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signupName || !signupEmail || !signupPhone || !signupPassword || !signupConfirmPassword) {
-      showToast(currentLang === 'AR' ? 'الرجاء تعبئة كافة الفراغات' : 'Veuillez remplir tous les champs obligatoires.', 'error');
+      showToast(translate('web.autoText11', { defaultValue: currentLang === 'AR' ? 'الرجاء تعبئة كافة الفراغات' : 'Veuillez remplir tous les champs obligatoires.' }), 'error');
       return;
     }
     if (signupPassword !== signupConfirmPassword) {
-      showToast(currentLang === 'AR' ? 'كلمات المرور غير متطابقة' : 'Les mots de passe ne correspondent pas.', 'error');
+      showToast(translate('web.autoText12', { defaultValue: currentLang === 'AR' ? 'كلمات المرور غير متطابقة' : 'Les mots de passe ne correspondent pas.' }), 'error');
       return;
     }
 
     // Check if email already taken
     const exists = usersList.find(u => u.email.toLowerCase() === signupEmail.toLowerCase());
     if (exists) {
-      showToast(currentLang === 'AR' ? 'هذا البريد الإلكتروني مسجل بالفعل' : 'Cette adresse email est déjà enregistrée.', 'error');
+      showToast(translate('web.autoText13', { defaultValue: currentLang === 'AR' ? 'هذا البريد الإلكتروني مسجل بالفعل' : 'Cette adresse email est déjà enregistrée.' }), 'error');
       return;
     }
 
@@ -743,7 +749,7 @@ export const AppNavigator = () => {
     // Sign in immediately
     const customSession: WebSessionUser = { id: newUserObj.id, name: signupName, email: signupEmail.toLowerCase(), role: 'user', phone: signupPhone, status: 'active', addresses: [signupCity], city: signupCity };
     await startWebSession(customSession, 'Accueil');
-    showToast(currentLang === 'AR' ? 'تم إنشاء حسابك وتفعيله بنجاح !' : 'Votre compte a été créé avec succès. Bienvenue !', 'success');
+    showToast(translate('web.autoText14', { defaultValue: currentLang === 'AR' ? 'تم إنشاء حسابك وتفعيله بنجاح !' : 'Votre compte a été créé avec succès. Bienvenue !' }), 'success');
 
     // Reset fields
     setSignupName('');
@@ -760,25 +766,8 @@ export const AppNavigator = () => {
     setBypassAuth(false);
     setActiveTab('Accueil');
     await signOut();
-    showToast(currentLang === 'AR' ? 'تم تسجيل خروجك بنجاح' : 'Déconnexion réussie ! A bientôt.', 'info');
+    showToast(tCommon('web.logoutSuccess', translate('web.autoText15', { defaultValue: currentLang === 'AR' ? 'تم تسجيل خروجك بنجاح' : 'Déconnexion réussie ! A bientôt.' })), 'info');
   };
-
-  // Filters logic
-  const filteredProducts = products.filter(p => {
-    const matchesSearch = searchQuery === '' || 
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      p.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategoryFilter === 'Toutes' || p.category === selectedCategoryFilter;
-    const matchesCondition = selectedConditionFilter === 'Tous' || p.condition === selectedConditionFilter;
-    const matchesPrice = p.price <= priceMax;
-    return matchesSearch && matchesCategory && matchesCondition && matchesPrice;
-  });
-
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === 'price_asc') return a.price - b.price;
-    if (sortBy === 'price_desc') return b.price - a.price;
-    return 0; // Default featured sort order
-  });
 
   // Admin Announcement CRUD operations
   const openAddAnnonce = () => {
@@ -812,7 +801,7 @@ export const AppNavigator = () => {
   const handleSaveAnnonce = (e: React.FormEvent) => {
     e.preventDefault();
     if (!annonceTitle || !annonceDescription || annoncePrice <= 0) {
-      showToast(currentLang === 'AR' ? 'الرجاء تعبئة بيانات الإعلان بشكل صحيح' : 'Données d\'annonce incomplètes.', 'error');
+      showToast(translate('web.autoText16', { defaultValue: currentLang === 'AR' ? 'الرجاء تعبئة بيانات الإعلان بشكل صحيح' : 'Données d\'annonce incomplètes.' }), 'error');
       return;
     }
 
@@ -831,7 +820,7 @@ export const AppNavigator = () => {
         isAvailable: annonceIsAvailable
       };
       dispatch(updateListing(updatedItem));
-      showToast(currentLang === 'AR' ? 'تم تحديث الإعلان بنجاح !' : 'L\'annonce a été modifiée avec succès !', 'success');
+      showToast(translate('web.autoText17', { defaultValue: currentLang === 'AR' ? 'تم تحديث الإعلان بنجاح !' : 'L\'annonce a été modifiée avec succès !' }), 'success');
     } else {
       // Create new Listing Redux
       const newItem: Product = {
@@ -847,16 +836,16 @@ export const AppNavigator = () => {
         isAvailable: annonceIsAvailable
       };
       dispatch(addListing(newItem));
-      showToast(currentLang === 'AR' ? 'تم إضافة الإعلان بنجاح !' : 'Nouvelle annonce publiée avec succès !', 'success');
+      showToast(translate('web.autoText18', { defaultValue: currentLang === 'AR' ? 'تم إضافة الإعلان بنجاح !' : 'Nouvelle annonce publiée avec succès !' }), 'success');
     }
 
     setShowAdminModal(false);
   };
 
   const handleDeleteAnnonce = (id: string) => {
-    if (window.confirm(currentLang === 'AR' ? 'هل أنت متأكد من حذف هذا الإعلان ؟' : 'Voulez-vous vraiment supprimer cette annonce ?')) {
+    if (window.confirm(translate('web.autoText19', { defaultValue: currentLang === 'AR' ? 'هل أنت متأكد من حذف هذا الإعلان ؟' : 'Voulez-vous vraiment supprimer cette annonce ?' }))) {
       dispatch(deleteListing(id));
-      showToast(currentLang === 'AR' ? 'تم حذف الإعلان' : 'Annonce supprimée !', 'info');
+      showToast(translate('web.autoText20', { defaultValue: currentLang === 'AR' ? 'تم حذف الإعلان' : 'Annonce supprimée !' }), 'info');
     }
   };
 
@@ -865,13 +854,13 @@ export const AppNavigator = () => {
     e.preventDefault();
     setCategoryErrorMessage(null);
     if (!newCategoryName.trim()) {
-      setCategoryErrorMessage(currentLang === 'AR' ? 'يرجى إدخال اسم الصنف.' : 'Veuillez saisir un nom de catégorie.');
+      setCategoryErrorMessage(translate('web.autoText21', { defaultValue: currentLang === 'AR' ? 'يرجى إدخال اسم الصنف.' : 'Veuillez saisir un nom de catégorie.' }));
       return;
     }
 
     // Check duplicates
     if (reduxCategories.find(c => c.name.toLowerCase() === newCategoryName.trim().toLowerCase())) {
-      setCategoryErrorMessage(currentLang === 'AR' ? 'هذا الصنف موجود بالفعل' : 'Catégorie déjà existante.');
+      setCategoryErrorMessage(translate('web.autoText22', { defaultValue: currentLang === 'AR' ? 'هذا الصنف موجود بالفعل' : 'Catégorie déjà existante.' }));
       return;
     }
 
@@ -883,7 +872,7 @@ export const AppNavigator = () => {
       updatedAt: new Date().toISOString()
     };
     dispatch(addCategory(newCat));
-    showToast(currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !', 'success');
+    showToast(translate('web.autoText23', { defaultValue: currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !' }), 'success');
     setNewCategoryName('');
     setNewCategoryImage(null);
   };
@@ -892,7 +881,7 @@ export const AppNavigator = () => {
     e.preventDefault();
     setCategoryErrorMessage(null);
     if (!editingCategory || !editCategoryName.trim()) {
-      setCategoryErrorMessage(currentLang === 'AR' ? 'يرجى إدخال اسم الصنف.' : 'Veuillez saisir un nom de catégorie.');
+      setCategoryErrorMessage(translate('web.autoText24', { defaultValue: currentLang === 'AR' ? 'يرجى إدخال اسم الصنف.' : 'Veuillez saisir un nom de catégorie.' }));
       return;
     }
 
@@ -903,16 +892,16 @@ export const AppNavigator = () => {
       updatedAt: new Date().toISOString()
     };
     dispatch(updateCategory(renamed));
-    showToast(currentLang === 'AR' ? 'تمت إعادة تسمية الصنف !' : 'Catégorie modifiée !', 'success');
+    showToast(translate('web.autoText25', { defaultValue: currentLang === 'AR' ? 'تمت إعادة تسمية الصنف !' : 'Catégorie modifiée !' }), 'success');
     setEditingCategory(null);
     setEditCategoryName('');
     setNewCategoryImage(null);
   };
 
   const handleDeleteCategory = (id: string, name: string) => {
-    if (window.confirm(currentLang === 'AR' ? `هل أنت متأكد من حذف صنف "${name}" ؟` : `Voulez-vous supprimer la catégorie "${name}" ?`)) {
+    if (window.confirm(translate('web.autoText26', { defaultValue: currentLang === 'AR' ? `هل أنت متأكد من حذف صنف "${name}" ؟` : `Voulez-vous supprimer la catégorie "${name}" ?` }))) {
       dispatch(deleteCategory(id));
-      showToast(currentLang === 'AR' ? 'تم حذف الصنف' : 'Catégorie supprimée !', 'info');
+      showToast(translate('web.autoText27', { defaultValue: currentLang === 'AR' ? 'تم حذف الصنف' : 'Catégorie supprimée !' }), 'info');
     }
   };
 
@@ -927,7 +916,7 @@ export const AppNavigator = () => {
       updatedAt: new Date().toISOString()
     };
     dispatch(updateUser(updated));
-    showToast(currentLang === 'AR' ? 'تم تغيير رتبة المستخدم' : 'Rôle de l\'utilisateur modifié !', 'success');
+    showToast(translate('web.autoText28', { defaultValue: currentLang === 'AR' ? 'تم تغيير رتبة المستخدم' : 'Rôle de l\'utilisateur modifié !' }), 'success');
   };
 
   const handleToggleUserStatus = (userId: string, currentStatus: string) => {
@@ -936,7 +925,7 @@ export const AppNavigator = () => {
 
     // Check that we aren't locking ourselves
     if (sessionUser && target.email.toLowerCase() === sessionUser.email.toLowerCase()) {
-      showToast(currentLang === 'AR' ? 'لا يمكنك حظر حسابك الخاص !' : 'Impossible de bloquer votre propre compte admin !', 'error');
+      showToast(translate('web.autoText29', { defaultValue: currentLang === 'AR' ? 'لا يمكنك حظر حسابك الخاص !' : 'Impossible de bloquer votre propre compte admin !' }), 'error');
       return;
     }
 
@@ -954,66 +943,49 @@ export const AppNavigator = () => {
     );
   };
 
-  const handleAdminProfileUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    const trimmedEmail = profileEmail.trim().toLowerCase();
-    const trimmedPhone = profilePhone.trim();
-
-    if (!trimmedEmail || !isValidEmail(trimmedEmail)) {
-      showToast(currentLang === 'AR' ? 'الرجاء إدخال بريد إلكتروني صحيح' : 'Veuillez saisir une adresse email valide.', 'error');
-      return;
-    }
-
-    if (!trimmedPhone || !isValidPhone(trimmedPhone)) {
-      showToast(currentLang === 'AR' ? 'الرجاء إدخال رقم هاتف صحيح' : 'Veuillez saisir un numéro de téléphone valide.', 'error');
-      return;
-    }
-
-    if (sessionUser) {
-      const updatedSession = {
-        ...sessionUser,
-        email: trimmedEmail,
-        phone: trimmedPhone,
-        addresses: sessionUser.addresses?.length ? sessionUser.addresses : [profileCity || 'Tunis'],
-      };
-      setSessionUser(updatedSession);
-      signIn(updatedSession);
-
-      const storedAdmin = usersList.find(user => user.role === 'admin' && user.email.toLowerCase() === sessionUser.email.toLowerCase());
-      if (storedAdmin) {
-        dispatch(updateUser({
-          ...storedAdmin,
-          email: trimmedEmail,
-          phone: trimmedPhone,
-          updatedAt: new Date().toISOString(),
-        }));
-      }
-    }
-
-    showToast(currentLang === 'AR' ? 'تم تحديث بيانات المدير بنجاح' : 'Coordonnées administrateur mises à jour !', 'success');
+  const handleStartEditUser = (user: UserAccount) => {
+    setEditingUser(user);
+    setEditUserName(user.name);
+    setEditUserEmail(user.email);
+    setEditUserPhone(user.phone || '');
+    setEditUserRole(user.role === 'admin' ? 'admin' : 'user');
   };
 
-  const handleAdminBrandSettingsUpdate = (e: React.FormEvent) => {
+  const handleSaveUserEdit = (e: React.FormEvent) => {
     e.preventDefault();
-    const trimmedBusinessName = businessNameInput.trim();
-    const years = Number(experienceYearsInput);
+    if (!editingUser) return;
 
-    if (!trimmedBusinessName) {
-      showToast(currentLang === 'AR' ? 'الرجاء إدخال اسم العرض' : 'Veuillez saisir le nom affiché.', 'error');
-      return;
-    }
+    const updatedUser: UserAccount = {
+      ...editingUser,
+      name: editUserName.trim(),
+      email: editUserEmail.trim().toLowerCase(),
+      phone: editUserPhone.trim() || undefined,
+      role: editUserRole,
+      updatedAt: new Date().toISOString(),
+    };
 
-    if (!Number.isFinite(years) || years < 1 || years > 80) {
-      showToast(currentLang === 'AR' ? 'الرجاء إدخال عدد سنوات صحيح' : 'Veuillez saisir une expérience valide.', 'error');
-      return;
-    }
-
-    dispatch(updatePlombierSettings({
-      businessName: trimmedBusinessName,
-      experienceYears: Math.round(years),
-    }));
-    showToast(currentLang === 'AR' ? 'تم تحديث هوية الموقع' : 'Identité du site mise à jour !', 'success');
+    dispatch(updateUser(updatedUser));
+    showToast(currentLang === 'AR' ? 'تم تحديث المستخدم بنجاح' : 'Utilisateur mis à jour avec succès !', 'success');
+    setEditingUser(null);
   };
+
+  const handleCancelEditUser = () => {
+    setEditingUser(null);
+  };
+
+  const handleDeleteUser = (userId: string, userRole: string) => {
+    if (userRole === 'admin') {
+      showToast(currentLang === 'AR' ? 'لا يمكنك حذف حساب المسؤول' : 'Impossible de supprimer un compte administrateur.', 'error');
+      return;
+    }
+
+    if (window.confirm(currentLang === 'AR' ? 'هل أنت متأكد أنك تريد حذف هذا المستخدم؟' : 'Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+      dispatch(deleteUser(userId));
+      showToast(currentLang === 'AR' ? 'تم حذف المستخدم بنجاح' : 'Utilisateur supprimé avec succès !', 'info');
+    }
+  };
+
+  // Note: admin profile and brand update handlers were previously defined here but are not currently used in this web navigator.
 
   // Product Visual visual components
   const ProductVisual = ({ image, className = "w-16 h-16" }: { image: string; className?: string }) => {
@@ -1078,7 +1050,7 @@ export const AppNavigator = () => {
             </div>
           </div>
           <div className="text-slate-400 text-[10px] font-black uppercase tracking-wider">
-            {currentLang === 'AR' ? 'جاري تحميل التطبيق الفاخر...' : 'Chargement premium...'} {loadingProgress}%
+            {translate('web.autoText30', { defaultValue: currentLang === 'AR' ? 'جاري تحميل التطبيق الفاخر...' : 'Chargement premium...' })} {loadingProgress}%
           </div>
         </div>
       )}
@@ -1147,7 +1119,7 @@ export const AppNavigator = () => {
                   type="button"
                   onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
                   className="w-8 h-8 rounded-lg border flex items-center justify-center transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
-                  title={currentTheme === 'light' ? 'Activer Mode Sombre' : 'Activer Mode Clair'}
+                  title={currentTheme === 'light' ? tCommon('web.enableDarkMode', 'Activer Mode Sombre') : tCommon('web.enableLightMode', 'Activer Mode Clair')}
                 >
                   {currentTheme === 'light' ? (
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -1174,13 +1146,13 @@ export const AppNavigator = () => {
                 </div>
                 <h3 className="text-2xl font-black text-slate-950 dark:text-white">
                   {authTab === 'signin' 
-                    ? (currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion') 
-                    : (currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Inscription')}
+                    ? tCommon('web.signinTitle', translate('web.autoText31', { defaultValue: currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion' })) 
+                    : tCommon('web.signupTitle', translate('web.autoText32', { defaultValue: currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Inscription' }))}
                 </h3>
                 <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 font-semibold">
                   {authTab === 'signin'
-                    ? (currentLang === 'AR' ? 'سجل دخولك للوصول إلى حسابك الفاخر' : 'Connectez-vous pour accéder à votre espace premium.')
-                    : (currentLang === 'AR' ? 'قم بإنشاء حسابك المجاني في ثوانٍ معدودة' : 'Créez votre compte client gratuit en quelques secondes.')}
+                    ? tCommon('web.signinSubtitle', translate('web.autoText33', { defaultValue: currentLang === 'AR' ? 'سجل دخولك للوصول إلى حسابك الفاخر' : 'Connectez-vous pour accéder à votre espace premium.' }))
+                    : tCommon('web.signupSubtitle', translate('web.autoText34', { defaultValue: currentLang === 'AR' ? 'قم بإنشاء حسابك المجاني في ثوانٍ معدودة' : 'Créez votre compte client gratuit en quelques secondes.' }))}
                 </p>
               </div>
 
@@ -1189,7 +1161,7 @@ export const AppNavigator = () => {
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                      {currentLang === 'AR' ? 'البريد الإلكتروني' : 'Adresse Email'}
+                      {tCommon('web.emailLabel', translate('web.autoText35', { defaultValue: currentLang === 'AR' ? 'البريد الإلكتروني' : 'Adresse Email' }))}
                     </label>
                     <input 
                       type="email"
@@ -1203,7 +1175,7 @@ export const AppNavigator = () => {
 
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                      {currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe'}
+                      {tCommon('web.passwordLabel', translate('web.autoText36', { defaultValue: currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe' }))}
                     </label>
                     <input 
                       type="password"
@@ -1219,13 +1191,13 @@ export const AppNavigator = () => {
                     type="submit"
                     className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
                   >
-                    {currentLang === 'AR' ? 'دخول آمن' : 'Connexion Sécurisée'}
+                    {tCommon('web.secureLoginButton', translate('web.autoText37', { defaultValue: currentLang === 'AR' ? 'دخول آمن' : 'Connexion Sécurisée' }))}
                   </button>
 
                   {/* PRE-FILL BUTTONS */}
                   <div className="border-t border-slate-200 dark:border-slate-800 pt-4 mt-6">
                     <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center font-bold mb-2.5">
-                      {currentLang === 'AR' ? 'حسابات التجربة الفورية' : 'COMPTES DE DÉMO DE PLOMBERIE (ACCÈS DIRECT)'}
+                      {tCommon('web.demoAccountsLabel', translate('web.autoText38', { defaultValue: currentLang === 'AR' ? 'حسابات التجربة الفورية' : 'COMPTES DE DÉMO DE PLOMBERIE (ACCÈS DIRECT)' }))}
                     </p>
                     <div className="grid grid-cols-2 gap-3 text-center">
                       <button 
@@ -1233,11 +1205,11 @@ export const AppNavigator = () => {
                         onClick={() => {
                           setSigninEmail('user@stouchy.com');
                           setSigninPassword('user123');
-                          showToast("Connexion en cours...", "info");
+                          showToast(tCommon('web.signingIn', translate('web.autoText39', { defaultValue: currentLang === 'AR' ? 'جاري تسجيل الدخول...' : 'Connexion en cours...' })), "info");
                           setTimeout(() => {
                             const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
                             startWebSession(userSession, 'Accueil');
-                            showToast(currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !', 'success');
+                            showToast(translate('web.autoText40', { defaultValue: currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !' }), 'success');
                           }, 250);
                         }}
                         className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 border border-slate-250 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-black py-2.5 rounded-lg transition"
@@ -1249,11 +1221,11 @@ export const AppNavigator = () => {
                         onClick={() => {
                           setSigninEmail('admin@stouchy.com');
                           setSigninPassword('admin123');
-                          showToast("Connexion en cours...", "info");
+                          showToast(tCommon('web.signingIn', translate('web.autoText41', { defaultValue: currentLang === 'AR' ? 'جاري تسجيل الدخول...' : 'Connexion en cours...' })), "info");
                           setTimeout(() => {
                             const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
                             startWebSession(adminSession, 'AdminAccueil');
-                            showToast(currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !', 'success');
+                            showToast(translate('web.autoText42', { defaultValue: currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !' }), 'success');
                           }, 250);
                         }}
                         className="bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-750 border border-slate-250 dark:border-slate-700 text-slate-800 dark:text-slate-200 text-[10px] font-black py-2.5 rounded-lg transition"
@@ -1266,7 +1238,7 @@ export const AppNavigator = () => {
                   {/* LINK TO SIGN UP SCREEN */}
                   <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
                     <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                      {currentLang === 'AR' ? 'ليس لديك حساب؟' : `Nouveau sur ${businessName} ?`}{' '}
+                      {translate('web.autoText43', { defaultValue: currentLang === 'AR' ? 'ليس لديك حساب؟' : `Nouveau sur ${businessName} ?` })}{' '}
                       <button
                         type="button"
                         onClick={() => {
@@ -1276,7 +1248,7 @@ export const AppNavigator = () => {
                         }}
                         className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
                       >
-                        {currentLang === 'AR' ? 'أنشئ حساباً جديداً' : 'Créer un compte'}
+                        {translate('web.autoText44', { defaultValue: currentLang === 'AR' ? 'أنشئ حساباً جديداً' : 'Créer un compte' })}
                       </button>
                     </p>
                   </div>
@@ -1288,7 +1260,7 @@ export const AppNavigator = () => {
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                      {currentLang === 'AR' ? 'الاسم الكامل' : 'Nom Complet'}
+                      {translate('web.autoText45', { defaultValue: currentLang === 'AR' ? 'الاسم الكامل' : 'Nom Complet' })}
                     </label>
                     <input 
                       type="text"
@@ -1303,7 +1275,7 @@ export const AppNavigator = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                        {currentLang === 'AR' ? 'البريد الإلكتروني' : 'Email'}
+                        {translate('web.autoText46', { defaultValue: currentLang === 'AR' ? 'البريد الإلكتروني' : 'Email' })}
                       </label>
                       <input 
                         type="email"
@@ -1316,7 +1288,7 @@ export const AppNavigator = () => {
                     </div>
                     <div className="space-y-2">
                       <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                        {currentLang === 'AR' ? 'الهاتف' : 'Téléphone'}
+                        {translate('web.autoText47', { defaultValue: currentLang === 'AR' ? 'الهاتف' : 'Téléphone' })}
                       </label>
                       <input 
                         type="text"
@@ -1331,7 +1303,7 @@ export const AppNavigator = () => {
 
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                      {currentLang === 'AR' ? 'المدينة / الولاية' : 'Ville / Gouvernorat'}
+                      {translate('web.autoText48', { defaultValue: currentLang === 'AR' ? 'المدينة / الولاية' : 'Ville / Gouvernorat' })}
                     </label>
                     <select
                       value={signupCity}
@@ -1350,7 +1322,7 @@ export const AppNavigator = () => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                        {currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe'}
+                        {translate('web.autoText49', { defaultValue: currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe' })}
                       </label>
                       <input 
                         type="password"
@@ -1363,7 +1335,7 @@ export const AppNavigator = () => {
                     </div>
                     <div className="space-y-2">
                       <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                        {currentLang === 'AR' ? 'تأكيد كلمة المرور' : 'Confirmation'}
+                        {translate('web.autoText50', { defaultValue: currentLang === 'AR' ? 'تأكيد كلمة المرور' : 'Confirmation' })}
                       </label>
                       <input 
                         type="password"
@@ -1380,13 +1352,13 @@ export const AppNavigator = () => {
                     type="submit"
                     className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3.5 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
                   >
-                    {currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Créer mon compte client'}
+                    {translate('web.autoText51', { defaultValue: currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Créer mon compte client' })}
                   </button>
 
                   {/* LINK TO SIGN IN SCREEN */}
                   <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
                     <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                      {currentLang === 'AR' ? 'لديك حساب بالفعل؟' : 'Déjà inscrit ?'}{' '}
+                      {translate('web.autoText52', { defaultValue: currentLang === 'AR' ? 'لديك حساب بالفعل؟' : 'Déjà inscrit ?' })}{' '}
                       <button
                         type="button"
                         onClick={() => {
@@ -1399,7 +1371,7 @@ export const AppNavigator = () => {
                         }}
                         className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
                       >
-                        {currentLang === 'AR' ? 'تسجيل الدخول' : 'Se connecter'}
+                        {translate('web.autoText53', { defaultValue: currentLang === 'AR' ? 'تسجيل الدخول' : 'Se connecter' })}
                       </button>
                     </p>
                   </div>
@@ -1414,11 +1386,11 @@ export const AppNavigator = () => {
                     setCurrentRole('anonyme');
                     setSessionUser(null);
                     setActiveTab('Accueil');
-                    showToast(currentLang === 'AR' ? 'تصفح بصفتك زائر' : 'Accès Invité autorisé.', 'info');
+                    showToast(translate('web.autoText54', { defaultValue: currentLang === 'AR' ? 'تصفح بصفتك زائر' : 'Accès Invité autorisé.' }), 'info');
                   }}
                   className="w-full bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-300 dark:border-slate-850 text-slate-650 hover:text-slate-800 dark:text-slate-350 dark:hover:text-white text-xs font-black py-3.5 rounded-xl transition flex items-center justify-center gap-2 hover:scale-[1.01] transform"
                 >
-                  <span>{currentLang === 'AR' ? 'المواصلة كزائر (مجهول) ←' : 'Continuer en tant qu\'invité (Anonyme) →'}</span>
+                  <span>{translate('web.autoText55', { defaultValue: currentLang === 'AR' ? 'المواصلة كزائر (مجهول) ←' : 'Continuer en tant qu\'invité (Anonyme) →' })}</span>
                 </button>
               </div>
 
@@ -1463,9 +1435,9 @@ export const AppNavigator = () => {
               {currentRole === 'admin' ? (
                 // ADMIN PANELS: Accueil | Gestion Annonce | Gestion Catégorie | Galerie | Gestion User | Profil | Analytics
                 [
-                  { id: 'AdminAccueil', label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' },
-                  { id: 'GestionAnnonce', label: currentLang === 'AR' ? 'إدارة الإعلانات' : 'Gestion Annonce' },
-                  { id: 'GestionCategorie', label: currentLang === 'AR' ? 'إدارة الأصناف' : 'Gestion Catégorie' },
+                  { id: 'AdminAccueil', label: translate('web.autoText56', { defaultValue: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' }) },
+                  { id: 'GestionAnnonce', label: translate('web.autoText57', { defaultValue: currentLang === 'AR' ? 'إدارة الإعلانات' : 'Gestion Annonce' }) },
+                  { id: 'GestionCategorie', label: translate('web.autoText58', { defaultValue: currentLang === 'AR' ? 'إدارة الأصناف' : 'Gestion Catégorie' }) },
                   { id: 'AdminGallery', label: currentLang === 'AR' ? 'المعرض' : galleryManageLabel },
                   { id: 'GestionUser', label: currentLang === 'AR' ? 'إدارة المستخدمين' : 'Gestion User' },
                   { id: 'AdminProfile', label: currentLang === 'AR' ? 'ملف الإدارة' : 'Profil' },
@@ -2618,6 +2590,64 @@ export const AppNavigator = () => {
                 {currentLang === 'AR' ? 'استعرض الأعضاء المسجلين وقم بترقية أدوارهم أو تجميد حساباتهم.' : 'Visualisez la liste des inscrits, modifiez les rôles ou désactivez temporairement des accès.'}
               </p>
 
+              {editingUser && (
+                <div className="mt-8 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <h2 className="text-xl font-black">{currentLang === 'AR' ? 'تعديل المستخدم' : 'Modifier un utilisateur'}</h2>
+                      <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">{currentLang === 'AR' ? 'قم بتعديل بيانات هذا المستخدم ثم احفظ التغييرات.' : 'Mettez à jour les informations utilisateur puis enregistrez.'}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={handleCancelEditUser}
+                      className="text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-4 py-2 rounded-2xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+                    >
+                      {currentLang === 'AR' ? 'إلغاء' : 'Annuler'}
+                    </button>
+                  </div>
+
+                  <form onSubmit={handleSaveUserEdit} className="grid gap-4 mt-6 md:grid-cols-2">
+                    <input
+                      value={editUserName}
+                      onChange={e => setEditUserName(e.target.value)}
+                      placeholder={currentLang === 'AR' ? 'الاسم الكامل' : 'Nom complet'}
+                      required
+                      className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    />
+                    <input
+                      type="email"
+                      value={editUserEmail}
+                      onChange={e => setEditUserEmail(e.target.value)}
+                      placeholder="Email"
+                      required
+                      className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    />
+                    <input
+                      value={editUserPhone}
+                      onChange={e => setEditUserPhone(e.target.value)}
+                      placeholder={currentLang === 'AR' ? 'الهاتف' : 'Téléphone'}
+                      className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    />
+                    <select
+                      value={editUserRole}
+                      onChange={e => setEditUserRole(e.target.value as 'admin' | 'user')}
+                      className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    >
+                      <option value="user">Utilisateur</option>
+                      <option value="admin">Administrateur</option>
+                    </select>
+                    <div className="md:col-span-2 flex justify-end gap-3">
+                      <button
+                        type="submit"
+                        className="bg-[#F97316] text-white px-6 py-3 rounded-3xl font-black hover:bg-[#e0630b] transition"
+                      >
+                        {currentLang === 'AR' ? 'حفظ التغييرات' : 'Enregistrer'}
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
               {/* Users table */}
               <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
                 <div className="overflow-x-auto">
@@ -2657,12 +2687,29 @@ export const AppNavigator = () => {
                             </span>
                           </td>
                           <td className="px-6 py-4 text-center">
-                            <div className="flex justify-center gap-2">
+                            <div className="flex flex-wrap justify-center gap-2">
+                              <button 
+                                onClick={() => handleStartEditUser(u)}
+                                className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-650 text-slate-700 dark:text-white px-2.5 py-1 rounded transition"
+                              >
+                                Modifier
+                              </button>
+                              <button 
+                                onClick={() => handleDeleteUser(u.id, u.role)}
+                                disabled={u.role === 'admin'}
+                                className={`px-2.5 py-1 rounded font-black transition ${
+                                  u.role === 'admin'
+                                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                                    : 'bg-rose-600 hover:bg-rose-700 text-white'
+                                }`}
+                              >
+                                {u.role === 'admin' ? (currentLang === 'AR' ? 'محمي' : 'Admin protégé') : (currentLang === 'AR' ? 'حذف' : 'Supprimer')}
+                              </button>
                               <button 
                                 onClick={() => handleToggleUserRole(u.id, u.role)}
                                 className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-650 text-slate-700 dark:text-white px-2.5 py-1 rounded transition"
                               >
-                                {u.role === 'admin' ? 'Rétrograder en Client' : 'Promouvoir Admin'}
+                                {u.role === 'admin' ? 'Rétrograder' : 'Promouvoir'}
                               </button>
                               <button 
                                 onClick={() => handleToggleUserStatus(u.id, u.status)}

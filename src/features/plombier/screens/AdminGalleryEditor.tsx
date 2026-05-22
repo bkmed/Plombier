@@ -85,86 +85,112 @@ const AdminGalleryEditor = () => {
   };
 
   return (
-    <div className="p-4 space-y-6">
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h3 className="font-black text-2xl">{editingItem ? 'Modifier une image' : 'Ajouter une image'} à la galerie</h3>
-          <p className="text-sm text-slate-500">Utilisez ce formulaire pour gérer le contenu de la galerie web.</p>
-        </div>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
-        {errorMessage && <div className="text-rose-700 bg-rose-100 border border-rose-200 rounded-xl px-4 py-3 text-sm">{errorMessage}</div>}
-        {statusMessage && <div className="text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-xl px-4 py-3 text-sm">{statusMessage}</div>}
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <input
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="Titre"
-            required
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-          />
-          <input
-            value={subtitle}
-            onChange={e => setSubtitle(e.target.value)}
-            placeholder="Sous-titre"
-            className="w-full px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-          />
-        </div>
-
-        <textarea
-          value={description}
-          onChange={e => setDescription(e.target.value)}
-          placeholder="Description"
-          className="w-full min-h-[120px] px-4 py-3 rounded-xl border border-slate-300 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-        />
-
-        <div>
-          <label className="block text-sm font-semibold mb-2">Image de la galerie</label>
-          <CategoryImageInput imageUri={imageUri || undefined} onImageSelected={setImageUri} />
-        </div>
-
-        <div className="flex flex-wrap gap-3 items-center">
-          <button
-            type="submit"
-            className="bg-[#F97316] text-white px-5 py-3 rounded-xl font-black hover:bg-[#e0630b] transition"
-          >
-            {editingItem ? 'Enregistrer les modifications' : 'Ajouter à la galerie'}
-          </button>
-          {editingItem && (
+    <div className="space-y-8">
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h3 className="font-black text-3xl">{editingItem ? 'Modifier une image' : 'Ajouter une image'} à la galerie</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Utilisez ce formulaire pour gérer les photos de la galerie, exactement comme pour l’ajout d’une annonce.</p>
+          </div>
+          <div className="flex gap-3 flex-wrap">
             <button
               type="button"
               onClick={resetForm}
-              className="bg-slate-100 text-slate-700 px-4 py-3 rounded-xl font-semibold hover:bg-slate-200 transition"
+              className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-4 py-2 rounded-2xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition"
             >
-              Annuler
+              Réinitialiser
             </button>
-          )}
+          </div>
         </div>
-      </form>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between gap-4">
-          <h4 className="text-xl font-black">Liste des images de la galerie</h4>
-          <span className="text-sm text-slate-500">{items.length} élément{items.length === 1 ? '' : 's'}</span>
+        <form onSubmit={handleSubmit} className="space-y-6 mt-8">
+          {errorMessage && <div className="text-rose-700 bg-rose-100 border border-rose-200 rounded-3xl px-4 py-3 text-sm">{errorMessage}</div>}
+          {statusMessage && <div className="text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-3xl px-4 py-3 text-sm">{statusMessage}</div>}
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <input
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              placeholder="Titre"
+              required
+              className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+            />
+            <input
+              value={subtitle}
+              onChange={e => setSubtitle(e.target.value)}
+              placeholder="Sous-titre"
+              className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+            />
+          </div>
+
+          <textarea
+            value={description}
+            onChange={e => setDescription(e.target.value)}
+            placeholder="Description"
+            className="w-full min-h-[140px] px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+          />
+
+          <div className="grid gap-4 md:grid-cols-[1.4fr_0.8fr] items-start">
+            <div>
+              <label className="block text-sm font-semibold mb-2">Image de la galerie</label>
+              <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
+                <CategoryImageInput imageUri={imageUri || undefined} onImageSelected={setImageUri} />
+              </div>
+            </div>
+            <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 text-sm text-slate-500 dark:text-slate-400">
+              <p className="font-black text-sm mb-2">Conseil :</p>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>Choisissez une image claire et représentative.</li>
+                <li>Ajoutez un titre court et un sous-titre pertinent.</li>
+                <li>La description aide vos clients à comprendre la réalisation.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3 items-center">
+            <button
+              type="submit"
+              className="bg-[#F97316] text-white px-6 py-3 rounded-3xl font-black hover:bg-[#e0630b] transition"
+            >
+              {editingItem ? 'Enregistrer les modifications' : 'Ajouter à la galerie'}
+            </button>
+            {editingItem && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 px-5 py-3 rounded-3xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+              >
+                Annuler
+              </button>
+            )}
+          </div>
+        </form>
+      </div>
+
+      <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
+          <div>
+            <h4 className="text-xl font-black">Liste des images de la galerie</h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">Gérez les visuels qui s’affichent sur la page Galerie.</p>
+          </div>
+          <span className="text-sm text-slate-500 dark:text-slate-400">{items.length} élément{items.length === 1 ? '' : 's'}</span>
         </div>
 
         {items.length === 0 ? (
-          <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-6 py-8 text-center text-sm text-slate-500">
+          <div className="rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">
             Aucune image ajoutée pour le moment.
           </div>
         ) : (
           <div className="grid gap-4">
             {items.map(item => (
-              <div key={item.id} className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 bg-white p-4 shadow-sm">
-                <div className="overflow-hidden rounded-3xl bg-slate-100">
+              <div key={item.id} className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 shadow-sm">
+                <div className="overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800 h-full">
                   <img src={item.imageUri} alt={item.title} className="h-full w-full object-cover" />
                 </div>
                 <div className="space-y-2">
-                  <div className="font-black text-slate-900">{item.title}</div>
-                  {item.subtitle ? <div className="text-sm text-slate-500">{item.subtitle}</div> : null}
-                  {item.description ? <div className="text-sm text-slate-600">{item.description}</div> : null}
+                  <div className="font-black text-slate-900 dark:text-slate-100">{item.title}</div>
+                  {item.subtitle ? <div className="text-sm text-slate-500 dark:text-slate-400">{item.subtitle}</div> : null}
+                  {item.description ? <div className="text-sm text-slate-600 dark:text-slate-300">{item.description}</div> : null}
                   <div className="text-[11px] text-slate-400">Mis à jour le {new Date(item.updatedAt || item.createdAt).toLocaleDateString()}</div>
                 </div>
                 <div className="flex flex-col gap-2 justify-between">

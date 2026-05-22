@@ -21,7 +21,7 @@ const coverageCities = [
 ];
 
 const ZonesScreen = ({ currentLang, t, supportWhatsAppDigits, supportWhatsAppNumber }: ZonesScreenProps) => {
-  const toast = useToast();
+  const { showToast } = useToast();
   const [selectedGovernorat, setSelectedGovernorat] = useState<string | null>('Grand Tunis');
   const [interventionName, setInterventionName] = useState('');
   const [interventionPhone, setInterventionPhone] = useState('');
@@ -32,11 +32,11 @@ const ZonesScreen = ({ currentLang, t, supportWhatsAppDigits, supportWhatsAppNum
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!interventionName || !interventionPhone) {
-      toast(currentLang === 'AR' ? 'الرجاء ملء الاسم والهاتف' : 'Nom et téléphone requis.', 'error');
+      showToast(currentLang === 'AR' ? 'الرجاء ملء الاسم والهاتف' : 'Nom et téléphone requis.', 'error');
       return;
     }
 
-    toast(
+    showToast(
       currentLang === 'AR'
         ? 'تم تسجيل طلبك بنجاح ! سيتصل بك الفني الآن.'
         : 'Demande urgente enregistrée ! Un technicien vous appelle sous 10 min.',

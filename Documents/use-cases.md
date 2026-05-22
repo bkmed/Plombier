@@ -1,4 +1,4 @@
-# Plombier Wallet - Use Cases
+# Plombier  - Use Cases
 
 ## UC-01 - Se connecter
 

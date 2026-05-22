@@ -25,6 +25,7 @@ import categoriesReducer from './slices/categoriesSlice';
 import partsReducer from './slices/partsSlice';
 import plombierSettingsReducer from './slices/plombierSettingsSlice';
 import galleryReducer from './slices/gallerySlice';
+import uiReducer from './slices/uiSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   parts: partsReducer,
   gallery: galleryReducer,
   plombierSettings: plombierSettingsReducer,
+  ui: uiReducer,
 });
 
 const persistConfig = {
@@ -59,6 +61,7 @@ const persistConfig = {
     'parts',
     'gallery',
     'plombierSettings',
+    'ui',
   ], // add slices here to persist
 };
 

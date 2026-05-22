@@ -1,8 +1,8 @@
-# Cahier des Charges - Plombier Tunisie / Wallet
+# Cahier des Charges - Plombier Tunisie 
 
 ## 1. Contexte
 
-Plombier Tunisie / Wallet est une application cross-platform React Native + React Native Web. Elle couvre deux surfaces produit: vitrine/marketplace plomberie et wallet personnel.
+Plombier Tunisie  est une application cross-platform React Native + React Native Web. Elle couvre deux surfaces produit: vitrine/marketplace plomberie et wallet personnel.
 
 Le projet conserve une seule base de code afin de reduire les couts de maintenance et garantir une experience coherente sur web, iOS et Android. Le web actuel est visuellement valide mais doit etre extrait du fichier monolithique `AppNavigator.web.tsx` vers des composants partages.
 
