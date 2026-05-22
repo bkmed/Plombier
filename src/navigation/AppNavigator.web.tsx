@@ -111,7 +111,7 @@ const translations = {
     services: "Services",
     zones: "Zone d'intervention",
     pieces: "Pièces d'occasion",
-    mon_profil: "Profil",
+    mon_profil: "Mon profil",
     paiement: "Paiement",
     admin: "Admin",
     tagline: "Plomberie · Climatisation · Gaz · Chauffage",
@@ -561,7 +561,6 @@ export const AppNavigator = () => {
   const [editingCategory, setEditingCategory] = useState<LocalCategory | null>(null);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [categoryErrorMessage, setCategoryErrorMessage] = useState<string | null>(null);
-  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   // Admin user edit state
   const [editingUser, setEditingUser] = useState<UserAccount | null>(null);
@@ -904,7 +903,6 @@ export const AppNavigator = () => {
     showToast(translate('web.autoText23', { defaultValue: currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !' }), 'success');
     setNewCategoryName('');
     setNewCategoryImage(null);
-    closeCategoryModal();
   };
 
   const handleRenameCategory = (e: React.FormEvent) => {
@@ -926,7 +924,6 @@ export const AppNavigator = () => {
     setEditingCategory(null);
     setEditCategoryName('');
     setNewCategoryImage(null);
-    closeCategoryModal();
   };
 
   const handleDeleteCategory = (id: string, name: string) => {
@@ -936,28 +933,7 @@ export const AppNavigator = () => {
     }
   };
 
-  const openCategoryModal = (category?: LocalCategory) => {
-    if (category) {
-      setEditingCategory(category);
-      setEditCategoryName(category.name);
-      setNewCategoryImage(category.imageUri || null);
-    } else {
-      setEditingCategory(null);
-      setEditCategoryName('');
-      setNewCategoryImage(null);
-    }
-    setCategoryErrorMessage(null);
-    setShowCategoryModal(true);
-  };
-
-  const closeCategoryModal = () => {
-    setShowCategoryModal(false);
-    setEditingCategory(null);
-    setCategoryErrorMessage(null);
-    setNewCategoryImage(null);
-    setNewCategoryName('');
-    setEditCategoryName('');
-  };
+  // Inline category add/edit handled via `editingCategory`, `newCategoryName`, `editCategoryName`, and image state.
 
   // Admin User status toggles
   const handleToggleUserRole = (userId: string, currentVal: string) => {
@@ -1576,8 +1552,7 @@ export const AppNavigator = () => {
                   { id: 'Zones', label: t.zones },
                   { id: 'Marketplace', label: t.pieces },
                   { id: 'Gallery', label: galleryTitle },
-                  { id: 'Profile', label: t.mon_profil },
-                  { id: 'Payment', label: t.paiement }
+                  { id: 'Profile', label: t.mon_profil }
                 ].map(link => (
                   <button 
                     key={link.id}
@@ -1688,8 +1663,7 @@ export const AppNavigator = () => {
                 { id: 'Zones', label: t.zones },
                 { id: 'Marketplace', label: t.pieces },
                 { id: 'Gallery', label: galleryTitle },
-                { id: 'Profile', label: t.mon_profil },
-                { id: 'Payment', label: t.paiement }
+                { id: 'Profile', label: t.mon_profil }
               ].map(link => (
                 <button
                   key={link.id}
@@ -2121,6 +2095,42 @@ export const AppNavigator = () => {
                         </form>
                       </div>
 
+                      {/* Payment maintenance card (moved into Profile) */}
+                      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
+                        <span className="bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-extrabold text-[9px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
+                          {t.maintenance}
+                        </span>
+
+                        <h3 className="text-lg font-black text-slate-850 dark:text-slate-100">{t.bientot_dispo}</h3>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-semibold">
+                          {t.maintenance_desc}
+                        </p>
+
+                        <div className="space-y-3 pt-4 max-w-full">
+                          <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                            <span>{t.progression}</span>
+                            <span className="text-[#F97316]">85%</span>
+                          </div>
+                          <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                            <div className="h-full bg-gradient-to-r from-[#1E3A5F] to-[#F97316] rounded-full" style={{ width: '85%' }} />
+                          </div>
+                          <p className="text-[9px] text-slate-450 dark:text-slate-500 font-bold uppercase tracking-wide">Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.</p>
+                        </div>
+
+                        <div className="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4">
+                          <h4 className="text-[10px] font-bold text-slate-450 uppercase tracking-widest text-center">{currentLang === 'AR' ? 'أعلمني عند الإطلاق' : "M'avertir lors de la mise en service"}</h4>
+                          <form onSubmit={(e) => {
+                            e.preventDefault();
+                            if (!newsletterEmail) return;
+                            showToast(currentLang === 'AR' ? 'شكراً ! سيتم إعلامك بالبريد الإلكتروني.' : 'Merci ! Vous recevrez une alerte prioritaire.', 'success');
+                            setNewsletterEmail('');
+                          }} className="mt-3 flex gap-2">
+                            <input type="email" required placeholder="votre.email@domaine.tn" value={newsletterEmail} onChange={(e) => setNewsletterEmail(e.target.value)} className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none" />
+                            <button type="submit" className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4 py-3 rounded-xl transition">{t.avertir}</button>
+                          </form>
+                        </div>
+                      </div>
+
                     </div>
 
                     {/* Right Favorites grid (lg:col-span-8) */}
@@ -2277,74 +2287,7 @@ export const AppNavigator = () => {
                   <button onClick={() => setActiveTab('Politique')} className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316] hover:text-[#1E3A5F] transition">{t.politique}</button>
                 </div>
 
-      {showCategoryModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-md w-full shadow-2xl overflow-hidden relative">
-            <button
-              onClick={closeCategoryModal}
-              className="absolute top-4 right-4 z-10 w-8.5 h-8.5 rounded-full bg-slate-100 dark:bg-slate-750 text-slate-500 hover:text-slate-850 dark:hover:text-slate-100 flex items-center justify-center font-bold"
-            >
-              ✕
-            </button>
-
-            <div className="p-6 sm:p-8 space-y-6">
-              <h2 className="text-xl font-black text-slate-850 dark:text-white">
-                {editingCategory
-                  ? (currentLang === 'AR' ? 'تعديل الصنف' : 'Modifier la catégorie')
-                  : (currentLang === 'AR' ? 'إضافة صنف جديد' : 'Créer une catégorie')}
-              </h2>
-
-              {categoryErrorMessage && (
-                <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                  {categoryErrorMessage}
-                </div>
-              )}
-
-              <form
-                onSubmit={editingCategory ? handleRenameCategory : handleAddCategory}
-                className="space-y-4 text-xs font-semibold"
-              >
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    {currentLang === 'AR' ? 'اسم الصنف' : 'Nom de la catégorie'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder={currentLang === 'AR' ? 'مثال: مضخات الماء' : 'Ex: Pompes et Accessoires'}
-                    value={editingCategory ? editCategoryName : newCategoryName}
-                    onChange={(e) => editingCategory ? setEditCategoryName(e.target.value) : setNewCategoryName(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-[#F97316]"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                    {currentLang === 'AR' ? 'صورة الصنف (اختياري)' : 'Image de catégorie (optionnel)'}
-                  </label>
-                  <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
-                </div>
-
-                <div className="flex flex-wrap gap-3 justify-end">
-                  <button
-                    type="button"
-                    onClick={closeCategoryModal}
-                    className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-200 text-xs font-black px-5 py-3 rounded-xl transition"
-                  >
-                    {currentLang === 'AR' ? 'إلغاء' : 'Annuler'}
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-5 py-3 rounded-xl transition"
-                  >
-                    {editingCategory ? (currentLang === 'AR' ? 'حفظ التغييرات' : 'Enregistrer') : (currentLang === 'AR' ? 'إضافة الصنف' : 'Ajouter')}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* category modal removed — forms are inline now */}
               </div>
             </div>
           )}
@@ -2385,95 +2328,7 @@ export const AppNavigator = () => {
             </div>
           )}
 
-          {/* ------------------------------------------
-              USER TAB 6: PAIEMENT (SOON / INTEGRATION PAGE)
-              ------------------------------------------ */}
-          {activeTab === 'Payment' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
-              <div className="max-w-3xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] p-8 sm:p-12 shadow-sm space-y-8 text-center relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#1E3A5F] via-[#F97316] to-[#1E3A5F]" />
-                
-                <span className="bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-extrabold text-[9px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-                  {t.maintenance}
-                </span>
-
-                <h1 className="text-3xl font-black text-slate-850 dark:text-slate-100 mt-4">
-                  {t.bientot_dispo}
-                </h1>
-                
-                <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-semibold">
-                  {t.maintenance_desc}
-                </p>
-
-                {/* Premium Integration Progress Bar */}
-                <div className="space-y-3 pt-6 max-w-md mx-auto">
-                  <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <span>{t.progression}</span>
-                    <span className="text-[#F97316]">85%</span>
-                  </div>
-                  <div className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-[#1E3A5F] to-[#F97316] rounded-full" 
-                      style={{ width: '85%' }}
-                    />
-                  </div>
-                  <p className="text-[9px] text-slate-450 dark:text-slate-500 font-bold uppercase tracking-wide">
-                    Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.
-                  </p>
-                </div>
-
-                {/* Newsletter alert form */}
-                <div className="border-t border-slate-100 dark:border-slate-700 pt-8 mt-8 space-y-4 max-w-md mx-auto">
-                  <h4 className="text-[10px] font-bold text-slate-450 uppercase tracking-widest text-center">
-                    M'avertir lors de la mise en service
-                  </h4>
-                  <form 
-                    onSubmit={(e) => {
-                      e.preventDefault();
-                      if (!newsletterEmail) return;
-                      showToast(currentLang === 'AR' ? 'شكراً ! سيتم إعلامك بالبريد الإلكتروني.' : 'Merci ! Vous recevrez une alerte prioritaire.', 'success');
-                      setNewsletterEmail('');
-                    }}
-                    className="flex gap-2.5"
-                  >
-                    <input 
-                      type="email"
-                      required
-                      placeholder="votre.email@domaine.tn"
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
-                    />
-                    <button 
-                      type="submit"
-                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-md"
-                    >
-                      {t.avertir}
-                    </button>
-                  </form>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto pt-6 border-t border-slate-100 dark:border-slate-700">
-                  <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl text-center border border-slate-200 dark:border-slate-800">
-                    <span className="text-xl block mb-2">🔒</span>
-                    <span className="text-[8.5px] font-black uppercase text-slate-500 dark:text-slate-400">Cryptage SSL 256 bits</span>
-                  </div>
-                  <div className="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl text-center border border-slate-200 dark:border-slate-800">
-                    <span className="text-xl block mb-2">🚚</span>
-                    <span className="text-[8.5px] font-black uppercase text-slate-500 dark:text-slate-400">Livraison express 24h</span>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={() => setActiveTab('Accueil')}
-                  className="text-xs font-black text-slate-400 hover:text-slate-650 inline-flex items-center gap-1.5 pt-4"
-                >
-                  <span>{isRTL ? '→' : '←'}</span>
-                  <span>{t.retour_accueil}</span>
-                </button>
-              </div>
-            </div>
-          )}
+          {/* Payment tab removed — functionality folded into Profile maintenance card */}
 
           {/* ------------------------------------------
               ADMIN TAB 1: ACCUEIL (DASHBOARD METRICS)
@@ -2639,20 +2494,60 @@ export const AppNavigator = () => {
                     {categoryErrorMessage}
                   </div>
                 )}
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <p className="text-sm text-slate-500 dark:text-slate-400">
-                    {currentLang === 'AR'
-                      ? 'استخدم الزر أدناه لإضافة صنف جديد أو انقر على تعديل لفتح النموذج داخل مربع حوار.'
-                      : 'Use the button below to add a new category, or click edit to open the modal form.'}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => openCategoryModal()}
-                    className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
-                  >
-                    {currentLang === 'AR' ? '+ إضافة صنف' : '+ Ajouter une catégorie'}
-                  </button>
-                </div>
+                {editingCategory ? (
+                  <form onSubmit={handleRenameCategory} className="grid gap-3 md:grid-cols-[1.7fr_1fr] items-end">
+                    <div className="space-y-3">
+                      <input 
+                        type="text"
+                        required
+                        placeholder="Nouveau nom..."
+                        value={editCategoryName}
+                        onChange={(e) => setEditCategoryName(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
+                      />
+                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
+                    </div>
+                    <div className="flex flex-wrap gap-3 justify-end">
+                      <button 
+                        type="submit"
+                        className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition"
+                      >
+                        Enregistrer
+                      </button>
+                      <button 
+                        type="button"
+                        onClick={() => {
+                          setEditingCategory(null);
+                          setNewCategoryImage(null);
+                          setCategoryErrorMessage(null);
+                        }}
+                        className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-4 py-3 rounded-xl transition"
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <form onSubmit={handleAddCategory} className="flex items-center gap-3">
+                    <input 
+                      type="text"
+                      required
+                      placeholder="Ex: Pompes et Accessoires..."
+                      value={newCategoryName}
+                      onChange={(e) => setNewCategoryName(e.target.value)}
+                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
+                    />
+                    <div>
+                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
+                    </div>
+                    <button 
+                      type="submit"
+                      className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
+                    >
+                      + Ajouter
+                    </button>
+                  </form>
+                )}
               </div>
 
               {/* Categories list table */}
@@ -2685,7 +2580,10 @@ export const AppNavigator = () => {
                             <div className="flex justify-center gap-2">
                               <button 
                                 onClick={() => {
-                                  openCategoryModal(cat);
+                                  setEditingCategory(cat);
+                                  setEditCategoryName(cat.name);
+                                  setNewCategoryImage(cat.imageUri || null);
+                                  setCategoryErrorMessage(null);
                                 }}
                                 className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
                               >
