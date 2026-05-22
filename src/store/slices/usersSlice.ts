@@ -12,7 +12,7 @@ const initialState: UsersState = {
     {
       id: 'admin1',
       name: 'Admin User',
-      email: 'admin@stouchy.com',
+      email: 'admin@demo.com',
       role: 'admin',
       status: 'active',
       createdAt: new Date().toISOString(),
@@ -21,7 +21,7 @@ const initialState: UsersState = {
     {
       id: 'user1',
       name: 'Regular User',
-      email: 'user@stouchy.com',
+      email: 'user@demo.com',
       role: 'user',
       status: 'active',
       createdAt: new Date().toISOString(),

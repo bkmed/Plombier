@@ -79,8 +79,8 @@ npm run lint
 
 | Role | Email | Password |
 | :--- | :--- | :--- |
-| Admin | `admin@stouchy.com` | `admin123` |
-| User | `user@stouchy.com` | `user123` |
+| Admin | `admin@demo.com` | `admin123` |
+| User | `user@demo.com` | `user123` |
 
 ## License
 

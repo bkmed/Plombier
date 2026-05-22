@@ -514,9 +514,12 @@ export const AppNavigator = () => {
   // Admin tabs: 'AdminAccueil' | 'GestionAnnonce' | 'GestionCategorie' | 'GestionUser' | 'AdminProfile' | 'Analytics'
 
   // Auth Forms
-  const [authTab, setAuthTab] = useState<'signin' | 'signup'>('signin');
+  const [authTab, setAuthTab] = useState<'signin' | 'signup' | 'forgot'>('signin');
   const [signinEmail, setSigninEmail] = useState('');
   const [signinPassword, setSigninPassword] = useState('');
+
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotStatusMessage, setForgotStatusMessage] = useState<string | null>(null);
 
   const [signupName, setSignupName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
@@ -558,6 +561,7 @@ export const AppNavigator = () => {
   const [editingCategory, setEditingCategory] = useState<LocalCategory | null>(null);
   const [editCategoryName, setEditCategoryName] = useState('');
   const [categoryErrorMessage, setCategoryErrorMessage] = useState<string | null>(null);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
 
   // Admin user edit state
   const [editingUser, setEditingUser] = useState<UserAccount | null>(null);
@@ -628,6 +632,8 @@ export const AppNavigator = () => {
     if (!authUser) {
       setSessionUser(null);
       setCurrentRole('anonyme');
+      setBypassAuth(true);
+      setActiveTab('Accueil');
       return;
     }
 
@@ -676,22 +682,45 @@ export const AppNavigator = () => {
   // Sign In submit handler
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (authTab === 'forgot') {
+      const email = forgotEmail.trim().toLowerCase();
+      if (!email) {
+        showToast(translate('web.autoText5', { defaultValue: currentLang === 'AR' ? 'الرجاء إدخال البريد الإلكتروني' : 'Veuillez saisir votre email' }), 'error');
+        return;
+      }
+
+      const knownEmails = ['admin@demo.com', 'user@demo.com'];
+      const foundUser = usersList.some(u => u.email.toLowerCase() === email) || knownEmails.includes(email);
+      setForgotStatusMessage(currentLang === 'AR'
+        ? 'إذا كان هذا البريد مسجلاً، تم إرسال تعليمات إعادة تعيين كلمة المرور.'
+        : 'Si ce compte existe, un lien de réinitialisation a été envoyé.');
+
+      if (foundUser) {
+        showToast(currentLang === 'AR' ? 'تم إرسال رابط إعادة التعيين إلى بريدك.' : 'Un email de réinitialisation a été envoyé.', 'success');
+      } else {
+        showToast(currentLang === 'AR' ? 'إذا كان هذا البريد مسجلاً، فسيتم إرسال تعليمات.' : 'Si le compte existe, vous recevrez un email.', 'info');
+      }
+      setAuthTab('signin');
+      setForgotEmail('');
+      return;
+    }
+
     if (!signinEmail || !signinPassword) {
       showToast(translate('web.autoText5', { defaultValue: currentLang === 'AR' ? 'الرجاء إدخال البريد الإلكتروني وكلمة المرور' : 'Veuillez remplir tous les champs' }), 'error');
       return;
     }
 
     // Demo Admin Check
-    if (signinEmail.toLowerCase() === 'admin@stouchy.com' && signinPassword === 'admin123') {
-      const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
+    if (signinEmail.toLowerCase() === 'admin@demo.com' && signinPassword === 'admin123') {
+      const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@demo.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
       await startWebSession(adminSession, 'AdminAccueil');
       showToast(translate('web.autoText6', { defaultValue: currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !' }), 'success');
       return;
     }
 
     // Demo User Check
-    if (signinEmail.toLowerCase() === 'user@stouchy.com' && signinPassword === 'user123') {
-      const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
+    if (signinEmail.toLowerCase() === 'user@demo.com' && signinPassword === 'user123') {
+      const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@demo.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
       await startWebSession(userSession, 'Accueil');
       showToast(translate('web.autoText7', { defaultValue: currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !' }), 'success');
       return;
@@ -875,6 +904,7 @@ export const AppNavigator = () => {
     showToast(translate('web.autoText23', { defaultValue: currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !' }), 'success');
     setNewCategoryName('');
     setNewCategoryImage(null);
+    closeCategoryModal();
   };
 
   const handleRenameCategory = (e: React.FormEvent) => {
@@ -896,6 +926,7 @@ export const AppNavigator = () => {
     setEditingCategory(null);
     setEditCategoryName('');
     setNewCategoryImage(null);
+    closeCategoryModal();
   };
 
   const handleDeleteCategory = (id: string, name: string) => {
@@ -903,6 +934,29 @@ export const AppNavigator = () => {
       dispatch(deleteCategory(id));
       showToast(translate('web.autoText27', { defaultValue: currentLang === 'AR' ? 'تم حذف الصنف' : 'Catégorie supprimée !' }), 'info');
     }
+  };
+
+  const openCategoryModal = (category?: LocalCategory) => {
+    if (category) {
+      setEditingCategory(category);
+      setEditCategoryName(category.name);
+      setNewCategoryImage(category.imageUri || null);
+    } else {
+      setEditingCategory(null);
+      setEditCategoryName('');
+      setNewCategoryImage(null);
+    }
+    setCategoryErrorMessage(null);
+    setShowCategoryModal(true);
+  };
+
+  const closeCategoryModal = () => {
+    setShowCategoryModal(false);
+    setEditingCategory(null);
+    setCategoryErrorMessage(null);
+    setNewCategoryImage(null);
+    setNewCategoryName('');
+    setEditCategoryName('');
   };
 
   // Admin User status toggles
@@ -1145,14 +1199,14 @@ export const AppNavigator = () => {
                   <LogoSVG size={56} />
                 </div>
                 <h3 className="text-2xl font-black text-slate-950 dark:text-white">
-                  {authTab === 'signin' 
-                    ? tCommon('web.signinTitle', translate('web.autoText31', { defaultValue: currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion' })) 
-                    : tCommon('web.signupTitle', translate('web.autoText32', { defaultValue: currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Inscription' }))}
+                  {authTab === 'signin' && tCommon('web.signinTitle', translate('web.autoText31', { defaultValue: currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion' }))}
+                  {authTab === 'signup' && tCommon('web.signupTitle', translate('web.autoText32', { defaultValue: currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Inscription' }))}
+                  {authTab === 'forgot' && (currentLang === 'AR' ? 'نسيت كلمة المرور' : 'Mot de passe oublié')}
                 </h3>
                 <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 font-semibold">
-                  {authTab === 'signin'
-                    ? tCommon('web.signinSubtitle', translate('web.autoText33', { defaultValue: currentLang === 'AR' ? 'سجل دخولك للوصول إلى حسابك الفاخر' : 'Connectez-vous pour accéder à votre espace premium.' }))
-                    : tCommon('web.signupSubtitle', translate('web.autoText34', { defaultValue: currentLang === 'AR' ? 'قم بإنشاء حسابك المجاني في ثوانٍ معدودة' : 'Créez votre compte client gratuit en quelques secondes.' }))}
+                  {authTab === 'signin' && tCommon('web.signinSubtitle', translate('web.autoText33', { defaultValue: currentLang === 'AR' ? 'سجل دخولك للوصول إلى حسابك الفاخر' : 'Connectez-vous pour accéder à votre espace premium.' }))}
+                  {authTab === 'signup' && tCommon('web.signupSubtitle', translate('web.autoText34', { defaultValue: currentLang === 'AR' ? 'قم بإنشاء حسابك المجاني في ثوانٍ معدودة' : 'Créez votre compte client gratuit en quelques secondes.' }))}
+                  {authTab === 'forgot' && (currentLang === 'AR' ? 'أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور.' : 'Entrez votre email pour recevoir les instructions de réinitialisation.')}
                 </p>
               </div>
 
@@ -1186,6 +1240,20 @@ export const AppNavigator = () => {
                       className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] text-left transition-colors"
                     />
                   </div>
+                  <div className="flex justify-between items-center text-xs text-slate-500 dark:text-slate-400 font-bold">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthTab('forgot');
+                        setForgotEmail(signinEmail);
+                        setForgotStatusMessage(null);
+                      }}
+                      className="text-[#F97316] hover:underline bg-transparent border-0 p-0 cursor-pointer"
+                    >
+                      {currentLang === 'AR' ? 'هل نسيت كلمة المرور؟' : 'Forgot Password?'}
+                    </button>
+                    <span className="text-[10px]">{currentLang === 'AR' ? 'تسجيل آمن' : 'Secure login'}</span>
+                  </div>
 
                   <button 
                     type="submit"
@@ -1203,11 +1271,11 @@ export const AppNavigator = () => {
                       <button 
                         type="button"
                         onClick={() => {
-                          setSigninEmail('user@stouchy.com');
+                          setSigninEmail('user@demo.com');
                           setSigninPassword('user123');
                           showToast(tCommon('web.signingIn', translate('web.autoText39', { defaultValue: currentLang === 'AR' ? 'جاري تسجيل الدخول...' : 'Connexion en cours...' })), "info");
                           setTimeout(() => {
-                            const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@stouchy.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
+                            const userSession: WebSessionUser = { id: 'user-web-demo', name: 'Ahmed Ben Ali', email: 'user@demo.com', role: 'user', phone: '+216 22 456 789', status: 'active', addresses: ['Ariana'], city: 'Ariana' };
                             startWebSession(userSession, 'Accueil');
                             showToast(translate('web.autoText40', { defaultValue: currentLang === 'AR' ? 'مرحباً بك أحمد بن علي' : 'Ravi de vous revoir, Ahmed Ben Ali !' }), 'success');
                           }, 250);
@@ -1219,11 +1287,11 @@ export const AppNavigator = () => {
                       <button 
                         type="button"
                         onClick={() => {
-                          setSigninEmail('admin@stouchy.com');
+                          setSigninEmail('admin@demo.com');
                           setSigninPassword('admin123');
                           showToast(tCommon('web.signingIn', translate('web.autoText41', { defaultValue: currentLang === 'AR' ? 'جاري تسجيل الدخول...' : 'Connexion en cours...' })), "info");
                           setTimeout(() => {
-                            const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
+                            const adminSession: WebSessionUser = { id: 'admin-web-demo', name: 'Admin Plombier', email: 'admin@demo.com', role: 'admin', phone: '+216 22 000 111', status: 'active', addresses: ['Tunis'], city: 'Tunis' };
                             startWebSession(adminSession, 'AdminAccueil');
                             showToast(translate('web.autoText42', { defaultValue: currentLang === 'AR' ? 'مرحباً بك حضرة المدير' : 'Bienvenue dans votre espace d\'administration !' }), 'success');
                           }, 250);
@@ -1251,6 +1319,50 @@ export const AppNavigator = () => {
                         {translate('web.autoText44', { defaultValue: currentLang === 'AR' ? 'أنشئ حساباً جديداً' : 'Créer un compte' })}
                       </button>
                     </p>
+                  </div>
+                </form>
+              )}
+
+              {authTab === 'forgot' && (
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
+                      {tCommon('web.emailLabel', translate('web.autoText35', { defaultValue: currentLang === 'AR' ? 'البريد الإلكتروني' : 'Adresse Email' }))}
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="exemple@email.com"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-4 py-3 text-xs font-semibold text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-650 focus:outline-none focus:border-[#F97316] text-left transition-colors"
+                    />
+                  </div>
+
+                  {forgotStatusMessage && (
+                    <div className="rounded-3xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                      {forgotStatusMessage}
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
+                  >
+                    {currentLang === 'AR' ? 'إرسال رابط إعادة التعيين' : 'Send reset link'}
+                  </button>
+
+                  <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAuthTab('signin');
+                        setForgotStatusMessage(null);
+                      }}
+                      className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
+                    >
+                      {currentLang === 'AR' ? 'العودة إلى تسجيل الدخول' : 'Back to sign in'}
+                    </button>
                   </div>
                 </form>
               )}
@@ -2164,6 +2276,75 @@ export const AppNavigator = () => {
                   <button onClick={() => setActiveTab('Informations')} className="text-xs font-black uppercase tracking-[0.25em] text-[#1E3A5F] hover:text-[#F97316] transition">{t.retour_accueil}</button>
                   <button onClick={() => setActiveTab('Politique')} className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316] hover:text-[#1E3A5F] transition">{t.politique}</button>
                 </div>
+
+      {showCategoryModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-md w-full shadow-2xl overflow-hidden relative">
+            <button
+              onClick={closeCategoryModal}
+              className="absolute top-4 right-4 z-10 w-8.5 h-8.5 rounded-full bg-slate-100 dark:bg-slate-750 text-slate-500 hover:text-slate-850 dark:hover:text-slate-100 flex items-center justify-center font-bold"
+            >
+              ✕
+            </button>
+
+            <div className="p-6 sm:p-8 space-y-6">
+              <h2 className="text-xl font-black text-slate-850 dark:text-white">
+                {editingCategory
+                  ? (currentLang === 'AR' ? 'تعديل الصنف' : 'Modifier la catégorie')
+                  : (currentLang === 'AR' ? 'إضافة صنف جديد' : 'Créer une catégorie')}
+              </h2>
+
+              {categoryErrorMessage && (
+                <div className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                  {categoryErrorMessage}
+                </div>
+              )}
+
+              <form
+                onSubmit={editingCategory ? handleRenameCategory : handleAddCategory}
+                className="space-y-4 text-xs font-semibold"
+              >
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    {currentLang === 'AR' ? 'اسم الصنف' : 'Nom de la catégorie'}
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={currentLang === 'AR' ? 'مثال: مضخات الماء' : 'Ex: Pompes et Accessoires'}
+                    value={editingCategory ? editCategoryName : newCategoryName}
+                    onChange={(e) => editingCategory ? setEditCategoryName(e.target.value) : setNewCategoryName(e.target.value)}
+                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-900 dark:text-white focus:outline-none focus:border-[#F97316]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    {currentLang === 'AR' ? 'صورة الصنف (اختياري)' : 'Image de catégorie (optionnel)'}
+                  </label>
+                  <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
+                </div>
+
+                <div className="flex flex-wrap gap-3 justify-end">
+                  <button
+                    type="button"
+                    onClick={closeCategoryModal}
+                    className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-200 text-xs font-black px-5 py-3 rounded-xl transition"
+                  >
+                    {currentLang === 'AR' ? 'إلغاء' : 'Annuler'}
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-5 py-3 rounded-xl transition"
+                  >
+                    {editingCategory ? (currentLang === 'AR' ? 'حفظ التغييرات' : 'Enregistrer') : (currentLang === 'AR' ? 'إضافة الصنف' : 'Ajouter')}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
               </div>
             </div>
           )}
@@ -2330,10 +2511,10 @@ export const AppNavigator = () => {
                 
                 <div className="space-y-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
                   {[
-                    { log: currentLang === 'AR' ? 'قام أحمد بن علي بطلب تدخل سريع بجهة أريانة.' : "Ahmed Ben Ali (user@stouchy.com) a sollicité une intervention plomberie d'urgence à Ariana.", time: "Il y a 5 minutes", badge: "Intervention", color: "bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400" },
+                    { log: currentLang === 'AR' ? 'قام أحمد بن علي بطلب تدخل سريع بجهة أريانة.' : "Ahmed Ben Ali (user@demo.com) a sollicité une intervention plomberie d'urgence à Ariana.", time: "Il y a 5 minutes", badge: "Intervention", color: "bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400" },
                     { log: currentLang === 'AR' ? 'تمت إضافة قطعة غيار جديدة : "مزيج مطبخ غروهي".' : "Nouvelle pièce ajoutée : Mélangeur Cuisine Grohe dans le catalogue.", time: "Il y a 20 minutes", badge: "Catalogue", color: "bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400" },
                     { log: currentLang === 'AR' ? 'تمت إضافة صنف جديد : "مضخات مياه".' : "Catégorie 'Pompes de circulation' créée par Admin.", time: "Il y a 2 heures", badge: "Catégorie", color: "bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400" },
-                    { log: currentLang === 'AR' ? 'تم تحديث دور المستخدم "user@stouchy.com" لرتبة عميل.' : "Statut réactivé pour le client user@stouchy.com.", time: "Il y a 1 jour", badge: "Utilisateur", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400" }
+                    { log: currentLang === 'AR' ? 'تم تحديث دور المستخدم "user@demo.com" لرتبة عميل.' : "Statut réactivé pour le client user@demo.com.", time: "Il y a 1 jour", badge: "Utilisateur", color: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400" }
                   ].map((l, idx) => (
                     <div key={idx} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-750 pb-3 last:border-b-0 last:pb-0">
                       <div className="flex items-center gap-3">
@@ -2458,61 +2639,20 @@ export const AppNavigator = () => {
                     {categoryErrorMessage}
                   </div>
                 )}
-
-                {editingCategory ? (
-                  <form onSubmit={handleRenameCategory} className="grid gap-3 md:grid-cols-[1.7fr_1fr] items-end">
-                    <div className="space-y-3">
-                      <input 
-                        type="text"
-                        required
-                        placeholder="Nouveau nom..."
-                        value={editCategoryName}
-                        onChange={(e) => setEditCategoryName(e.target.value)}
-                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
-                      />
-                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
-                    </div>
-                    <div className="flex flex-wrap gap-3 justify-end">
-                      <button 
-                        type="submit"
-                        className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3 rounded-xl transition"
-                      >
-                        Enregistrer
-                      </button>
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          setEditingCategory(null);
-                          setNewCategoryImage(null);
-                          setCategoryErrorMessage(null);
-                        }}
-                        className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-4 py-3 rounded-xl transition"
-                      >
-                        Annuler
-                      </button>
-                    </div>
-                  </form>
-                ) : (
-                  <form onSubmit={handleAddCategory} className="flex items-center gap-3">
-                    <input 
-                      type="text"
-                      required
-                      placeholder="Ex: Pompes et Accessoires..."
-                      value={newCategoryName}
-                      onChange={(e) => setNewCategoryName(e.target.value)}
-                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
-                    />
-                    <div>
-                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
-                    </div>
-                    <button 
-                      type="submit"
-                      className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
-                    >
-                      + Ajouter
-                    </button>
-                  </form>
-                )}
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
+                    {currentLang === 'AR'
+                      ? 'استخدم الزر أدناه لإضافة صنف جديد أو انقر على تعديل لفتح النموذج داخل مربع حوار.'
+                      : 'Use the button below to add a new category, or click edit to open the modal form.'}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => openCategoryModal()}
+                    className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
+                  >
+                    {currentLang === 'AR' ? '+ إضافة صنف' : '+ Ajouter une catégorie'}
+                  </button>
+                </div>
               </div>
 
               {/* Categories list table */}
@@ -2545,10 +2685,7 @@ export const AppNavigator = () => {
                             <div className="flex justify-center gap-2">
                               <button 
                                 onClick={() => {
-                                  setEditingCategory(cat);
-                                  setEditCategoryName(cat.name);
-                                  setNewCategoryImage(cat.imageUri || null);
-                                  setCategoryErrorMessage(null);
+                                  openCategoryModal(cat);
                                 }}
                                 className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
                               >
