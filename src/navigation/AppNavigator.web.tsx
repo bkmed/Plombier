@@ -194,6 +194,22 @@ const translations = {
     politique: "Politique de confidentialité",
     conditions_util: "Conditions d'utilisation",
     plan_site: "Plan du site",
+    informations_desc: "Retrouvez ici toutes les informations légales concernant l'utilisation de notre plateforme.",
+    privacy_intro: "La confidentialité de vos données est une priorité. Nous collectons uniquement les informations nécessaires pour livrer nos services et améliorer votre expérience.",
+    privacy_point_1: "Collecte minimale de données pour les interventions et les commandes.",
+    privacy_point_2: "Aucune revente de vos coordonnées à des tiers.",
+    privacy_point_3: "Chiffrement et hébergement sécurisé des données sensibles.",
+    terms_intro: "En utilisant ce site, vous acceptez nos conditions d'utilisation telles que décrites ci-dessous.",
+    terms_point_1: "Les services sont fournis selon les informations et disponibilités affichées.",
+    terms_point_2: "Tout contenu abusif ou frauduleux est interdit et peut entraîner une suspension.",
+    terms_point_3: "Nous nous réservons le droit de modifier les conditions à tout moment.",
+    sitemap_intro: "Accédez rapidement aux pages principales de Plombier Tunisie grâce à notre plan du site.",
+    sitemap_page_accueil: "Accueil",
+    sitemap_page_services: "Services",
+    sitemap_page_zones: "Zones d'intervention",
+    sitemap_page_pieces: "Pièces d'occasion",
+    sitemap_page_profil: "Profil",
+    sitemap_page_contact: "Contact & Support",
     boutique_acces: "Accéder au marketplace",
     filtres: "Filtres",
     toutes_categories: "Toutes les catégories",
@@ -297,6 +313,22 @@ const translations = {
     politique: "سياسة الخصوصية والأمان",
     conditions_util: "شروط الاستخدام العامة",
     plan_site: "خريطة الموقع التقنية",
+    informations_desc: "تجد هنا جميع المعلومات القانونية المتعلقة باستخدام منصتنا.",
+    privacy_intro: "نحن نحافظ على خصوصية بياناتك ونستخدم فقط المعلومات الضرورية لتقديم الخدمة وتحسين تجربتك.",
+    privacy_point_1: "جمع بيانات محدود فقط لطلبات التدخل والطلبات.",
+    privacy_point_2: "لا يتم بيع بياناتك الشخصية لأي طرف ثالث.",
+    privacy_point_3: "تشفير آمن وحفظ البيانات الحساسة في بيئة محمية.",
+    terms_intro: "باستخدام هذا الموقع، فإنك توافق على شروط الاستخدام الموضحة أدناه.",
+    terms_point_1: "الخدمات تُقدَّم وفق المعلومات والتوافر المعروض.",
+    terms_point_2: "يُمنع أي محتوى مسيء أو احتيالي وقد يؤدي إلى إيقاف الحساب.",
+    terms_point_3: "نحتفظ بحق تعديل الشروط في أي وقت.",
+    sitemap_intro: "انتقل سريعًا إلى الصفحات الرئيسية لموقع Plombier Tunisie من خلال خريطة الموقع.",
+    sitemap_page_accueil: "الصفحة الرئيسية",
+    sitemap_page_services: "الخدمات",
+    sitemap_page_zones: "مناطق الخدمة",
+    sitemap_page_pieces: "قطع الغيار",
+    sitemap_page_profil: "الملف الشخصي",
+    sitemap_page_contact: "التواصل والدعم",
     boutique_acces: "الذهاب إلى سوق قطع الغيار",
     filtres: "تصفية البحث",
     toutes_categories: "جميع الأصناف",
@@ -400,6 +432,22 @@ const translations = {
     politique: "Privacy Policy",
     conditions_util: "Terms of Service",
     plan_site: "Site Map",
+    informations_desc: "Find all the legal information here about how our platform operates and how we protect your data.",
+    privacy_intro: "Your privacy is a priority. We only collect the data needed to deliver our services and improve your experience.",
+    privacy_point_1: "Minimal data collection for service requests and orders.",
+    privacy_point_2: "We never sell your contact details to third parties.",
+    privacy_point_3: "Sensitive data is protected with encryption and secure storage.",
+    terms_intro: "By using this site, you agree to the following terms of service.",
+    terms_point_1: "Services are provided based on the displayed information and availability.",
+    terms_point_2: "Abusive or fraudulent content is prohibited and may result in suspension.",
+    terms_point_3: "We reserve the right to update these terms at any time.",
+    sitemap_intro: "Quickly access the main Plombier Tunisia pages via our site map.",
+    sitemap_page_accueil: "Home",
+    sitemap_page_services: "Services",
+    sitemap_page_zones: "Service Areas",
+    sitemap_page_pieces: "Used Parts",
+    sitemap_page_profil: "Profile",
+    sitemap_page_contact: "Contact & Support",
     boutique_acces: "Access Marketplace",
     filtres: "Filters",
     toutes_categories: "All Categories",
@@ -2529,6 +2577,122 @@ export const AppNavigator = () => {
           )}
 
           {/* ------------------------------------------
+              USER TAB 5.5: LEGAL INFORMATION & POLICY PAGES
+              ------------------------------------------ */}
+          {activeTab === 'Informations' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[32px] p-8 sm:p-12 shadow-sm">
+                <div className="space-y-4 text-center">
+                  <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">{t.informations}</span>
+                  <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-slate-100">{t.informations}</h1>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">{t.informations_desc}</p>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-3 mt-10">
+                  {[
+                    { id: 'Politique', label: t.politique, desc: t.privacy_intro },
+                    { id: 'Conditions', label: t.conditions_util, desc: t.terms_intro },
+                    { id: 'PlanSite', label: t.plan_site, desc: t.sitemap_intro }
+                  ].map(item => (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className="text-left bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 hover:border-[#F97316] transition"
+                    >
+                      <p className="text-xs uppercase font-black text-[#F97316]">{item.label}</p>
+                      <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{item.desc}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'Politique' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[32px] p-8 sm:p-12 shadow-sm space-y-8">
+                <div className="space-y-4">
+                  <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">{t.politique}</span>
+                  <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-slate-100">{t.politique}</h1>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">{t.privacy_intro}</p>
+                </div>
+
+                <ul className="grid gap-4 sm:grid-cols-3">
+                  {[t.privacy_point_1, t.privacy_point_2, t.privacy_point_3].map((point, idx) => (
+                    <li key={idx} className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-5 text-sm font-semibold text-slate-700 dark:text-slate-200">
+                      {point}
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex flex-wrap gap-3">
+                  <button onClick={() => setActiveTab('Informations')} className="text-xs font-black uppercase tracking-[0.25em] text-[#1E3A5F] hover:text-[#F97316] transition">{t.retour_accueil}</button>
+                  <button onClick={() => setActiveTab('PlanSite')} className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316] hover:text-[#1E3A5F] transition">{t.plan_site}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'Conditions' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[32px] p-8 sm:p-12 shadow-sm space-y-8">
+                <div className="space-y-4">
+                  <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">{t.conditions_util}</span>
+                  <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-slate-100">{t.conditions_util}</h1>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">{t.terms_intro}</p>
+                </div>
+
+                <ol className="list-decimal list-inside space-y-3 text-sm leading-6 text-slate-700 dark:text-slate-200 font-semibold">
+                  <li>{t.terms_point_1}</li>
+                  <li>{t.terms_point_2}</li>
+                  <li>{t.terms_point_3}</li>
+                </ol>
+
+                <div className="flex flex-wrap gap-3">
+                  <button onClick={() => setActiveTab('Informations')} className="text-xs font-black uppercase tracking-[0.25em] text-[#1E3A5F] hover:text-[#F97316] transition">{t.retour_accueil}</button>
+                  <button onClick={() => setActiveTab('Politique')} className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316] hover:text-[#1E3A5F] transition">{t.politique}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'PlanSite' && (
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+              <div className="max-w-4xl mx-auto bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[32px] p-8 sm:p-12 shadow-sm space-y-8">
+                <div className="space-y-4">
+                  <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">{t.plan_site}</span>
+                  <h1 className="text-3xl sm:text-4xl font-black text-slate-900 dark:text-slate-100">{t.plan_site}</h1>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">{t.sitemap_intro}</p>
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2 text-sm text-slate-700 dark:text-slate-200 font-semibold">
+                  {[
+                    { label: t.sitemap_page_accueil, tab: 'Accueil' },
+                    { label: t.sitemap_page_services, tab: 'Services' },
+                    { label: t.sitemap_page_zones, tab: 'Zones' },
+                    { label: t.sitemap_page_pieces, tab: 'Marketplace' },
+                    { label: t.sitemap_page_profil, tab: 'Profile' },
+                    { label: t.sitemap_page_contact, tab: 'Profile' }
+                  ].map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveTab(item.tab)}
+                      className="text-left rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4 hover:border-[#F97316] transition"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap gap-3">
+                  <button onClick={() => setActiveTab('Informations')} className="text-xs font-black uppercase tracking-[0.25em] text-[#1E3A5F] hover:text-[#F97316] transition">{t.retour_accueil}</button>
+                  <button onClick={() => setActiveTab('Conditions')} className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316] hover:text-[#1E3A5F] transition">{t.conditions_util}</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ------------------------------------------
               USER TAB 6: PAIEMENT (SOON / INTEGRATION PAGE)
               ------------------------------------------ */}
           {activeTab === 'Payment' && (
@@ -3448,9 +3612,10 @@ export const AppNavigator = () => {
                 {t.informations}
               </h4>
               <ul className="space-y-2 text-xs font-semibold">
-                <li><button onClick={() => showToast(t.politique, 'info')} className="hover:text-[#F97316] transition">{t.politique}</button></li>
-                <li><button onClick={() => showToast(t.conditions_util, 'info')} className="hover:text-[#F97316] transition">{t.conditions_util}</button></li>
-                <li><button onClick={() => showToast(t.plan_site, 'info')} className="hover:text-[#F97316] transition">{t.plan_site}</button></li>
+                <li><button onClick={() => setActiveTab('Informations')} className="hover:text-[#F97316] transition">{t.informations}</button></li>
+                <li><button onClick={() => setActiveTab('Politique')} className="hover:text-[#F97316] transition">{t.politique}</button></li>
+                <li><button onClick={() => setActiveTab('Conditions')} className="hover:text-[#F97316] transition">{t.conditions_util}</button></li>
+                <li><button onClick={() => setActiveTab('PlanSite')} className="hover:text-[#F97316] transition">{t.plan_site}</button></li>
               </ul>
             </div>
 

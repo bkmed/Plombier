@@ -15,7 +15,7 @@
 - Mettre a jour README et documents projet.
 
 ## A Faire / TODO
--ajouter ces pages :
+- ✅ ajouter ces pages :
     1-la Informations
     2-Politique de confidentialité
     3-Conditions d'utilisation
