@@ -22,6 +22,8 @@
     "manageCategories": "Kategorien verwalten",
     "viewAllOrders": "Alle Bestellungen anzeigen",
     "globalAnalytics": "Globale Analysen",
+    "admin_edit_email": "Admin-E-Mail bearbeiten",
+    "admin_edit_phone": "Support-WhatsApp bearbeiten",
     "purchases": {
       "title": "Einkaufsverwaltung",
       "total": "Gesamt",
@@ -41,6 +43,14 @@
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
     }
+  },
+  "webServices": {
+    "nos_services": "Unsere Services",
+    "nos_services_subtitle": "Einsatze fur Sanitar, Klima, Gas und Heizung fur zuverlassige Wohnungen das ganze Jahr.",
+    "voir_tout": "Alle anzeigen",
+    "services_title": "Services",
+    "services_subtitle": "Einsatze fur Sanitar, Klima, Gas und Heizung fur zuverlassige Wohnungen das ganze Jahr.",
+    "view_all": "Alle anzeigen"
   },
   "announcements": {
     "addAnnouncement": "Ankündigung hinzufügen",

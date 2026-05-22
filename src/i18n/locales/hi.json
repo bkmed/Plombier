@@ -22,6 +22,8 @@
     "manageCategories": "श्रेणियों का प्रबंधन करें",
     "viewAllOrders": "सभी ऑर्डर देखें",
     "globalAnalytics": "वैश्विक विश्लेषण",
+    "admin_edit_email": "एडमिन ईमेल संपादित करें",
+    "admin_edit_phone": "सपोर्ट WhatsApp संपादित करें",
     "purchases": {
       "title": "खरीद प्रबंधन",
       "total": "कुल",
@@ -41,6 +43,14 @@
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
     }
+  },
+  "webServices": {
+    "nos_services": "हमारी सेवाएं",
+    "nos_services_subtitle": "पूरे वर्ष भरोसेमंद घरों के लिए प्लंबिंग, एसी, गैस और हीटिंग सेवाएं।",
+    "voir_tout": "सभी देखें",
+    "services_title": "सेवाएं",
+    "services_subtitle": "पूरे वर्ष भरोसेमंद घरों के लिए प्लंबिंग, एसी, गैस और हीटिंग सेवाएं।",
+    "view_all": "सभी देखें"
   },
   "announcements": {
     "addAnnouncement": "घोषणा जोड़ें",

@@ -22,6 +22,8 @@
     "manageCategories": "管理类别",
     "viewAllOrders": "查看所有订单",
     "globalAnalytics": "全局分析",
+    "admin_edit_email": "编辑管理员邮箱",
+    "admin_edit_phone": "编辑支持 WhatsApp",
     "purchases": {
       "title": "采购管理",
       "total": "总计",
@@ -41,6 +43,14 @@
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
     }
+  },
+  "webServices": {
+    "nos_services": "我们的服务",
+    "nos_services_subtitle": "全年可靠的管道、空调、燃气和供暖服务。",
+    "voir_tout": "查看全部",
+    "services_title": "服务",
+    "services_subtitle": "全年可靠的管道、空调、燃气和供暖服务。",
+    "view_all": "查看全部"
   },
   "announcements": {
     "addAnnouncement": "添加公告",

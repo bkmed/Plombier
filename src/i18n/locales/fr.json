@@ -22,6 +22,8 @@
     "manageCategories": "Gérer les catégories",
     "viewAllOrders": "Voir toutes les commandes",
     "globalAnalytics": "Analyses globales",
+    "admin_edit_email": "Modifier l'e-mail admin",
+    "admin_edit_phone": "Modifier le WhatsApp support",
     "purchases": {
       "title": "Gestion des Achats",
       "total": "Total",
@@ -41,6 +43,14 @@
       "edit": "Modifier la réclamation",
       "actions": "Actions de réclamation"
     }
+  },
+  "webServices": {
+    "nos_services": "Nos Services",
+    "nos_services_subtitle": "Des interventions plomberie, climatisation, gaz et chauffage pensées pour des logements fiables toute l'année.",
+    "voir_tout": "Voir tout",
+    "services_title": "Nos Services",
+    "services_subtitle": "Des interventions plomberie, climatisation, gaz et chauffage pensées pour des logements fiables toute l'année.",
+    "view_all": "Voir tout"
   },
   "announcements": {
     "addAnnouncement": "Ajouter une annonce",

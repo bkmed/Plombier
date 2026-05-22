@@ -6,6 +6,8 @@ import { addCategory, updateCategory, deleteCategory } from '../store/slices/cat
 import { addUser, updateUser } from '../store/slices/usersSlice';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { ServiceIcon, ServiceIconName } from '../components/ServiceIcon';
+import { isValidEmail, isValidPhone } from '../utils/validation';
 
 // ==========================================
 // BRAND LOGO SVG
@@ -139,6 +141,20 @@ const translations = {
     plus_favoris: "Envie d'autres pièces ?",
     plus_favoris_desc: "Ajoutez un cœur à nos articles d'occasion pour les sauvegarder instantanément ici.",
     consulter: "Fiche technique",
+    nos_services: "Nos Services",
+    nos_services_subtitle: "Des interventions plomberie, climatisation, gaz et chauffage pensées pour des logements fiables toute l'année.",
+    voir_tout: "Voir tout",
+    services_title: "Nos Services",
+    services_subtitle: "Des interventions plomberie, climatisation, gaz et chauffage pensées pour des logements fiables toute l'année.",
+    view_all: "Voir tout",
+    admin_edit_email: "Modifier l'e-mail admin",
+    admin_edit_phone: "Modifier le WhatsApp support",
+    support_whatsapp: "WhatsApp support",
+    villes_couvertes: "Villes couvertes",
+    appeler_whatsapp: "Contacter WhatsApp",
+    nom_complet: "Nom complet",
+    telephone: "Téléphone",
+    ville: "Ville",
     nos_expertises: "Nos Expertises Techniques",
     expertises_desc: "Dépannages et rénovations sanitaires professionnelles sur tout le Grand Tunis et le Sahel.",
     plomberie_generale: "Plomberie Générale",
@@ -228,6 +244,20 @@ const translations = {
     plus_favoris: "تبحث عن قطع أخرى ؟",
     plus_favoris_desc: "قم بإضافة إعجاب (قلب) على قطع الغيار لحفظها هنا والرجوع إليها بسهولة.",
     consulter: "التفاصيل التقنية",
+    nos_services: "خدماتنا",
+    nos_services_subtitle: "تدخلات في الترصيص والتكييف والغاز والتدفئة لضمان منزل آمن وعملي طوال السنة.",
+    voir_tout: "عرض الكل",
+    services_title: "خدماتنا",
+    services_subtitle: "تدخلات في الترصيص والتكييف والغاز والتدفئة لضمان منزل آمن وعملي طوال السنة.",
+    view_all: "عرض الكل",
+    admin_edit_email: "تعديل بريد المدير",
+    admin_edit_phone: "تعديل واتساب الدعم",
+    support_whatsapp: "واتساب الدعم",
+    villes_couvertes: "المدن المغطاة",
+    appeler_whatsapp: "تواصل عبر واتساب",
+    nom_complet: "الاسم الكامل",
+    telephone: "الهاتف",
+    ville: "المدينة",
     nos_expertises: "خبراتنا الفنية المعتمدة",
     expertises_desc: "خدمات ترصيص وتصليح سريعة ومحترفة في تونس الكبرى وجهة الساحل.",
     plomberie_generale: "الترصيص العام والسباكة",
@@ -317,6 +347,20 @@ const translations = {
     plus_favoris: "Looking for more parts?",
     plus_favoris_desc: "Add a heart to our used items to save them here instantly.",
     consulter: "Technical Details",
+    nos_services: "Our Services",
+    nos_services_subtitle: "Plumbing, AC, gas, and heating interventions for reliable homes all year.",
+    voir_tout: "View all",
+    services_title: "Services",
+    services_subtitle: "Plumbing, AC, gas, and heating interventions for reliable homes all year.",
+    view_all: "View all",
+    admin_edit_email: "Edit admin email",
+    admin_edit_phone: "Edit support WhatsApp",
+    support_whatsapp: "Support WhatsApp",
+    villes_couvertes: "Covered cities",
+    appeler_whatsapp: "Contact WhatsApp",
+    nom_complet: "Full name",
+    telephone: "Phone",
+    ville: "City",
     nos_expertises: "Our Technical Expertise",
     expertises_desc: "Professional plumbing repairs and renovations across Greater Tunis and the Sahel region.",
     plomberie_generale: "General Plumbing",
@@ -481,6 +525,20 @@ export const AppNavigator = () => {
   // Quick WhatsApp pre-filled technical messages
   const t = translations[currentLang];
   const isRTL = currentLang === 'AR';
+  const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
+  const nextLanguage = languageOrder[(languageOrder.indexOf(currentLang) + 1) % languageOrder.length];
+  const supportWhatsAppNumber = profilePhone || sessionUser?.phone || '+216 22 000 111';
+  const supportWhatsAppDigits = supportWhatsAppNumber.replace(/\D/g, '') || '21622000111';
+  const coverageCities = [
+    { city: 'Tunis', area: 'Grand Tunis' },
+    { city: 'Ariana', area: 'Grand Tunis' },
+    { city: 'Ben Arous', area: 'Grand Tunis' },
+    { city: 'La Manouba', area: 'Grand Tunis' },
+    { city: 'Sousse', area: 'Sahel' },
+    { city: 'Monastir', area: 'Sahel' },
+    { city: 'Mahdia', area: 'Sahel' },
+    { city: 'Sfax', area: 'Sud Est' },
+  ];
 
   // Splash Screen progress timer
   useEffect(() => {
@@ -543,7 +601,7 @@ export const AppNavigator = () => {
 
     // Demo Admin Check
     if (signinEmail.toLowerCase() === 'admin@stouchy.com' && signinPassword === 'admin123') {
-      const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role };
+      const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role, phone: '+216 22 000 111' };
       setSessionUser(adminSession);
       setCurrentRole('admin');
       setBypassAuth(true);
@@ -566,7 +624,7 @@ export const AppNavigator = () => {
     // Check custom registrations in Redux list
     const foundUser = usersList.find(u => u.email.toLowerCase() === signinEmail.toLowerCase());
     if (foundUser) {
-      if (foundUser.status === 'blocked') {
+      if (foundUser.status === 'rejected') {
         showToast(currentLang === 'AR' ? 'هذا الحساب معطل مؤقتاً' : 'Ce compte est suspendu ou bloqué.', 'error');
         return;
       }
@@ -808,7 +866,7 @@ export const AppNavigator = () => {
 
     const updated = {
       ...target,
-      status: (currentStatus === 'active' ? 'blocked' : 'active') as 'active' | 'blocked',
+      status: (currentStatus === 'active' ? 'rejected' : 'active') as 'active' | 'rejected',
       updatedAt: new Date().toISOString()
     };
     dispatch(updateUser(updated));
@@ -818,6 +876,43 @@ export const AppNavigator = () => {
         : (currentStatus === 'active' ? 'Utilisateur bloqué avec succès !' : 'Compte réactivé !'), 
       'info'
     );
+  };
+
+  const handleAdminProfileUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedEmail = profileEmail.trim().toLowerCase();
+    const trimmedPhone = profilePhone.trim();
+
+    if (!trimmedEmail || !isValidEmail(trimmedEmail)) {
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال بريد إلكتروني صحيح' : 'Veuillez saisir une adresse email valide.', 'error');
+      return;
+    }
+
+    if (!trimmedPhone || !isValidPhone(trimmedPhone)) {
+      showToast(currentLang === 'AR' ? 'الرجاء إدخال رقم هاتف صحيح' : 'Veuillez saisir un numéro de téléphone valide.', 'error');
+      return;
+    }
+
+    if (sessionUser) {
+      const updatedSession = {
+        ...sessionUser,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+      };
+      setSessionUser(updatedSession);
+
+      const storedAdmin = usersList.find(user => user.role === 'admin' && user.email.toLowerCase() === sessionUser.email.toLowerCase());
+      if (storedAdmin) {
+        dispatch(updateUser({
+          ...storedAdmin,
+          email: trimmedEmail,
+          phone: trimmedPhone,
+          updatedAt: new Date().toISOString(),
+        }));
+      }
+    }
+
+    showToast(currentLang === 'AR' ? 'تم تحديث بيانات المدير بنجاح' : 'Coordonnées administrateur mises à jour !', 'success');
   };
 
   // Product Visual visual components
@@ -941,10 +1036,10 @@ export const AppNavigator = () => {
                 {/* Language button */}
                 <button 
                   type="button"
-                  onClick={() => setCurrentLang(currentLang === 'FR' ? 'AR' : 'FR')}
-                  className="px-2.5 py-1.5 rounded-lg border text-[10px] font-black tracking-wider uppercase transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
+                  onClick={() => setCurrentLang(nextLanguage)}
+                  className="min-h-[44px] px-3.5 py-2 rounded-lg border text-[10px] font-black tracking-wider uppercase transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
                 >
-                  {currentLang === 'FR' ? 'العربية' : 'Français'}
+                  {nextLanguage === 'AR' ? 'العربية' : nextLanguage === 'EN' ? 'English' : 'Français'}
                 </button>
 
                 {/* Dark Mode toggle icon button */}
@@ -1059,7 +1154,7 @@ export const AppNavigator = () => {
                           setSigninPassword('admin123');
                           showToast("Connexion en cours...", "info");
                           setTimeout(() => {
-                            const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role };
+                            const adminSession = { name: 'Admin Plombier', email: 'admin@stouchy.com', role: 'admin' as Role, phone: '+216 22 000 111' };
                             setSessionUser(adminSession);
                             setCurrentRole('admin');
                             setBypassAuth(true);
@@ -1321,14 +1416,14 @@ export const AppNavigator = () => {
             </nav>
 
             {/* Utility Preferences Header Right */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 ml-3">
               
               {/* Language toggle button */}
               <button 
-                onClick={() => setCurrentLang(currentLang === 'FR' ? 'AR' : 'FR')}
-                className="px-2.5 py-1.5 rounded-lg border text-[11px] font-black shadow-sm bg-slate-50 dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+                onClick={() => setCurrentLang(nextLanguage)}
+                className="min-h-[44px] min-w-[44px] px-3 rounded-lg border text-[11px] font-black shadow-sm bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition"
               >
-                {currentLang === 'FR' ? 'AR' : 'FR'}
+                {nextLanguage}
               </button>
 
               {/* Dark mode toggler */}
@@ -1433,13 +1528,13 @@ export const AppNavigator = () => {
           MAIN VIEWS ROUTER & SWITCHER
           ========================================== */}
       {(bypassAuth || sessionUser) && (
-        <main className="min-h-[calc(100vh-280px)]">
+        <main className="min-h-[calc(100vh-280px)] bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300">
 
           {/* ------------------------------------------
               USER TAB 1: ACCUEIL (HOME VIEW)
               ------------------------------------------ */}
           {activeTab === 'Accueil' && (
-            <div className="animate-fade-in text-left">
+            <div className="animate-fade-in text-left bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100">
               {/* Premium Hero Banner */}
               <section className="relative bg-[#0F172A] text-white py-24 sm:py-32 overflow-hidden">
                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_30%,#F97316_0%,transparent_50%)] pointer-events-none" />
@@ -1467,7 +1562,7 @@ export const AppNavigator = () => {
                       </button>
 
                       <a 
-                        href={`https://wa.me/21622456789?text=${encodeURIComponent(t.whatsapp_msg)}`}
+                        href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(t.whatsapp_msg)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
@@ -1503,35 +1598,44 @@ export const AppNavigator = () => {
               </section>
 
               {/* Technical Services Key Cards */}
-              <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
                 <div className="text-center max-w-2xl mx-auto mb-16">
                   <h2 className="text-3xl font-black tracking-tight">
-                    {currentLang === 'AR' ? 'تخصصاتنا الفنية الرئيسية' : 'Nos Prestations Clés'}
+                    {t.nos_services}
                   </h2>
                   <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
-                    {t.expertises_desc}
+                    {t.nos_services_subtitle}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                  {[
+                  {([
                     { title: t.plomberie_generale, icon: "plumbing", desc: currentLang === 'AR' ? 'إصلاح التسربات وتجديد شبكات المياه المنزلية والعمومية.' : 'Recherche de fuites, installations de sanitaires et de chauffe-eau.' },
                     { title: t.climatisation, icon: "ac", desc: currentLang === 'AR' ? 'تركيب المكيفات، صيانة شاملة وشحن الغاز المعتمد.' : 'Installation de climatiseurs split, recharges de gaz et entretien.' },
                     { title: t.installation_gaz, icon: "gas", desc: currentLang === 'AR' ? 'تمديد وتوصيل مواسير الغاز المنزلي مع السلامة الكلية.' : 'Tuyauteries de gaz conformes, branchements et détection de fuites.' },
                     { title: t.chauffage_central, icon: "heater", desc: currentLang === 'AR' ? 'صيانة وضبط المراجل الحرارية والمشعات للتوفير.' : 'Chaudières, détartrages de radiateurs et régulations connectées.' }
-                  ].map((serv, idx) => (
+                  ] as Array<{ title: string; icon: ServiceIconName; desc: string }>).map((serv, idx) => (
                     <button 
                       key={idx}
                       onClick={() => setActiveTab('Services')}
                       className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm hover:border-[#F97316] hover:shadow-lg transition-all duration-300 text-left group hover:-translate-y-1 transform focus:outline-none"
                     >
                       <div className="w-12 h-12 rounded-2xl bg-[#1E3A5F]/5 dark:bg-[#1E3A5F]/20 flex items-center justify-center text-[#1E3A5F] dark:text-sky-400 group-hover:bg-[#F97316]/10 group-hover:text-[#F97316] transition-colors mb-5">
-                        🛠️
+                        <ServiceIcon name={serv.icon} className="w-6 h-6" title={serv.title} />
                       </div>
                       <h3 className="text-base font-black group-hover:text-[#F97316] transition-colors">{serv.title}</h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">{serv.desc}</p>
                     </button>
                   ))}
+                </div>
+
+                <div className="mt-10 flex justify-center">
+                  <button
+                    onClick={() => setActiveTab('Services')}
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#1E3A5F] px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:bg-[#152a47] dark:bg-sky-600 dark:hover:bg-sky-500"
+                  >
+                    {t.voir_tout}
+                  </button>
                 </div>
               </section>
 
@@ -1622,24 +1726,25 @@ export const AppNavigator = () => {
               USER TAB 2: SERVICES VIEW
               ------------------------------------------ */}
           {activeTab === 'Services' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left bg-slate-50 dark:bg-transparent">
               <div className="text-center max-w-3xl mx-auto mb-16">
                 <span className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
-                  {t.nos_expertises}
+                  {t.nos_services}
                 </span>
                 <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
-                  {t.nos_expertises}
+                  {t.nos_services}
                 </h1>
                 <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
-                  {t.expertises_desc}
+                  {t.nos_services_subtitle}
                 </p>
               </div>
 
               {/* List of 4 Services with before/after comparative graphics */}
               <div className="space-y-16">
-                {[
+                {([
                   { 
                     name: t.plomberie_generale, 
+                    icon: 'plumbing',
                     desc: currentLang === 'AR' ? 'تركيب وتصليح جميع الأجهزة الصحية المنزلية من حنفيات، مصارف، كشف تسرب المياه المجهول وحل المشاكل التقنية المعقدة.' : "Installation, réparation et maintenance de tous vos systèmes sanitaires. Nous intervenons sur les fuites complexes, le débouchage de canalisations, et la rénovation complète de salles de bain.",
                     pts: [t.plomberie_desc_1, t.plomberie_desc_2, t.plomberie_desc_3],
                     whatsapp_text: t.devis_msg + t.plomberie_generale,
@@ -1648,6 +1753,7 @@ export const AppNavigator = () => {
                   },
                   { 
                     name: t.climatisation, 
+                    icon: 'ac',
                     desc: currentLang === 'AR' ? 'صيانة دورية للمكيفات وتركيب الوحدات وشحن غاز التبريد لضمان استهلاك طاقة مثالي وتبريد ممتاز في الصيف.' : "Expertise complète en systèmes de refroidissement. De l'installation de splits muraux à la maintenance de centrales de climatisation, nous assurons une température optimale.",
                     pts: [t.clim_desc_1, t.clim_desc_2, t.clim_desc_3],
                     whatsapp_text: t.devis_msg + t.climatisation,
@@ -1656,6 +1762,7 @@ export const AppNavigator = () => {
                   },
                   { 
                     name: t.installation_gaz, 
+                    icon: 'gas',
                     desc: currentLang === 'AR' ? 'تركيب شبكات الغاز الطبيعي المنزلي والصناعي مع اختبارات صارمة لمنع تسرب الغاز وضمان مطابقتها للمواصفات الحكومية.' : "La sécurité est notre priorité absolue. Nous réalisons vos installations de gaz de ville ou bouteille selon les normes de sécurité les plus strictes de la STEG.",
                     pts: [t.gaz_desc_1, t.gaz_desc_2, t.gaz_desc_3],
                     whatsapp_text: t.devis_msg + t.installation_gaz,
@@ -1664,13 +1771,14 @@ export const AppNavigator = () => {
                   },
                   { 
                     name: t.chauffage_central, 
+                    icon: 'heater',
                     desc: currentLang === 'AR' ? 'ضبط وصيانة المراجل وشبكات التدفئة المركزية وتطهير المشعات من الرواسب الكلسية لتدفئة متجانسة وقوية.' : "Solutions de chauffage performantes pour un hiver serein. Nous installons des chaudières à condensation haute performance et des radiateurs révisés.",
                     pts: [t.chauffage_desc_1, t.chauffage_desc_2, t.chauffage_desc_3],
                     whatsapp_text: t.devis_msg + t.chauffage_central,
                     imgBefore: currentLang === 'AR' ? 'مشع تدفئة مليء بالرواسب الكلسية والمياه الطينية' : "Radiateurs froids par embouage du circuit d'eau",
                     imgAfter: currentLang === 'AR' ? 'دورة تدفئة مطهرة بالكامل وتدفئة ممتازة' : "Désembouage hydrodynamique et chauffage parfait"
                   }
-                ].map((serv, idx) => (
+                ] as Array<{ name: string; icon: ServiceIconName; desc: string; pts: string[]; whatsapp_text: string; imgBefore: string; imgAfter: string }>).map((serv, idx) => (
                   <div 
                     key={idx}
                     className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center border-b border-slate-200 dark:border-slate-800 pb-16 last:border-b-0 last:pb-0 ${
@@ -1681,7 +1789,7 @@ export const AppNavigator = () => {
                     <div className="space-y-6">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-[#1E3A5F] flex items-center justify-center text-white font-extrabold text-sm">
-                          {idx + 1}
+                          <ServiceIcon name={serv.icon} className="w-5 h-5" title={serv.name} />
                         </div>
                         <h2 className="text-xl sm:text-2xl font-black text-slate-850 dark:text-slate-100">{serv.name}</h2>
                       </div>
@@ -1701,7 +1809,7 @@ export const AppNavigator = () => {
 
                       {/* WhatsApp quotation request trigger */}
                       <a
-                        href={`https://wa.me/21622456789?text=${encodeURIComponent(serv.whatsapp_text)}`}
+                        href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(serv.whatsapp_text)}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-md hover:scale-[1.02] transform"
@@ -1829,6 +1937,30 @@ export const AppNavigator = () => {
                         </button>
                       </div>
                     )}
+                  </div>
+
+                  <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                      <h4 className="text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">
+                        {t.villes_couvertes}
+                      </h4>
+                      <a
+                        href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(t.whatsapp_msg)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-[40px] items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white transition hover:bg-emerald-700"
+                      >
+                        {t.appeler_whatsapp}: {supportWhatsAppNumber}
+                      </a>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {coverageCities.map((item) => (
+                        <div key={item.city} className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2">
+                          <div className="text-xs font-black text-slate-800 dark:text-slate-100">{item.city}</div>
+                          <div className="text-[9px] font-bold uppercase tracking-wide text-slate-400">{item.area}</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
@@ -2789,14 +2921,46 @@ export const AppNavigator = () => {
                     </span>
                   </div>
                   <div className="text-left text-xs font-semibold text-slate-400 space-y-2 border-t border-slate-100 dark:border-slate-700 pt-4">
-                    <div>Email: <span className="font-black text-slate-700 dark:text-slate-200">{sessionUser?.email}</span></div>
+                    <div>Email: <span className="font-black text-slate-700 dark:text-slate-200">{profileEmail}</span></div>
+                    <div>{t.support_whatsapp}: <span className="font-black text-slate-700 dark:text-slate-200">{profilePhone}</span></div>
                     <div>Statut: <span className="font-black text-emerald-500">Actif principal</span></div>
                   </div>
                 </div>
 
                 {/* Edit Form */}
                 <div className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-                  <h3 className="text-sm font-black uppercase tracking-wider">{t.securite}</h3>
+                  <h3 className="text-sm font-black uppercase tracking-wider">{currentLang === 'AR' ? 'بيانات الاتصال والأمان' : 'Coordonnées & Sécurité'}</h3>
+                  
+                  <form onSubmit={handleAdminProfileUpdate} className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.admin_edit_email}</label>
+                      <input
+                        type="email"
+                        required
+                        value={profileEmail}
+                        onChange={(e) => setProfileEmail(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">{t.admin_edit_phone}</label>
+                      <input
+                        type="tel"
+                        required
+                        value={profilePhone}
+                        onChange={(e) => setProfilePhone(e.target.value)}
+                        className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <button
+                        type="submit"
+                        className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
+                      >
+                        {currentLang === 'AR' ? 'حفظ بيانات الاتصال' : 'Enregistrer les coordonnées'}
+                      </button>
+                    </div>
+                  </form>
                   
                   <form 
                     onSubmit={(e) => {
@@ -2844,6 +3008,21 @@ export const AppNavigator = () => {
               <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
                 {currentLang === 'AR' ? 'استعرض التقارير البيانية حول الأرباح المحققة وطلبات الصيانة.' : 'Analysez la répartition des ventes de pièces et le taux d\'intervention régionale.'}
               </p>
+
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
+                {[
+                  { label: currentLang === 'AR' ? 'متوسط زمن الرد' : 'Temps de réponse moyen', value: '18 min', detail: currentLang === 'AR' ? 'طلبات عاجلة' : 'Demandes urgentes' },
+                  { label: currentLang === 'AR' ? 'قيمة الطلب المتوسطة' : 'Panier moyen', value: '164 DT', detail: currentLang === 'AR' ? 'قطع مستعملة' : 'Pièces d\'occasion' },
+                  { label: currentLang === 'AR' ? 'الطلبات المفتوحة' : 'Leads ouverts', value: '27', detail: currentLang === 'AR' ? 'هذا الأسبوع' : 'Cette semaine' },
+                  { label: currentLang === 'AR' ? 'معدل التحويل' : 'Taux de conversion', value: '31%', detail: currentLang === 'AR' ? 'واتساب إلى طلب' : 'WhatsApp vers commande' },
+                ].map((metric, idx) => (
+                  <div key={idx} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-sm">
+                    <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400">{metric.label}</span>
+                    <strong className="mt-2 block text-2xl font-black text-slate-850 dark:text-white">{metric.value}</strong>
+                    <span className="mt-1 block text-[10px] font-bold text-slate-500 dark:text-slate-400">{metric.detail}</span>
+                  </div>
+                ))}
+              </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
                 
@@ -2903,6 +3082,40 @@ export const AppNavigator = () => {
                 </div>
 
               </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
+                <div className="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm">
+                  <h3 className="text-sm font-black uppercase tracking-wider">Performance par région</h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                    {[
+                      { region: 'Grand Tunis', requests: 42, satisfaction: '98%' },
+                      { region: 'Sahel', requests: 26, satisfaction: '96%' },
+                      { region: 'Sfax', requests: 14, satisfaction: '94%' },
+                    ].map((row) => (
+                      <div key={row.region} className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{row.region}</span>
+                        <div className="mt-3 text-xl font-black text-slate-850 dark:text-white">{row.requests}</div>
+                        <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{row.satisfaction} satisfaction</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm">
+                  <h3 className="text-sm font-black uppercase tracking-wider">Alertes stock</h3>
+                  <div className="space-y-3 mt-6 text-xs font-semibold">
+                    {[
+                      'Robinetterie: 3 références à renouveler',
+                      'Chauffe-eau: forte demande cette semaine',
+                      'Vannes: marge moyenne +12%',
+                    ].map((item) => (
+                      <div key={item} className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900 px-3 py-2 text-amber-700 dark:text-amber-300">
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 
@@ -2954,7 +3167,7 @@ export const AppNavigator = () => {
                   </a>
 
                   <a 
-                    href={`https://wa.me/21622456789?text=${encodeURIComponent(
+                    href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
                       `Bonjour, je suis intéressé par l'achat de la pièce d'occasion : ${selectedProduct.title} - ${selectedProduct.price} DT.`
                     )}`}
                     target="_blank"
@@ -3188,7 +3401,7 @@ export const AppNavigator = () => {
           ========================================== */}
       {(bypassAuth || sessionUser) && currentRole !== 'admin' && (
         <a 
-          href={`https://wa.me/21622456789?text=${encodeURIComponent(t.whatsapp_msg)}`}
+          href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(t.whatsapp_msg)}`}
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95"

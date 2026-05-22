@@ -22,6 +22,8 @@
     "manageCategories": "Gestionar categorías",
     "viewAllOrders": "Ver todos los pedidos",
     "globalAnalytics": "Análisis Global",
+    "admin_edit_email": "Editar email de admin",
+    "admin_edit_phone": "Editar WhatsApp de soporte",
     "purchases": {
       "title": "Gestión de Compras",
       "total": "Total",
@@ -41,6 +43,14 @@
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
     }
+  },
+  "webServices": {
+    "nos_services": "Nuestros servicios",
+    "nos_services_subtitle": "Intervenciones de fontaneria, climatizacion, gas y calefaccion para hogares fiables todo el ano.",
+    "voir_tout": "Ver todo",
+    "services_title": "Servicios",
+    "services_subtitle": "Intervenciones de fontaneria, climatizacion, gas y calefaccion para hogares fiables todo el ano.",
+    "view_all": "Ver todo"
   },
   "announcements": {
     "addAnnouncement": "Añadir anuncio",

@@ -22,6 +22,8 @@
     "manageCategories": "Manage Categories",
     "viewAllOrders": "View All Orders",
     "globalAnalytics": "Global Analytics",
+    "admin_edit_email": "Edit admin email",
+    "admin_edit_phone": "Edit support WhatsApp",
     "purchases": {
       "title": "Purchases",
       "total": "Total",
@@ -41,6 +43,14 @@
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
     }
+  },
+  "webServices": {
+    "nos_services": "Our Services",
+    "nos_services_subtitle": "Plumbing, AC, gas, and heating interventions for reliable homes all year.",
+    "voir_tout": "View all",
+    "services_title": "Services",
+    "services_subtitle": "Plumbing, AC, gas, and heating interventions for reliable homes all year.",
+    "view_all": "View all"
   },
   "announcements": {
     "addAnnouncement": "Add Announcement",

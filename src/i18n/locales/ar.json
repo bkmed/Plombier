@@ -22,6 +22,8 @@
     "manageCategories": "إدارة الفئات",
     "viewAllOrders": "عرض جميع الطلبات",
     "globalAnalytics": "التحليلات العالمية",
+    "admin_edit_email": "تعديل بريد المدير",
+    "admin_edit_phone": "تعديل واتساب الدعم",
     "purchases": {
       "title": "إدارة المشتريات",
       "total": "الإجمالي",
@@ -41,6 +43,14 @@
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
     }
+  },
+  "webServices": {
+    "nos_services": "خدماتنا",
+    "nos_services_subtitle": "تدخلات في الترصيص والتكييف والغاز والتدفئة لضمان منزل آمن وعملي طوال السنة.",
+    "voir_tout": "عرض الكل",
+    "services_title": "خدماتنا",
+    "services_subtitle": "تدخلات في الترصيص والتكييف والغاز والتدفئة لضمان منزل آمن وعملي طوال السنة.",
+    "view_all": "عرض الكل"
   },
   "announcements": {
     "addAnnouncement": "إضافة إعلان",
