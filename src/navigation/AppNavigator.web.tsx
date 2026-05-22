@@ -544,6 +544,7 @@ export const AppNavigator = () => {
 
   // Admin announcement modal/form state
   const [showAdminModal, setShowAdminModal] = useState(false);
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [annonceTitle, setAnnonceTitle] = useState('');
   const [annonceSubtitle, setAnnonceSubtitle] = useState('');
@@ -812,6 +813,20 @@ export const AppNavigator = () => {
     setShowAdminModal(true);
   };
 
+  const openAddCategoryModal = () => {
+    setCategoryErrorMessage(null);
+    setNewCategoryName('');
+    setNewCategoryImage(null);
+    setShowCategoryModal(true);
+  };
+
+  const closeCategoryModal = () => {
+    setShowCategoryModal(false);
+    setCategoryErrorMessage(null);
+    setNewCategoryName('');
+    setNewCategoryImage(null);
+  };
+
   const openEditAnnonce = (prod: Product) => {
     setEditingProduct(prod);
     setAnnonceTitle(prod.title);
@@ -903,6 +918,7 @@ export const AppNavigator = () => {
     showToast(translate('web.autoText23', { defaultValue: currentLang === 'AR' ? 'تمت إضافة الصنف بنجاح !' : 'Catégorie ajoutée avec succès !' }), 'success');
     setNewCategoryName('');
     setNewCategoryImage(null);
+    setShowCategoryModal(false);
   };
 
   const handleRenameCategory = (e: React.FormEvent) => {
@@ -2484,17 +2500,49 @@ export const AppNavigator = () => {
                 {currentLang === 'AR' ? 'تحكم في القائمة الديناميكية للأصناف المستعملة في الفرز.' : 'Ajoutez de nouvelles familles de produits et réorganisez le catalogue.'}
               </p>
 
-              {/* Add form */}
-              <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm mt-8">
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">
-                  {editingCategory ? (currentLang === 'AR' ? 'تعديل الصنف الحالي' : 'Modifier la catégorie') : (currentLang === 'AR' ? 'إضافة صنف جديد' : 'Créer une nouvelle catégorie')}
-                </h3>
-                {categoryErrorMessage && (
-                  <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
-                    {categoryErrorMessage}
-                  </div>
-                )}
-                {editingCategory ? (
+              <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm mt-8">
+                <div>
+                  <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">
+                    {editingCategory ? (currentLang === 'AR' ? 'تعديل الصنف الحالي' : 'Modifier la catégorie') : (currentLang === 'AR' ? 'إضافة صنف جديد' : 'Créer une nouvelle catégorie')}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-xl">
+                    {currentLang === 'AR'
+                      ? 'استخدم الزر لإضافة صنف جديد عبر نافذة منبثقة. يمكنك تعديل أسماء الأصناف من خلال جدول الأصناف أدناه.'
+                      : 'Ajoutez de nouvelles catégories via la fenêtre modale. Vous pouvez renommer les catégories existantes depuis le tableau ci-dessous.'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  {editingCategory ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditingCategory(null);
+                        setEditCategoryName('');
+                        setNewCategoryImage(null);
+                        setCategoryErrorMessage(null);
+                      }}
+                      className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-5 py-3 rounded-xl transition"
+                    >
+                      {currentLang === 'AR' ? 'إلغاء التعديل' : 'Annuler la modification'}
+                    </button>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={openAddCategoryModal}
+                    className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-sm transition"
+                  >
+                    {currentLang === 'AR' ? '+ إضافة صنف جديد' : '+ Ajouter une catégorie'}
+                  </button>
+                </div>
+              </div>
+
+              {editingCategory && (
+                <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm mt-6">
+                  {categoryErrorMessage && (
+                    <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                      {categoryErrorMessage}
+                    </div>
+                  )}
                   <form onSubmit={handleRenameCategory} className="grid gap-3 md:grid-cols-[1.7fr_1fr] items-end">
                     <div className="space-y-3">
                       <input 
@@ -2527,28 +2575,8 @@ export const AppNavigator = () => {
                       </button>
                     </div>
                   </form>
-                ) : (
-                  <form onSubmit={handleAddCategory} className="flex items-center gap-3">
-                    <input 
-                      type="text"
-                      required
-                      placeholder="Ex: Pompes et Accessoires..."
-                      value={newCategoryName}
-                      onChange={(e) => setNewCategoryName(e.target.value)}
-                      className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-105 focus:outline-none"
-                    />
-                    <div>
-                      <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
-                    </div>
-                    <button 
-                      type="submit"
-                      className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3 rounded-xl transition shadow-sm"
-                    >
-                      + Ajouter
-                    </button>
-                  </form>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Categories list table */}
               <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
@@ -2981,6 +3009,69 @@ export const AppNavigator = () => {
                 >
                   {currentLang === 'AR' ? 'حفظ الإعلان' : 'Enregistrer les modifications'}
                 </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCategoryModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-lg w-full shadow-2xl overflow-hidden relative">
+            <button
+              onClick={closeCategoryModal}
+              className="absolute top-4 right-4 z-10 w-8.5 h-8.5 rounded-full bg-slate-100 dark:bg-slate-750 text-slate-500 hover:text-slate-850 dark:hover:text-slate-100 flex items-center justify-center font-bold"
+            >
+              ✕
+            </button>
+
+            <div className="p-6 sm:p-8 space-y-6">
+              <h2 className="text-xl font-black text-slate-850 dark:text-white">
+                {currentLang === 'AR' ? 'إضافة صنف جديد' : 'Ajouter une catégorie'}
+              </h2>
+
+              {categoryErrorMessage && (
+                <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+                  {categoryErrorMessage}
+                </div>
+              )}
+
+              <form onSubmit={handleAddCategory} className="space-y-4 text-xs font-semibold">
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                    {currentLang === 'AR' ? 'اسم الصنف' : 'Nom de la catégorie'} *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder={currentLang === 'AR' ? 'مثال: مضخات مياه' : 'Ex: Pompes et Accessoires'}
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                    {currentLang === 'AR' ? 'صورة الصنف (اختياري)' : 'Image de catégorie (optionnel)'}
+                  </label>
+                  <CategoryImageInput imageUri={newCategoryImage || undefined} onImageSelected={setNewCategoryImage} />
+                </div>
+
+                <div className="flex justify-end gap-3 pt-4">
+                  <button
+                    type="button"
+                    onClick={closeCategoryModal}
+                    className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-5 py-3 rounded-xl transition"
+                  >
+                    {currentLang === 'AR' ? 'إلغاء' : 'Annuler'}
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-sm transition"
+                  >
+                    {currentLang === 'AR' ? 'إضافة' : 'Ajouter'}
+                  </button>
+                </div>
               </form>
             </div>
           </div>
