@@ -79,10 +79,10 @@ export const AppNavigator = () => {
 
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
-  const galleryTitle = translate('web.galleryTitle', {
+  const galleryTitle = translate('web.gallery.title', {
     defaultValue: 'Galerie',
   });
-  const galleryManageLabel = translate('web.galleryManageLabel', {
+  const galleryManageLabel = translate('web.gallery.manageGallery', {
     defaultValue: 'Gérer la galerie',
   });
   const isRTL = i18n.language === 'ar';
