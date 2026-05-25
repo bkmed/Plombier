@@ -6,7 +6,11 @@ interface LegalPagesProps {
   setActiveTab: (tab: string) => void;
 }
 
-export const LegalPages: React.FC<LegalPagesProps> = ({ page, t, setActiveTab }) => {
+export const LegalPages: React.FC<LegalPagesProps> = ({
+  page,
+  t,
+  setActiveTab,
+}) => {
   if (page === 'Informations') {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
@@ -40,14 +44,18 @@ export const LegalPages: React.FC<LegalPagesProps> = ({ page, t, setActiveTab })
                 label: t.plan_site,
                 desc: t.sitemap_intro,
               },
-            ].map((item) => (
+            ].map(item => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 className="text-left bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 hover:border-[#F97316] transition"
               >
-                <p className="text-xs uppercase font-black text-[#F97316]">{item.label}</p>
-                <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">{item.desc}</p>
+                <p className="text-xs uppercase font-black text-[#F97316]">
+                  {item.label}
+                </p>
+                <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
+                  {item.desc}
+                </p>
               </button>
             ))}
           </div>
@@ -73,14 +81,16 @@ export const LegalPages: React.FC<LegalPagesProps> = ({ page, t, setActiveTab })
           </div>
 
           <ul className="grid gap-4 sm:grid-cols-3">
-            {[t.privacy_point_1, t.privacy_point_2, t.privacy_point_3].map((point, idx) => (
-              <li
-                key={idx}
-                className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-5 text-sm font-semibold text-slate-700 dark:text-slate-200"
-              >
-                {point}
-              </li>
-            ))}
+            {[t.privacy_point_1, t.privacy_point_2, t.privacy_point_3].map(
+              (point, idx) => (
+                <li
+                  key={idx}
+                  className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-5 text-sm font-semibold text-slate-700 dark:text-slate-200"
+                >
+                  {point}
+                </li>
+              ),
+            )}
           </ul>
 
           <div className="flex flex-wrap gap-3">

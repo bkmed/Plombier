@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WebSessionUser, Role } from '../../features/plombier/utils/webTranslations';
+import {
+  WebSessionUser,
+  Role,
+} from '../../features/plombier/utils/webTranslations';
 
 interface WebSessionState {
   sessionUser: WebSessionUser | null;
@@ -21,12 +24,13 @@ const webSessionSlice = createSlice({
     setCurrentRole: (state, action: PayloadAction<Role>) => {
       state.currentRole = action.payload;
     },
-    clearSession: (state) => {
+    clearSession: state => {
       state.sessionUser = null;
       state.currentRole = 'anonyme';
     },
   },
 });
 
-export const { setSessionUser, setCurrentRole, clearSession } = webSessionSlice.actions;
+export const { setSessionUser, setCurrentRole, clearSession } =
+  webSessionSlice.actions;
 export default webSessionSlice.reducer;

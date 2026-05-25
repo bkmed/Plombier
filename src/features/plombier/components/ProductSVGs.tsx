@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const FaucetSVG = ({ className = 'w-16 h-16' }: { className?: string }) => (
+export const FaucetSVG = ({
+  className = 'w-16 h-16',
+}: {
+  className?: string;
+}) => (
   <svg
     viewBox="0 0 100 100"
     className={className}
@@ -30,7 +34,11 @@ export const FaucetSVG = ({ className = 'w-16 h-16' }: { className?: string }) =
   </svg>
 );
 
-export const BoilerSVG = ({ className = 'w-16 h-16' }: { className?: string }) => (
+export const BoilerSVG = ({
+  className = 'w-16 h-16',
+}: {
+  className?: string;
+}) => (
   <svg
     viewBox="0 0 100 100"
     className={className}

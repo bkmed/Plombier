@@ -6,7 +6,7 @@ interface WebSplashScreenProps {
   loadingProgress: number;
   businessName: string;
   currentLang: string;
-  t: any;
+  t: (key: string, options?: any) => string;
 }
 
 export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
@@ -46,7 +46,7 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
           {businessName}
         </div>
         <div className="text-[#F97316] text-[10px] sm:text-xs font-black tracking-widest uppercase mt-2.5">
-          {t.tagline}
+          {t('tagline')}
         </div>
         <div className="text-slate-400/60 text-xs font-bold mt-2 font-arabic">
           سباكة · تكييف · غاز · تدفئة مركزية
@@ -68,7 +68,7 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
         </div>
       </div>
       <div className="text-slate-400 text-[10px] font-black uppercase tracking-wider">
-        {translate('web.autoText30', {
+        {t('web.autoText30', {
           defaultValue:
             currentLang === 'AR'
               ? 'جاري تحميل التطبيق الفاخر...'

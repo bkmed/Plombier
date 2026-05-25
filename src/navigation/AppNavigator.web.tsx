@@ -10,11 +10,24 @@ import {
   setCurrentTheme as setCurrentThemeAction,
   setBypassAuth as setBypassAuthAction,
 } from '../store/slices/uiSlice';
-import { setSessionUser, setCurrentRole, clearSession } from '../store/slices/webSessionSlice';
+import {
+  setSessionUser,
+  setCurrentRole,
+  clearSession,
+} from '../store/slices/webSessionSlice';
 import { addCategory } from '../store/slices/categoriesSlice';
 import { addService } from '../store/slices/servicesSlice';
-import { toggleFavoriteAction, updateListing, addListing, deleteListing } from '../store/slices/partsSlice';
-import { addCategory as addCategoryRedux, updateCategory, deleteCategory } from '../store/slices/categoriesSlice';
+import {
+  toggleFavoriteAction,
+  updateListing,
+  addListing,
+  deleteListing,
+} from '../store/slices/partsSlice';
+import {
+  addCategory as addCategoryRedux,
+  updateCategory,
+  deleteCategory,
+} from '../store/slices/categoriesSlice';
 import { updateUser, deleteUser } from '../store/slices/usersSlice';
 
 // Shared Components & Screens
@@ -41,7 +54,11 @@ import AdminAnalyticsScreen from '../features/plombier/screens/AdminAnalyticsScr
 import AdminGalleryEditor from '../features/plombier/screens/AdminGalleryEditor';
 import AdminServicesEditor from '../features/plombier/screens/AdminServicesEditor';
 
-import { Role, WebSessionUser, LocalCategory } from '../features/plombier/utils/webTranslations';
+import {
+  Role,
+  WebSessionUser,
+  LocalCategory,
+} from '../features/plombier/utils/webTranslations';
 import { User } from '../services/authService';
 
 export const AppNavigator = () => {
@@ -52,14 +69,20 @@ export const AppNavigator = () => {
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.parts.listings);
   const favorites = useSelector((state: RootState) => state.parts.favorites);
-  const reduxCategories = useSelector((state: RootState) => state.categories.items);
+  const reduxCategories = useSelector(
+    (state: RootState) => state.categories.items,
+  );
   const usersList = useSelector((state: RootState) => state.users.items);
   const galleryItems = useSelector((state: RootState) => state.gallery.items);
-  const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
+  const plombierSettings = useSelector(
+    (state: RootState) => state.plombierSettings,
+  );
   const uiState = useSelector((state: RootState) => state.ui);
   const { currentLang, currentTheme, activeTab, bypassAuth } = uiState;
 
-  const { sessionUser, currentRole } = useSelector((state: RootState) => (state as any).webSession);
+  const { sessionUser, currentRole } = useSelector(
+    (state: RootState) => (state as any).webSession,
+  );
 
   // Splash Screen
   const [showSplash, setShowSplash] = useState(true);
@@ -67,28 +90,41 @@ export const AppNavigator = () => {
 
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
-  const galleryTitle = translate('web.galleryTitle', { defaultValue: 'Galerie' });
-  const galleryManageLabel = translate('web.galleryManageLabel', { defaultValue: 'Gérer la galerie' });
+  const galleryTitle = translate('web.galleryTitle', {
+    defaultValue: 'Galerie',
+  });
+  const galleryManageLabel = translate('web.galleryManageLabel', {
+    defaultValue: 'Gérer la galerie',
+  });
   const isRTL = currentLang === 'AR';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
   const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
-  const nextLanguage = languageOrder[(languageOrder.indexOf(currentLang) + 1) % languageOrder.length];
-  
+  const nextLanguage =
+    languageOrder[
+      (languageOrder.indexOf(currentLang) + 1) % languageOrder.length
+    ];
+
   const profileName = sessionUser?.name || '';
   const profileEmail = sessionUser?.email || '';
   const profilePhone = sessionUser?.phone || '';
   const profileCity = sessionUser?.city || '';
 
-  const supportEmail = plombierSettings.supportEmail || profileEmail || sessionUser?.email || '';
-  const supportWhatsAppNumber = plombierSettings.supportPhone || profilePhone || sessionUser?.phone || '';
+  const supportEmail =
+    plombierSettings.supportEmail || profileEmail || sessionUser?.email || '';
+  const supportWhatsAppNumber =
+    plombierSettings.supportPhone || profilePhone || sessionUser?.phone || '';
   const supportWhatsAppDigits = supportWhatsAppNumber.replace(/\D/g, '');
-  const tCommon = (key: string, defaultValue: string) => translate(key, { defaultValue });
-  
+  const tCommon = (key: string, defaultValue: string) =>
+    translate(key, { defaultValue });
+
   const setActiveTab = (tab: string) => dispatch(setActiveTabAction(tab));
-  const setCurrentLang = (lang: 'FR' | 'AR' | 'EN') => dispatch(setCurrentLangAction(lang));
-  const setCurrentTheme = (theme: 'light' | 'dark') => dispatch(setCurrentThemeAction(theme));
-  const setBypassAuth = (value: boolean) => dispatch(setBypassAuthAction(value));
+  const setCurrentLang = (lang: 'FR' | 'AR' | 'EN') =>
+    dispatch(setCurrentLangAction(lang));
+  const setCurrentTheme = (theme: 'light' | 'dark') =>
+    dispatch(setCurrentThemeAction(theme));
+  const setBypassAuth = (value: boolean) =>
+    dispatch(setBypassAuthAction(value));
 
   const startWebSession = async (userData: WebSessionUser, tab: string) => {
     dispatch(setSessionUser(userData));
@@ -107,7 +143,10 @@ export const AppNavigator = () => {
       tCommon(
         'web.logoutSuccess',
         translate('web.autoText15', {
-          defaultValue: currentLang === 'AR' ? 'تم تسجيل خروجك بنجاح' : 'Déconnexion réussie ! A bientôt.',
+          defaultValue:
+            currentLang === 'AR'
+              ? 'تم تسجيل خروجك بنجاح'
+              : 'Déconnexion réussie ! A bientôt.',
         }),
       ),
       'info',
@@ -121,7 +160,10 @@ export const AppNavigator = () => {
         tCommon(
           'web.favoriteLoginRequired',
           translate('web.autoText2', {
-            defaultValue: currentLang === 'AR' ? 'يرجى تسجيل الدخول لحفظ المفضلة' : 'Veuillez vous connecter pour gérer vos favoris.',
+            defaultValue:
+              currentLang === 'AR'
+                ? 'يرجى تسجيل الدخول لحفظ المفضلة'
+                : 'Veuillez vous connecter pour gérer vos favoris.',
           }),
         ),
         'info',
@@ -134,7 +176,10 @@ export const AppNavigator = () => {
         tCommon(
           'web.favoriteRemoved',
           translate('web.autoText3', {
-            defaultValue: currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris',
+            defaultValue:
+              currentLang === 'AR'
+                ? 'تمت إزالته من المفضلة'
+                : 'Retiré des favoris',
           }),
         ),
         'info',
@@ -144,7 +189,10 @@ export const AppNavigator = () => {
         tCommon(
           'web.favoriteAdded',
           translate('web.autoText4', {
-            defaultValue: currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !',
+            defaultValue:
+              currentLang === 'AR'
+                ? 'أضيف إلى المفضلة !'
+                : 'Ajouté aux favoris !',
           }),
         ),
         'success',
@@ -156,13 +204,48 @@ export const AppNavigator = () => {
   useEffect(() => {
     if (reduxCategories.length === 0) {
       const initialCats: LocalCategory[] = [
-        { id: 'cat-1', name: 'Robinetterie', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-        { id: 'cat-2', name: 'Chauffe-eau', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-        { id: 'cat-3', name: 'Canalisation', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-        { id: 'cat-4', name: 'Climatisation', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-        { id: 'cat-5', name: 'Radiateurs', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-        { id: 'cat-6', name: 'Vannes', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-        { id: 'cat-7', name: 'Autre', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
+        {
+          id: 'cat-1',
+          name: 'Robinetterie',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-2',
+          name: 'Chauffe-eau',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-3',
+          name: 'Canalisation',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-4',
+          name: 'Climatisation',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-5',
+          name: 'Radiateurs',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-6',
+          name: 'Vannes',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-7',
+          name: 'Autre',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
       ];
       initialCats.forEach(cat => dispatch(addCategory(cat)));
     }
@@ -282,7 +365,9 @@ export const AppNavigator = () => {
   return (
     <div
       className={`min-h-screen font-sans antialiased transition-colors duration-300 ${
-        currentTheme === 'dark' ? 'bg-[#0B0F19] text-slate-100' : 'bg-slate-50 text-slate-800'
+        currentTheme === 'dark'
+          ? 'bg-[#0B0F19] text-slate-100'
+          : 'bg-slate-50 text-slate-800'
       }`}
       dir={isRTL ? 'rtl' : 'ltr'}
     >
@@ -292,7 +377,6 @@ export const AppNavigator = () => {
         businessName={businessName}
         currentLang={currentLang}
         t={translate}
-        translate={translate}
       />
 
       {!bypassAuth && !sessionUser && (
@@ -303,13 +387,12 @@ export const AppNavigator = () => {
           currentTheme={currentTheme}
           setCurrentLang={setCurrentLang}
           setCurrentTheme={setCurrentTheme}
-          tCommon={tCommon}
-          translate={translate}
+          t={translate}
           showToast={showToast}
           startWebSession={startWebSession}
           setBypassAuth={setBypassAuth}
-          setCurrentRole={(role) => dispatch(setCurrentRole(role))}
-          setSessionUser={(user) => dispatch(setSessionUser(user))}
+          setCurrentRole={role => dispatch(setCurrentRole(role))}
+          setSessionUser={user => dispatch(setSessionUser(user))}
           setActiveTab={setActiveTab}
         />
       )}
@@ -327,13 +410,12 @@ export const AppNavigator = () => {
           galleryManageLabel={galleryManageLabel}
           galleryTitle={galleryTitle}
           t={translate}
-          translate={translate}
           setActiveTab={setActiveTab}
           setCurrentLang={setCurrentLang}
           setCurrentTheme={setCurrentTheme}
           handleLogout={handleLogout}
           setBypassAuth={setBypassAuth}
-          setSessionUser={(user) => dispatch(setSessionUser(user))}
+          setSessionUser={user => dispatch(setSessionUser(user))}
         />
       )}
 
@@ -349,14 +431,15 @@ export const AppNavigator = () => {
               products={products}
               favorites={favorites}
               t={translate}
-              translate={translate}
               setActiveTab={setActiveTab}
               setSelectedProduct={setSelectedProduct}
               toggleFavorite={toggleFavorite}
             />
           )}
 
-          {activeTab === 'Services' && <ServicesScreen supportWhatsAppDigits={supportWhatsAppDigits} />}
+          {activeTab === 'Services' && (
+            <ServicesScreen supportWhatsAppDigits={supportWhatsAppDigits} />
+          )}
 
           {activeTab === 'Zones' && (
             <ZonesScreen
@@ -369,7 +452,11 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'Marketplace' && (
-            <MarketplaceScreen currentLang={currentLang} t={translate} setSelectedProduct={setSelectedProduct} />
+            <MarketplaceScreen
+              currentLang={currentLang}
+              t={translate}
+              setSelectedProduct={setSelectedProduct}
+            />
           )}
 
           {activeTab === 'Gallery' && (
@@ -400,7 +487,9 @@ export const AppNavigator = () => {
             />
           )}
 
-          {['Informations', 'Politique', 'Conditions', 'PlanSite'].includes(activeTab) && (
+          {['Informations', 'Politique', 'Conditions', 'PlanSite'].includes(
+            activeTab,
+          ) && (
             <LegalPages
               page={activeTab as any}
               t={translate}
@@ -471,9 +560,13 @@ export const AppNavigator = () => {
             />
           )}
 
-          {activeTab === 'AdminProfile' && <AdminProfileScreen currentLang={currentLang} t={translate} />}
+          {activeTab === 'AdminProfile' && (
+            <AdminProfileScreen currentLang={currentLang} t={translate} />
+          )}
 
-          {activeTab === 'Analytics' && <AdminAnalyticsScreen currentLang={currentLang} t={translate} />}
+          {activeTab === 'Analytics' && (
+            <AdminAnalyticsScreen currentLang={currentLang} t={translate} />
+          )}
         </main>
       )}
 

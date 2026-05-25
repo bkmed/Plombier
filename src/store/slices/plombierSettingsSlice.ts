@@ -37,7 +37,9 @@ const plombierSettingsSlice = createSlice({
         state.experienceYears = action.payload.experienceYears;
       }
       if (action.payload.interventionZones !== undefined) {
-        state.interventionZones = Array.isArray(action.payload.interventionZones)
+        state.interventionZones = Array.isArray(
+          action.payload.interventionZones,
+        )
           ? action.payload.interventionZones
           : [];
       }

@@ -44,7 +44,9 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
   return (
     <header
       className={`sticky top-0 z-50 border-b transition-colors backdrop-blur-md ${
-        currentTheme === 'dark' ? 'bg-[#0F172A]/90 border-slate-800' : 'bg-white/95 border-slate-200'
+        currentTheme === 'dark'
+          ? 'bg-[#0F172A]/90 border-slate-800'
+          : 'bg-white/95 border-slate-200'
       } shadow-sm`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
@@ -61,7 +63,11 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
         >
           <LogoSVG size={44} />
           <div className="text-left">
-            <span className={`text-xl font-black tracking-tight ${isRTL ? 'font-arabic font-extrabold' : ''}`}>
+            <span
+              className={`text-xl font-black tracking-tight ${
+                isRTL ? 'font-arabic font-extrabold' : ''
+              }`}
+            >
               {businessName}
             </span>
             <p className="text-[9px] text-[#F97316] font-bold tracking-widest uppercase mt-0.5 leading-none">
@@ -83,13 +89,19 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                 {
                   id: 'GestionAnnonce',
                   label: t('web.autoText57', {
-                    defaultValue: currentLang === 'AR' ? 'إدارة الإعلانات' : 'Gestion Annonce',
+                    defaultValue:
+                      currentLang === 'AR'
+                        ? 'إدارة الإعلانات'
+                        : 'Gestion Annonce',
                   }),
                 },
                 {
                   id: 'GestionCategorie',
                   label: t('web.autoText58', {
-                    defaultValue: currentLang === 'AR' ? 'إدارة الأصناف' : 'Gestion Catégorie',
+                    defaultValue:
+                      currentLang === 'AR'
+                        ? 'إدارة الأصناف'
+                        : 'Gestion Catégorie',
                   }),
                 },
                 {
@@ -110,9 +122,10 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                 },
                 {
                   id: 'Analytics',
-                  label: currentLang === 'AR' ? 'التحليلات الماليّة' : 'Analytics',
+                  label:
+                    currentLang === 'AR' ? 'التحليلات الماليّة' : 'Analytics',
                 },
-              ].map((link) => (
+              ].map(link => (
                 <button
                   key={link.id}
                   onClick={() => setActiveTab(link.id)}
@@ -135,7 +148,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                 { id: 'Marketplace', label: t.pieces },
                 { id: 'Gallery', label: galleryTitle },
                 { id: 'Profile', label: t.mon_profil },
-              ].map((link) => (
+              ].map(link => (
                 <button
                   key={link.id}
                   onClick={() => setActiveTab(link.id)}
@@ -165,15 +178,32 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
 
           {/* Dark mode toggler */}
           <button
-            onClick={() => setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')}
+            onClick={() =>
+              setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')
+            }
             className="w-9 h-9 rounded-lg border flex items-center justify-center bg-slate-50 dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-750 transition"
           >
             {currentTheme === 'light' ? (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
               </svg>
             ) : (
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="text-amber-400">
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                className="text-amber-400"
+              >
                 <circle cx="12" cy="12" r="5" />
                 <line x1="12" y1="1" x2="12" y2="3" />
                 <line x1="12" y1="21" x2="12" y2="23" />
@@ -195,7 +225,9 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                 }}
                 className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4.5 py-2.5 rounded-xl transition shadow-md"
               >
-                {currentLang === 'AR' ? 'تسجيل الدخول' : "Connexion / S'inscrire"}
+                {currentLang === 'AR'
+                  ? 'تسجيل الدخول'
+                  : "Connexion / S'inscrire"}
               </button>
             ) : (
               <div className="flex items-center gap-2">
@@ -219,20 +251,46 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
       <div className="lg:hidden flex overflow-x-auto border-t border-slate-200 dark:border-slate-800 px-4 py-2 gap-3 text-center no-scrollbar">
         {currentRole === 'admin'
           ? [
-              { id: 'AdminAccueil', label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil' },
-              { id: 'GestionAnnonce', label: currentLang === 'AR' ? 'الإعلانات' : 'Annonces' },
-              { id: 'GestionCategorie', label: currentLang === 'AR' ? 'الأصناف' : 'Catégories' },
-              { id: 'AdminGallery', label: currentLang === 'AR' ? 'المعرض' : galleryManageLabel },
-              { id: 'AdminServices', label: currentLang === 'AR' ? 'الخدمats' : 'Services' },
-              { id: 'GestionUser', label: currentLang === 'AR' ? 'المستخدمين' : 'Membres' },
-              { id: 'AdminProfile', label: currentLang === 'AR' ? 'الملف' : 'Profil' },
-              { id: 'Analytics', label: currentLang === 'AR' ? 'التحليلات' : 'Analytics' },
-            ].map((link) => (
+              {
+                id: 'AdminAccueil',
+                label: currentLang === 'AR' ? 'الرئيسية' : 'Accueil',
+              },
+              {
+                id: 'GestionAnnonce',
+                label: currentLang === 'AR' ? 'الإعلانات' : 'Annonces',
+              },
+              {
+                id: 'GestionCategorie',
+                label: currentLang === 'AR' ? 'الأصناف' : 'Catégories',
+              },
+              {
+                id: 'AdminGallery',
+                label: currentLang === 'AR' ? 'المعرض' : galleryManageLabel,
+              },
+              {
+                id: 'AdminServices',
+                label: currentLang === 'AR' ? 'الخدمats' : 'Services',
+              },
+              {
+                id: 'GestionUser',
+                label: currentLang === 'AR' ? 'المستخدمين' : 'Membres',
+              },
+              {
+                id: 'AdminProfile',
+                label: currentLang === 'AR' ? 'الملف' : 'Profil',
+              },
+              {
+                id: 'Analytics',
+                label: currentLang === 'AR' ? 'التحليلات' : 'Analytics',
+              },
+            ].map(link => (
               <button
                 key={link.id}
                 onClick={() => setActiveTab(link.id)}
                 className={`px-3 py-1.5 rounded-full text-[11px] font-black whitespace-nowrap transition ${
-                  activeTab === link.id ? 'bg-[#F97316] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  activeTab === link.id
+                    ? 'bg-[#F97316] text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                 }`}
               >
                 {link.label}
@@ -245,12 +303,14 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
               { id: 'Marketplace', label: t.pieces },
               { id: 'Gallery', label: galleryTitle },
               { id: 'Profile', label: t.mon_profil },
-            ].map((link) => (
+            ].map(link => (
               <button
                 key={link.id}
                 onClick={() => setActiveTab(link.id)}
                 className={`px-3 py-1.5 rounded-full text-[11px] font-black whitespace-nowrap transition ${
-                  activeTab === link.id ? 'bg-[#F97316] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+                  activeTab === link.id
+                    ? 'bg-[#F97316] text-white'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
                 }`}
               >
                 {link.label}

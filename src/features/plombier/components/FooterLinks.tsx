@@ -54,14 +54,18 @@ export const FooterLinks = ({
               setActiveTab(currentRole === 'admin' ? 'AdminAccueil' : 'Accueil')
             }
           >
-            <Text className="hover:text-[#F97316]">{t('sitemap_page_accueil')}</Text>
+            <Text className="hover:text-[#F97316]">
+              {t('sitemap_page_accueil')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>
               setActiveTab(currentRole === 'admin' ? 'AdminProfile' : 'Profile')
             }
           >
-            <Text className="hover:text-[#F97316]">{t('sitemap_page_profil')}</Text>
+            <Text className="hover:text-[#F97316]">
+              {t('sitemap_page_profil')}
+            </Text>
           </TouchableOpacity>
           {currentRole === 'admin' && (
             <TouchableOpacity onPress={() => setActiveTab('AdminGallery')}>
@@ -73,10 +77,14 @@ export const FooterLinks = ({
           {currentRole !== 'admin' && (
             <>
               <TouchableOpacity onPress={() => setActiveTab('Services')}>
-                <Text className="hover:text-[#F97316]">{t('sitemap_page_services')}</Text>
+                <Text className="hover:text-[#F97316]">
+                  {t('sitemap_page_services')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setActiveTab('Marketplace')}>
-                <Text className="hover:text-[#F97316]">{t('sitemap_page_pieces')}</Text>
+                <Text className="hover:text-[#F97316]">
+                  {t('sitemap_page_pieces')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setActiveTab('Gallery')}>
                 <Text className="hover:text-[#F97316]">

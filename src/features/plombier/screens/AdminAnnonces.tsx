@@ -31,7 +31,9 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   const [annonceSubtitle, setAnnonceSubtitle] = React.useState('');
   const [annonceCategory, setAnnonceCategory] = React.useState('Robinetterie');
   const [annoncePrice, setAnnoncePrice] = React.useState(25);
-  const [annonceCondition, setAnnonceCondition] = React.useState<'comme neuf' | 'bon état' | 'pour pièces'>('comme neuf');
+  const [annonceCondition, setAnnonceCondition] = React.useState<
+    'comme neuf' | 'bon état' | 'pour pièces'
+  >('comme neuf');
   const [annonceDescription, setAnnonceDescription] = React.useState('');
   const [annonceImage, setAnnonceImage] = React.useState('faucet');
   const [annonceIsFeatured, setAnnonceIsFeatured] = React.useState(false);
@@ -70,7 +72,10 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
     if (!annonceTitle || !annonceDescription || annoncePrice <= 0) {
       showToast(
         translate('web.autoText16', {
-          defaultValue: currentLang === 'AR' ? 'الرجاء تعبئة بيانات الإعلان بشكل صحيح' : "Données d'annonce incomplètes.",
+          defaultValue:
+            currentLang === 'AR'
+              ? 'الرجاء تعبئة بيانات الإعلان بشكل صحيح'
+              : "Données d'annonce incomplètes.",
         }),
         'error',
       );
@@ -81,7 +86,8 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       const updatedItem = {
         ...editingProduct,
         title: annonceTitle,
-        subtitle: annonceSubtitle.toUpperCase() || annonceCategory.toUpperCase(),
+        subtitle:
+          annonceSubtitle.toUpperCase() || annonceCategory.toUpperCase(),
         category: annonceCategory,
         price: Number(annoncePrice),
         condition: annonceCondition,
@@ -93,7 +99,10 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       dispatch(updateListing(updatedItem));
       showToast(
         translate('web.autoText17', {
-          defaultValue: currentLang === 'AR' ? 'تم تحديث الإعلان بنجاح !' : "L'annonce a été modifiée avec succès !",
+          defaultValue:
+            currentLang === 'AR'
+              ? 'تم تحديث الإعلان بنجاح !'
+              : "L'annonce a été modifiée avec succès !",
         }),
         'success',
       );
@@ -101,7 +110,8 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       const newItem = {
         id: 'prod-' + Date.now(),
         title: annonceTitle,
-        subtitle: annonceSubtitle.toUpperCase() || annonceCategory.toUpperCase(),
+        subtitle:
+          annonceSubtitle.toUpperCase() || annonceCategory.toUpperCase(),
         category: annonceCategory,
         price: Number(annoncePrice),
         condition: annonceCondition,
@@ -113,7 +123,10 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       dispatch(addListing(newItem));
       showToast(
         translate('web.autoText18', {
-          defaultValue: currentLang === 'AR' ? 'تم إضافة الإعلان بنجاح !' : 'Nouvelle annonce publiée avec succès !',
+          defaultValue:
+            currentLang === 'AR'
+              ? 'تم إضافة الإعلان بنجاح !'
+              : 'Nouvelle annonce publiée avec succès !',
         }),
         'success',
       );
@@ -126,14 +139,18 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
     if (
       window.confirm(
         translate('web.autoText19', {
-          defaultValue: currentLang === 'AR' ? 'هل أنت متأكد من حذف هذا الإعلان ؟' : 'Voulez-vous vraiment supprimer cette annonce ?',
+          defaultValue:
+            currentLang === 'AR'
+              ? 'هل أنت متأكد من حذف هذا الإعلان ؟'
+              : 'Voulez-vous vraiment supprimer cette annonce ?',
         }),
       )
     ) {
       dispatch(deleteListing(id));
       showToast(
         translate('web.autoText20', {
-          defaultValue: currentLang === 'AR' ? 'تم حذف الإعلان' : 'Annonce supprimée !',
+          defaultValue:
+            currentLang === 'AR' ? 'تم حذف الإعلان' : 'Annonce supprimée !',
         }),
         'info',
       );
@@ -145,7 +162,9 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="text-3xl font-black tracking-tight">
-            {currentLang === 'AR' ? 'إدارة إعلانات قطع الغيار' : 'Gestion des Annonces'}
+            {currentLang === 'AR'
+              ? 'إدارة إعلانات قطع الغيار'
+              : 'Gestion des Annonces'}
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
             {currentLang === 'AR'
@@ -158,7 +177,9 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
           onClick={openAddAnnonce}
           className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-md transition"
         >
-          {currentLang === 'AR' ? '+ إضافة إعلان جديد' : '+ Ajouter une annonce'}
+          {currentLang === 'AR'
+            ? '+ إضافة إعلان جديد'
+            : '+ Ajouter une annonce'}
         </button>
       </div>
 
@@ -168,27 +189,46 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
           <table className="w-full text-xs text-left font-semibold">
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
               <tr>
-                <th className="px-6 py-4">{currentLang === 'AR' ? 'القطعة' : 'Pièce'}</th>
-                <th className="px-6 py-4">{currentLang === 'AR' ? 'الصنف' : 'Catégorie'}</th>
-                <th className="px-6 py-4">{currentLang === 'AR' ? 'السعر' : 'Prix'}</th>
-                <th className="px-6 py-4">{currentLang === 'AR' ? 'الحالة' : 'État'}</th>
-                <th className="px-6 py-4">{currentLang === 'AR' ? 'الوضعية' : 'Statut'}</th>
+                <th className="px-6 py-4">
+                  {currentLang === 'AR' ? 'القطعة' : 'Pièce'}
+                </th>
+                <th className="px-6 py-4">
+                  {currentLang === 'AR' ? 'الصنف' : 'Catégorie'}
+                </th>
+                <th className="px-6 py-4">
+                  {currentLang === 'AR' ? 'السعر' : 'Prix'}
+                </th>
+                <th className="px-6 py-4">
+                  {currentLang === 'AR' ? 'الحالة' : 'État'}
+                </th>
+                <th className="px-6 py-4">
+                  {currentLang === 'AR' ? 'الوضعية' : 'Statut'}
+                </th>
                 <th className="px-6 py-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-750 text-slate-700 dark:text-slate-200">
-              {products.map((prod) => (
-                <tr key={prod.id} className="hover:bg-slate-50/55 dark:hover:bg-slate-750/30 transition">
+              {products.map(prod => (
+                <tr
+                  key={prod.id}
+                  className="hover:bg-slate-50/55 dark:hover:bg-slate-750/30 transition"
+                >
                   <td className="px-6 py-4 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
                       <ProductVisual image={prod.image} className="w-6 h-6" />
                     </div>
                     <div>
-                      <div className="font-black text-slate-850 dark:text-slate-100">{prod.title}</div>
-                      <span className="text-[10px] text-slate-400 font-semibold">{prod.subtitle}</span>
+                      <div className="font-black text-slate-850 dark:text-slate-100">
+                        {prod.title}
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-semibold">
+                        {prod.subtitle}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{prod.category}</td>
+                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
+                    {prod.category}
+                  </td>
                   <td className="px-6 py-4 font-black">{prod.price} TND</td>
                   <td className="px-6 py-4">
                     <span className="bg-slate-150 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-350">
@@ -204,8 +244,12 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       }`}
                     >
                       {prod.isAvailable
-                        ? currentLang === 'AR' ? 'متوفر' : 'Disponible'
-                        : currentLang === 'AR' ? 'مباع' : 'Vendu'}
+                        ? currentLang === 'AR'
+                          ? 'متوفر'
+                          : 'Disponible'
+                        : currentLang === 'AR'
+                        ? 'مباع'
+                        : 'Vendu'}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
@@ -244,11 +288,18 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
             <div className="p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-black text-slate-850 dark:text-white">
                 {editingProduct
-                  ? currentLang === 'AR' ? 'تعديل بيانات الإعلان' : "Modifier l'annonce"
-                  : currentLang === 'AR' ? 'إضافة إعلان جديد' : 'Créer une annonce'}
+                  ? currentLang === 'AR'
+                    ? 'تعديل بيانات الإعلان'
+                    : "Modifier l'annonce"
+                  : currentLang === 'AR'
+                  ? 'إضافة إعلان جديد'
+                  : 'Créer une annonce'}
               </h2>
 
-              <form onSubmit={handleSaveAnnonce} className="space-y-4 text-xs font-semibold">
+              <form
+                onSubmit={handleSaveAnnonce}
+                className="space-y-4 text-xs font-semibold"
+              >
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
@@ -336,9 +387,15 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       onChange={e => setAnnonceImage(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
                     >
-                      <option value="faucet">Haut-de-gamme Robinet (Faucet)</option>
-                      <option value="boiler">Chauffe-eau / Chaudière (Boiler)</option>
-                      <option value="copper_fittings">Canalisation / Raccords (Pipes)</option>
+                      <option value="faucet">
+                        Haut-de-gamme Robinet (Faucet)
+                      </option>
+                      <option value="boiler">
+                        Chauffe-eau / Chaudière (Boiler)
+                      </option>
+                      <option value="copper_fittings">
+                        Canalisation / Raccords (Pipes)
+                      </option>
                     </select>
                   </div>
 
@@ -382,7 +439,9 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                   type="submit"
                   className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
                 >
-                  {currentLang === 'AR' ? 'حفظ الإعلان' : 'Enregistrer les modifications'}
+                  {currentLang === 'AR'
+                    ? 'حفظ الإعلان'
+                    : 'Enregistrer les modifications'}
                 </button>
               </form>
             </div>

@@ -26,13 +26,13 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
         // Fallback
       }
     }
-    
+
     if (t && typeof t === 'object') {
       const flatKey = key.replace(/\./g, '_');
       if (typeof (t as any)[flatKey] === 'string') {
         return (t as any)[flatKey];
       }
-      
+
       const parts = key.split('.');
       let obj: any = t;
       for (const part of parts) {
@@ -44,12 +44,12 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
         }
       }
       if (typeof obj === 'string') return obj;
-      
+
       if (typeof (t as any)[key] === 'string') {
         return (t as any)[key];
       }
     }
-    
+
     const parts = key.split('.');
     return parts[parts.length - 1] || key;
   };

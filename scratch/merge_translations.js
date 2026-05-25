@@ -375,13 +375,6 @@ for (const lang of languages) {
   localeData[lang] = data;
 }
 
-// Map of uppercase translations key to lowercase lang file
-const langMapping = {
-  FR: 'fr',
-  AR: 'ar',
-  EN: 'en'
-};
-
 // 3. Merge translations
 for (const lang of languages) {
   // Ensure "web" namespace exists

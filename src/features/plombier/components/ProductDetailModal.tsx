@@ -28,7 +28,10 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div className="bg-slate-50 dark:bg-slate-900 py-14 flex items-center justify-center border-b sm:border-b-0 sm:border-r border-slate-200 dark:border-slate-700">
-            <ProductVisual image={selectedProduct.image} className="w-24 h-24" />
+            <ProductVisual
+              image={selectedProduct.image}
+              className="w-24 h-24"
+            />
           </div>
 
           <div className="p-6 sm:p-8 flex flex-col justify-between">
@@ -50,14 +53,19 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
               </p>
 
               <div className="text-xl font-black text-[#F97316]">
-                {selectedProduct.price} <span className="text-sm font-bold">DT</span>
+                {selectedProduct.price}{' '}
+                <span className="text-sm font-bold">DT</span>
               </div>
             </div>
 
             {/* Direct Action links */}
             <div className="grid grid-cols-2 gap-3 mt-6">
               <a
-                href={supportWhatsAppDigits ? `tel:${supportWhatsAppDigits}` : "tel:+21622456789"}
+                href={
+                  supportWhatsAppDigits
+                    ? `tel:${supportWhatsAppDigits}`
+                    : 'tel:+21622456789'
+                }
                 className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3 rounded-xl transition text-center shadow flex items-center justify-center gap-1.5"
               >
                 <span>{t.call}</span>

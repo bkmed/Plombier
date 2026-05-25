@@ -27,7 +27,9 @@ export const WebFooter: React.FC<WebFooterProps> = ({
     <>
       <footer
         className={`border-t transition-colors ${
-          currentTheme === 'dark' ? 'bg-[#0B0F19] border-slate-800 text-slate-400' : 'bg-slate-100 border-slate-200 text-slate-600'
+          currentTheme === 'dark'
+            ? 'bg-[#0B0F19] border-slate-800 text-slate-400'
+            : 'bg-slate-100 border-slate-200 text-slate-600'
         } py-12`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 text-left">
@@ -35,7 +37,9 @@ export const WebFooter: React.FC<WebFooterProps> = ({
             <span className="text-lg font-black text-slate-850 dark:text-slate-105 flex items-center gap-2">
               🛠️ {businessName}
             </span>
-            <p className="text-xs leading-relaxed font-semibold">{t.foot_desc}</p>
+            <p className="text-xs leading-relaxed font-semibold">
+              {t.foot_desc}
+            </p>
           </div>
 
           <FooterLinks
@@ -54,7 +58,9 @@ export const WebFooter: React.FC<WebFooterProps> = ({
 
       {currentRole !== 'admin' && (
         <a
-          href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(t.whatsapp_msg)}`}
+          href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
+            t.whatsapp_msg,
+          )}`}
           target="_blank"
           rel="noopener noreferrer"
           className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 text-white rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95"

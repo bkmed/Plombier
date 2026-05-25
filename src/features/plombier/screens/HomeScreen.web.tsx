@@ -10,7 +10,7 @@ interface HomeScreenWebProps {
   galleryItems: any[];
   products: any[];
   favorites: string[];
-  t: any;
+  t: (key: string, options?: any) => string;
   setActiveTab: (tab: string) => void;
   setSelectedProduct: (prod: any) => void;
   toggleFavorite: (id: string, e: React.MouseEvent) => void;
@@ -55,16 +55,18 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 onClick={() => setActiveTab('Zones')}
                 className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
               >
-                <span>{t.contactez_experts}</span>
+                <span>{t('contactez_experts')}</span>
               </button>
 
               <a
-                href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(t.whatsapp_msg)}`}
+                href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
+                  t('whatsapp_msg'),
+                )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
               >
-                <span>{t.whatsapp} Support 24/7</span>
+                <span>{t('whatsapp')} Support 24/7</span>
               </a>
             </div>
           </div>
@@ -78,27 +80,31 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             {[
               {
                 val: `${experienceYears}+`,
-                lbl: t.experience_lbl,
+                lbl: t('experience_lbl'),
                 color: 'text-[#1E3A5F] dark:text-sky-400',
               },
               {
-                val: t.dispo_val,
-                lbl: t.dispo_lbl,
+                val: t('dispo_val'),
+                lbl: t('dispo_lbl'),
                 color: 'text-[#F97316]',
               },
               {
-                val: t.gov_val,
-                lbl: t.gov_lbl,
+                val: t('gov_val'),
+                lbl: t('gov_lbl'),
                 color: 'text-[#1E3A5F] dark:text-sky-400',
               },
               {
-                val: t.satisfaction_val,
-                lbl: t.satisfaction_lbl,
+                val: t('satisfaction_val'),
+                lbl: t('satisfaction_lbl'),
                 color: 'text-emerald-500',
               },
             ].map((stat, idx) => (
               <div key={idx} className="space-y-1">
-                <div className={`text-3xl sm:text-4xl font-black tracking-tight ${stat.color}`}>{stat.val}</div>
+                <div
+                  className={`text-3xl sm:text-4xl font-black tracking-tight ${stat.color}`}
+                >
+                  {stat.val}
+                </div>
                 <p className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide">
                   {stat.lbl}
                 </p>
@@ -111,9 +117,11 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
       {/* Technical Services Key Cards */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl font-black tracking-tight">{translate('webServices.nos_services')}</h2>
+          <h2 className="text-3xl font-black tracking-tight">
+            {t('webServices.nos_services')}
+          </h2>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
-            {translate('webServices.nos_services_subtitle')}
+            {t('webServices.nos_services_subtitle')}
           </p>
         </div>
 
@@ -121,7 +129,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
           {(
             [
               {
-                title: t.plomberie_generale,
+                title: t('plomberie_generale'),
                 icon: 'plumbing',
                 desc:
                   currentLang === 'AR'
@@ -129,7 +137,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                     : 'Recherche de fuites, installations de sanitaires et de chauffe-eau.',
               },
               {
-                title: t.climatisation,
+                title: t('climatisation'),
                 icon: 'ac',
                 desc:
                   currentLang === 'AR'
@@ -137,7 +145,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                     : 'Installation de climatiseurs split, recharges de gaz et entretien.',
               },
               {
-                title: t.installation_gaz,
+                title: t('installation_gaz'),
                 icon: 'gas',
                 desc:
                   currentLang === 'AR'
@@ -145,7 +153,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                     : 'Tuyauteries de gaz conformes, branchements et détection de fuites.',
               },
               {
-                title: t.chauffage_central,
+                title: t('chauffage_central'),
                 icon: 'heater',
                 desc:
                   currentLang === 'AR'
@@ -164,10 +172,18 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm hover:border-[#F97316] hover:shadow-lg transition-all duration-300 text-left group hover:-translate-y-1 transform focus:outline-none"
             >
               <div className="w-12 h-12 rounded-2xl bg-[#1E3A5F]/5 dark:bg-[#1E3A5F]/20 flex items-center justify-center text-[#1E3A5F] dark:text-sky-400 group-hover:bg-[#F97316]/10 group-hover:text-[#F97316] transition-colors mb-5">
-                <ServiceIcon name={serv.icon} className="w-6 h-6" title={serv.title} />
+                <ServiceIcon
+                  name={serv.icon}
+                  className="w-6 h-6"
+                  title={serv.title}
+                />
               </div>
-              <h3 className="text-base font-black group-hover:text-[#F97316] transition-colors">{serv.title}</h3>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">{serv.desc}</p>
+              <h3 className="text-base font-black group-hover:text-[#F97316] transition-colors">
+                {serv.title}
+              </h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                {serv.desc}
+              </p>
             </button>
           ))}
         </div>
@@ -177,7 +193,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             onClick={() => setActiveTab('Services')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#1E3A5F] px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:bg-[#152a47] dark:bg-sky-600 dark:hover:bg-sky-500"
           >
-            {t.voir_tout}
+            {t('voir_tout')}
           </button>
         </div>
       </section>
@@ -186,9 +202,13 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">Galerie Réalisations</span>
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">
+              Galerie Réalisations
+            </span>
             <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-              {currentLang === 'AR' ? 'صور من عملنا الحقيقي' : 'Nos Réalisations en Images'}
+              {currentLang === 'AR'
+                ? 'صور من عملنا الحقيقي'
+                : 'Nos Réalisations en Images'}
             </h2>
             <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 max-w-2xl">
               {currentLang === 'AR'
@@ -205,21 +225,31 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {galleryItems.slice(0, 3).map((item) => (
+          {galleryItems.slice(0, 3).map(item => (
             <div
               key={item.id}
               className="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 shadow-sm"
             >
               <div className="h-56 overflow-hidden">
-                <img src={item.imageUri} alt={item.title} className="h-full w-full object-cover" />
+                <img
+                  src={item.imageUri}
+                  alt={item.title}
+                  className="h-full w-full object-cover"
+                />
               </div>
               <div className="p-5">
-                <div className="text-sm font-black text-slate-900 dark:text-slate-100">{item.title}</div>
+                <div className="text-sm font-black text-slate-900 dark:text-slate-100">
+                  {item.title}
+                </div>
                 {item.subtitle ? (
-                  <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">{item.subtitle}</div>
+                  <div className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                    {item.subtitle}
+                  </div>
                 ) : null}
                 {item.description ? (
-                  <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{item.description}</p>
+                  <p className="mt-3 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    {item.description}
+                  </p>
                 ) : null}
               </div>
             </div>
@@ -240,7 +270,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
-              <h2 className="text-3xl font-black tracking-tight">{t.pieces}</h2>
+              <h2 className="text-3xl font-black tracking-tight">
+                {t('pieces')}
+              </h2>
               <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
                 {currentLang === 'AR'
                   ? 'استعرض أحدث قطع الغيار المستعملة المضمونة المتوفرة في الكتالوج لدينا.'
@@ -251,12 +283,12 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               onClick={() => setActiveTab('Marketplace')}
               className="text-xs font-black text-[#F97316] hover:underline flex items-center gap-1.5"
             >
-              <span>{t.boutique_acces}</span>
+              <span>{t('boutique_acces')}</span>
             </button>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.slice(0, 4).map((prod) => (
+            {products.slice(0, 4).map(prod => (
               <div
                 key={prod.id}
                 onClick={() => setSelectedProduct(prod)}
@@ -270,17 +302,21 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 
                   {/* Heart favorite toggle */}
                   <button
-                    onClick={(e) => toggleFavorite(prod.id, e)}
+                    onClick={e => toggleFavorite(prod.id, e)}
                     className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
                   >
                     <svg
                       width="14"
                       height="14"
                       viewBox="0 0 24 24"
-                      fill={favorites.includes(prod.id) ? 'currentColor' : 'none'}
+                      fill={
+                        favorites.includes(prod.id) ? 'currentColor' : 'none'
+                      }
                       stroke="currentColor"
                       strokeWidth="2.5"
-                      className={favorites.includes(prod.id) ? 'text-rose-500' : ''}
+                      className={
+                        favorites.includes(prod.id) ? 'text-rose-500' : ''
+                      }
                     >
                       <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                     </svg>
@@ -291,7 +327,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 
                 <div className="p-4 text-left flex-1 flex flex-col justify-between">
                   <div>
-                    <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">{prod.category}</span>
+                    <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">
+                      {prod.category}
+                    </span>
                     <h4 className="text-xs sm:text-sm font-black text-slate-850 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
                       {prod.title}
                     </h4>
@@ -299,11 +337,12 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 
                   <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
                     <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200">
-                      {prod.price} <span className="text-[9px] font-bold">DT</span>
+                      {prod.price}{' '}
+                      <span className="text-[9px] font-bold">DT</span>
                     </div>
 
                     <button
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         setSelectedProduct(prod);
                       }}

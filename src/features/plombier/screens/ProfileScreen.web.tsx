@@ -54,7 +54,9 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
             🔒
           </div>
           <h2 className="text-2xl font-black text-slate-850 dark:text-slate-100">
-            {currentLang === 'AR' ? 'سجل دخولك لتفعيل حسابك الشخصي' : 'Identification Requise'}
+            {currentLang === 'AR'
+              ? 'سجل دخولك لتفعيل حسابك الشخصي'
+              : 'Identification Requise'}
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed font-semibold">
             {currentLang === 'AR'
@@ -71,9 +73,14 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
               }}
               className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
             >
-              {currentLang === 'AR' ? 'تسجيل الدخول / إنشاء حساب' : "Accéder à l'écran de connexion"}
+              {currentLang === 'AR'
+                ? 'تسجيل الدخول / إنشاء حساب'
+                : "Accéder à l'écran de connexion"}
             </button>
-            <button onClick={() => setActiveTab('Accueil')} className="text-xs font-black text-slate-400 hover:text-slate-655">
+            <button
+              onClick={() => setActiveTab('Accueil')}
+              className="text-xs font-black text-slate-400 hover:text-slate-655"
+            >
               {t.retour_accueil}
             </button>
           </div>
@@ -81,7 +88,9 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
       ) : (
         // LOGGED CLIENT INTERFACE
         <div>
-          <h1 className="text-3xl font-black tracking-tight">{t.tableau_bord}</h1>
+          <h1 className="text-3xl font-black tracking-tight">
+            {t.tableau_bord}
+          </h1>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
             {t.tableau_bord_desc}
           </p>
@@ -98,7 +107,9 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                 </div>
 
                 <div>
-                  <h3 className="text-base font-black text-slate-850 dark:text-slate-100">{profileName}</h3>
+                  <h3 className="text-base font-black text-slate-850 dark:text-slate-100">
+                    {profileName}
+                  </h3>
                   <span className="inline-block mt-1 text-[9px] font-black px-3 py-1 rounded-full uppercase bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/10">
                     {t.compte_particulier}
                   </span>
@@ -107,30 +118,46 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                 {/* Profile information */}
                 <div className="border-t border-slate-100 dark:border-slate-700 pt-5 space-y-3.5 text-left font-semibold text-xs text-slate-500 dark:text-slate-450">
                   <div className="space-y-1">
-                    <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">Email</span>
-                    <p className="font-black text-slate-800 dark:text-slate-200">{profileEmail}</p>
+                    <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
+                      Email
+                    </span>
+                    <p className="font-black text-slate-800 dark:text-slate-200">
+                      {profileEmail}
+                    </p>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">{t.telephone}</span>
-                    <p className="font-black text-slate-800 dark:text-slate-200">{profilePhone}</p>
+                    <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
+                      {t.telephone}
+                    </span>
+                    <p className="font-black text-slate-800 dark:text-slate-200">
+                      {profilePhone}
+                    </p>
                   </div>
                   <div className="space-y-1">
-                    <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">{t.ville}</span>
-                    <p className="font-black text-slate-800 dark:text-slate-200">{profileCity}</p>
+                    <span className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
+                      {t.ville}
+                    </span>
+                    <p className="font-black text-slate-800 dark:text-slate-200">
+                      {profileCity}
+                    </p>
                   </div>
                 </div>
               </div>
 
               {/* Security details updates */}
               <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
-                <h3 className="text-sm font-black uppercase tracking-wider">{t.securite}</h3>
+                <h3 className="text-sm font-black uppercase tracking-wider">
+                  {t.securite}
+                </h3>
 
                 <form
-                  onSubmit={(e) => {
+                  onSubmit={e => {
                     e.preventDefault();
                     if (!currentMdp || !newMdp) return;
                     showToast(
-                      currentLang === 'AR' ? 'تم تحديث كلمة المرور بنجاح' : 'Sécurité mise à jour avec succès !',
+                      currentLang === 'AR'
+                        ? 'تم تحديث كلمة المرور بنجاح'
+                        : 'Sécurité mise à jour avec succès !',
                       'success',
                     );
                     setCurrentMdp('');
@@ -146,7 +173,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                       type="password"
                       required
                       value={currentMdp}
-                      onChange={(e) => setCurrentMdp(e.target.value)}
+                      onChange={e => setCurrentMdp(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
                     />
                   </div>
@@ -159,7 +186,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                       type="password"
                       required
                       value={newMdp}
-                      onChange={(e) => setNewMdp(e.target.value)}
+                      onChange={e => setNewMdp(e.target.value)}
                       className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
                     />
                   </div>
@@ -179,7 +206,9 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                   {t.maintenance}
                 </span>
 
-                <h3 className="text-lg font-black text-slate-850 dark:text-slate-100">{t.bientot_dispo}</h3>
+                <h3 className="text-lg font-black text-slate-850 dark:text-slate-100">
+                  {t.bientot_dispo}
+                </h3>
                 <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-semibold">
                   {t.maintenance_desc}
                 </p>
@@ -196,16 +225,19 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     />
                   </div>
                   <p className="text-[9px] text-slate-450 dark:text-slate-500 font-bold uppercase tracking-wide">
-                    Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.
+                    Tests d'homologation de sécurité SSL et cryptage en cours
+                    avec la SMT.
                   </p>
                 </div>
 
                 <div className="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4">
                   <h4 className="text-[10px] font-bold text-slate-450 uppercase tracking-widest text-center">
-                    {currentLang === 'AR' ? 'أعلمني عند الإطلاق' : "M'avertir lors de la mise en service"}
+                    {currentLang === 'AR'
+                      ? 'أعلمني عند الإطلاق'
+                      : "M'avertir lors de la mise en service"}
                   </h4>
                   <form
-                    onSubmit={(e) => {
+                    onSubmit={e => {
                       e.preventDefault();
                       if (!newsletterEmail) return;
                       showToast(
@@ -223,10 +255,13 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                       required
                       placeholder="votre.email@domaine.tn"
                       value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      onChange={e => setNewsletterEmail(e.target.value)}
                       className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
                     />
-                    <button type="submit" className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4 py-3 rounded-xl transition">
+                    <button
+                      type="submit"
+                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4 py-3 rounded-xl transition"
+                    >
                       {t.avertir}
                     </button>
                   </form>
@@ -237,23 +272,33 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
             {/* Right Favorites grid (lg:col-span-8) */}
             <div className="lg:col-span-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
               <div className="flex justify-between items-center">
-                <h3 className="text-sm font-black uppercase tracking-wider">{t.mes_favoris}</h3>
-                <button onClick={() => setActiveTab('Marketplace')} className="text-xs font-black text-[#F97316] hover:underline">
+                <h3 className="text-sm font-black uppercase tracking-wider">
+                  {t.mes_favoris}
+                </h3>
+                <button
+                  onClick={() => setActiveTab('Marketplace')}
+                  className="text-xs font-black text-[#F97316] hover:underline"
+                >
                   {t.parcourir_market}
                 </button>
               </div>
 
               {favorites.length === 0 ? (
                 <div className="border border-dashed border-slate-350 dark:border-slate-700 rounded-2xl p-10 text-center space-y-3">
-                  <p className="text-xs text-slate-400 font-bold">{t.plus_favoris_desc}</p>
-                  <button onClick={() => setActiveTab('Marketplace')} className="bg-slate-100 dark:bg-slate-750 px-4 py-2 rounded-xl text-xs font-black">
+                  <p className="text-xs text-slate-400 font-bold">
+                    {t.plus_favoris_desc}
+                  </p>
+                  <button
+                    onClick={() => setActiveTab('Marketplace')}
+                    className="bg-slate-100 dark:bg-slate-750 px-4 py-2 rounded-xl text-xs font-black"
+                  >
                     {t.boutique_acces}
                   </button>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {favorites.map((id) => {
-                    const prod = products.find((p) => p.id === id);
+                  {favorites.map(id => {
+                    const prod = products.find(p => p.id === id);
                     if (!prod) return null;
                     return (
                       <div
@@ -262,12 +307,15 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                       >
                         <div className="bg-slate-50 dark:bg-slate-900 py-6 flex items-center justify-center relative">
                           <button
-                            onClick={(e) => toggleFavorite(prod.id, e)}
+                            onClick={e => toggleFavorite(prod.id, e)}
                             className="absolute top-2 right-2 w-7.5 h-7.5 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-rose-500 hover:scale-110 transition"
                           >
                             ✕
                           </button>
-                          <ProductVisual image={prod.image} className="w-12 h-12" />
+                          <ProductVisual
+                            image={prod.image}
+                            className="w-12 h-12"
+                          />
                         </div>
 
                         <div className="p-4 space-y-4">
@@ -276,9 +324,13 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                               <h4 className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 leading-tight">
                                 {prod.title}
                               </h4>
-                              <span className="text-xs font-black text-[#F97316] whitespace-nowrap">{prod.price} DT</span>
+                              <span className="text-xs font-black text-[#F97316] whitespace-nowrap">
+                                {prod.price} DT
+                              </span>
                             </div>
-                            <p className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">{prod.description}</p>
+                            <p className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                              {prod.description}
+                            </p>
                           </div>
 
                           <button

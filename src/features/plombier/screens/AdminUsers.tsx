@@ -25,7 +25,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
   const [editUserName, setEditUserName] = React.useState('');
   const [editUserEmail, setEditUserEmail] = React.useState('');
   const [editUserPhone, setEditUserPhone] = React.useState('');
-  const [editUserRole, setEditUserRole] = React.useState<'admin' | 'user'>('user');
+  const [editUserRole, setEditUserRole] = React.useState<'admin' | 'user'>(
+    'user',
+  );
 
   const handleStartEditUser = (user: any) => {
     setEditingUser(user);
@@ -54,7 +56,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
 
     dispatch(updateUser(updatedUser));
     showToast(
-      currentLang === 'AR' ? 'تم تحديث المستخدم بنجاح' : 'Utilisateur mis à jour avec succès !',
+      currentLang === 'AR'
+        ? 'تم تحديث المستخدم بنجاح'
+        : 'Utilisateur mis à jour avec succès !',
       'success',
     );
     setEditingUser(null);
@@ -88,7 +92,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
     };
     dispatch(updateUser(updated));
     showToast(
-      currentLang === 'AR' ? 'تم تغيير رتبة المستخدم' : "Rôle de l'utilisateur modifié !",
+      currentLang === 'AR'
+        ? 'تم تغيير رتبة المستخدم'
+        : "Rôle de l'utilisateur modifié !",
       'success',
     );
   };
@@ -97,9 +103,14 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
     const target = usersList.find(u => u.id === userId);
     if (!target) return;
 
-    if (sessionUser && target.email.toLowerCase() === sessionUser.email.toLowerCase()) {
+    if (
+      sessionUser &&
+      target.email.toLowerCase() === sessionUser.email.toLowerCase()
+    ) {
       showToast(
-        currentLang === 'AR' ? 'لا يمكنك حظر حسابك الخاص !' : 'Impossible de bloquer votre propre compte admin !',
+        currentLang === 'AR'
+          ? 'لا يمكنك حظر حسابك الخاص !'
+          : 'Impossible de bloquer votre propre compte admin !',
         'error',
       );
       return;
@@ -113,8 +124,12 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
     dispatch(updateUser(updated));
     showToast(
       currentLang === 'AR'
-        ? currentStatus === 'active' ? 'تم حظر المستخدم بنجاح' : 'تم تنشيط حساب المستخدم'
-        : currentStatus === 'active' ? 'Utilisateur bloqué avec succès !' : 'Compte réactivé !',
+        ? currentStatus === 'active'
+          ? 'تم حظر المستخدم بنجاح'
+          : 'تم تنشيط حساب المستخدم'
+        : currentStatus === 'active'
+        ? 'Utilisateur bloqué avec succès !'
+        : 'Compte réactivé !',
       'info',
     );
   };
@@ -122,7 +137,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <h1 className="text-3xl font-black tracking-tight">
-        {currentLang === 'AR' ? 'إدارة حسابات المستخدمين' : 'Gestion des Comptes Membres'}
+        {currentLang === 'AR'
+          ? 'إدارة حسابات المستخدمين'
+          : 'Gestion des Comptes Membres'}
       </h1>
       <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
         {currentLang === 'AR'
@@ -135,10 +152,14 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-xl font-black">
-                {currentLang === 'AR' ? 'تعديل المستخدم' : 'Modifier un utilisateur'}
+                {currentLang === 'AR'
+                  ? 'تعديل المستخدم'
+                  : 'Modifier un utilisateur'}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
-                {currentLang === 'AR' ? 'قم بتعديل بيانات هذا المستخدم ثم احفظ التغييرات.' : 'Mettez à jour les informations utilisateur puis enregistrez.'}
+                {currentLang === 'AR'
+                  ? 'قم بتعديل بيانات هذا المستخدم ثم احفظ التغييرات.'
+                  : 'Mettez à jour les informations utilisateur puis enregistrez.'}
               </p>
             </div>
             <button
@@ -150,11 +171,16 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
             </button>
           </div>
 
-          <form onSubmit={handleSaveUserEdit} className="grid gap-4 mt-6 md:grid-cols-2">
+          <form
+            onSubmit={handleSaveUserEdit}
+            className="grid gap-4 mt-6 md:grid-cols-2"
+          >
             <input
               value={editUserName}
               onChange={e => setEditUserName(e.target.value)}
-              placeholder={currentLang === 'AR' ? 'الاسم الكامل' : 'Nom complet'}
+              placeholder={
+                currentLang === 'AR' ? 'الاسم الكامل' : 'Nom complet'
+              }
               required
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             />
@@ -174,7 +200,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
             />
             <select
               value={editUserRole}
-              onChange={e => setEditUserRole(e.target.value as 'admin' | 'user')}
+              onChange={e =>
+                setEditUserRole(e.target.value as 'admin' | 'user')
+              }
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             >
               <option value="user">Utilisateur</option>
@@ -208,14 +236,21 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-750 text-slate-700 dark:text-slate-200">
               {usersList.map(u => (
-                <tr key={u.id} className="hover:bg-slate-50/50 dark:hover:bg-slate-750/30 transition">
+                <tr
+                  key={u.id}
+                  className="hover:bg-slate-50/50 dark:hover:bg-slate-750/30 transition"
+                >
                   <td className="px-6 py-4 font-black">{u.name}</td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">{u.email}</td>
+                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
+                    {u.email}
+                  </td>
                   <td className="px-6 py-4">{u.phone || 'N/A'}</td>
                   <td className="px-6 py-4">
                     <span
                       className={`px-2.5 py-1 rounded text-[9.5px] font-black uppercase ${
-                        u.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+                        u.role === 'admin'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-blue-100 text-blue-700'
                       }`}
                     >
                       {u.role}
@@ -224,7 +259,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
                   <td className="px-6 py-4">
                     <span
                       className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
-                        u.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+                        u.status === 'active'
+                          ? 'bg-emerald-50 text-emerald-600'
+                          : 'bg-rose-50 text-rose-600'
                       }`}
                     >
                       {u.status}
@@ -248,8 +285,12 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
                         }`}
                       >
                         {u.role === 'admin'
-                          ? currentLang === 'AR' ? 'محمي' : 'Admin protégé'
-                          : currentLang === 'AR' ? 'حذف' : 'Supprimer'}
+                          ? currentLang === 'AR'
+                            ? 'محمي'
+                            : 'Admin protégé'
+                          : currentLang === 'AR'
+                          ? 'حذف'
+                          : 'Supprimer'}
                       </button>
                       <button
                         onClick={() => handleToggleUserRole(u.id, u.role)}
@@ -260,7 +301,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
                       <button
                         onClick={() => handleToggleUserStatus(u.id, u.status)}
                         className={`px-2.5 py-1 rounded text-white transition font-black ${
-                          u.status === 'active' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'
+                          u.status === 'active'
+                            ? 'bg-rose-600 hover:bg-rose-700'
+                            : 'bg-emerald-600 hover:bg-emerald-700'
                         }`}
                       >
                         {u.status === 'active' ? 'Bloquer' : 'Activer'}

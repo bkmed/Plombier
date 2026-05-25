@@ -17,14 +17,12 @@ const ALL_CITIES_BY_ZONE: Record<string, { city: string; area: string }[]> = {
     { city: 'Ben Arous', area: 'Grand Tunis' },
     { city: 'La Manouba', area: 'Grand Tunis' },
   ],
-  'Sahel': [
+  Sahel: [
     { city: 'Sousse', area: 'Sahel' },
     { city: 'Monastir', area: 'Sahel' },
     { city: 'Mahdia', area: 'Sahel' },
   ],
-  'Sfax': [
-    { city: 'Sfax', area: 'Sfax' },
-  ],
+  Sfax: [{ city: 'Sfax', area: 'Sfax' }],
 };
 
 const ZonesScreen = ({
@@ -260,7 +258,7 @@ const ZonesScreen = ({
               <input
                 type="text"
                 required
-                placeholder={supportWhatsAppNumber || "+216 22 456 789"}
+                placeholder={supportWhatsAppNumber || '+216 22 456 789'}
                 value={interventionPhone}
                 onChange={e => setInterventionPhone(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
