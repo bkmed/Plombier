@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from '../../../context/ToastContext';
 
 type Lang = 'FR' | 'AR' | 'EN';
@@ -7,30 +7,58 @@ interface ZonesScreenProps {
   t: Record<string, any>;
   supportWhatsAppDigits: string;
   supportWhatsAppNumber: string;
+  interventionZones?: string[];
 }
 
-const coverageCities = [
-  { city: 'Tunis', area: 'Grand Tunis' },
-  { city: 'Ariana', area: 'Grand Tunis' },
-  { city: 'Ben Arous', area: 'Grand Tunis' },
-  { city: 'La Manouba', area: 'Grand Tunis' },
-];
-
-const cityOptions = ['Tunis', 'Ariana', 'Ben Arous', 'La Manouba'];
+const ALL_CITIES_BY_ZONE: Record<string, { city: string; area: string }[]> = {
+  'Grand Tunis': [
+    { city: 'Tunis', area: 'Grand Tunis' },
+    { city: 'Ariana', area: 'Grand Tunis' },
+    { city: 'Ben Arous', area: 'Grand Tunis' },
+    { city: 'La Manouba', area: 'Grand Tunis' },
+  ],
+  'Sahel': [
+    { city: 'Sousse', area: 'Sahel' },
+    { city: 'Monastir', area: 'Sahel' },
+    { city: 'Mahdia', area: 'Sahel' },
+  ],
+  'Sfax': [
+    { city: 'Sfax', area: 'Sfax' },
+  ],
+};
 
 const ZonesScreen = ({
   currentLang,
   t,
   supportWhatsAppDigits,
   supportWhatsAppNumber,
+  interventionZones,
 }: ZonesScreenProps) => {
   const { showToast } = useToast();
+
+  const activeZones =
+    interventionZones && interventionZones.length > 0
+      ? interventionZones
+      : ['Grand Tunis', 'Sahel', 'Sfax'];
+
+  const coverageCities = activeZones.flatMap(
+    zone => ALL_CITIES_BY_ZONE[zone] || [],
+  );
+
+  const cityOptions = coverageCities.map(item => item.city);
+
   const [selectedGovernorat, setSelectedGovernorat] = useState<string | null>(
-    'Grand Tunis',
+    activeZones[0] || 'Grand Tunis',
   );
   const [interventionName, setInterventionName] = useState('');
   const [interventionPhone, setInterventionPhone] = useState('');
-  const [interventionGov, setInterventionGov] = useState('Tunis');
+  const [interventionGov, setInterventionGov] = useState('');
+
+  useEffect(() => {
+    if (cityOptions.length > 0 && !cityOptions.includes(interventionGov)) {
+      setInterventionGov(cityOptions[0]);
+    }
+  }, [cityOptions, interventionGov]);
   const [interventionProblem, setInterventionProblem] = useState("Fuite d'eau");
   const [interventionDetails, setInterventionDetails] = useState('');
 
@@ -232,7 +260,7 @@ const ZonesScreen = ({
               <input
                 type="text"
                 required
-                placeholder="+216 22 456 789"
+                placeholder={supportWhatsAppNumber || "+216 22 456 789"}
                 value={interventionPhone}
                 onChange={e => setInterventionPhone(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"

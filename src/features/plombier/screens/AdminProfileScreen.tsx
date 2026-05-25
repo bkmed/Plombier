@@ -13,10 +13,46 @@ import {
 type Lang = 'FR' | 'AR' | 'EN';
 interface AdminProfileScreenProps {
   currentLang: Lang;
-  t: (key: string, options?: any) => string;
+  t: any;
 }
 
 const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
+  const getTranslation = (key: string): string => {
+    if (typeof t === 'function') {
+      try {
+        const val = t(key);
+        if (typeof val === 'string') return val;
+      } catch {
+        // Fallback
+      }
+    }
+    
+    if (t && typeof t === 'object') {
+      const flatKey = key.replace(/\./g, '_');
+      if (typeof (t as any)[flatKey] === 'string') {
+        return (t as any)[flatKey];
+      }
+      
+      const parts = key.split('.');
+      let obj: any = t;
+      for (const part of parts) {
+        if (obj && typeof obj === 'object') {
+          obj = obj[part];
+        } else {
+          obj = undefined;
+          break;
+        }
+      }
+      if (typeof obj === 'string') return obj;
+      
+      if (typeof (t as any)[key] === 'string') {
+        return (t as any)[key];
+      }
+    }
+    
+    const parts = key.split('.');
+    return parts[parts.length - 1] || key;
+  };
   const { user, updateProfile } = useAuth();
   const dispatch = useDispatch();
   const { showToast } = useToast();
@@ -251,13 +287,13 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
               </span>
             </div>
             <div>
-              {t('support.whatsapp')}:{' '}
+              {getTranslation('support.whatsapp')}:{' '}
               <span className="font-black text-slate-700 dark:text-slate-200">
                 {plombierSettings.supportPhone || profilePhone}
               </span>
             </div>
             <div>
-              {t('support.email_label')}:{' '}
+              {getTranslation('support.email_label')}:{' '}
               <span className="font-black text-slate-700 dark:text-slate-200">
                 {plombierSettings.supportEmail || profileEmail}
               </span>
@@ -431,7 +467,7 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
           >
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                {t('admin.admin_edit_email')}
+                {getTranslation('admin.admin_edit_email')}
               </label>
               <input
                 type="email"
@@ -443,7 +479,7 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
             </div>
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                {t('admin.admin_edit_phone')}
+                {getTranslation('admin.admin_edit_phone')}
               </label>
               <input
                 type="tel"
@@ -455,7 +491,7 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
             </div>
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                {t('support.email_label')}
+                {getTranslation('support.email_label')}
               </label>
               <input
                 type="email"
@@ -468,7 +504,7 @@ const AdminProfileScreen = ({ currentLang, t }: AdminProfileScreenProps) => {
             </div>
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                {t('support.whatsapp')}
+                {getTranslation('support.whatsapp')}
               </label>
               <input
                 type="tel"

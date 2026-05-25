@@ -395,10 +395,6 @@ function deepMerge(target, source) {
   return target;
 }
 
-// Deep clone helper
-function deepClone(obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
 
 // Sync function
 function syncAll() {

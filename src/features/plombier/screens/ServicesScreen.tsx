@@ -12,9 +12,6 @@ const ServicesScreen = ({
 }) => {
   const services = useSelector((state: RootState) => selectServices(state));
   const { t } = useTranslation();
-  const currentLang = useSelector(
-    (state: RootState) => state.ui.currentLang,
-  ) as 'FR' | 'AR' | 'EN';
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left bg-slate-50 dark:bg-transparent">
