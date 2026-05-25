@@ -1,72 +1,60 @@
 import React from 'react';
 
 interface AdminDashboardProps {
-  currentLang: string;
   businessName: string;
   products: any[];
   reduxCategories: any[];
   usersList: any[];
+  t: any;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
-  currentLang,
   businessName,
   products,
   reduxCategories,
   usersList,
+  t,
 }) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    t(key, { defaultValue });
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <h1 className="text-3xl font-black tracking-tight text-slate-850 dark:text-white">
-        {currentLang === 'AR'
-          ? 'لوحة قيادة المدير'
-          : 'Tableau de Bord Administration'}
+        {tCommon('admin.dashboardTitle', 'Admin dashboard')}
       </h1>
       <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
-        {currentLang === 'AR'
-          ? `إليك مؤشرات النشاط الحالية ومستجدات العمل لـ ${businessName}.`
-          : "Suivez l'état général des stocks de pièces détachées et des membres inscrits."}
+        {tCommon(
+          'admin.dashboardDescription',
+          `View current activity metrics and stock status for ${businessName}.`,
+        )}
       </p>
 
       {/* Metrics cards row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
         {[
           {
-            title:
-              currentLang === 'AR'
-                ? 'إجمالي القطع المعروضة'
-                : 'Annonces Actives',
+            title: tCommon('admin.activeListingsTitle', 'Active listings'),
             val: products.length,
-            desc:
-              currentLang === 'AR'
-                ? 'قطعة غيار مستعملة'
-                : 'Pièces en catalogue',
+            desc: tCommon('admin.activeListingsDesc', 'Spare parts in catalog'),
             color: 'border-l-4 border-blue-500',
           },
           {
-            title: currentLang === 'AR' ? 'الأصناف المتوفرة' : 'Catégories',
+            title: tCommon('admin.categoriesTitle', 'Available categories'),
             val: reduxCategories.length,
-            desc:
-              currentLang === 'AR'
-                ? 'صنفاً ديناميكياً'
-                : 'Familles de produits',
+            desc: tCommon('admin.categoriesDesc', 'Product families'),
             color: 'border-l-4 border-amber-500',
           },
           {
-            title: currentLang === 'AR' ? 'حسابات الأعضاء' : 'Membres Inscrits',
+            title: tCommon('admin.registeredUsersTitle', 'Registered users'),
             val: usersList.length,
-            desc:
-              currentLang === 'AR' ? 'حساباً مسجلاً' : 'Clients enregistrés',
+            desc: tCommon('admin.registeredUsersDesc', 'Accounts created'),
             color: 'border-l-4 border-emerald-500',
           },
           {
-            title:
-              currentLang === 'AR' ? 'طلبات الصيانة الواردة' : 'Urgences Leads',
+            title: tCommon('admin.leadsTitle', 'Incoming service requests'),
             val: 12,
-            desc:
-              currentLang === 'AR'
-                ? 'طلب تدخل سريع'
-                : "Demandes d'interventions",
+            desc: tCommon('admin.leadsDesc', 'Urgent intervention needs'),
             color: 'border-l-4 border-rose-500',
           },
         ].map((m, idx) => (
@@ -90,50 +78,48 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Activity Ledgers / System logs */}
       <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm mt-10">
         <h3 className="text-base font-black text-slate-850 dark:text-white mb-6">
-          {currentLang === 'AR'
-            ? 'سجل العمليات الأخير للرئيس'
-            : 'Historique Récents des Actions Admin'}
+          {tCommon('admin.recentActivityTitle', 'Recent admin action history')}
         </h3>
 
         <div className="space-y-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
           {[
             {
-              log:
-                currentLang === 'AR'
-                  ? 'قام أحمد بن علي بطلب تدخل سريع بجهة أريانة.'
-                  : "Ahmed Ben Ali (user@demo.com) a sollicité une intervention plomberie d'urgence à Ariana.",
+              log: tCommon(
+                'admin.activityIntervention',
+                'Ahmed Ben Ali (user@demo.com) requested an urgent plumbing intervention in Ariana.',
+              ),
               time: 'Il y a 5 minutes',
-              badge: 'Intervention',
+              badge: tCommon('admin.badgeIntervention', 'Intervention'),
               color:
                 'bg-rose-100 text-rose-700 dark:bg-rose-950/40 dark:text-rose-400',
             },
             {
-              log:
-                currentLang === 'AR'
-                  ? 'تمت إضافة قطعة غيار جديدة : "مزيج مطبق غروهي".'
-                  : 'Nouvelle pièce ajoutée : Mélangeur Cuisine Grohe dans le catalogue.',
+              log: tCommon(
+                'admin.activityCatalog',
+                'New spare part added: Grohe kitchen mixer is now in the catalog.',
+              ),
               time: 'Il y a 20 minutes',
-              badge: 'Catalogue',
+              badge: tCommon('admin.badgeCatalog', 'Catalog'),
               color:
                 'bg-blue-100 text-blue-700 dark:bg-blue-950/40 dark:text-blue-400',
             },
             {
-              log:
-                currentLang === 'AR'
-                  ? 'تمت إضافة صنف جديد : "مضخات مياه".'
-                  : "Catégorie 'Pompes de circulation' créée par Admin.",
+              log: tCommon(
+                'admin.activityCategory',
+                "Category 'Water Pumps' created by Admin.",
+              ),
               time: 'Il y a 2 heures',
-              badge: 'Catégorie',
+              badge: tCommon('admin.badgeCategory', 'Category'),
               color:
                 'bg-amber-100 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400',
             },
             {
-              log:
-                currentLang === 'AR'
-                  ? 'تم تحديث دور المستخدم "user@demo.com" لرتبة عميل.'
-                  : 'Statut réactivé pour le client user@demo.com.',
+              log: tCommon(
+                'admin.activityUser',
+                'User role for user@demo.com was updated to client.',
+              ),
               time: 'Il y a 1 jour',
-              badge: 'Utilisateur',
+              badge: tCommon('admin.badgeUser', 'User'),
               color:
                 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400',
             },

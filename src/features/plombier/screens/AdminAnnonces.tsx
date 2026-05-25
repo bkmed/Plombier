@@ -9,16 +9,16 @@ import {
 import { ProductVisual } from '../components/ProductSVGs';
 
 interface AdminAnnoncesProps {
-  currentLang: string;
   showToast: any;
   translate: any;
 }
 
 export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
-  currentLang,
   showToast,
   translate,
 }) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    translate(key, { defaultValue });
   const dispatch = useDispatch();
   const products = useSelector((state: RootState) => state.parts.listings);
   const reduxCategories = useSelector(
@@ -72,10 +72,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
     if (!annonceTitle || !annonceDescription || annoncePrice <= 0) {
       showToast(
         translate('web.autoText16', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'الرجاء تعبئة بيانات الإعلان بشكل صحيح'
-              : "Données d'annonce incomplètes.",
+          defaultValue: "Données d'annonce incomplètes.",
         }),
         'error',
       );
@@ -99,10 +96,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       dispatch(updateListing(updatedItem));
       showToast(
         translate('web.autoText17', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'تم تحديث الإعلان بنجاح !'
-              : "L'annonce a été modifiée avec succès !",
+          defaultValue: "L'annonce a été modifiée avec succès !",
         }),
         'success',
       );
@@ -123,10 +117,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       dispatch(addListing(newItem));
       showToast(
         translate('web.autoText18', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'تم إضافة الإعلان بنجاح !'
-              : 'Nouvelle annonce publiée avec succès !',
+          defaultValue: 'Nouvelle annonce publiée avec succès !',
         }),
         'success',
       );
@@ -139,10 +130,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
     if (
       window.confirm(
         translate('web.autoText19', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'هل أنت متأكد من حذف هذا الإعلان ؟'
-              : 'Voulez-vous vraiment supprimer cette annonce ?',
+          defaultValue: 'Voulez-vous vraiment supprimer cette annonce ?',
         }),
       )
     ) {
@@ -154,8 +142,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       dispatch(deleteListing(id));
       showToast(
         translate('web.autoText20', {
-          defaultValue:
-            currentLang === 'AR' ? 'تم حذف الإعلان' : 'Annonce supprimée !',
+          defaultValue: 'Annonce supprimée !',
         }),
         'info',
       );
@@ -167,14 +154,13 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
         <div>
           <h1 className="text-3xl font-black tracking-tight">
-            {currentLang === 'AR'
-              ? 'إدارة إعلانات قطع الغيار'
-              : 'Gestion des Annonces'}
+            {tCommon('adminAnnonces.title', 'Gestion des Annonces')}
           </h1>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
-            {currentLang === 'AR'
-              ? 'قم بإضافة، تعديل أو حذف إعلانات قطع الغيار المعروضة في الكتالوج.'
-              : 'Créez de nouvelles fiches produits, modifiez les descriptifs et gérez les disponibilités.'}
+            {tCommon(
+              'adminAnnonces.description',
+              'Créez de nouvelles fiches produits, modifiez les descriptifs et gérez les disponibilités.',
+            )}
           </p>
         </div>
 
@@ -182,9 +168,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
           onClick={openAddAnnonce}
           className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-md transition"
         >
-          {currentLang === 'AR'
-            ? '+ إضافة إعلان جديد'
-            : '+ Ajouter une annonce'}
+          {tCommon('adminAnnonces.addAnnouncement', '+ Ajouter une annonce')}
         </button>
       </div>
 
@@ -195,19 +179,19 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
               <tr>
                 <th className="px-6 py-4">
-                  {currentLang === 'AR' ? 'القطعة' : 'Pièce'}
+                  {tCommon('adminAnnonces.columnPiece', 'Pièce')}
                 </th>
                 <th className="px-6 py-4">
-                  {currentLang === 'AR' ? 'الصنف' : 'Catégorie'}
+                  {tCommon('adminAnnonces.columnCategory', 'Catégorie')}
                 </th>
                 <th className="px-6 py-4">
-                  {currentLang === 'AR' ? 'السعر' : 'Prix'}
+                  {tCommon('adminAnnonces.columnPrice', 'Prix')}
                 </th>
                 <th className="px-6 py-4">
-                  {currentLang === 'AR' ? 'الحالة' : 'État'}
+                  {tCommon('adminAnnonces.columnCondition', 'État')}
                 </th>
                 <th className="px-6 py-4">
-                  {currentLang === 'AR' ? 'الوضعية' : 'Statut'}
+                  {tCommon('adminAnnonces.columnStatus', 'Statut')}
                 </th>
                 <th className="px-6 py-4 text-center">Actions</th>
               </tr>
@@ -249,12 +233,8 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       }`}
                     >
                       {prod.isAvailable
-                        ? currentLang === 'AR'
-                          ? 'متوفر'
-                          : 'Disponible'
-                        : currentLang === 'AR'
-                        ? 'مباع'
-                        : 'Vendu'}
+                        ? tCommon('adminAnnonces.available', 'Disponible')
+                        : tCommon('adminAnnonces.sold', 'Vendu')}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-center">
@@ -263,13 +243,13 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                         onClick={() => openEditAnnonce(prod)}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition"
                       >
-                        {currentLang === 'AR' ? 'تعديل' : 'Modifier'}
+                        {tCommon('adminAnnonces.edit', 'Modifier')}
                       </button>
                       <button
                         onClick={() => handleDeleteAnnonce(prod.id)}
                         className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition"
                       >
-                        {currentLang === 'AR' ? 'حذف' : 'Supprimer'}
+                        {tCommon('adminAnnonces.delete', 'Supprimer')}
                       </button>
                     </div>
                   </td>
@@ -293,12 +273,14 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
             <div className="p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-black text-slate-850 dark:text-white">
                 {editingProduct
-                  ? currentLang === 'AR'
-                    ? 'تعديل بيانات الإعلان'
-                    : "Modifier l'annonce"
-                  : currentLang === 'AR'
-                  ? 'إضافة إعلان جديد'
-                  : 'Créer une annonce'}
+                  ? tCommon(
+                      'adminAnnonces.modalEditTitle',
+                      "Modifier l'annonce",
+                    )
+                  : tCommon(
+                      'adminAnnonces.modalCreateTitle',
+                      '+ Ajouter une annonce',
+                    )}
               </h2>
 
               <form
@@ -444,9 +426,10 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                   type="submit"
                   className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
                 >
-                  {currentLang === 'AR'
-                    ? 'حفظ الإعلان'
-                    : 'Enregistrer les modifications'}
+                  {tCommon(
+                    'adminAnnonces.modalSubmit',
+                    'Enregistrer les modifications',
+                  )}
                 </button>
               </form>
             </div>

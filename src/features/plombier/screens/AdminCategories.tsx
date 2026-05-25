@@ -9,16 +9,16 @@ import {
 import CategoryImageInput from '../components/CategoryImageInput';
 
 interface AdminCategoriesProps {
-  currentLang: string;
   showToast: any;
   translate: any;
 }
 
 export const AdminCategories: React.FC<AdminCategoriesProps> = ({
-  currentLang,
   showToast,
   translate,
 }) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    translate(key, { defaultValue });
   const dispatch = useDispatch();
   const reduxCategories = useSelector(
     (state: RootState) => state.categories.items,
@@ -72,10 +72,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
     if (!categoryName.trim()) {
       setCategoryErrorMessage(
         translate('web.autoText21', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'يرجى إدخال اسم الصنف.'
-              : 'Veuillez saisir un nom de catégorie.',
+          defaultValue: 'Veuillez saisir un nom de catégorie.',
         }),
       );
       return;
@@ -90,10 +87,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
     if (duplicate) {
       setCategoryErrorMessage(
         translate('web.autoText22', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'هذا الصنف موجود بالفعل'
-              : 'Catégorie déjà existante.',
+          defaultValue: 'Catégorie déjà existante.',
         }),
       );
       return;
@@ -109,10 +103,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
       dispatch(updateCategory(renamed));
       showToast(
         translate('web.autoText25', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'تمت إعادة تسمية الصنف !'
-              : 'Catégorie modifiée !',
+          defaultValue: 'Catégorie modifiée !',
         }),
         'success',
       );
@@ -127,10 +118,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
       dispatch(addCategory(newCat));
       showToast(
         translate('web.autoText23', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'تمت إضافة الصنف بنجاح !'
-              : 'Catégorie ajoutée avec succès !',
+          defaultValue: 'Catégorie ajoutée avec succès !',
         }),
         'success',
       );
@@ -147,10 +135,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
     if (
       window.confirm(
         translate('web.autoText26', {
-          defaultValue:
-            currentLang === 'AR'
-              ? `هل أنت متأكد من حذف صنف "${name}" ؟`
-              : `Voulez-vous supprimer la catégorie "${name}" ?`,
+          defaultValue: `Voulez-vous supprimer la catégorie "${name}" ?`,
         }),
       )
     ) {
@@ -163,8 +148,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
       dispatch(deleteCategory(id));
       showToast(
         translate('web.autoText27', {
-          defaultValue:
-            currentLang === 'AR' ? 'تم حذف الصنف' : 'Catégorie supprimée !',
+          defaultValue: 'Catégorie supprimée !',
         }),
         'info',
       );
@@ -174,31 +158,30 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <h1 className="text-3xl font-black tracking-tight">
-        {currentLang === 'AR'
-          ? 'إدارة أصناف المنتجات'
-          : 'Gestion des Catégories'}
+        {tCommon('adminCategories.title', 'Gestion des Catégories')}
       </h1>
       <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
-        {currentLang === 'AR'
-          ? 'تحكم في القائمة الديناميكية للأصناف المستعملة في الفرز.'
-          : 'Ajoutez de nouvelles familles de produits et réorganisez le catalogue.'}
+        {tCommon(
+          'adminCategories.description',
+          'Ajoutez de nouvelles familles de produits et réorganisez le catalogue.',
+        )}
       </p>
 
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm mt-8">
         <div>
           <h3 className="text-xs font-black uppercase tracking-widest text-slate-450 mb-2">
             {editingCategory
-              ? currentLang === 'AR'
-                ? 'تعديل الصنف الحالي'
-                : 'Modifier la catégorie'
-              : currentLang === 'AR'
-              ? 'إضافة صنف جديد'
-              : 'Créer une nouvelle catégorie'}
+              ? tCommon('adminCategories.editHeading', 'Modifier la catégorie')
+              : tCommon(
+                  'adminCategories.createHeading',
+                  'Créer une nouvelle catégorie',
+                )}
           </h3>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-xl">
-            {currentLang === 'AR'
-              ? 'استخدم الزر لإضافة صنف جديد عبر نافذة منبثقة. يمكنك تعديل أسماء الأصناف من خلال جدول الأصناف أدناه.'
-              : 'Ajoutez de nouvelles catégories via la fenêtre modale. Vous pouvez renommer les catégories existantes depuis le tableau ci-dessous.'}
+            {tCommon(
+              'adminCategories.infoText',
+              'Ajoutez de nouvelles catégories via la fenêtre modale. Vous pouvez renommer les catégories existantes depuis le tableau ci-dessous.',
+            )}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -213,9 +196,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
               }}
               className="bg-slate-200 dark:bg-slate-700 text-slate-650 dark:text-slate-250 text-xs font-black px-5 py-3 rounded-xl transition"
             >
-              {currentLang === 'AR'
-                ? 'إلغاء التعديل'
-                : 'Annuler la modification'}
+              {tCommon('adminCategories.cancelEdit', 'Annuler la modification')}
             </button>
           ) : null}
           <button
@@ -223,9 +204,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
             onClick={openAddCategoryModal}
             className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-sm transition"
           >
-            {currentLang === 'AR'
-              ? '+ إضافة صنف جديد'
-              : '+ Ajouter une catégorie'}
+            {tCommon('adminCategories.addCategory', '+ Ajouter une catégorie')}
           </button>
         </div>
       </div>
@@ -273,7 +252,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                         onClick={() => openEditCategoryModal(cat)}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
                       >
-                        {currentLang === 'AR' ? 'تعديل الاسم' : 'Renommer'}
+                        {tCommon('adminCategories.rename', 'Renommer')}
                       </button>
                       <button
                         onClick={() => handleDeleteCategory(cat.id, cat.name)}
@@ -303,12 +282,14 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
             <div className="p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-black text-slate-850 dark:text-white">
                 {editingCategory
-                  ? currentLang === 'AR'
-                    ? 'تعديل الصنف'
-                    : 'Modifier la catégorie'
-                  : currentLang === 'AR'
-                  ? 'إضافة صنف جديد'
-                  : 'Ajouter une catégorie'}
+                  ? tCommon(
+                      'adminCategories.modalEditTitle',
+                      'Modifier la catégorie',
+                    )
+                  : tCommon(
+                      'adminCategories.modalCreateTitle',
+                      'Ajouter une catégorie',
+                    )}
               </h2>
 
               {categoryErrorMessage && (
@@ -323,17 +304,19 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
               >
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
-                    {currentLang === 'AR' ? 'اسم الصنف' : 'Nom de la catégorie'}{' '}
+                    {tCommon(
+                      'adminCategories.categoryNameLabel',
+                      'Nom de la catégorie',
+                    )}{' '}
                     *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder={
-                      currentLang === 'AR'
-                        ? 'مثال: مضخات مياه'
-                        : 'Ex: Pompes et Accessoires'
-                    }
+                    placeholder={tCommon(
+                      'adminCategories.categoryPlaceholder',
+                      'Ex: Pompes et Accessoires',
+                    )}
                     value={editingCategory ? editCategoryName : newCategoryName}
                     onChange={e =>
                       editingCategory
@@ -346,9 +329,10 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
 
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
-                    {currentLang === 'AR'
-                      ? 'صورة الصنف (اختياري)'
-                      : 'Image de catégorie (optionnel)'}
+                    {tCommon(
+                      'adminCategories.imageLabel',
+                      'Image de catégorie (optionnel)',
+                    )}
                   </label>
                   <CategoryImageInput
                     imageUri={newCategoryImage || undefined}
@@ -362,19 +346,15 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                     onClick={closeCategoryModal}
                     className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-5 py-3 rounded-xl transition"
                   >
-                    {currentLang === 'AR' ? 'إلغاء' : 'Annuler'}
+                    {tCommon('adminCategories.modalCancel', 'Annuler')}
                   </button>
                   <button
                     type="submit"
                     className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-sm transition"
                   >
                     {editingCategory
-                      ? currentLang === 'AR'
-                        ? 'حفظ التعديل'
-                        : 'Enregistrer'
-                      : currentLang === 'AR'
-                      ? 'إضافة'
-                      : 'Ajouter'}
+                      ? tCommon('adminCategories.saveEdit', 'Enregistrer')
+                      : tCommon('adminCategories.add', 'Ajouter')}
                   </button>
                 </div>
               </form>

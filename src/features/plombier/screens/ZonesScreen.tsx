@@ -204,8 +204,7 @@ const ZonesScreen = ({
 
           <div className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">
-              *{' '}
-              {t.urgentCoverageText}
+              * {t.urgentCoverageText}
             </span>
             <a
               href="https://maps.google.com"

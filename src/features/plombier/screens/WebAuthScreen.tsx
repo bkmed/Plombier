@@ -67,7 +67,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
       };
       startWebSession(adminSession, 'AdminAccueil');
       showToast(
-        tCommon('web.welcomeAdmin', "Bienvenue dans votre espace d'administration !"),
+        tCommon(
+          'web.welcomeAdmin',
+          "Bienvenue dans votre espace d'administration !",
+        ),
         'success',
       );
     } else if (
@@ -103,7 +106,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
     e.preventDefault();
     if (signupPassword !== signupConfirmPassword) {
       showToast(
-        tCommon('web.passwordsMismatch', 'Les mots de passe ne correspondent pas'),
+        tCommon(
+          'web.passwordsMismatch',
+          'Les mots de passe ne correspondent pas',
+        ),
         'error',
       );
       return;
@@ -243,8 +249,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               <LogoSVG size={56} />
             </div>
             <h3 className="text-2xl font-black text-slate-950 dark:text-white">
-              {authTab === 'signin' &&
-                tCommon('web.signinTitle', 'Connexion')}
+              {authTab === 'signin' && tCommon('web.signinTitle', 'Connexion')}
               {authTab === 'signup' &&
                 tCommon('web.signupTitle', 'Inscription')}
               {authTab === 'forgot' &&
@@ -355,7 +360,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                         };
                         startWebSession(userSession, 'Accueil');
                         showToast(
-                          tCommon('web.welcomeUser', 'Ravi de vous revoir, Ahmed Ben Ali !'),
+                          tCommon(
+                            'web.welcomeUser',
+                            'Ravi de vous revoir, Ahmed Ben Ali !',
+                          ),
                           'success',
                         );
                       }, 250);
@@ -388,7 +396,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                         };
                         startWebSession(adminSession, 'AdminAccueil');
                         showToast(
-                          tCommon('web.welcomeAdmin', "Bienvenue dans votre espace d'administration !"),
+                          tCommon(
+                            'web.welcomeAdmin',
+                            "Bienvenue dans votre espace d'administration !",
+                          ),
                           'success',
                         );
                       }, 250);
@@ -402,7 +413,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                  {tCommon('web.noAccountQuestion', `Nouveau sur ${businessName} ?`)}{' '}
+                  {tCommon(
+                    'web.noAccountQuestion',
+                    `Nouveau sur ${businessName} ?`,
+                  )}{' '}
                   <button
                     type="button"
                     onClick={() => {
@@ -424,7 +438,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               onSubmit={e => {
                 e.preventDefault();
                 setForgotStatusMessage(
-                  tCommon('web.resetLinkSent', 'Le lien de réinitialisation a été envoyé !'),
+                  tCommon(
+                    'web.resetLinkSent',
+                    'Le lien de réinitialisation a été envoyé !',
+                  ),
                 );
               }}
               className="space-y-4"

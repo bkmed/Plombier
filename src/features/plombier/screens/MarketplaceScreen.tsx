@@ -7,11 +7,8 @@ import {
 } from '../../../store/slices/partsSlice';
 import { useToast } from '../../../context/ToastContext';
 
-type Lang = 'FR' | 'AR' | 'EN';
-
 interface MarketplaceScreenProps {
-  currentLang: Lang;
-  t: Record<string, any>;
+  t: any;
   setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
 }
 
@@ -132,10 +129,11 @@ const ProductVisual = ({
 };
 
 const MarketplaceScreen = ({
-  currentLang,
   t,
   setSelectedProduct,
 }: MarketplaceScreenProps) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    t(key, { defaultValue });
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
@@ -194,13 +192,10 @@ const MarketplaceScreen = ({
     event.stopPropagation();
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
-      showToast(
-        currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris',
-        'info',
-      );
+      showToast(tCommon('web.favoriteRemoved', 'Retiré des favoris'), 'info');
     } else {
       showToast(
-        currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !',
+        tCommon('web.favoriteAdded', 'Ajouté aux favoris !'),
         'success',
       );
     }
@@ -212,9 +207,10 @@ const MarketplaceScreen = ({
         <div>
           <h1 className="text-3xl font-black tracking-tight">{t.pieces}</h1>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
-            {currentLang === 'AR'
-              ? 'ابحث واشتر قطع غيار الترصيص المستعملة المضمونة والمجربة من قبل حرفيينا.'
-              : "Recherchez et filtrez nos pièces de rechange de plomberie d'occasion certifiées."}
+            {tCommon(
+              'web.marketplaceIntro',
+              "Recherchez et filtrez nos pièces de rechange de plomberie d'occasion certifiées.",
+            )}
           </p>
         </div>
 
@@ -247,11 +243,10 @@ const MarketplaceScreen = ({
               </label>
               <input
                 type="text"
-                placeholder={
-                  currentLang === 'AR'
-                    ? 'ابحث عن قطعة...'
-                    : 'Grohe, boiler, radiateur...'
-                }
+                placeholder={tCommon(
+                  'web.marketplaceSearchPlaceholder',
+                  'Grohe, boiler, radiateur...',
+                )}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
@@ -401,7 +396,7 @@ const MarketplaceScreen = ({
                         }}
                         className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition"
                       >
-                        {currentLang === 'AR' ? 'شراء' : 'Commander'}
+                        {tCommon('web.buyButton', 'Commander')}
                       </button>
                     </div>
                   </div>

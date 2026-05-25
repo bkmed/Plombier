@@ -4,7 +4,6 @@ import { Role } from '../utils/webTranslations';
 
 interface ProfileScreenWebProps {
   currentRole: Role;
-  currentLang: string;
   businessName: string;
   profileName: string;
   profileEmail: string;
@@ -24,7 +23,6 @@ interface ProfileScreenWebProps {
 
 export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
   currentRole,
-  currentLang,
   businessName,
   profileName,
   profileEmail,
@@ -41,6 +39,8 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
   toggleFavorite,
   setSelectedProduct,
 }) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    t(key, { defaultValue });
   const [currentMdp, setCurrentMdp] = React.useState('');
   const [newMdp, setNewMdp] = React.useState('');
   const [newsletterEmail, setNewsletterEmail] = React.useState('');
@@ -54,14 +54,13 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
             🔒
           </div>
           <h2 className="text-2xl font-black text-slate-850 dark:text-slate-100">
-            {currentLang === 'AR'
-              ? 'سجل دخولك لتفعيل حسابك الشخصي'
-              : 'Identification Requise'}
+            {tCommon('web.profileLoginRequiredTitle', 'Identification Requise')}
           </h2>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm leading-relaxed font-semibold">
-            {currentLang === 'AR'
-              ? 'لإضافة قطع غيار للمفضلة وتعديل بياناتك، يرجى تسجيل الدخول أو إنشاء حساب جديد.'
-              : `Rejoignez ${businessName} pour sauvegarder vos pièces favorites, demander des interventions immédiates en priorité et modifier votre mot de passe.`}
+            {tCommon(
+              'web.profileLoginRequiredDescription',
+              `Rejoignez ${businessName} pour sauvegarder vos pièces favorites, demander des interventions immédiates en priorité et modifier votre mot de passe.`,
+            )}
           </p>
 
           <div className="pt-4 flex flex-col gap-3">
@@ -73,9 +72,10 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
               }}
               className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
             >
-              {currentLang === 'AR'
-                ? 'تسجيل الدخول / إنشاء حساب'
-                : "Accéder à l'écran de connexion"}
+              {tCommon(
+                'web.profileLoginButton',
+                "Accéder à l'écran de connexion",
+              )}
             </button>
             <button
               onClick={() => setActiveTab('Accueil')}
@@ -155,9 +155,10 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     e.preventDefault();
                     if (!currentMdp || !newMdp) return;
                     showToast(
-                      currentLang === 'AR'
-                        ? 'تم تحديث كلمة المرور بنجاح'
-                        : 'Sécurité mise à jour avec succès !',
+                      tCommon(
+                        'web.profilePasswordUpdated',
+                        'Sécurité mise à jour avec succès !',
+                      ),
                       'success',
                     );
                     setCurrentMdp('');
@@ -232,18 +233,20 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
 
                 <div className="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4">
                   <h4 className="text-[10px] font-bold text-slate-450 uppercase tracking-widest text-center">
-                    {currentLang === 'AR'
-                      ? 'أعلمني عند الإطلاق'
-                      : "M'avertir lors de la mise en service"}
+                    {tCommon(
+                      'web.profileNotifyMeHeader',
+                      "M'avertir lors de la mise en service",
+                    )}
                   </h4>
                   <form
                     onSubmit={e => {
                       e.preventDefault();
                       if (!newsletterEmail) return;
                       showToast(
-                        currentLang === 'AR'
-                          ? 'شكراً ! سيتم إعلامك بالبريد الإلكتروني.'
-                          : 'Merci ! Vous recevrez une alerte prioritaire.',
+                        tCommon(
+                          'web.profileNewsletterSuccess',
+                          'Merci ! Vous recevrez une alerte prioritaire.',
+                        ),
                         'success',
                       );
                       setNewsletterEmail('');

@@ -1,56 +1,49 @@
 import React from 'react';
 
-type Lang = 'FR' | 'AR' | 'EN';
 interface AdminAnalyticsScreenProps {
-  currentLang: Lang;
-  t: Record<string, any>;
+  t: any;
 }
 
-const AdminAnalyticsScreen = ({
-  currentLang,
-  t,
-}: AdminAnalyticsScreenProps) => {
+const AdminAnalyticsScreen = ({ t }: AdminAnalyticsScreenProps) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    t(key, { defaultValue });
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <h1 className="text-3xl font-black tracking-tight">
-        {currentLang === 'AR'
-          ? 'مؤشرات الأداء الماليّة والخدمية'
-          : 'Indicateurs Financiers & Performance'}
+        {tCommon(
+          'admin.analyticsTitle',
+          'Financial and service performance metrics',
+        )}
       </h1>
       <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
-        {currentLang === 'AR'
-          ? 'استعرض التقارير البيانية حول الأرباح المحققة وطلبات الصيانة.'
-          : "Analysez la répartition des ventes de pièces et le taux d'intervention régionale."}
+        {tCommon(
+          'admin.analyticsDescription',
+          'Review revenue charts and service request trends in one dashboard.',
+        )}
       </p>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
         {[
           {
-            label:
-              currentLang === 'AR'
-                ? 'متوسط زمن الرد'
-                : 'Temps de réponse moyen',
+            label: tCommon('admin.avgResponseTime', 'Average response time'),
             value: '18 min',
-            detail: currentLang === 'AR' ? 'طلبات عاجلة' : 'Demandes urgentes',
+            detail: tCommon('admin.urgentRequests', 'Urgent requests'),
           },
           {
-            label:
-              currentLang === 'AR' ? 'قيمة الطلب المتوسطة' : 'Panier moyen',
+            label: tCommon('admin.avgOrderValue', 'Average order value'),
             value: '164 DT',
-            detail: currentLang === 'AR' ? 'قطع مستعملة' : "Pièces d'occasion",
+            detail: tCommon('admin.usedParts', 'Used parts'),
           },
           {
-            label: currentLang === 'AR' ? 'الطلبات المفتوحة' : 'Leads ouverts',
+            label: tCommon('admin.openLeads', 'Open leads'),
             value: '27',
-            detail: currentLang === 'AR' ? 'هذا الأسبوع' : 'Cette semaine',
+            detail: tCommon('admin.thisWeek', 'This week'),
           },
           {
-            label: currentLang === 'AR' ? 'معدل التحويل' : 'Taux de conversion',
+            label: tCommon('admin.conversionRate', 'Conversion rate'),
             value: '31%',
-            detail:
-              currentLang === 'AR'
-                ? 'واتساب إلى طلب'
-                : 'WhatsApp vers commande',
+            detail: tCommon('admin.whatsappToOrder', 'WhatsApp to order'),
           },
         ].map((metric, idx) => (
           <div
@@ -73,7 +66,10 @@ const AdminAnalyticsScreen = ({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <h3 className="text-sm font-black uppercase tracking-wider">
-            Évolution du Chiffre d'Affaires Mensuel (TND)
+            {tCommon(
+              'admin.monthlyRevenueChartTitle',
+              'Monthly revenue evolution (TND)',
+            )}
           </h3>
           <div className="space-y-4 pt-4">
             {[
@@ -103,7 +99,10 @@ const AdminAnalyticsScreen = ({
 
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <h3 className="text-sm font-black uppercase tracking-wider">
-            Répartition des Demandes par Services (%)
+            {tCommon(
+              'admin.serviceDemandBreakdownTitle',
+              'Service request allocation (%)',
+            )}
           </h3>
           <div className="space-y-5 pt-4 text-xs font-bold text-slate-500">
             {[

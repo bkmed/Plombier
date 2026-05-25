@@ -258,9 +258,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 
           {galleryItems.length === 0 && (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 dark:bg-slate-900 p-8 text-center text-slate-500 dark:text-slate-400">
-              {currentLang === 'AR'
-                ? 'لم يتم إضافة أي صورة بعد. ستظهر هنا الصور الواقعية بمجرد إضافتها من قبل المسؤول.'
-                : 'Aucune photo ajoutée pour le moment. Les réalisations réelles apparaîtront ici dès qu’elles seront publiées par l’administrateur.'}
+              {tCommon(
+                'web.homeEmptyGallery',
+                'Aucune photo ajoutée pour le moment. Les réalisations réelles apparaîtront ici dès qu’elles seront publiées par l’administrateur.',
+              )}
             </div>
           )}
         </div>

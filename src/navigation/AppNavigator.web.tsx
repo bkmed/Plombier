@@ -138,17 +138,17 @@ export const AppNavigator = () => {
     if (e) e.stopPropagation();
     if (currentRole === 'anonyme') {
       showToast(
-        tCommon('web.favoriteLoginRequired', 'Veuillez vous connecter pour gérer vos favoris.'),
+        tCommon(
+          'web.favoriteLoginRequired',
+          'Veuillez vous connecter pour gérer vos favoris.',
+        ),
         'info',
       );
       return;
     }
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
-      showToast(
-        tCommon('web.favoriteRemoved', 'Retiré des favoris'),
-        'info',
-      );
+      showToast(tCommon('web.favoriteRemoved', 'Retiré des favoris'), 'info');
     } else {
       showToast(
         tCommon('web.favoriteAdded', 'Ajouté aux favoris !'),
@@ -405,7 +405,6 @@ export const AppNavigator = () => {
 
           {activeTab === 'Marketplace' && (
             <MarketplaceScreen
-              currentLang={currentLang}
               t={translate}
               setSelectedProduct={setSelectedProduct}
             />
@@ -420,7 +419,6 @@ export const AppNavigator = () => {
           {activeTab === 'Profile' && (
             <ProfileScreenWeb
               currentRole={currentRole}
-              currentLang={currentLang}
               businessName={businessName}
               profileName={profileName}
               profileEmail={profileEmail}
@@ -451,7 +449,7 @@ export const AppNavigator = () => {
 
           {activeTab === 'AdminAccueil' && (
             <AdminDashboard
-              currentLang={currentLang}
+              t={translate}
               businessName={businessName}
               products={products}
               reduxCategories={reduxCategories}
@@ -460,19 +458,11 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'GestionAnnonce' && (
-            <AdminAnnonces
-              currentLang={currentLang}
-              showToast={showToast}
-              translate={translate}
-            />
+            <AdminAnnonces showToast={showToast} translate={translate} />
           )}
 
           {activeTab === 'GestionCategorie' && (
-            <AdminCategories
-              currentLang={currentLang}
-              showToast={showToast}
-              translate={translate}
-            />
+            <AdminCategories showToast={showToast} translate={translate} />
           )}
 
           {activeTab === 'AdminGallery' && (
@@ -488,20 +478,14 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'GestionUser' && (
-            <AdminUsers
-              currentLang={currentLang}
-              showToast={showToast}
-              t={translate}
-            />
+            <AdminUsers showToast={showToast} t={translate} />
           )}
 
           {activeTab === 'AdminProfile' && (
             <AdminProfileScreen currentLang={currentLang} t={translate} />
           )}
 
-          {activeTab === 'Analytics' && (
-            <AdminAnalyticsScreen currentLang={currentLang} t={translate} />
-          )}
+          {activeTab === 'Analytics' && <AdminAnalyticsScreen t={translate} />}
         </main>
       )}
 
