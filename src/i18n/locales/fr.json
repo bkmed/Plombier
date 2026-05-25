@@ -1500,5 +1500,66 @@
       "call_to_buy": "Commander"
     },
     "buy_piece_msg": "Bonjour, je suis intéressé par l'achat de la pièce d'occasion : {{title}} - {{price}} DT."
+  },
+  "auth_hardcoded": {
+    "signin_title": "Connexion",
+    "signup_title": "Inscription",
+    "forgot_title": "Mot de passe oublié",
+    "signin_subtitle": "Connectez-vous pour accéder à votre espace premium.",
+    "signup_subtitle": "Créez votre compte client gratuit en quelques secondes.",
+    "forgot_subtitle": "Entrez votre email pour recevoir les instructions de réinitialisation.",
+    "email_label": "Adresse Email",
+    "password_label": "Mot de Passe",
+    "forgot_password_link": "Mot de passe oublié?",
+    "secure_login_badge": "Connexion sécurisée",
+    "secure_login_button": "Connexion Sécurisée",
+    "demo_accounts_label": "COMPTES DE DÉMO DE PLOMBERIE (ACCÈS DIRECT)",
+    "signing_in": "Connexion en cours...",
+    "admin_welcome": "Bienvenue dans votre espace d'administration!",
+    "user_welcome": "Ravi de vous revoir, Ahmed Ben Ali!",
+    "invalid_credentials": "Identifiants invalides",
+    "no_account_text": "Nouveau sur {{businessName}}?",
+    "create_account_link": "Créer un compte",
+    "reset_link_sent": "Le lien de réinitialisation a été envoyé!",
+    "send_reset_link": "Envoyer le lien de réinitialisation",
+    "back_to_signin": "Retour à la connexion",
+    "full_name_label": "Nom Complet",
+    "phone_label": "Téléphone",
+    "city_label": "Ville / Gouvernorat",
+    "confirm_password_label": "Confirmation",
+    "create_account_button": "Créer mon compte client",
+    "has_account_text": "Déjà inscrit?",
+    "signin_link": "Se connecter",
+    "guest_access": "Accès Invité autorisé.",
+    "continue_guest": "Continuer en tant qu'invité (Anonyme) →"
+  },
+  "nav_hardcoded": {
+    "home": "Accueil",
+    "admin_home": "Accueil",
+    "announcements": "Gestion Annonce",
+    "categories": "Gestion Catégorie",
+    "gallery": "galleryManageLabel",
+    "services": "Services",
+    "users": "Gestion User",
+    "admin_profile": "Profil",
+    "analytics": "Analytics",
+    "logout": "Déconnexion",
+    "login_register": "Connexion / S'inscrire",
+    "mobile_announcements": "Annonces",
+    "mobile_categories": "Catégories",
+    "mobile_services": "Services",
+    "mobile_users": "Membres",
+    "mobile_profile": "Profil",
+    "mobile_analytics": "Analytics"
+  },
+  "favorites_hardcoded": {
+    "login_required": "Veuillez vous connecter pour gérer vos favoris.",
+    "removed": "Retiré des favoris",
+    "added": "Ajouté aux favoris!"
+  },
+  "common_hardcoded": {
+    "logout_success": "Déconnexion réussie! A bientôt.",
+    "urgent": "URGENT",
+    "loading_premium": "Chargement premium..."
   }
 }

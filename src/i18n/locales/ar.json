@@ -1500,5 +1500,66 @@
       "call_to_buy": "اتصل لشراء"
     },
     "buy_piece_msg": "مرحباً، أنا مهتم بشراء قطعة الغيار المستعملة: {{title}} - بسعر {{price}} د.ت."
+  },
+  "auth_hardcoded": {
+    "signin_title": "تسجيل الدخول",
+    "signup_title": "إنشاء حساب جديد",
+    "forgot_title": "نسيت كلمة المرور",
+    "signin_subtitle": "سجل دخولك للوصول إلى حسابك الفاخر",
+    "signup_subtitle": "قم بإنشاء حسابك المجاني في ثوانٍ معدودة",
+    "forgot_subtitle": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور.",
+    "email_label": "البريد الإلكتروني",
+    "password_label": "كلمة المرور",
+    "forgot_password_link": "هل نسيت كلمة المرور?",
+    "secure_login_badge": "تسجيل آمن",
+    "secure_login_button": "دخول آمن",
+    "demo_accounts_label": "حسابات التجربة الفورية",
+    "signing_in": "جاري تسجيل الدخول...",
+    "admin_welcome": "مرحباً بك حضرة المدير",
+    "user_welcome": "مرحباً بك أحمد بن علي",
+    "invalid_credentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+    "no_account_text": "ليس لديك حساب?",
+    "create_account_link": "أنشئ حساباً جديداً",
+    "reset_link_sent": "تم إرسال رابط إعادة تعيين كلمة المرور بنجاح!",
+    "send_reset_link": "إرسال رابط إعادة التعيين",
+    "back_to_signin": "العودة إلى تسجيل الدخول",
+    "full_name_label": "الاسم الكامل",
+    "phone_label": "الهاتف",
+    "city_label": "المدينة / الولاية",
+    "confirm_password_label": "تأكيد كلمة المرور",
+    "create_account_button": "إنشاء حساب جديد",
+    "has_account_text": "لديك حساب بالفعل?",
+    "signin_link": "تسجيل الدخول",
+    "guest_access": "تصفح بصفتك زائر",
+    "continue_guest": "المواصلة كزائر (مجهول) ←"
+  },
+  "nav_hardcoded": {
+    "home": "الرئيسية",
+    "admin_home": "الرئيسية",
+    "announcements": "إدارة الإعلانات",
+    "categories": "إدارة الأصناف",
+    "gallery": "galleryManageLabel",
+    "services": "الخدمات",
+    "users": "المستخدمين",
+    "admin_profile": "ملف الإدارة",
+    "analytics": "التحليلات الماليّة",
+    "logout": "خروج",
+    "login_register": "تسجيل الدخول",
+    "mobile_announcements": "الإعلانات",
+    "mobile_categories": "الأصناف",
+    "mobile_services": "الخدمات",
+    "mobile_users": "المستخدمين",
+    "mobile_profile": "الملف",
+    "mobile_analytics": "التحليلات"
+  },
+  "favorites_hardcoded": {
+    "login_required": "يرجى تسجيل الدخول لحفظ المفضلة",
+    "removed": "تمت إزالته من المفضلة",
+    "added": "أضيف إلى المفضلة!"
+  },
+  "common_hardcoded": {
+    "logout_success": "تم تسجيل خروجك بنجاح",
+    "urgent": "حالة طوارئ قصوى",
+    "loading_premium": "جاري تحميل التطبيق الفاخر..."
   }
 }

@@ -48,13 +48,13 @@ export const FooterLinks = ({
         <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
           {navLabel}
         </Text>
-        <View className="space-y-2 text-xs font-semibold">
+        <View className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
           <TouchableOpacity
             onPress={() =>
               setActiveTab(currentRole === 'admin' ? 'AdminAccueil' : 'Accueil')
             }
           >
-            <Text className="hover:text-[#F97316]">
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
               {t('sitemap_page_accueil')}
             </Text>
           </TouchableOpacity>
@@ -63,13 +63,13 @@ export const FooterLinks = ({
               setActiveTab(currentRole === 'admin' ? 'AdminProfile' : 'Profile')
             }
           >
-            <Text className="hover:text-[#F97316]">
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
               {t('sitemap_page_profil')}
             </Text>
           </TouchableOpacity>
           {currentRole === 'admin' && (
             <TouchableOpacity onPress={() => setActiveTab('AdminGallery')}>
-              <Text className="hover:text-[#F97316]">
+              <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
                 {t('gallery.manageGallery')}
               </Text>
             </TouchableOpacity>
@@ -77,17 +77,17 @@ export const FooterLinks = ({
           {currentRole !== 'admin' && (
             <>
               <TouchableOpacity onPress={() => setActiveTab('Services')}>
-                <Text className="hover:text-[#F97316]">
+                <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
                   {t('sitemap_page_services')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setActiveTab('Marketplace')}>
-                <Text className="hover:text-[#F97316]">
+                <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
                   {t('sitemap_page_pieces')}
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setActiveTab('Gallery')}>
-                <Text className="hover:text-[#F97316]">
+                <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
                   {t('gallery.title')}
                 </Text>
               </TouchableOpacity>
@@ -100,18 +100,18 @@ export const FooterLinks = ({
         <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
           {t('informations')}
         </Text>
-        <View className="space-y-2 text-xs font-semibold">
+        <View className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
           <TouchableOpacity onPress={() => setActiveTab('Informations')}>
-            <Text className="hover:text-[#F97316]">{t('informations')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('informations')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('Politique')}>
-            <Text className="hover:text-[#F97316]">{t('politique')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('politique')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('Conditions')}>
-            <Text className="hover:text-[#F97316]">{t('conditions_util')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('conditions_util')}</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('PlanSite')}>
-            <Text className="hover:text-[#F97316]">{t('plan_site')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('plan_site')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -120,10 +120,10 @@ export const FooterLinks = ({
         <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
           {t('support.header') || 'Support'}
         </Text>
-        <View className="space-y-2 text-xs font-semibold">
+        <View className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
           {supportWhatsAppNumber ? (
             <TouchableOpacity onPress={() => openTel(supportWhatsAppNumber)}>
-              <Text className="flex items-center gap-2">
+              <Text className="text-slate-600 dark:text-slate-300 flex items-center gap-2">
                 📞 {supportWhatsAppNumber}
               </Text>
             </TouchableOpacity>
@@ -131,7 +131,7 @@ export const FooterLinks = ({
 
           {supportEmail ? (
             <TouchableOpacity onPress={() => openMail(supportEmail)}>
-              <Text className="flex items-center gap-2">✉️ {supportEmail}</Text>
+              <Text className="text-slate-600 dark:text-slate-300 flex items-center gap-2">✉️ {supportEmail}</Text>
             </TouchableOpacity>
           ) : null}
 
@@ -139,7 +139,7 @@ export const FooterLinks = ({
             <TouchableOpacity
               onPress={() => openWhatsApp(supportWhatsAppDigits)}
             >
-              <Text className="flex items-center gap-2">
+              <Text className="text-slate-600 dark:text-slate-300 flex items-center gap-2">
                 {t('support.whatsapp')}: {supportWhatsAppNumber}
               </Text>
             </TouchableOpacity>

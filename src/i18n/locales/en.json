@@ -1500,5 +1500,66 @@
       "call_to_buy": "Order Now"
     },
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
+  },
+  "auth_hardcoded": {
+    "signin_title": "Sign In",
+    "signup_title": "Sign Up",
+    "forgot_title": "Forgot Password",
+    "signin_subtitle": "Sign in to access your premium space.",
+    "signup_subtitle": "Create your free customer account in seconds.",
+    "forgot_subtitle": "Enter your email to receive password reset instructions.",
+    "email_label": "Email Address",
+    "password_label": "Password",
+    "forgot_password_link": "Forgot Password?",
+    "secure_login_badge": "Secure login",
+    "secure_login_button": "Secure Login",
+    "demo_accounts_label": "DEMO PLUMBING ACCOUNTS (DIRECT ACCESS)",
+    "signing_in": "Signing in...",
+    "admin_welcome": "Welcome to your admin space!",
+    "user_welcome": "Welcome back, Ahmed Ben Ali!",
+    "invalid_credentials": "Email or password is incorrect",
+    "no_account_text": "Don't have an account?",
+    "create_account_link": "Create an account",
+    "reset_link_sent": "Password reset link sent successfully!",
+    "send_reset_link": "Send reset link",
+    "back_to_signin": "Back to sign in",
+    "full_name_label": "Full Name",
+    "phone_label": "Phone",
+    "city_label": "City / Governorate",
+    "confirm_password_label": "Confirm Password",
+    "create_account_button": "Create customer account",
+    "has_account_text": "Already registered?",
+    "signin_link": "Log In",
+    "guest_access": "Guest access allowed.",
+    "continue_guest": "Continue as guest (Anonymous) →"
+  },
+  "nav_hardcoded": {
+    "home": "Home",
+    "admin_home": "Home",
+    "announcements": "Manage Announcements",
+    "categories": "Manage Categories",
+    "gallery": "galleryManageLabel",
+    "services": "Services",
+    "users": "User Management",
+    "admin_profile": "Profile",
+    "analytics": "Analytics",
+    "logout": "Logout",
+    "login_register": "Login / Register",
+    "mobile_announcements": "Announcements",
+    "mobile_categories": "Categories",
+    "mobile_services": "Services",
+    "mobile_users": "Members",
+    "mobile_profile": "Profile",
+    "mobile_analytics": "Analytics"
+  },
+  "favorites_hardcoded": {
+    "login_required": "Please log in to save favorites.",
+    "removed": "Removed from favorites",
+    "added": "Added to favorites!"
+  },
+  "common_hardcoded": {
+    "logout_success": "Logout successful! See you soon.",
+    "urgent": "URGENT",
+    "loading_premium": "Loading premium..."
   }
 }
