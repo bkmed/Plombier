@@ -18,10 +18,7 @@ export const MaterialIcons: React.FC<IconProps> = ({
     switch (iconName) {
       case 'home':
         return (
-          <path
-            d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"
-            fill="currentColor"
-          />
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" fill="currentColor" />
         );
       case 'receipt-long':
       case 'receipt':
@@ -70,10 +67,7 @@ export const MaterialIcons: React.FC<IconProps> = ({
         );
       case 'add':
         return (
-          <path
-            d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
-            fill="currentColor"
-          />
+          <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor" />
         );
       case 'priority-high':
         return (
@@ -115,12 +109,7 @@ export const MaterialIcons: React.FC<IconProps> = ({
         );
       case 'flash-on':
       case 'utility':
-        return (
-          <path
-            d="M7 2v11h3v9l7-12h-4l4-8z"
-            fill="currentColor"
-          />
-        );
+        return <path d="M7 2v11h3v9l7-12h-4l4-8z" fill="currentColor" />;
       case 'local-gas-station':
       case 'fuel':
         return (
@@ -130,14 +119,7 @@ export const MaterialIcons: React.FC<IconProps> = ({
           />
         );
       case 'circle':
-        return (
-          <circle
-            cx="12"
-            cy="12"
-            r="8"
-            fill="currentColor"
-          />
-        );
+        return <circle cx="12" cy="12" r="8" fill="currentColor" />;
       case 'arrow-forward':
         return (
           <path
@@ -183,14 +165,7 @@ export const MaterialIcons: React.FC<IconProps> = ({
           />
         );
       default:
-        return (
-          <circle
-            cx="12"
-            cy="12"
-            r="6"
-            fill="currentColor"
-          />
-        );
+        return <circle cx="12" cy="12" r="6" fill="currentColor" />;
     }
   };
 

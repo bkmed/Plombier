@@ -8,6 +8,7 @@
   "navigation": {
     "home": "Home"
   },
+  "navigation_label": "Navigazione",
   "shortcuts": {
     "coffee": "Coffee",
     "transport": "Transport",

@@ -6,34 +6,75 @@ interface AdminAnalyticsScreenProps {
   t: Record<string, any>;
 }
 
-const AdminAnalyticsScreen = ({ currentLang, t }: AdminAnalyticsScreenProps) => {
+const AdminAnalyticsScreen = ({
+  currentLang,
+  t,
+}: AdminAnalyticsScreenProps) => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-      <h1 className="text-3xl font-black tracking-tight">{currentLang === 'AR' ? 'مؤشرات الأداء الماليّة والخدمية' : 'Indicateurs Financiers & Performance'}</h1>
+      <h1 className="text-3xl font-black tracking-tight">
+        {currentLang === 'AR'
+          ? 'مؤشرات الأداء الماليّة والخدمية'
+          : 'Indicateurs Financiers & Performance'}
+      </h1>
       <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
         {currentLang === 'AR'
           ? 'استعرض التقارير البيانية حول الأرباح المحققة وطلبات الصيانة.'
-          : 'Analysez la répartition des ventes de pièces et le taux d\'intervention régionale.'}
+          : "Analysez la répartition des ventes de pièces et le taux d'intervention régionale."}
       </p>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
         {[
-          { label: currentLang === 'AR' ? 'متوسط زمن الرد' : 'Temps de réponse moyen', value: '18 min', detail: currentLang === 'AR' ? 'طلبات عاجلة' : 'Demandes urgentes' },
-          { label: currentLang === 'AR' ? 'قيمة الطلب المتوسطة' : 'Panier moyen', value: '164 DT', detail: currentLang === 'AR' ? 'قطع مستعملة' : 'Pièces d\'occasion' },
-          { label: currentLang === 'AR' ? 'الطلبات المفتوحة' : 'Leads ouverts', value: '27', detail: currentLang === 'AR' ? 'هذا الأسبوع' : 'Cette semaine' },
-          { label: currentLang === 'AR' ? 'معدل التحويل' : 'Taux de conversion', value: '31%', detail: currentLang === 'AR' ? 'واتساب إلى طلب' : 'WhatsApp vers commande' },
+          {
+            label:
+              currentLang === 'AR'
+                ? 'متوسط زمن الرد'
+                : 'Temps de réponse moyen',
+            value: '18 min',
+            detail: currentLang === 'AR' ? 'طلبات عاجلة' : 'Demandes urgentes',
+          },
+          {
+            label:
+              currentLang === 'AR' ? 'قيمة الطلب المتوسطة' : 'Panier moyen',
+            value: '164 DT',
+            detail: currentLang === 'AR' ? 'قطع مستعملة' : "Pièces d'occasion",
+          },
+          {
+            label: currentLang === 'AR' ? 'الطلبات المفتوحة' : 'Leads ouverts',
+            value: '27',
+            detail: currentLang === 'AR' ? 'هذا الأسبوع' : 'Cette semaine',
+          },
+          {
+            label: currentLang === 'AR' ? 'معدل التحويل' : 'Taux de conversion',
+            value: '31%',
+            detail:
+              currentLang === 'AR'
+                ? 'واتساب إلى طلب'
+                : 'WhatsApp vers commande',
+          },
         ].map((metric, idx) => (
-          <div key={idx} className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-sm">
-            <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400">{metric.label}</span>
-            <strong className="mt-2 block text-2xl font-black text-slate-850 dark:text-white">{metric.value}</strong>
-            <span className="mt-1 block text-[10px] font-bold text-slate-500 dark:text-slate-400">{metric.detail}</span>
+          <div
+            key={idx}
+            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 shadow-sm"
+          >
+            <span className="block text-[9px] font-black uppercase tracking-widest text-slate-400">
+              {metric.label}
+            </span>
+            <strong className="mt-2 block text-2xl font-black text-slate-850 dark:text-white">
+              {metric.value}
+            </strong>
+            <span className="mt-1 block text-[10px] font-bold text-slate-500 dark:text-slate-400">
+              {metric.detail}
+            </span>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-10">
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <h3 className="text-sm font-black uppercase tracking-wider">Évolution du Chiffre d'Affaires Mensuel (TND)</h3>
+          <h3 className="text-sm font-black uppercase tracking-wider">
+            Évolution du Chiffre d'Affaires Mensuel (TND)
+          </h3>
           <div className="space-y-4 pt-4">
             {[
               { month: 'Janvier', val: 3400, percent: '45%' },
@@ -45,10 +86,15 @@ const AdminAnalyticsScreen = ({ currentLang, t }: AdminAnalyticsScreenProps) => 
               <div key={idx} className="space-y-1.5 text-xs font-semibold">
                 <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
                   <span>{row.month}</span>
-                  <span className="font-black text-slate-800 dark:text-white">{row.val.toFixed(3)} DT</span>
+                  <span className="font-black text-slate-800 dark:text-white">
+                    {row.val.toFixed(3)} DT
+                  </span>
                 </div>
                 <div className="h-4 bg-slate-100 dark:bg-slate-900 rounded-lg overflow-hidden relative">
-                  <div className="h-full bg-gradient-to-r from-sky-600 to-[#1E3A5F] rounded-lg transition-all duration-500" style={{ width: row.percent }} />
+                  <div
+                    className="h-full bg-gradient-to-r from-sky-600 to-[#1E3A5F] rounded-lg transition-all duration-500"
+                    style={{ width: row.percent }}
+                  />
                 </div>
               </div>
             ))}
@@ -56,7 +102,9 @@ const AdminAnalyticsScreen = ({ currentLang, t }: AdminAnalyticsScreenProps) => 
         </div>
 
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <h3 className="text-sm font-black uppercase tracking-wider">Répartition des Demandes par Services (%)</h3>
+          <h3 className="text-sm font-black uppercase tracking-wider">
+            Répartition des Demandes par Services (%)
+          </h3>
           <div className="space-y-5 pt-4 text-xs font-bold text-slate-500">
             {[
               { name: t.plomberie_generale, share: 45, color: 'bg-blue-500' },
@@ -73,7 +121,10 @@ const AdminAnalyticsScreen = ({ currentLang, t }: AdminAnalyticsScreenProps) => 
                   <span>{row.share}%</span>
                 </div>
                 <div className="h-2 bg-slate-100 dark:bg-slate-900 rounded-full overflow-hidden">
-                  <div className={`h-full ${row.color}`} style={{ width: `${row.share}%` }} />
+                  <div
+                    className={`h-full ${row.color}`}
+                    style={{ width: `${row.share}%` }}
+                  />
                 </div>
               </div>
             ))}
@@ -83,27 +134,47 @@ const AdminAnalyticsScreen = ({ currentLang, t }: AdminAnalyticsScreenProps) => 
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
         <div className="lg:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm">
-          <h3 className="text-sm font-black uppercase tracking-wider">Performance par région</h3>
+          <h3 className="text-sm font-black uppercase tracking-wider">
+            Performance par région
+          </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
             {[
               { region: 'Grand Tunis', requests: 42, satisfaction: '98%' },
               { region: 'Sahel', requests: 26, satisfaction: '96%' },
               { region: 'Sfax', requests: 14, satisfaction: '94%' },
-            ].map((row) => (
-              <div key={row.region} className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{row.region}</span>
-                <div className="mt-3 text-xl font-black text-slate-850 dark:text-white">{row.requests}</div>
-                <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">{row.satisfaction} satisfaction</div>
+            ].map(row => (
+              <div
+                key={row.region}
+                className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4"
+              >
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  {row.region}
+                </span>
+                <div className="mt-3 text-xl font-black text-slate-850 dark:text-white">
+                  {row.requests}
+                </div>
+                <div className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+                  {row.satisfaction} satisfaction
+                </div>
               </div>
             ))}
           </div>
         </div>
 
         <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm">
-          <h3 className="text-sm font-black uppercase tracking-wider">Alertes stock</h3>
+          <h3 className="text-sm font-black uppercase tracking-wider">
+            Alertes stock
+          </h3>
           <div className="space-y-3 mt-6 text-xs font-semibold">
-            {['Robinetterie: 3 références à renouveler', 'Chauffe-eau: forte demande cette semaine', 'Vannes: marge moyenne +12%'].map((item) => (
-              <div key={item} className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900 px-3 py-2 text-amber-700 dark:text-amber-300">
+            {[
+              'Robinetterie: 3 références à renouveler',
+              'Chauffe-eau: forte demande cette semaine',
+              'Vannes: marge moyenne +12%',
+            ].map(item => (
+              <div
+                key={item}
+                className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-900 px-3 py-2 text-amber-700 dark:text-amber-300"
+              >
                 {item}
               </div>
             ))}

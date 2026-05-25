@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react';
-import { Alert, ScrollView, Share, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Alert,
+  ScrollView,
+  Share,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useNavigation } from '@react-navigation/native';
@@ -14,10 +21,18 @@ import {
 } from '../../store/slices/walletSlice';
 import { trackWalletScreen } from '../../services/analyticsService';
 
-const Toggle = ({ value, onPress }: { value: boolean; onPress: () => void }) => (
+const Toggle = ({
+  value,
+  onPress,
+}: {
+  value: boolean;
+  onPress: () => void;
+}) => (
   <TouchableOpacity
     onPress={onPress}
-    className={`h-[26px] w-11 rounded-full p-[3px] ${value ? 'items-end bg-primary' : 'items-start bg-outline-variant'}`}
+    className={`h-[26px] w-11 rounded-full p-[3px] ${
+      value ? 'items-end bg-primary' : 'items-start bg-outline-variant'
+    }`}
   >
     <View className="h-5 w-5 rounded-full bg-white shadow-editorial" />
   </TouchableOpacity>
@@ -39,7 +54,15 @@ export const ProfileScreen = () => {
     const csv = [
       'date,label,category,amount,account,tags,note',
       ...transactions.map(tx =>
-        [tx.date, tx.label, tx.category, tx.amount, tx.accountId, tx.tags.join('|'), tx.note || '']
+        [
+          tx.date,
+          tx.label,
+          tx.category,
+          tx.amount,
+          tx.accountId,
+          tx.tags.join('|'),
+          tx.note || '',
+        ]
           .map(value => `"${String(value).replace(/"/g, '""')}"`)
           .join(','),
       ),
@@ -65,7 +88,9 @@ export const ProfileScreen = () => {
             <Text className="font-headline text-lg font-extrabold text-on-surface">
               {user?.name || 'Plombier User'}
             </Text>
-            <Text className="mt-1 font-body text-xs text-on-surface-variant">{user?.email}</Text>
+            <Text className="mt-1 font-body text-xs text-on-surface-variant">
+              {user?.email}
+            </Text>
             <Text className="mt-2 self-start rounded-full bg-primary/10 px-3 py-1.5 font-label text-[10px] font-extrabold uppercase text-primary">
               Verified Wallet
             </Text>
@@ -80,19 +105,36 @@ export const ProfileScreen = () => {
             ['Language', i18n.language.toUpperCase(), 'language'],
             ['Currency', settings.currency, 'payments'],
           ].map(([label, value, icon]) => (
-            <TouchableOpacity key={label} className="flex-row items-center justify-between px-5 py-4">
+            <TouchableOpacity
+              key={label}
+              className="flex-row items-center justify-between px-5 py-4"
+            >
               <View className="flex-row items-center gap-3">
-                <MaterialIcons name={icon as string} size={20} color="#005994" />
-                <Text className="font-body text-sm font-bold text-on-surface">{label}</Text>
+                <MaterialIcons
+                  name={icon as string}
+                  size={20}
+                  color="#005994"
+                />
+                <Text className="font-body text-sm font-bold text-on-surface">
+                  {label}
+                </Text>
               </View>
-              <Text className="font-body text-sm text-on-surface-variant">{value}</Text>
+              <Text className="font-body text-sm text-on-surface-variant">
+                {value}
+              </Text>
             </TouchableOpacity>
           ))}
           <View className="flex-row items-center justify-between px-5 py-4">
-            <Text className="font-body text-sm font-bold text-on-surface">Hide Balances</Text>
+            <Text className="font-body text-sm font-bold text-on-surface">
+              Hide Balances
+            </Text>
             <Toggle
               value={settings.hideBalances}
-              onPress={() => dispatch(updateSettings({ hideBalances: !settings.hideBalances }))}
+              onPress={() =>
+                dispatch(
+                  updateSettings({ hideBalances: !settings.hideBalances }),
+                )
+              }
             />
           </View>
         </View>
@@ -102,17 +144,25 @@ export const ProfileScreen = () => {
         </Text>
         <View className="mx-5 rounded-2xl bg-surface-container-lowest shadow-editorial">
           <View className="flex-row items-center justify-between px-5 py-4">
-            <Text className="font-body text-sm font-bold text-on-surface">Monthly Budget</Text>
+            <Text className="font-body text-sm font-bold text-on-surface">
+              Monthly Budget
+            </Text>
             <Text className="font-body text-sm text-on-surface-variant">
               {settings.monthlyBudget} {settings.currency}
             </Text>
           </View>
           <View className="flex-row items-center justify-between px-5 py-4">
-            <Text className="font-body text-sm font-bold text-on-surface">Notifications</Text>
+            <Text className="font-body text-sm font-bold text-on-surface">
+              Notifications
+            </Text>
             <Toggle
               value={settings.notificationsEnabled}
               onPress={() =>
-                dispatch(updateSettings({ notificationsEnabled: !settings.notificationsEnabled }))
+                dispatch(
+                  updateSettings({
+                    notificationsEnabled: !settings.notificationsEnabled,
+                  }),
+                )
               }
             />
           </View>
@@ -123,7 +173,10 @@ export const ProfileScreen = () => {
         </Text>
         <View className="mx-5 rounded-2xl bg-surface-container-lowest p-2 shadow-editorial">
           {settings.shortcuts.map(shortcut => (
-            <View key={shortcut.id} className="flex-row items-center justify-between rounded-xl px-3 py-3">
+            <View
+              key={shortcut.id}
+              className="flex-row items-center justify-between rounded-xl px-3 py-3"
+            >
               <View className="flex-row items-center gap-3">
                 <Text className="text-xl">{shortcut.emoji}</Text>
                 <Text className="font-body text-sm font-bold text-on-surface">
@@ -149,10 +202,14 @@ export const ProfileScreen = () => {
           ].map(item => (
             <TouchableOpacity
               key={item.page}
-              onPress={() => navigation.navigate('LegalScreen', { page: item.page })}
+              onPress={() =>
+                navigation.navigate('LegalScreen', { page: item.page })
+              }
               className="flex-row items-center justify-between px-5 py-4 border-b border-slate-200 dark:border-slate-700"
             >
-              <Text className="font-body text-sm font-bold text-on-surface">{item.label}</Text>
+              <Text className="font-body text-sm font-bold text-on-surface">
+                {item.label}
+              </Text>
               <MaterialIcons name="chevron-right" size={20} color="#005994" />
             </TouchableOpacity>
           ))}
@@ -162,8 +219,13 @@ export const ProfileScreen = () => {
           Data
         </Text>
         <View className="mx-5 rounded-2xl bg-surface-container-lowest shadow-editorial">
-          <TouchableOpacity className="flex-row items-center justify-between px-5 py-4" onPress={exportCsv}>
-            <Text className="font-body text-sm font-bold text-on-surface">Export CSV</Text>
+          <TouchableOpacity
+            className="flex-row items-center justify-between px-5 py-4"
+            onPress={exportCsv}
+          >
+            <Text className="font-body text-sm font-bold text-on-surface">
+              Export CSV
+            </Text>
             <MaterialIcons name="download" size={20} color="#005994" />
           </TouchableOpacity>
           <TouchableOpacity
@@ -171,16 +233,25 @@ export const ProfileScreen = () => {
             onPress={() =>
               Alert.alert('Reset?', 'This cannot be undone', [
                 { text: 'Cancel', style: 'cancel' },
-                { text: 'Reset', style: 'destructive', onPress: () => dispatch(resetAll()) },
+                {
+                  text: 'Reset',
+                  style: 'destructive',
+                  onPress: () => dispatch(resetAll()),
+                },
               ])
             }
           >
-            <Text className="font-body text-sm font-bold text-secondary">Reset All Data</Text>
+            <Text className="font-body text-sm font-bold text-secondary">
+              Reset All Data
+            </Text>
             <MaterialIcons name="delete-forever" size={20} color="#bc000d" />
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity className="mx-5 mt-6 rounded-xl bg-primary py-4" onPress={() => signOut()}>
+        <TouchableOpacity
+          className="mx-5 mt-6 rounded-xl bg-primary py-4"
+          onPress={() => signOut()}
+        >
           <Text className="text-center font-label text-xs font-extrabold uppercase tracking-[1px] text-white">
             Sign Out
           </Text>

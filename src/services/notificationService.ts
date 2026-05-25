@@ -44,7 +44,10 @@ export const scheduleBillReminder = async (rule: RecurringRule) => {
       id: `bill-${rule.id}`,
       title: 'Bill Reminder',
       body: `${rule.label} is due on ${rule.nextDueDate}.`,
-      android: { channelId: 'plombier_bills', importance: AndroidImportance.HIGH },
+      android: {
+        channelId: 'plombier_bills',
+        importance: AndroidImportance.HIGH,
+      },
       data: { type: 'wallet_bill', ruleId: rule.id },
     },
     trigger,
@@ -56,7 +59,10 @@ export const sendBudgetAlert = async (category: string, percent: number) => {
   await notifee.displayNotification({
     title: 'Budget Alert',
     body: `${category} reached ${percent}% of its budget.`,
-    android: { channelId: 'plombier_budget', importance: AndroidImportance.DEFAULT },
+    android: {
+      channelId: 'plombier_budget',
+      importance: AndroidImportance.DEFAULT,
+    },
     data: { type: 'wallet_budget', category },
   });
 };

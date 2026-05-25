@@ -21,95 +21,99 @@ interface PartsState {
 
 const seedProducts: Product[] = [
   {
-    id: "prod-1",
-    title: "Mélangeur Cuisine...",
-    subtitle: "ROBINETTERIE",
+    id: 'prod-1',
+    title: 'Mélangeur Cuisine...',
+    subtitle: 'ROBINETTERIE',
     price: 145,
-    condition: "comme neuf",
-    category: "Robinetterie",
-    description: "Marque Grohe, peu utilisé, complet avec flexibles.",
-    image: "faucet",
+    condition: 'comme neuf',
+    category: 'Robinetterie',
+    description: 'Marque Grohe, peu utilisé, complet avec flexibles.',
+    image: 'faucet',
     isFeatured: true,
-    isAvailable: true
+    isAvailable: true,
   },
   {
-    id: "prod-2",
-    title: "Chauffe-eau Gaz 10L",
-    subtitle: "CHAUFFE-EAU",
+    id: 'prod-2',
+    title: 'Chauffe-eau Gaz 10L',
+    subtitle: 'CHAUFFE-EAU',
     price: 320,
-    condition: "bon état",
-    category: "Chauffe-eau",
-    description: "Junkers en parfait état de marche, révisé récemment.",
-    image: "boiler",
+    condition: 'bon état',
+    category: 'Chauffe-eau',
+    description: 'Junkers en parfait état de marche, révisé récemment.',
+    image: 'boiler',
     isFeatured: true,
-    isAvailable: true
+    isAvailable: true,
   },
   {
-    id: "prod-3",
-    title: "Lot de raccords Cuivre",
-    subtitle: "CANALISATION",
+    id: 'prod-3',
+    title: 'Lot de raccords Cuivre',
+    subtitle: 'CANALISATION',
     price: 45,
-    condition: "pour pièces",
-    category: "Canalisation",
-    description: "Divers diamètres, chutes utilisables pour petits travaux.",
-    image: "copper_fittings",
+    condition: 'pour pièces',
+    category: 'Canalisation',
+    description: 'Divers diamètres, chutes utilisables pour petits travaux.',
+    image: 'copper_fittings',
     isFeatured: true,
-    isAvailable: true
+    isAvailable: true,
   },
   {
-    id: "prod-4",
-    title: "Mitigeur évier Grohe",
-    subtitle: "ROBINETTERIE",
+    id: 'prod-4',
+    title: 'Mitigeur évier Grohe',
+    subtitle: 'ROBINETTERIE',
     price: 180,
-    condition: "comme neuf",
-    category: "Robinetterie",
-    description: "Mitigeur évier de cuisine Grohe chromé, comme neuf, complet dans sa boîte d'origine.",
-    image: "faucet",
+    condition: 'comme neuf',
+    category: 'Robinetterie',
+    description:
+      "Mitigeur évier de cuisine Grohe chromé, comme neuf, complet dans sa boîte d'origine.",
+    image: 'faucet',
     isFeatured: false,
-    isAvailable: true
+    isAvailable: true,
   },
   {
-    id: "prod-5",
-    title: "Chauffe-eau électrique 50L",
-    subtitle: "CHAUFFE-EAU",
+    id: 'prod-5',
+    title: 'Chauffe-eau électrique 50L',
+    subtitle: 'CHAUFFE-EAU',
     price: 210,
-    condition: "bon état",
-    category: "Chauffe-eau",
-    description: "Chauffe-eau électrique Ariston en bon état, fonctionne parfaitement, détartré récemment.",
-    image: "boiler",
+    condition: 'bon état',
+    category: 'Chauffe-eau',
+    description:
+      'Chauffe-eau électrique Ariston en bon état, fonctionne parfaitement, détartré récemment.',
+    image: 'boiler',
     isFeatured: false,
-    isAvailable: true
+    isAvailable: true,
   },
   {
-    id: "prod-6",
-    title: "Vannes et Raccords Laiton",
-    subtitle: "CANALISATION",
+    id: 'prod-6',
+    title: 'Vannes et Raccords Laiton',
+    subtitle: 'CANALISATION',
     price: 35,
-    condition: "pour pièces",
-    category: "Canalisation",
-    description: "Lot de vannes d'arrêt et raccords en laiton d'occasion pour dépannage ou pièces.",
-    image: "copper_fittings",
+    condition: 'pour pièces',
+    category: 'Canalisation',
+    description:
+      "Lot de vannes d'arrêt et raccords en laiton d'occasion pour dépannage ou pièces.",
+    image: 'copper_fittings',
     isFeatured: false,
-    isAvailable: true
+    isAvailable: true,
   },
   {
-    id: "prod-7",
-    title: "Pompe de circulation Chauffage",
-    subtitle: "CANALISATION",
+    id: 'prod-7',
+    title: 'Pompe de circulation Chauffage',
+    subtitle: 'CANALISATION',
     price: 90,
-    condition: "bon état",
-    category: "Canalisation",
-    description: "Circulateur de chauffage central de marque Grundfos, testé et fonctionnel.",
-    image: "copper_fittings",
+    condition: 'bon état',
+    category: 'Canalisation',
+    description:
+      'Circulateur de chauffage central de marque Grundfos, testé et fonctionnel.',
+    image: 'copper_fittings',
     isFeatured: false,
-    isAvailable: true
-  }
+    isAvailable: true,
+  },
 ];
 
 const initialState: PartsState = {
   listings: seedProducts,
-  favorites: ["prod-1"],
-  cart: ["prod-3"],
+  favorites: ['prod-1'],
+  cart: ['prod-3'],
 };
 
 const partsSlice = createSlice({
@@ -149,10 +153,10 @@ const partsSlice = createSlice({
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.cart = state.cart.filter(cartId => cartId !== action.payload);
     },
-    clearCart: (state) => {
+    clearCart: state => {
       state.cart = [];
-    }
-  }
+    },
+  },
 });
 
 export const {
@@ -163,7 +167,7 @@ export const {
   toggleFavoriteAction,
   addToCart,
   removeFromCart,
-  clearCart
+  clearCart,
 } = partsSlice.actions;
 
 export default partsSlice.reducer;

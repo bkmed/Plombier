@@ -138,12 +138,54 @@ const DEFAULT_ACCOUNTS: Account[] = [
 ];
 
 const DEFAULT_SHORTCUTS: Shortcut[] = [
-  { id: 's1', i18nKey: 'shortcuts.coffee', emoji: '☕', defaultAmount: 2.5, category: 'drinks', accountId: 'acc_cash' },
-  { id: 's2', i18nKey: 'shortcuts.transport', emoji: '🚌', defaultAmount: 1, category: 'transport', accountId: 'acc_cash' },
-  { id: 's3', i18nKey: 'shortcuts.dining', emoji: '🍽️', defaultAmount: 8, category: 'food', accountId: 'acc_cash' },
-  { id: 's4', i18nKey: 'shortcuts.retail', emoji: '🛍️', defaultAmount: 5, category: 'shopping', accountId: 'acc_cash' },
-  { id: 's5', i18nKey: 'shortcuts.utility', emoji: '⚡', defaultAmount: 3, category: 'home', accountId: 'acc_bank' },
-  { id: 's6', i18nKey: 'shortcuts.fuel', emoji: '⛽', defaultAmount: 12, category: 'transport', accountId: 'acc_bank' },
+  {
+    id: 's1',
+    i18nKey: 'shortcuts.coffee',
+    emoji: '☕',
+    defaultAmount: 2.5,
+    category: 'drinks',
+    accountId: 'acc_cash',
+  },
+  {
+    id: 's2',
+    i18nKey: 'shortcuts.transport',
+    emoji: '🚌',
+    defaultAmount: 1,
+    category: 'transport',
+    accountId: 'acc_cash',
+  },
+  {
+    id: 's3',
+    i18nKey: 'shortcuts.dining',
+    emoji: '🍽️',
+    defaultAmount: 8,
+    category: 'food',
+    accountId: 'acc_cash',
+  },
+  {
+    id: 's4',
+    i18nKey: 'shortcuts.retail',
+    emoji: '🛍️',
+    defaultAmount: 5,
+    category: 'shopping',
+    accountId: 'acc_cash',
+  },
+  {
+    id: 's5',
+    i18nKey: 'shortcuts.utility',
+    emoji: '⚡',
+    defaultAmount: 3,
+    category: 'home',
+    accountId: 'acc_bank',
+  },
+  {
+    id: 's6',
+    i18nKey: 'shortcuts.fuel',
+    emoji: '⛽',
+    defaultAmount: 12,
+    category: 'transport',
+    accountId: 'acc_bank',
+  },
 ];
 
 const DEFAULT_RECURRING: RecurringRule[] = [
@@ -242,7 +284,9 @@ const walletSlice = createSlice({
       }
     },
     deleteTransaction: (state, action: PayloadAction<string>) => {
-      state.transactions = state.transactions.filter(t => t.id !== action.payload);
+      state.transactions = state.transactions.filter(
+        t => t.id !== action.payload,
+      );
     },
     updateTransaction: (
       state,
@@ -255,7 +299,10 @@ const walletSlice = createSlice({
       const tx = state.transactions.find(t => t.id === action.payload);
       if (tx) tx.isPaid = !tx.isPaid;
     },
-    addAccount: (state, action: PayloadAction<Omit<Account, 'id' | 'createdAt'>>) => {
+    addAccount: (
+      state,
+      action: PayloadAction<Omit<Account, 'id' | 'createdAt'>>,
+    ) => {
       state.accounts.push({
         ...action.payload,
         id: `acc_${Date.now()}`,
@@ -273,7 +320,10 @@ const walletSlice = createSlice({
       const acc = state.accounts.find(a => a.id === action.payload);
       if (acc) acc.isArchived = true;
     },
-    addRecurringRule: (state, action: PayloadAction<Omit<RecurringRule, 'id'>>) => {
+    addRecurringRule: (
+      state,
+      action: PayloadAction<Omit<RecurringRule, 'id'>>,
+    ) => {
       state.recurringRules.push({ ...action.payload, id: `rec_${Date.now()}` });
     },
     markRecurringPaid: (state, action: PayloadAction<string>) => {
@@ -283,12 +333,15 @@ const walletSlice = createSlice({
       const next = new Date(rule.nextDueDate);
       if (rule.frequency === 'monthly') next.setMonth(next.getMonth() + 1);
       else if (rule.frequency === 'weekly') next.setDate(next.getDate() + 7);
-      else if (rule.frequency === 'yearly') next.setFullYear(next.getFullYear() + 1);
+      else if (rule.frequency === 'yearly')
+        next.setFullYear(next.getFullYear() + 1);
       else next.setDate(next.getDate() + 1);
       rule.nextDueDate = next.toISOString().split('T')[0];
     },
     deleteRecurringRule: (state, action: PayloadAction<string>) => {
-      state.recurringRules = state.recurringRules.filter(r => r.id !== action.payload);
+      state.recurringRules = state.recurringRules.filter(
+        r => r.id !== action.payload,
+      );
     },
     updateSettings: (state, action: PayloadAction<Partial<WalletSettings>>) => {
       Object.assign(state.settings, action.payload);
@@ -338,7 +391,9 @@ export const selectRecurringRules = (s: RootState) => s.wallet.recurringRules;
 export const selectWalletSettings = (s: RootState) => s.wallet.settings;
 
 export const selectTotalBalance = (s: RootState) =>
-  s.wallet.accounts.filter(a => !a.isArchived).reduce((sum, a) => sum + a.balance, 0);
+  s.wallet.accounts
+    .filter(a => !a.isArchived)
+    .reduce((sum, a) => sum + a.balance, 0);
 
 export const selectTotalSpentToday = (s: RootState) => {
   const today = new Date().toISOString().split('T')[0];
@@ -359,47 +414,41 @@ export const selectTotalIncomeMonth = (month: string) => (s: RootState) =>
 
 export const selectTransactionsByDay = createSelector(
   [selectTransactions],
-  (transactions) => transactions.reduce((acc, tx) => {
-    acc[tx.date] = acc[tx.date] ? [...acc[tx.date], tx] : [tx];
-    return acc;
-  }, {} as Record<string, Transaction[]>)
+  transactions =>
+    transactions.reduce((acc, tx) => {
+      acc[tx.date] = acc[tx.date] ? [...acc[tx.date], tx] : [tx];
+      return acc;
+    }, {} as Record<string, Transaction[]>),
 );
 
 export const selectTotalByCategory = createSelector(
-  [
-    selectTransactions,
-    (_s: RootState, month: string) => month
-  ],
+  [selectTransactions, (_s: RootState, month: string) => month],
   (transactions, month) =>
     transactions
       .filter(t => t.date.startsWith(month) && t.type === 'expense')
-      .reduce(
-        (acc, t) => {
-          acc[t.category] = (acc[t.category] || 0) + t.amount;
-          return acc;
-        },
-        {} as Record<Category, number>
-      )
+      .reduce((acc, t) => {
+        acc[t.category] = (acc[t.category] || 0) + t.amount;
+        return acc;
+      }, {} as Record<Category, number>),
 );
 
 export const selectOverdueBills = createSelector(
   [selectRecurringRules],
-  (rules) => {
+  rules => {
     const today = new Date().toISOString().split('T')[0];
     return rules.filter(
       r => r.nextDueDate < today && !r.isPaid && r.type === 'expense',
     );
-  }
+  },
 );
 
 export const selectUpcomingBills = createSelector(
-  [
-    selectRecurringRules,
-    (_s: RootState, days: number) => days
-  ],
+  [selectRecurringRules, (_s: RootState, days: number) => days],
   (rules, days) => {
     const today = new Date();
-    const limit = new Date(today.getTime() + days * 86400000).toISOString().split('T')[0];
+    const limit = new Date(today.getTime() + days * 86400000)
+      .toISOString()
+      .split('T')[0];
     const todayStr = today.toISOString().split('T')[0];
     return rules.filter(
       r =>
@@ -408,14 +457,22 @@ export const selectUpcomingBills = createSelector(
         !r.isPaid &&
         r.type === 'expense',
     );
-  }
+  },
 );
 
-export const selectBudgetPercent = (category: Category, month: string) => (s: RootState) => {
-  const budget = s.wallet.settings.categoryBudgets.find(b => b.category === category);
-  if (!budget || budget.monthlyLimit === 0) return 0;
-  const spent = s.wallet.transactions
-    .filter(t => t.date.startsWith(month) && t.type === 'expense' && t.category === category)
-    .reduce((sum, t) => sum + t.amount, 0);
-  return Math.round((spent / budget.monthlyLimit) * 100);
-};
+export const selectBudgetPercent =
+  (category: Category, month: string) => (s: RootState) => {
+    const budget = s.wallet.settings.categoryBudgets.find(
+      b => b.category === category,
+    );
+    if (!budget || budget.monthlyLimit === 0) return 0;
+    const spent = s.wallet.transactions
+      .filter(
+        t =>
+          t.date.startsWith(month) &&
+          t.type === 'expense' &&
+          t.category === category,
+      )
+      .reduce((sum, t) => sum + t.amount, 0);
+    return Math.round((spent / budget.monthlyLimit) * 100);
+  };

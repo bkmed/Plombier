@@ -37,12 +37,42 @@ const Tabs = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const WALLET_TABS = [
-  { name: 'Home', component: HomeScreen, icon: 'home', label: 'navigation.home' },
-  { name: 'History', component: HistoryScreen, icon: 'receipt-long', label: 'history.title' },
-  { name: 'Reports', component: ReportsScreen, icon: 'analytics', label: 'reports.title' },
-  { name: 'Accounts', component: AccountsScreen, icon: 'account-balance-wallet', label: 'accounts.title' },
-  { name: 'Goals', component: GoalsScreen, icon: 'track-changes', label: 'goals.title' },
-  { name: 'Profile', component: ProfileScreen, icon: 'person', label: 'profile.title' },
+  {
+    name: 'Home',
+    component: HomeScreen,
+    icon: 'home',
+    label: 'navigation.home',
+  },
+  {
+    name: 'History',
+    component: HistoryScreen,
+    icon: 'receipt-long',
+    label: 'history.title',
+  },
+  {
+    name: 'Reports',
+    component: ReportsScreen,
+    icon: 'analytics',
+    label: 'reports.title',
+  },
+  {
+    name: 'Accounts',
+    component: AccountsScreen,
+    icon: 'account-balance-wallet',
+    label: 'accounts.title',
+  },
+  {
+    name: 'Goals',
+    component: GoalsScreen,
+    icon: 'track-changes',
+    label: 'goals.title',
+  },
+  {
+    name: 'Profile',
+    component: ProfileScreen,
+    icon: 'person',
+    label: 'profile.title',
+  },
 ] as const;
 
 const AuthStack = () => (
@@ -93,9 +123,15 @@ const WebNavigator = () => {
           },
           tabBarIcon: ({ color, focused, size }) => (
             <View
-              className={focused ? 'rounded-2xl bg-primary px-3 py-2' : 'px-3 py-2'}
+              className={
+                focused ? 'rounded-2xl bg-primary px-3 py-2' : 'px-3 py-2'
+              }
             >
-              <MaterialIcons name={item?.icon || 'circle'} size={size} color={color} />
+              <MaterialIcons
+                name={item?.icon || 'circle'}
+                size={size}
+                color={color}
+              />
             </View>
           ),
         };
@@ -127,7 +163,11 @@ const DrawerNavigator = () => {
           drawerStyle: { backgroundColor: '#f8f9ff', width: 292 },
           drawerLabelStyle: { fontWeight: '800' },
           drawerIcon: ({ color, size }) => (
-            <MaterialIcons name={item?.icon || 'circle'} size={size} color={color} />
+            <MaterialIcons
+              name={item?.icon || 'circle'}
+              size={size}
+              color={color}
+            />
           ),
         };
       }}
@@ -161,7 +201,11 @@ const WalletShell = () => {
         component={AddTransactionSheet}
         options={{ presentation: 'transparentModal' }}
       />
-      <Root.Screen name="AddGoalModal" component={AddGoalModal} options={{ presentation: 'modal' }} />
+      <Root.Screen
+        name="AddGoalModal"
+        component={AddGoalModal}
+        options={{ presentation: 'modal' }}
+      />
       <Root.Screen
         name="AddAccountModal"
         component={AddAccountModal}
@@ -176,7 +220,13 @@ const WalletShell = () => {
   );
 };
 
-const BlockedAccount = ({ status, onLogout }: { status: string; onLogout: () => void }) => (
+const BlockedAccount = ({
+  status,
+  onLogout,
+}: {
+  status: string;
+  onLogout: () => void;
+}) => (
   <View className="flex-1 items-center justify-center bg-background px-6">
     <Text className="mb-3 text-5xl">🚫</Text>
     <Text className="text-center font-headline text-xl font-extrabold text-on-surface">
@@ -187,8 +237,13 @@ const BlockedAccount = ({ status, onLogout }: { status: string; onLogout: () => 
         ? 'Your account is currently under review.'
         : 'Your account access has been restricted.'}
     </Text>
-    <TouchableOpacity className="mt-6 rounded-xl bg-primary px-5 py-3" onPress={onLogout}>
-      <Text className="font-label text-xs font-extrabold uppercase text-on-primary">Logout</Text>
+    <TouchableOpacity
+      className="mt-6 rounded-xl bg-primary px-5 py-3"
+      onPress={onLogout}
+    >
+      <Text className="font-label text-xs font-extrabold uppercase text-on-primary">
+        Logout
+      </Text>
     </TouchableOpacity>
   </View>
 );

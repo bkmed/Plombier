@@ -22,6 +22,7 @@ import usersReducer from './slices/usersSlice';
 import walletReducer from './slices/walletSlice';
 import goalsReducer from './slices/goalsSlice';
 import categoriesReducer from './slices/categoriesSlice';
+import servicesReducer from './slices/servicesSlice';
 import partsReducer from './slices/partsSlice';
 import plombierSettingsReducer from './slices/plombierSettingsSlice';
 import galleryReducer from './slices/gallerySlice';
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   wallet: walletReducer,
   goals: goalsReducer,
   categories: categoriesReducer,
+  services: servicesReducer,
   parts: partsReducer,
   gallery: galleryReducer,
   plombierSettings: plombierSettingsReducer,
@@ -58,6 +60,7 @@ const persistConfig = {
     'wallet',
     'goals',
     'categories',
+    'services',
     'parts',
     'gallery',
     'plombierSettings',

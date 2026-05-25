@@ -52,6 +52,51 @@
     "services_subtitle": "Intervenciones de fontaneria, climatizacion, gas y calefaccion para hogares fiables todo el ano.",
     "view_all": "Ver todo"
   },
+  "gallery": {
+    "title": "Gallery",
+    "emptyState": "No images yet.",
+    "adminAdd": "Add image",
+    "manageGallery": "Manage gallery"
+  },
+  "support": {
+    "whatsapp": "Call on WhatsApp",
+    "header": "Support",
+    "email_label": "Support email"
+  },
+  "services_local": {
+    "plomberie_generale": "General Plumbing",
+    "plomberie_desc_long": "Installation, repair and maintenance of your sanitation systems. We handle complex leaks, pipe unclogging and full bathroom renovations.",
+    "plomberie_desc_1": "Thermal camera leak detection",
+    "plomberie_desc_2": "High-end faucet installation",
+    "plomberie_desc_3": "Drain pipe replacement",
+
+    "climatisation": "Air Conditioning",
+    "clim_desc_long": "Comprehensive cooling systems expertise. From split installation to central AC maintenance, we ensure optimal comfort.",
+    "clim_desc_1": "R410/R32 refrigerant gas recharge",
+    "clim_desc_2": "Certified anti-bacterial cleaning",
+    "clim_desc_3": "Energy consumption optimization",
+
+    "installation_gaz": "Gas Installation",
+    "gaz_desc_long": "Safety is our top priority. We perform gas installations to the highest safety standards.",
+    "gaz_desc_1": "STEG compliance checks",
+    "gaz_desc_2": "Carbon monoxide detector installation",
+    "gaz_desc_3": "Safe connection for stoves and boilers",
+
+    "chauffage_central": "Central Heating",
+    "chauffage_desc_long": "High-performance heating solutions for a worry-free winter. We install condensing boilers and serviced radiators.",
+    "chauffage_desc_1": "Full annual boiler maintenance",
+    "chauffage_desc_2": "Hydrodynamic loop flushing",
+    "chauffage_desc_3": "Smart regulation with connected thermostat",
+
+    "service_before_plomberie": "Old copper network with regular leaks",
+    "service_after_plomberie": "New copper tubes with professional welds",
+    "service_before_clim": "Clogged filters causing overconsumption",
+    "service_after_clim": "Fan cleaned and fully disinfected",
+    "service_before_gaz": "Expired flexible gas hose and corroded valve",
+    "service_after_gaz": "Rigid copper piping welded to STEG standards",
+    "service_before_chauffage": "Cold radiators due to circuit sludge",
+    "service_after_chauffage": "Hydrodynamic flushing and perfect heating"
+  },
   "announcements": {
     "addAnnouncement": "Añadir anuncio",
     "noAnnouncements": "Aún no hay anuncios",
@@ -443,6 +488,7 @@
   "navigation": {
     "home": "Home"
   },
+  "navigation_label": "Navegación",
   "notifications": {
     "markAllAsRead": "Marcar todo como leído",
     "noNotifications": "Aún no hay notificaciones",
@@ -1038,6 +1084,26 @@
     "goal_updated": "Goal updated",
     "paid_marked": "Marked as paid"
   },
+  "informations": "Legal Information",
+  "politique": "Privacy Policy",
+  "conditions_util": "Terms of Service",
+  "plan_site": "Site Map",
+  "informations_desc": "Find all the legal information here about how our platform operates and how we protect your data.",
+  "privacy_intro": "Your privacy is a priority. We only collect the data needed to deliver our services and improve your experience.",
+  "privacy_point_1": "Minimal data collection for service requests and orders.",
+  "privacy_point_2": "We never sell your contact details to third parties.",
+  "privacy_point_3": "Sensitive data is protected with encryption and secure storage.",
+  "terms_intro": "By using this site, you agree to the following terms of service.",
+  "terms_point_1": "Services are provided based on the displayed information and availability.",
+  "terms_point_2": "Abusive or fraudulent content is prohibited and may result in suspension.",
+  "terms_point_3": "We reserve the right to update these terms at any time.",
+  "sitemap_intro": "Quickly access the main Plombier Tunisia pages via our site map.",
+  "sitemap_page_accueil": "Home",
+  "sitemap_page_services": "Services",
+  "sitemap_page_zones": "Service Areas",
+  "sitemap_page_pieces": "Used Parts",
+  "sitemap_page_profil": "Profile",
+  "sitemap_page_contact": "Contact & Support",
   "status": {
     "cleared": "Cleared",
     "pending": "Pending",

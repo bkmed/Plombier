@@ -18,15 +18,19 @@ interface TransactionRowProps {
 const amountPrefix = (type: Transaction['type']) =>
   type === 'expense' ? '-' : type === 'income' ? '+' : '';
 
-export const TransactionRow = ({ transaction, onEdit, compact }: TransactionRowProps) => {
+export const TransactionRow = ({
+  transaction,
+  onEdit,
+  compact,
+}: TransactionRowProps) => {
   const dispatch = useDispatch();
   const settings = useSelector(selectWalletSettings);
   const amountColor =
     transaction.type === 'expense'
       ? 'text-secondary'
       : transaction.type === 'income'
-        ? 'text-primary'
-        : 'text-on-surface-variant';
+      ? 'text-primary'
+      : 'text-on-surface-variant';
 
   const actions = (
     <View className="flex-row overflow-hidden rounded-2xl">
@@ -52,7 +56,10 @@ export const TransactionRow = ({ transaction, onEdit, compact }: TransactionRowP
       </View>
       <View className="flex-1">
         <View className="flex-row items-center gap-2">
-          <Text className="font-body text-[15px] font-bold text-on-surface" numberOfLines={1}>
+          <Text
+            className="font-body text-[15px] font-bold text-on-surface"
+            numberOfLines={1}
+          >
             {transaction.label}
           </Text>
           {transaction.amount > 50 && transaction.type === 'expense' ? (
@@ -81,7 +88,9 @@ export const TransactionRow = ({ transaction, onEdit, compact }: TransactionRowP
         <Text className={`font-headline text-[15px] font-bold ${amountColor}`}>
           {settings.hideBalances
             ? '•••'
-            : `${amountPrefix(transaction.type)}${transaction.amount.toFixed(2)} ${settings.currency}`}
+            : `${amountPrefix(transaction.type)}${transaction.amount.toFixed(
+                2,
+              )} ${settings.currency}`}
         </Text>
         <Text className="mt-1 rounded-full bg-surface-container-high px-2 py-0.5 font-label text-[9px] font-extrabold uppercase text-on-surface-variant">
           {transaction.status}

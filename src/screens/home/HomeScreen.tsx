@@ -1,5 +1,11 @@
 import React, { useEffect } from 'react';
-import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Platform,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -50,8 +56,14 @@ export const HomeScreen = () => {
       <ScrollView className="flex-1" contentContainerClassName="pb-28">
         {Platform.OS === 'web' ? (
           <>
-            <View style={{ pointerEvents: 'none' }} className="absolute right-[-70px] top-24 h-[220px] w-[220px] rounded-full bg-primary/5 blur-3xl" />
-            <View style={{ pointerEvents: 'none' }} className="absolute bottom-10 left-[-90px] h-[260px] w-[260px] rounded-full bg-secondary/5 blur-3xl" />
+            <View
+              style={{ pointerEvents: 'none' }}
+              className="absolute right-[-70px] top-24 h-[220px] w-[220px] rounded-full bg-primary/5 blur-3xl"
+            />
+            <View
+              style={{ pointerEvents: 'none' }}
+              className="absolute bottom-10 left-[-90px] h-[260px] w-[260px] rounded-full bg-secondary/5 blur-3xl"
+            />
           </>
         ) : null}
 
@@ -70,10 +82,16 @@ export const HomeScreen = () => {
             <Text className="font-label text-[11px] font-bold uppercase tracking-[3px] text-white/75">
               Total Liquidity
             </Text>
-            <MaterialIcons name="account-balance-wallet" size={32} color="rgba(255,255,255,0.35)" />
+            <MaterialIcons
+              name="account-balance-wallet"
+              size={32}
+              color="rgba(255,255,255,0.35)"
+            />
           </View>
           <Text className="mt-5 font-headline text-[42px] font-extrabold text-white">
-            {settings.hideBalances ? '••••••' : `${balance.toFixed(2)} ${settings.currency}`}
+            {settings.hideBalances
+              ? '••••••'
+              : `${balance.toFixed(2)} ${settings.currency}`}
           </Text>
           <View className="mt-6 self-start rounded-full bg-white/15 px-4 py-2">
             <Text className="font-label text-[11px] font-extrabold uppercase tracking-[1.2px] text-white">
@@ -109,64 +127,78 @@ export const HomeScreen = () => {
         ) : null}
 
         <View className="mx-5 mt-6">
-          <Text className="font-headline text-lg font-extrabold text-on-surface">Quick Log</Text>
+          <Text className="font-headline text-lg font-extrabold text-on-surface">
+            Quick Log
+          </Text>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             className="mt-3"
             contentContainerClassName="gap-3"
           >
-            {[...settings.shortcuts, { id: 'custom', emoji: '➕', customLabel: 'Custom' }].map(
-              shortcut => (
-                <TouchableOpacity
-                  key={shortcut.id}
-                  className="w-[68px] items-center gap-2"
-                  onPress={() => {
-                    if (shortcut.id === 'custom' || !('defaultAmount' in shortcut)) {
-                      navigation.navigate('AddTransactionSheet');
-                      return;
-                    }
-                    dispatch(
-                      addTransaction({
-                        type: 'expense',
-                        amount: shortcut.defaultAmount,
-                        label: shortcut.customLabel || shortcut.i18nKey?.split('.').pop() || 'Quick log',
-                        category: shortcut.category,
-                        emoji: shortcut.emoji,
-                        accountId: shortcut.accountId,
-                        date: today(),
-                        time: timeNow(),
-                        tags: [],
-                        isRecurring: false,
-                        isPaid: true,
-                        status: 'cleared',
-                      }),
-                    );
-                    showToast(`✓ ${shortcut.defaultAmount} ${settings.currency}`, 'success');
-                  }}
-                  onLongPress={() =>
-                    shortcut.id !== 'custom' &&
-                    navigation.navigate('EditShortcutModal', { shortcutId: shortcut.id })
+            {[
+              ...settings.shortcuts,
+              { id: 'custom', emoji: '➕', customLabel: 'Custom' },
+            ].map(shortcut => (
+              <TouchableOpacity
+                key={shortcut.id}
+                className="w-[68px] items-center gap-2"
+                onPress={() => {
+                  if (
+                    shortcut.id === 'custom' ||
+                    !('defaultAmount' in shortcut)
+                  ) {
+                    navigation.navigate('AddTransactionSheet');
+                    return;
                   }
+                  dispatch(
+                    addTransaction({
+                      type: 'expense',
+                      amount: shortcut.defaultAmount,
+                      label:
+                        shortcut.customLabel ||
+                        shortcut.i18nKey?.split('.').pop() ||
+                        'Quick log',
+                      category: shortcut.category,
+                      emoji: shortcut.emoji,
+                      accountId: shortcut.accountId,
+                      date: today(),
+                      time: timeNow(),
+                      tags: [],
+                      isRecurring: false,
+                      isPaid: true,
+                      status: 'cleared',
+                    }),
+                  );
+                  showToast(
+                    `✓ ${shortcut.defaultAmount} ${settings.currency}`,
+                    'success',
+                  );
+                }}
+                onLongPress={() =>
+                  shortcut.id !== 'custom' &&
+                  navigation.navigate('EditShortcutModal', {
+                    shortcutId: shortcut.id,
+                  })
+                }
+              >
+                <View className="h-14 w-14 items-center justify-center rounded-2xl bg-surface-container-low">
+                  <Text className="text-2xl">{shortcut.emoji}</Text>
+                </View>
+                <Text
+                  className="text-center font-label text-[9px] font-bold uppercase tracking-[1px] text-on-surface-variant"
+                  numberOfLines={1}
                 >
-                  <View className="h-14 w-14 items-center justify-center rounded-2xl bg-surface-container-low">
-                    <Text className="text-2xl">{shortcut.emoji}</Text>
-                  </View>
-                  <Text
-                    className="text-center font-label text-[9px] font-bold uppercase tracking-[1px] text-on-surface-variant"
-                    numberOfLines={1}
-                  >
-                    {'customLabel' in shortcut && shortcut.customLabel
-                      ? shortcut.customLabel
-                      : shortcut.id === 'custom'
-                        ? 'Custom'
-                        : 'i18nKey' in shortcut
-                          ? shortcut.i18nKey?.split('.').pop()
-                          : 'Shortcut'}
-                  </Text>
-                </TouchableOpacity>
-              ),
-            )}
+                  {'customLabel' in shortcut && shortcut.customLabel
+                    ? shortcut.customLabel
+                    : shortcut.id === 'custom'
+                    ? 'Custom'
+                    : 'i18nKey' in shortcut
+                    ? shortcut.i18nKey?.split('.').pop()
+                    : 'Shortcut'}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
 

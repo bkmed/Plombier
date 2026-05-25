@@ -40,11 +40,13 @@ export const AddTransactionSheet = () => {
   const [amount, setAmount] = useState('');
   const [label, setLabel] = useState('');
   const [category, setCategory] = useState<Category>('food');
-  const selectedCategory = CATEGORIES.find(item => item.category === category) || CATEGORIES[0];
+  const selectedCategory =
+    CATEGORIES.find(item => item.category === category) || CATEGORIES[0];
 
   const append = (value: string) => {
     if (value === 'back') setAmount(prev => prev.slice(0, -1));
-    else if (!(value === '.' && amount.includes('.'))) setAmount(prev => `${prev}${value}`);
+    else if (!(value === '.' && amount.includes('.')))
+      setAmount(prev => `${prev}${value}`);
   };
 
   const save = () => {
@@ -83,19 +85,25 @@ export const AddTransactionSheet = () => {
         </Text>
 
         <View className="mb-4 flex-row gap-1 rounded-2xl bg-surface-container-low p-1">
-          {(['expense', 'income', 'transfer'] as TransactionType[]).map(item => (
-            <TouchableOpacity
-              key={item}
-              className={`flex-1 rounded-xl py-3 ${type === item ? 'bg-white shadow-editorial' : ''}`}
-              onPress={() => setType(item)}
-            >
-              <Text
-                className={`text-center font-label text-xs font-bold capitalize ${type === item ? 'text-primary' : 'text-on-surface-variant'}`}
+          {(['expense', 'income', 'transfer'] as TransactionType[]).map(
+            item => (
+              <TouchableOpacity
+                key={item}
+                className={`flex-1 rounded-xl py-3 ${
+                  type === item ? 'bg-white shadow-editorial' : ''
+                }`}
+                onPress={() => setType(item)}
               >
-                {item}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  className={`text-center font-label text-xs font-bold capitalize ${
+                    type === item ? 'text-primary' : 'text-on-surface-variant'
+                  }`}
+                >
+                  {item}
+                </Text>
+              </TouchableOpacity>
+            ),
+          )}
         </View>
 
         <View className="mb-4 items-center border-b border-outline-variant py-5">
@@ -111,7 +119,11 @@ export const AddTransactionSheet = () => {
           {CATEGORIES.map(item => (
             <TouchableOpacity
               key={item.category}
-              className={`w-[23%] items-center rounded-2xl py-3 ${category === item.category ? 'border-2 border-primary bg-primary/10' : 'bg-surface-container-low'}`}
+              className={`w-[23%] items-center rounded-2xl py-3 ${
+                category === item.category
+                  ? 'border-2 border-primary bg-primary/10'
+                  : 'bg-surface-container-low'
+              }`}
               onPress={() => setCategory(item.category)}
             >
               <Text className="text-xl">{item.emoji}</Text>
@@ -131,19 +143,23 @@ export const AddTransactionSheet = () => {
         />
 
         <View className="flex-row flex-wrap gap-2.5">
-          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'back'].map(key => (
-            <TouchableOpacity
-              key={key}
-              className="w-[31%] items-center rounded-2xl bg-surface-container-low py-4"
-              onPress={() => append(key)}
-            >
-              {key === 'back' ? (
-                <MaterialIcons name="backspace" size={20} color="#404751" />
-              ) : (
-                <Text className="font-headline text-xl font-bold text-on-surface">{key}</Text>
-              )}
-            </TouchableOpacity>
-          ))}
+          {['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'back'].map(
+            key => (
+              <TouchableOpacity
+                key={key}
+                className="w-[31%] items-center rounded-2xl bg-surface-container-low py-4"
+                onPress={() => append(key)}
+              >
+                {key === 'back' ? (
+                  <MaterialIcons name="backspace" size={20} color="#404751" />
+                ) : (
+                  <Text className="font-headline text-xl font-bold text-on-surface">
+                    {key}
+                  </Text>
+                )}
+              </TouchableOpacity>
+            ),
+          )}
         </View>
 
         <TouchableOpacity
@@ -151,7 +167,9 @@ export const AddTransactionSheet = () => {
           onPress={save}
         >
           <MaterialIcons name="check" size={20} color="#ffffff" />
-          <Text className="font-headline text-base font-extrabold text-white">Save Transaction</Text>
+          <Text className="font-headline text-base font-extrabold text-white">
+            Save Transaction
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

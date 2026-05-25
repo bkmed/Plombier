@@ -26,7 +26,12 @@ const SITEMAP_ROUTES = [
   { key: 'sitemap_page_contact', route: 'Profile' },
 ];
 
-export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage }: LegalContentProps) => {
+export const LegalContent = ({
+  page,
+  onBack,
+  onShowLegalPage,
+  onNavigateAppPage,
+}: LegalContentProps) => {
   const { t } = useTranslation();
 
   const renderPages = () => {
@@ -34,10 +39,21 @@ export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage 
       case 'privacy':
         return (
           <View className="space-y-4">
-            <Text className="text-sm text-slate-500 dark:text-slate-400">{t('privacy_intro')}</Text>
-            {[t('privacy_point_1'), t('privacy_point_2'), t('privacy_point_3')].map((item, idx) => (
-              <View key={idx} className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4">
-                <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">{item}</Text>
+            <Text className="text-sm text-slate-500 dark:text-slate-400">
+              {t('privacy_intro')}
+            </Text>
+            {[
+              t('privacy_point_1'),
+              t('privacy_point_2'),
+              t('privacy_point_3'),
+            ].map((item, idx) => (
+              <View
+                key={idx}
+                className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4"
+              >
+                <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                  {item}
+                </Text>
               </View>
             ))}
           </View>
@@ -45,20 +61,31 @@ export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage 
       case 'terms':
         return (
           <View className="space-y-4">
-            <Text className="text-sm text-slate-500 dark:text-slate-400">{t('terms_intro')}</Text>
+            <Text className="text-sm text-slate-500 dark:text-slate-400">
+              {t('terms_intro')}
+            </Text>
             <View className="space-y-3">
-              {[t('terms_point_1'), t('terms_point_2'), t('terms_point_3')].map((point, idx) => (
-                <View key={idx} className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4">
-                  <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">{`${idx + 1}. ${point}`}</Text>
-                </View>
-              ))}
+              {[t('terms_point_1'), t('terms_point_2'), t('terms_point_3')].map(
+                (point, idx) => (
+                  <View
+                    key={idx}
+                    className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4"
+                  >
+                    <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">{`${
+                      idx + 1
+                    }. ${point}`}</Text>
+                  </View>
+                ),
+              )}
             </View>
           </View>
         );
       case 'sitemap':
         return (
           <View className="space-y-4">
-            <Text className="text-sm text-slate-500 dark:text-slate-400">{t('sitemap_intro')}</Text>
+            <Text className="text-sm text-slate-500 dark:text-slate-400">
+              {t('sitemap_intro')}
+            </Text>
             <View className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {SITEMAP_ROUTES.map(item => (
                 <TouchableOpacity
@@ -66,7 +93,9 @@ export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage 
                   onPress={() => onNavigateAppPage?.(item.route)}
                   className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4"
                 >
-                  <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t(item.key)}</Text>
+                  <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                    {t(item.key)}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -75,7 +104,9 @@ export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage 
       default:
         return (
           <View className="space-y-4">
-            <Text className="text-sm text-slate-500 dark:text-slate-400">{t('informations_desc')}</Text>
+            <Text className="text-sm text-slate-500 dark:text-slate-400">
+              {t('informations_desc')}
+            </Text>
             <View className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {LEGAL_LINKS.map(link => (
                 <TouchableOpacity
@@ -83,7 +114,9 @@ export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage 
                   onPress={() => onShowLegalPage?.(link.page)}
                   className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 p-4"
                 >
-                  <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t(link.key)}</Text>
+                  <Text className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+                    {t(link.key)}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -93,18 +126,46 @@ export const LegalContent = ({ page, onBack, onShowLegalPage, onNavigateAppPage 
   };
 
   return (
-    <ScrollView className="flex-1 bg-background px-5 py-8" contentContainerClassName="pb-20">
+    <ScrollView
+      className="flex-1 bg-background px-5 py-8"
+      contentContainerClassName="pb-20"
+    >
       <View className="mb-6 flex-row items-center justify-between">
         {onBack ? (
-          <TouchableOpacity onPress={onBack} className="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2">
-            <Text className="text-xs font-black uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">{t('back')}</Text>
+          <TouchableOpacity
+            onPress={onBack}
+            className="rounded-full border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-2"
+          >
+            <Text className="text-xs font-black uppercase tracking-[0.2em] text-slate-700 dark:text-slate-200">
+              {t('back')}
+            </Text>
           </TouchableOpacity>
         ) : null}
       </View>
 
       <View className="rounded-[32px] bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 shadow-sm">
-        <Text className="text-sm font-black uppercase tracking-[0.32em] text-[#F97316]">{t(page === 'info' ? 'informations' : page === 'privacy' ? 'politique' : page === 'terms' ? 'conditions_util' : 'plan_site')}</Text>
-        <Text className="mt-4 text-3xl font-black text-slate-950 dark:text-slate-100">{t(page === 'info' ? 'informations' : page === 'privacy' ? 'politique' : page === 'terms' ? 'conditions_util' : 'plan_site')}</Text>
+        <Text className="text-sm font-black uppercase tracking-[0.32em] text-[#F97316]">
+          {t(
+            page === 'info'
+              ? 'informations'
+              : page === 'privacy'
+              ? 'politique'
+              : page === 'terms'
+              ? 'conditions_util'
+              : 'plan_site',
+          )}
+        </Text>
+        <Text className="mt-4 text-3xl font-black text-slate-950 dark:text-slate-100">
+          {t(
+            page === 'info'
+              ? 'informations'
+              : page === 'privacy'
+              ? 'politique'
+              : page === 'terms'
+              ? 'conditions_util'
+              : 'plan_site',
+          )}
+        </Text>
         <View className="mt-6">{renderPages()}</View>
       </View>
     </ScrollView>

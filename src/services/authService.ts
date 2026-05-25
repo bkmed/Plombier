@@ -102,7 +102,11 @@ export const authService = {
 
     const usersJson = storageService.getString(USERS_KEY);
     const users = usersJson ? JSON.parse(usersJson) : [];
-    if (users.find((item: UserAccount & { password?: string }) => item.email === email)) {
+    if (
+      users.find(
+        (item: UserAccount & { password?: string }) => item.email === email,
+      )
+    ) {
       throw new Error('Email already exists');
     }
 
@@ -121,7 +125,9 @@ export const authService = {
     users.push(newUser);
     storageService.setString(USERS_KEY, JSON.stringify(users));
 
-    const sessionUser = toSessionUser(newUser as UserAccount & { password?: string });
+    const sessionUser = toSessionUser(
+      newUser as UserAccount & { password?: string },
+    );
     storageService.setString(AUTH_KEY, JSON.stringify(sessionUser));
     return sessionUser;
   },
@@ -137,9 +143,15 @@ export const authService = {
     const usersJson = storageService.getString(USERS_KEY);
     if (usersJson) {
       const users = JSON.parse(usersJson);
-      const index = users.findIndex((item: UserAccount & { password?: string }) => item.id === newUser.id);
+      const index = users.findIndex(
+        (item: UserAccount & { password?: string }) => item.id === newUser.id,
+      );
       if (index !== -1) {
-        users[index] = { ...users[index], ...updatedData, updatedAt: new Date().toISOString() };
+        users[index] = {
+          ...users[index],
+          ...updatedData,
+          updatedAt: new Date().toISOString(),
+        };
         storageService.setString(USERS_KEY, JSON.stringify(users));
       }
     }

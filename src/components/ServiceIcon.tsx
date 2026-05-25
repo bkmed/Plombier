@@ -27,7 +27,7 @@ export const ServiceIcon = ({
       role={title ? 'img' : undefined}
     >
       {title && <title>{title}</title>}
-      {paths.map((path) => (
+      {paths.map(path => (
         <path key={path} d={path} />
       ))}
     </svg>

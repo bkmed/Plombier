@@ -28,7 +28,11 @@ export const TopAppBar = () => {
       className="z-50 flex-row items-center justify-between border-b border-outline-variant/40 bg-background/90 px-5 py-3"
       style={
         Platform.OS === 'web'
-          ? ({ position: 'sticky', top: 0, backdropFilter: 'blur(24px)' } as any)
+          ? ({
+              position: 'sticky',
+              top: 0,
+              backdropFilter: 'blur(24px)',
+            } as any)
           : undefined
       }
     >
@@ -46,7 +50,9 @@ export const TopAppBar = () => {
       <View className="flex-row items-center gap-3">
         <TouchableOpacity
           className="h-10 w-10 items-center justify-center rounded-full bg-surface-container-low"
-          onPress={() => dispatch(updateSettings({ hideBalances: !settings.hideBalances }))}
+          onPress={() =>
+            dispatch(updateSettings({ hideBalances: !settings.hideBalances }))
+          }
         >
           <MaterialIcons
             name={settings.hideBalances ? 'visibility-off' : 'visibility'}

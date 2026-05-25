@@ -6,7 +6,11 @@ const newDisplayName = process.argv[3] || newName;
 
 if (!newName) {
   console.error('Please provide a new project name.');
-  console.error('Usage: node scripts/rename-project.js <NewName> [NewDisplayName]', newName, newDisplayName);
+  console.error(
+    'Usage: node scripts/rename-project.js <NewName> [NewDisplayName]',
+    newName,
+    newDisplayName,
+  );
   process.exit(1);
 }
 
@@ -41,7 +45,13 @@ const walkDir = (dir, callback) => {
     let dirPath = path.join(dir, f);
     let isDirectory = fs.statSync(dirPath).isDirectory();
     if (isDirectory) {
-      if (f !== 'node_modules' && f !== '.git' && f !== 'build' && f !== 'dist' && f !== 'Pods') {
+      if (
+        f !== 'node_modules' &&
+        f !== '.git' &&
+        f !== 'build' &&
+        f !== 'dist' &&
+        f !== 'Pods'
+      ) {
         walkDir(dirPath, callback);
       }
     } else {
@@ -54,10 +64,12 @@ console.log(`Renaming project from "${oldName}" to "${newName}"...`);
 
 // 1. Update content in all files
 console.log('Updating text in files...');
-walkDir(rootDir, (filePath) => {
+walkDir(rootDir, filePath => {
   const fileName = path.basename(filePath);
   if (
-    /\.(js|jsx|ts|tsx|swift|json|md|html|xml|gradle|plist|pbxproj|storyboard|xcworkspacedata|xcscheme|java|kt|sh|txt|yml|yaml)$/.test(filePath) ||
+    /\.(js|jsx|ts|tsx|swift|json|md|html|xml|gradle|plist|pbxproj|storyboard|xcworkspacedata|xcscheme|java|kt|sh|txt|yml|yaml)$/.test(
+      filePath,
+    ) ||
     fileName === 'Podfile' ||
     fileName === 'Gemfile'
   ) {
@@ -88,7 +100,9 @@ if (fs.existsSync(iosDir)) {
   const xcworkspaceNew = path.join(iosDir, `${newName}.xcworkspace`);
   if (fs.existsSync(xcworkspaceOld)) {
     fs.renameSync(xcworkspaceOld, xcworkspaceNew);
-    console.log(`Renamed ios/${oldName}.xcworkspace to ios/${newName}.xcworkspace`);
+    console.log(
+      `Renamed ios/${oldName}.xcworkspace to ios/${newName}.xcworkspace`,
+    );
   }
 
   // Rename scheme

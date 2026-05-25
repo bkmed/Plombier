@@ -9,7 +9,14 @@ export enum Permission {
   MANAGE_SETTINGS = 'manage_settings',
 }
 
-const walletRoutes = ['Home', 'History', 'Reports', 'Accounts', 'Goals', 'Profile'];
+const walletRoutes = [
+  'Home',
+  'History',
+  'Reports',
+  'Accounts',
+  'Goals',
+  'Profile',
+];
 
 class RbacService {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

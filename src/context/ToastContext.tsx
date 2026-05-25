@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Animated, Dimensions, Platform } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Animated,
+  Dimensions,
+  Platform,
+} from 'react-native';
 import { useTheme } from './ThemeContext';
 import { Theme } from '../theme';
 
@@ -52,10 +59,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
       {children}
       <View
         style={styles.container}
-        {...Platform.select({
+        {...(Platform.select({
           web: { style: [styles.container, { pointerEvents: 'none' }] },
           default: { pointerEvents: 'box-none' },
-        }) as any}
+        }) as any)}
       >
         {toasts.map((toast, index) => (
           <ToastItem

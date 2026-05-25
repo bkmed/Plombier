@@ -9,19 +9,32 @@ export const LoadingScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}>
-        <Text style={{ fontSize: 42, fontWeight: '900', color: '#A80000', letterSpacing: -1 }}>
+      <View
+        style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 24 }}
+      >
+        <Text
+          style={{
+            fontSize: 42,
+            fontWeight: '900',
+            color: '#A80000',
+            letterSpacing: -1,
+          }}
+        >
           ST★UCHI
         </Text>
-        <Text style={{ fontSize: 32, fontWeight: 'bold', color: '#005994', marginTop: -16, marginLeft: 2 }}>
+        <Text
+          style={{
+            fontSize: 32,
+            fontWeight: 'bold',
+            color: '#005994',
+            marginTop: -16,
+            marginLeft: 2,
+          }}
+        >
           *
         </Text>
       </View>
-      <ActivityIndicator
-        size="large"
-        color="#005994"
-        style={styles.spinner}
-      />
+      <ActivityIndicator size="large" color="#005994" style={styles.spinner} />
     </View>
   );
 };

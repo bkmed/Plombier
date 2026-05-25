@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -80,10 +86,16 @@ export const HistoryScreen = () => {
           {['📅 This Month', '💳 Category', '🔽 Type'].map((chip, index) => (
             <View
               key={chip}
-              className={`rounded-full px-5 py-2.5 ${index === 0 ? 'bg-primary-container' : 'bg-surface-container-high'}`}
+              className={`rounded-full px-5 py-2.5 ${
+                index === 0
+                  ? 'bg-primary-container'
+                  : 'bg-surface-container-high'
+              }`}
             >
               <Text
-                className={`font-label text-xs font-bold ${index === 0 ? 'text-on-primary-container' : 'text-on-surface'}`}
+                className={`font-label text-xs font-bold ${
+                  index === 0 ? 'text-on-primary-container' : 'text-on-surface'
+                }`}
               >
                 {chip}
               </Text>
@@ -119,9 +131,12 @@ export const HistoryScreen = () => {
                       {income > spent ? 'Total Income' : 'Total Spent'}
                     </Text>
                     <Text
-                      className={`font-headline text-[22px] font-black ${income > spent ? 'text-primary' : 'text-secondary'}`}
+                      className={`font-headline text-[22px] font-black ${
+                        income > spent ? 'text-primary' : 'text-secondary'
+                      }`}
                     >
-                      {(income > spent ? income : spent).toFixed(2)} {settings.currency}
+                      {(income > spent ? income : spent).toFixed(2)}{' '}
+                      {settings.currency}
                     </Text>
                   </View>
                 </View>

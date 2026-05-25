@@ -7,7 +7,11 @@ interface Props {
   accept?: string;
 }
 
-const CategoryImageInput = ({ imageUri, onImageSelected, accept = 'image/*' }: Props) => {
+const CategoryImageInput = ({
+  imageUri,
+  onImageSelected,
+  accept = 'image/*',
+}: Props) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
     if (!file) return onImageSelected(null);
@@ -22,7 +26,7 @@ const CategoryImageInput = ({ imageUri, onImageSelected, accept = 'image/*' }: P
   const handleNativePress = () => {
     // Native image picker is not configured in this repo yet.
     // This placeholder keeps the file cross-platform and allows future integration.
-    alert('Sélection d\'image non disponible sur mobile pour le moment.');
+    alert("Sélection d'image non disponible sur mobile pour le moment.");
   };
 
   if (Platform.OS === 'web') {
@@ -30,9 +34,27 @@ const CategoryImageInput = ({ imageUri, onImageSelected, accept = 'image/*' }: P
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <input type="file" accept={accept} onChange={handleFileChange} />
         {imageUri ? (
-          <img src={imageUri} alt="preview" style={{ width: 64, height: 64, objectFit: 'cover', borderRadius: 8, marginLeft: 12 }} />
+          <img
+            src={imageUri}
+            alt="preview"
+            style={{
+              width: 64,
+              height: 64,
+              objectFit: 'cover',
+              borderRadius: 8,
+              marginLeft: 12,
+            }}
+          />
         ) : (
-          <View style={{ width: 64, height: 64, backgroundColor: '#f3f4f6', borderRadius: 8, marginLeft: 12 }} />
+          <View
+            style={{
+              width: 64,
+              height: 64,
+              backgroundColor: '#f3f4f6',
+              borderRadius: 8,
+              marginLeft: 12,
+            }}
+          />
         )}
       </View>
     );
@@ -40,13 +62,31 @@ const CategoryImageInput = ({ imageUri, onImageSelected, accept = 'image/*' }: P
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <TouchableOpacity onPress={handleNativePress} style={{ padding: 12, backgroundColor: '#e5e7eb', borderRadius: 12, marginRight: 12 }}>
+      <TouchableOpacity
+        onPress={handleNativePress}
+        style={{
+          padding: 12,
+          backgroundColor: '#e5e7eb',
+          borderRadius: 12,
+          marginRight: 12,
+        }}
+      >
         <Text>Choisir une image</Text>
       </TouchableOpacity>
       {imageUri ? (
-        <Image source={{ uri: imageUri }} style={{ width: 64, height: 64, borderRadius: 8 }} />
+        <Image
+          source={{ uri: imageUri }}
+          style={{ width: 64, height: 64, borderRadius: 8 }}
+        />
       ) : (
-        <View style={{ width: 64, height: 64, backgroundColor: '#f3f4f6', borderRadius: 8 }} />
+        <View
+          style={{
+            width: 64,
+            height: 64,
+            backgroundColor: '#f3f4f6',
+            borderRadius: 8,
+          }}
+        />
       )}
     </View>
   );

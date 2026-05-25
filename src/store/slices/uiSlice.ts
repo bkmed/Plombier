@@ -37,5 +37,6 @@ const uiSlice = createSlice({
   },
 });
 
-export const { setCurrentLang, setCurrentTheme, setActiveTab, setBypassAuth } = uiSlice.actions;
+export const { setCurrentLang, setCurrentTheme, setActiveTab, setBypassAuth } =
+  uiSlice.actions;
 export default uiSlice.reducer;

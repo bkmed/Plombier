@@ -12,7 +12,9 @@ import { RootState } from '../../../store';
 
 const AdminGalleryEditor = () => {
   const dispatch = useDispatch();
-  const items = useSelector((state: RootState) => selectGalleryItems(state)) as GalleryItem[];
+  const items = useSelector((state: RootState) =>
+    selectGalleryItems(state),
+  ) as GalleryItem[];
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [description, setDescription] = useState('');
@@ -98,7 +100,10 @@ const AdminGalleryEditor = () => {
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
             <h3 className="font-black text-3xl">Gérer la galerie</h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">Utilisez ce bouton pour ajouter ou modifier les photos de la galerie via une fenêtre modale.</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+              Utilisez ce bouton pour ajouter ou modifier les photos de la
+              galerie via une fenêtre modale.
+            </p>
           </div>
           <div className="flex gap-3 flex-wrap">
             <button
@@ -114,17 +119,31 @@ const AdminGalleryEditor = () => {
           </div>
         </div>
 
-        {statusMessage && <div className="mt-6 text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-3xl px-4 py-3 text-sm">{statusMessage}</div>}
-        {errorMessage && !showGalleryModal && <div className="mt-6 text-rose-700 bg-rose-100 border border-rose-200 rounded-3xl px-4 py-3 text-sm">{errorMessage}</div>}
+        {statusMessage && (
+          <div className="mt-6 text-emerald-700 bg-emerald-100 border border-emerald-200 rounded-3xl px-4 py-3 text-sm">
+            {statusMessage}
+          </div>
+        )}
+        {errorMessage && !showGalleryModal && (
+          <div className="mt-6 text-rose-700 bg-rose-100 border border-rose-200 rounded-3xl px-4 py-3 text-sm">
+            {errorMessage}
+          </div>
+        )}
       </div>
 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
           <div>
-            <h4 className="text-xl font-black">Liste des images de la galerie</h4>
-            <p className="text-sm text-slate-500 dark:text-slate-400">Gérez les visuels qui s’affichent sur la page Galerie.</p>
+            <h4 className="text-xl font-black">
+              Liste des images de la galerie
+            </h4>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
+              Gérez les visuels qui s’affichent sur la page Galerie.
+            </p>
           </div>
-          <span className="text-sm text-slate-500 dark:text-slate-400">{items.length} élément{items.length === 1 ? '' : 's'}</span>
+          <span className="text-sm text-slate-500 dark:text-slate-400">
+            {items.length} élément{items.length === 1 ? '' : 's'}
+          </span>
         </div>
 
         {items.length === 0 ? (
@@ -134,15 +153,37 @@ const AdminGalleryEditor = () => {
         ) : (
           <div className="grid gap-4">
             {items.map(item => (
-              <div key={item.id} className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 shadow-sm">
+              <div
+                key={item.id}
+                className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 shadow-sm"
+              >
                 <div className="overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800 h-full">
-                  <img src={item.imageUri} alt={item.title} className="h-full w-full object-cover" />
+                  <img
+                    src={item.imageUri}
+                    alt={item.title}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <div className="font-black text-slate-900 dark:text-slate-100">{item.title}</div>
-                  {item.subtitle ? <div className="text-sm text-slate-500 dark:text-slate-400">{item.subtitle}</div> : null}
-                  {item.description ? <div className="text-sm text-slate-600 dark:text-slate-300">{item.description}</div> : null}
-                  <div className="text-[11px] text-slate-400">Mis à jour le {new Date(item.updatedAt || item.createdAt).toLocaleDateString()}</div>
+                  <div className="font-black text-slate-900 dark:text-slate-100">
+                    {item.title}
+                  </div>
+                  {item.subtitle ? (
+                    <div className="text-sm text-slate-500 dark:text-slate-400">
+                      {item.subtitle}
+                    </div>
+                  ) : null}
+                  {item.description ? (
+                    <div className="text-sm text-slate-600 dark:text-slate-300">
+                      {item.description}
+                    </div>
+                  ) : null}
+                  <div className="text-[11px] text-slate-400">
+                    Mis à jour le{' '}
+                    {new Date(
+                      item.updatedAt || item.createdAt,
+                    ).toLocaleDateString()}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-2 justify-between">
                   <button
@@ -179,12 +220,21 @@ const AdminGalleryEditor = () => {
 
             <div className="p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-black text-slate-850 dark:text-white">
-                {editingItem ? 'Modifier une image de galerie' : 'Ajouter une image à la galerie'}
+                {editingItem
+                  ? 'Modifier une image de galerie'
+                  : 'Ajouter une image à la galerie'}
               </h2>
 
-              {errorMessage && <div className="text-rose-700 bg-rose-100 border border-rose-200 rounded-3xl px-4 py-3 text-sm">{errorMessage}</div>}
+              {errorMessage && (
+                <div className="text-rose-700 bg-rose-100 border border-rose-200 rounded-3xl px-4 py-3 text-sm">
+                  {errorMessage}
+                </div>
+              )}
 
-              <form onSubmit={handleSubmit} className="space-y-6 text-xs font-semibold">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-6 text-xs font-semibold"
+              >
                 <div className="grid gap-4 md:grid-cols-2">
                   <input
                     value={title}
@@ -210,17 +260,27 @@ const AdminGalleryEditor = () => {
 
                 <div className="grid gap-4 md:grid-cols-[1.4fr_0.8fr] items-start">
                   <div>
-                    <label className="block text-sm font-semibold mb-2">Image de la galerie</label>
+                    <label className="block text-sm font-semibold mb-2">
+                      Image de la galerie
+                    </label>
                     <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
-                      <CategoryImageInput imageUri={imageUri || undefined} onImageSelected={setImageUri} />
+                      <CategoryImageInput
+                        imageUri={imageUri || undefined}
+                        onImageSelected={setImageUri}
+                      />
                     </div>
                   </div>
                   <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 text-sm text-slate-500 dark:text-slate-400">
                     <p className="font-black text-sm mb-2">Conseil :</p>
                     <ul className="list-disc pl-5 space-y-2">
                       <li>Choisissez une image claire et représentative.</li>
-                      <li>Ajoutez un titre court et un sous-titre pertinent.</li>
-                      <li>La description aide vos clients à comprendre la réalisation.</li>
+                      <li>
+                        Ajoutez un titre court et un sous-titre pertinent.
+                      </li>
+                      <li>
+                        La description aide vos clients à comprendre la
+                        réalisation.
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -237,7 +297,9 @@ const AdminGalleryEditor = () => {
                     type="submit"
                     className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-sm transition"
                   >
-                    {editingItem ? 'Enregistrer les modifications' : 'Ajouter à la galerie'}
+                    {editingItem
+                      ? 'Enregistrer les modifications'
+                      : 'Ajouter à la galerie'}
                   </button>
                 </div>
               </form>

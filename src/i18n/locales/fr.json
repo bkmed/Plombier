@@ -59,7 +59,9 @@
     "manageGallery": "Gérer la galerie"
   },
   "support": {
-    "whatsapp": "Appeler sur WhatsApp"
+    "whatsapp": "Appeler sur WhatsApp",
+    "header": "Support",
+    "email_label": "Email de support"
   },
   "announcements": {
     "addAnnouncement": "Ajouter une annonce",
@@ -451,6 +453,41 @@
   },
   "navigation": {
     "home": "Accueil"
+  },
+  "navigation_label": "Navigation",
+  "services_local": {
+    "plomberie_generale": "Plomberie Générale",
+    "plomberie_desc_long": "Installation, réparation et maintenance de tous vos systèmes sanitaires. Nous intervenons sur les fuites complexes, le débouchage de canalisations, et la rénovation complète de salles de bain.",
+    "plomberie_desc_1": "Détection de fuites par caméra thermique",
+    "plomberie_desc_2": "Installation de robinetterie haut de gamme",
+    "plomberie_desc_3": "Remplacement de colonnes d'évacuation",
+
+    "climatisation": "Climatisation",
+    "clim_desc_long": "Expertise complète en systèmes de refroidissement. De l'installation de splits muraux à la maintenance de centrales de climatisation, nous assurons une température optimale.",
+    "clim_desc_1": "Recharge de gaz réfrigérant R410/R32",
+    "clim_desc_2": "Nettoyage antibactérien certifié",
+    "clim_desc_3": "Optimisation de consommation énergétique",
+
+    "installation_gaz": "Installation Gaz",
+    "gaz_desc_long": "La sécurité est notre priorité absolue. Nous réalisons vos installations de gaz selon les normes de sécurité les plus strictes.",
+    "gaz_desc_1": "Mise en conformité des installations STEG",
+    "gaz_desc_2": "Pose de détecteurs de monoxyde de carbone",
+    "gaz_desc_3": "Raccordement sécurisé cuisinières/chaudières",
+
+    "chauffage_central": "Chauffage Central",
+    "chauffage_desc_long": "Solutions de chauffage performantes pour un hiver serein. Nous installons des chaudières à condensation haute performance et des radiateurs révisés.",
+    "chauffage_desc_1": "Entretien annuel complet de chaudière",
+    "chauffage_desc_2": "Désembouage hydrodynamique de circuit",
+    "chauffage_desc_3": "Régulation intelligente par thermostat connecté",
+
+    "service_before_plomberie": "Réseau cuivre vétuste avec fuites régulières",
+    "service_after_plomberie": "Tubes cuivre neufs avec soudures professionnelles",
+    "service_before_clim": "Filtres encrassés provoquant une surconsommation",
+    "service_after_clim": "Turbine nettoyée et désinfectée de fond en comble",
+    "service_before_gaz": "Raccord souple expiré et robinet de gaz oxydé",
+    "service_after_gaz": "Tuyauterie cuivre rigide soudée aux normes STEG",
+    "service_before_chauffage": "Radiateurs froids par embouage du circuit d'eau",
+    "service_after_chauffage": "Désembouage hydrodynamique et chauffage parfait"
   },
   "notifications": {
     "markAllAsRead": "Tout marquer comme lu",

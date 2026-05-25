@@ -15,7 +15,11 @@ export const trackWalletScreen = (screen: string) => {
   }
 };
 
-export const trackTransactionAdded = (type: string, amount: number, category: string) => {
+export const trackTransactionAdded = (
+  type: string,
+  amount: number,
+  category: string,
+) => {
   if (Platform.OS !== 'web') {
     analytics().logEvent('wallet_transaction', { type, amount, category });
   }
@@ -30,7 +34,10 @@ export const analyticsService = {
     weeklySales: [],
   }),
 
-  getSalesChartData: async (): Promise<{ labels: string[]; data: number[] }> => ({
+  getSalesChartData: async (): Promise<{
+    labels: string[];
+    data: number[];
+  }> => ({
     labels: [],
     data: [],
   }),

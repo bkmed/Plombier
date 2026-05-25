@@ -8,6 +8,7 @@
   "navigation": {
     "home": "Home"
   },
+  "navigation_label": "Gezin",
   "shortcuts": {
     "coffee": "Coffee",
     "transport": "Transport",

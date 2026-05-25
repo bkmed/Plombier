@@ -7,10 +7,28 @@ interface Props {
   currentRole: string;
   supportWhatsAppDigits: string;
   supportWhatsAppNumber: string;
+  supportEmail: string;
 }
 
-export const FooterLinks = ({ setActiveTab, currentRole, supportWhatsAppDigits, supportWhatsAppNumber }: Props) => {
+export const FooterLinks = ({
+  setActiveTab,
+  currentRole,
+  supportWhatsAppDigits,
+  supportWhatsAppNumber,
+  supportEmail,
+}: Props) => {
   const { t } = useTranslation();
+
+  const navLabelRawPreferred = (t as any)('navigation_label');
+  const navLabelRaw =
+    typeof navLabelRawPreferred !== 'undefined' && navLabelRawPreferred !== null
+      ? navLabelRawPreferred
+      : (t as any)('navigation');
+  const navLabel =
+    typeof navLabelRaw === 'string'
+      ? navLabelRaw
+      : (navLabelRaw && (navLabelRaw.title || navLabelRaw.label)) ||
+        'Navigation';
 
   const openTel = (tel: string) => {
     Linking.openURL(`tel:${tel}`);
@@ -27,17 +45,29 @@ export const FooterLinks = ({ setActiveTab, currentRole, supportWhatsAppDigits, 
   return (
     <>
       <View className="space-y-3">
-        <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">{t('navigation')}</Text>
+        <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          {navLabel}
+        </Text>
         <View className="space-y-2 text-xs font-semibold">
-          <TouchableOpacity onPress={() => setActiveTab(currentRole === 'admin' ? 'AdminAccueil' : 'Accueil')}>
-            <Text className="hover:text-[#F97316]">{t('accueil')}</Text>
+          <TouchableOpacity
+            onPress={() =>
+              setActiveTab(currentRole === 'admin' ? 'AdminAccueil' : 'Accueil')
+            }
+          >
+            <Text className="hover:text-[#F97316]">{t('navigation.home')}</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setActiveTab(currentRole === 'admin' ? 'AdminProfile' : 'Profile')}>
-            <Text className="hover:text-[#F97316]">{t('mon_profil')}</Text>
+          <TouchableOpacity
+            onPress={() =>
+              setActiveTab(currentRole === 'admin' ? 'AdminProfile' : 'Profile')
+            }
+          >
+            <Text className="hover:text-[#F97316]">{t('profile.title')}</Text>
           </TouchableOpacity>
           {currentRole === 'admin' && (
             <TouchableOpacity onPress={() => setActiveTab('AdminGallery')}>
-              <Text className="hover:text-[#F97316]">{t('gallery.manageGallery')}</Text>
+              <Text className="hover:text-[#F97316]">
+                {t('gallery.manageGallery')}
+              </Text>
             </TouchableOpacity>
           )}
           {currentRole !== 'admin' && (
@@ -49,7 +79,9 @@ export const FooterLinks = ({ setActiveTab, currentRole, supportWhatsAppDigits, 
                 <Text className="hover:text-[#F97316]">{t('pieces')}</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setActiveTab('Gallery')}>
-                <Text className="hover:text-[#F97316]">{t('gallery.title')}</Text>
+                <Text className="hover:text-[#F97316]">
+                  {t('gallery.title')}
+                </Text>
               </TouchableOpacity>
             </>
           )}
@@ -57,7 +89,9 @@ export const FooterLinks = ({ setActiveTab, currentRole, supportWhatsAppDigits, 
       </View>
 
       <View className="space-y-3">
-        <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">{t('informations')}</Text>
+        <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          {t('informations')}
+        </Text>
         <View className="space-y-2 text-xs font-semibold">
           <TouchableOpacity onPress={() => setActiveTab('Informations')}>
             <Text className="hover:text-[#F97316]">{t('informations')}</Text>
@@ -75,17 +109,33 @@ export const FooterLinks = ({ setActiveTab, currentRole, supportWhatsAppDigits, 
       </View>
 
       <View className="space-y-3">
-        <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">Support</Text>
+        <Text className="text-xs font-black uppercase tracking-wider text-slate-800 dark:text-slate-200">
+          {t('support.header') || 'Support'}
+        </Text>
         <View className="space-y-2 text-xs font-semibold">
-          <TouchableOpacity onPress={() => openTel('+21622456789')}>
-            <Text className="flex items-center gap-2">📞 +216 22 456 789</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => openMail('support@plombier-tunisie.tn')}>
-            <Text className="flex items-center gap-2">✉️ support@plombier-tunisie.tn</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => openWhatsApp(supportWhatsAppDigits)}>
-            <Text className="flex items-center gap-2">{t('support.whatsapp')}: {supportWhatsAppNumber}</Text>
-          </TouchableOpacity>
+          {supportWhatsAppNumber ? (
+            <TouchableOpacity onPress={() => openTel(supportWhatsAppNumber)}>
+              <Text className="flex items-center gap-2">
+                📞 {supportWhatsAppNumber}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
+
+          {supportEmail ? (
+            <TouchableOpacity onPress={() => openMail(supportEmail)}>
+              <Text className="flex items-center gap-2">✉️ {supportEmail}</Text>
+            </TouchableOpacity>
+          ) : null}
+
+          {supportWhatsAppDigits ? (
+            <TouchableOpacity
+              onPress={() => openWhatsApp(supportWhatsAppDigits)}
+            >
+              <Text className="flex items-center gap-2">
+                {t('support.whatsapp')}: {supportWhatsAppNumber}
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
       </View>
     </>

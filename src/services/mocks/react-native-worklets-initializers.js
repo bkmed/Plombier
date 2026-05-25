@@ -17,7 +17,7 @@ export function init() {
   if (globalThis.__RUNTIME_KIND === undefined) {
     globalThis.__RUNTIME_KIND = RuntimeKind.ReactNative;
   }
-  
+
   if (SHOULD_BE_USE_WEB) {
     initializeRuntimeOnWeb();
   }

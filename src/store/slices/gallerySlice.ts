@@ -36,6 +36,11 @@ const gallerySlice = createSlice({
   },
 });
 
-export const { addGalleryItem, updateGalleryItem, deleteGalleryItem, setGalleryItems } = gallerySlice.actions;
+export const {
+  addGalleryItem,
+  updateGalleryItem,
+  deleteGalleryItem,
+  setGalleryItems,
+} = gallerySlice.actions;
 export const selectGalleryItems = (state: any) => state.gallery?.items || [];
 export default gallerySlice.reducer;

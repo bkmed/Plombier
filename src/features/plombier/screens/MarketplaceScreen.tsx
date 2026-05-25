@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { toggleFavoriteAction, type Product } from '../../../store/slices/partsSlice';
+import {
+  toggleFavoriteAction,
+  type Product,
+} from '../../../store/slices/partsSlice';
 import { useToast } from '../../../context/ToastContext';
 
 type Lang = 'FR' | 'AR' | 'EN';
@@ -9,31 +12,79 @@ type Lang = 'FR' | 'AR' | 'EN';
 interface MarketplaceScreenProps {
   currentLang: Lang;
   t: Record<string, any>;
-  supportWhatsAppDigits: string;
   setSelectedProduct: React.Dispatch<React.SetStateAction<Product | null>>;
 }
 
-const ProductVisual = ({ image, className = 'w-16 h-16' }: { image: string; className?: string }) => {
+const ProductVisual = ({
+  image,
+  className = 'w-16 h-16',
+}: {
+  image: string;
+  className?: string;
+}) => {
   if (image === 'faucet') {
     return (
-      <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        viewBox="0 0 100 100"
+        className={className}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M25 80 h50" strokeWidth="4" stroke="#475569" />
-        <path d="M40 80 V42 c0 -12 8 -22 22 -22 h8" strokeWidth="6" stroke="#64748B" />
+        <path
+          d="M40 80 V42 c0 -12 8 -22 22 -22 h8"
+          strokeWidth="6"
+          stroke="#64748B"
+        />
         <path d="M70 20 v8" strokeWidth="5" stroke="#94A3B8" />
         <path d="M66 28 h8" strokeWidth="2" stroke="#475569" />
         <path d="M32 50 h12" strokeWidth="4.5" stroke="#334155" />
         <circle cx="32" cy="50" r="3.5" fill="#EF4444" />
         <circle cx="44" cy="50" r="3.5" fill="#3B82F6" />
-        <path d="M43 35 c0 -5 5 -10 10 -10" stroke="white" strokeWidth="1.5" opacity="0.6" />
+        <path
+          d="M43 35 c0 -5 5 -10 10 -10"
+          stroke="white"
+          strokeWidth="1.5"
+          opacity="0.6"
+        />
       </svg>
     );
   }
   if (image === 'boiler') {
     return (
-      <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="25" y="15" width="50" height="66" rx="6" fill="#F8FAFC" stroke="#334155" strokeWidth="3" />
+      <svg
+        viewBox="0 0 100 100"
+        className={className}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <rect
+          x="25"
+          y="15"
+          width="50"
+          height="66"
+          rx="6"
+          fill="#F8FAFC"
+          stroke="#334155"
+          strokeWidth="3"
+        />
         <rect x="42" y="24" width="16" height="4" rx="1" fill="#1E3A5F" />
-        <rect x="38" y="55" width="24" height="12" rx="2" fill="#0F172A" stroke="#475569" strokeWidth="1.5" />
+        <rect
+          x="38"
+          y="55"
+          width="24"
+          height="12"
+          rx="2"
+          fill="#0F172A"
+          stroke="#475569"
+          strokeWidth="1.5"
+        />
         <circle cx="44" cy="72" r="2.5" fill="#64748B" />
         <circle cx="56" cy="72" r="2.5" fill="#64748B" />
         <path d="M35 81 v10" stroke="#B45309" strokeWidth="4.5" />
@@ -45,46 +96,87 @@ const ProductVisual = ({ image, className = 'w-16 h-16' }: { image: string; clas
     );
   }
   return (
-    <svg viewBox="0 0 100 100" className={className} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M22 28 h32 v32" stroke="#EA580C" strokeWidth="8" strokeLinecap="square" />
+    <svg
+      viewBox="0 0 100 100"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path
+        d="M22 28 h32 v32"
+        stroke="#EA580C"
+        strokeWidth="8"
+        strokeLinecap="square"
+      />
       <circle cx="22" cy="28" r="5" fill="#C2410C" />
       <circle cx="54" cy="60" r="5" fill="#C2410C" />
       <path d="M52 35 h32 M68 35 v30" stroke="#EA580C" strokeWidth="7" />
       <circle cx="52" cy="35" r="4.5" fill="#C2410C" />
       <circle cx="84" cy="35" r="4.5" fill="#C2410C" />
       <circle cx="68" cy="65" r="4.5" fill="#C2410C" />
-      <rect x="30" y="72" width="28" height="10" rx="1.5" fill="#EA580C" stroke="#C2410C" strokeWidth="1.5" />
+      <rect
+        x="30"
+        y="72"
+        width="28"
+        height="10"
+        rx="1.5"
+        fill="#EA580C"
+        stroke="#C2410C"
+        strokeWidth="1.5"
+      />
     </svg>
   );
 };
 
-const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedProduct }: MarketplaceScreenProps) => {
+const MarketplaceScreen = ({
+  currentLang,
+  t,
+  setSelectedProduct,
+}: MarketplaceScreenProps) => {
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
   const products = useSelector((state: RootState) => state.parts.listings);
   const favorites = useSelector((state: RootState) => state.parts.favorites);
-  const reduxCategories = useSelector((state: RootState) => state.categories.items);
+  const reduxCategories = useSelector(
+    (state: RootState) => state.categories.items,
+  );
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategoryFilter, setSelectedCategoryFilter] = useState('Toutes');
-  const [selectedConditionFilter, setSelectedConditionFilter] = useState('Tous');
+  const [selectedCategoryFilter, setSelectedCategoryFilter] =
+    useState('Toutes');
+  const [selectedConditionFilter, setSelectedConditionFilter] =
+    useState('Tous');
   const [priceMax, setPriceMax] = useState(600);
   const [sortBy, setSortBy] = useState('featured');
 
   const filteredProducts = useMemo(
     () =>
-      products.filter((product) => {
+      products.filter(product => {
         const matchesQuery = searchQuery
-          ? product.title.toLowerCase().includes(searchQuery.toLowerCase()) || product.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
+          ? product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.subtitle.toLowerCase().includes(searchQuery.toLowerCase())
           : true;
-        const matchesCategory = selectedCategoryFilter === 'Toutes' || product.category === selectedCategoryFilter;
+        const matchesCategory =
+          selectedCategoryFilter === 'Toutes' ||
+          product.category === selectedCategoryFilter;
         const matchesState =
-          selectedConditionFilter === 'Tous' || product.condition.toLowerCase() === selectedConditionFilter.toLowerCase();
+          selectedConditionFilter === 'Tous' ||
+          product.condition.toLowerCase() ===
+            selectedConditionFilter.toLowerCase();
         const matchesPrice = product.price <= priceMax;
         return matchesQuery && matchesCategory && matchesState && matchesPrice;
       }),
-    [products, searchQuery, selectedCategoryFilter, selectedConditionFilter, priceMax],
+    [
+      products,
+      searchQuery,
+      selectedCategoryFilter,
+      selectedConditionFilter,
+      priceMax,
+    ],
   );
 
   const sortedProducts = useMemo(() => {
@@ -95,13 +187,22 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
     });
   }, [filteredProducts, sortBy]);
 
-  const toggleFavorite = (id: string, event: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleFavorite = (
+    id: string,
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     event.stopPropagation();
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
-      showToast(currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris', 'info');
+      showToast(
+        currentLang === 'AR' ? 'تمت إزالته من المفضلة' : 'Retiré des favoris',
+        'info',
+      );
     } else {
-      showToast(currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !', 'success');
+      showToast(
+        currentLang === 'AR' ? 'أضيف إلى المفضلة !' : 'Ajouté aux favoris !',
+        'success',
+      );
     }
   };
 
@@ -113,15 +214,17 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
             {currentLang === 'AR'
               ? 'ابحث واشتر قطع غيار الترصيص المستعملة المضمونة والمجربة من قبل حرفيينا.'
-              : 'Recherchez et filtrez nos pièces de rechange de plomberie d\'occasion certifiées.'}
+              : "Recherchez et filtrez nos pièces de rechange de plomberie d'occasion certifiées."}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.tri} :</span>
+          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+            {t.tri} :
+          </span>
           <select
             value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
+            onChange={e => setSortBy(e.target.value)}
             className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-850 dark:text-slate-250 focus:outline-none"
           >
             <option value="featured">{t.recommande}</option>
@@ -134,21 +237,31 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <div className="lg:col-span-3 space-y-6">
           <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
-            <h3 className="text-sm font-black uppercase tracking-wider">{t.filtres}</h3>
+            <h3 className="text-sm font-black uppercase tracking-wider">
+              {t.filtres}
+            </h3>
 
             <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.rechercher}</label>
+              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                {t.rechercher}
+              </label>
               <input
                 type="text"
-                placeholder={currentLang === 'AR' ? 'ابحث عن قطعة...' : 'Grohe, boiler, radiateur...'}
+                placeholder={
+                  currentLang === 'AR'
+                    ? 'ابحث عن قطعة...'
+                    : 'Grohe, boiler, radiateur...'
+                }
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">Catégories</label>
+              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                Catégories
+              </label>
               <div className="space-y-1.5">
                 <button
                   type="button"
@@ -161,7 +274,7 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
                 >
                   {t.toutes_categories}
                 </button>
-                {reduxCategories.map((cat) => (
+                {reduxCategories.map(cat => (
                   <button
                     key={cat.id}
                     type="button"
@@ -179,9 +292,11 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
             </div>
 
             <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">{t.etat}</label>
+              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                {t.etat}
+              </label>
               <div className="grid grid-cols-2 gap-2 text-center">
-                {['Tous', 'comme neuf', 'bon état', 'pour pièces'].map((cond) => (
+                {['Tous', 'comme neuf', 'bon état', 'pour pièces'].map(cond => (
                   <button
                     type="button"
                     key={cond}
@@ -209,7 +324,7 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
                 max="1000"
                 step="10"
                 value={priceMax}
-                onChange={(e) => setPriceMax(Number(e.target.value))}
+                onChange={e => setPriceMax(Number(e.target.value))}
                 className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#F97316]"
               />
             </div>
@@ -219,11 +334,13 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
         <div className="lg:col-span-9">
           {sortedProducts.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
-              <p className="text-sm text-slate-400 font-bold">{t.aucun_produit}</p>
+              <p className="text-sm text-slate-400 font-bold">
+                {t.aucun_produit}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-              {sortedProducts.map((prod) => (
+              {sortedProducts.map(prod => (
                 <div
                   key={prod.id}
                   onClick={() => setSelectedProduct(prod)}
@@ -235,17 +352,21 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
                     </span>
 
                     <button
-                      onClick={(e) => toggleFavorite(prod.id, e)}
+                      onClick={e => toggleFavorite(prod.id, e)}
                       className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
                     >
                       <svg
                         width="14"
                         height="14"
                         viewBox="0 0 24 24"
-                        fill={favorites.includes(prod.id) ? 'currentColor' : 'none'}
+                        fill={
+                          favorites.includes(prod.id) ? 'currentColor' : 'none'
+                        }
                         stroke="currentColor"
                         strokeWidth="2.5"
-                        className={favorites.includes(prod.id) ? 'text-rose-500' : ''}
+                        className={
+                          favorites.includes(prod.id) ? 'text-rose-500' : ''
+                        }
                       >
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                       </svg>
@@ -256,20 +377,25 @@ const MarketplaceScreen = ({ currentLang, t, supportWhatsAppDigits, setSelectedP
 
                   <div className="p-4 text-left flex-1 flex flex-col justify-between">
                     <div>
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">{prod.category}</span>
+                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">
+                        {prod.category}
+                      </span>
                       <h4 className="text-xs sm:text-sm font-black text-slate-850 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
                         {prod.title}
                       </h4>
-                      <p className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">{prod.subtitle}</p>
+                      <p className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">
+                        {prod.subtitle}
+                      </p>
                     </div>
 
                     <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
                       <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-250">
-                        {prod.price} <span className="text-[9.5px] font-bold">DT</span>
+                        {prod.price}{' '}
+                        <span className="text-[9.5px] font-bold">DT</span>
                       </div>
 
                       <button
-                        onClick={(e) => {
+                        onClick={e => {
                           e.stopPropagation();
                           setSelectedProduct(prod);
                         }}
