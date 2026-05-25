@@ -1,29 +1,29 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import {
+  addListing,
+  updateListing,
+  deleteListing,
+} from '../../../store/slices/partsSlice';
 import { ProductVisual } from '../components/ProductSVGs';
 
 interface AdminAnnoncesProps {
   currentLang: string;
-  products: any[];
-  reduxCategories: any[];
-  dispatch: any;
   showToast: any;
   translate: any;
-  addListing: any;
-  updateListing: any;
-  deleteListing: any;
 }
 
 export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   currentLang,
-  products,
-  reduxCategories,
-  dispatch,
   showToast,
   translate,
-  addListing,
-  updateListing,
-  deleteListing,
 }) => {
+  const dispatch = useDispatch();
+  const products = useSelector((state: RootState) => state.parts.listings);
+  const reduxCategories = useSelector(
+    (state: RootState) => state.categories.items,
+  );
   const [showAdminModal, setShowAdminModal] = React.useState(false);
   const [editingProduct, setEditingProduct] = React.useState<any | null>(null);
 
@@ -146,6 +146,11 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
         }),
       )
     ) {
+      // Clear editing state if deleting the current product being edited
+      if (editingProduct?.id === id) {
+        setEditingProduct(null);
+        setShowAdminModal(false);
+      }
       dispatch(deleteListing(id));
       showToast(
         translate('web.autoText20', {

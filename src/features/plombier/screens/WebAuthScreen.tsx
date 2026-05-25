@@ -20,7 +20,6 @@ interface WebAuthScreenProps {
 
 export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
   businessName,
-  currentLang,
   nextLanguage,
   currentTheme,
   setCurrentLang,
@@ -69,12 +68,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
       };
       startWebSession(adminSession, 'AdminAccueil');
       showToast(
-        t('web.autoText42', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'مرحباً بك حضرة المدير'
-              : "Bienvenue dans votre espace d'administration !",
-        }),
+        tCommon('web.welcomeAdmin', "Bienvenue dans votre espace d'administration !"),
         'success',
       );
     } else if (
@@ -95,19 +89,12 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
       };
       startWebSession(userSession, 'Accueil');
       showToast(
-        t('web.autoText40', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'مرحباً بك أحمد بن علي'
-              : 'Ravi de vous revoir, Ahmed Ben Ali !',
-        }),
+        tCommon('web.welcomeUser', 'Ravi de vous revoir, Ahmed Ben Ali !'),
         'success',
       );
     } else {
       showToast(
-        currentLang === 'AR'
-          ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة'
-          : 'Identifiants invalides',
+        tCommon('web.invalidCredentials', 'Identifiants invalides'),
         'error',
       );
     }
@@ -117,9 +104,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
     e.preventDefault();
     if (signupPassword !== signupConfirmPassword) {
       showToast(
-        currentLang === 'AR'
-          ? 'كلمات المرور غير متطابقة'
-          : 'Les mots de passe ne correspondent pas',
+        tCommon('web.passwordsMismatch', 'Les mots de passe ne correspondent pas'),
         'error',
       );
       return;
@@ -138,9 +123,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
     };
     startWebSession(newUser, 'Accueil');
     showToast(
-      currentLang === 'AR'
-        ? 'تم إنشاء الحساب بنجاح'
-        : 'Compte créé avec succès !',
+      tCommon('web.signupSuccess', 'Compte créé avec succès !'),
       'success',
     );
   };
@@ -262,39 +245,28 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
             </div>
             <h3 className="text-2xl font-black text-slate-950 dark:text-white">
               {authTab === 'signin' &&
-                tCommon(
-                  'web.signinTitle',
-                  currentLang === 'AR' ? 'تسجيل الدخول' : 'Connexion',
-                )}
+                tCommon('web.signinTitle', 'Connexion')}
               {authTab === 'signup' &&
-                tCommon(
-                  'web.signupTitle',
-                  currentLang === 'AR' ? 'إنشاء حساب جديد' : 'Inscription',
-                )}
+                tCommon('web.signupTitle', 'Inscription')}
               {authTab === 'forgot' &&
-                (currentLang === 'AR'
-                  ? 'نسيت كلمة المرور'
-                  : 'Mot de passe oublié')}
+                tCommon('web.forgotTitle', 'Mot de passe oublié')}
             </h3>
             <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 font-semibold">
               {authTab === 'signin' &&
                 tCommon(
                   'web.signinSubtitle',
-                  currentLang === 'AR'
-                    ? 'سجل دخولك للوصول إلى حسابك الفاخر'
-                    : 'Connectez-vous pour accéder à votre espace premium.',
+                  'Connectez-vous pour accéder à votre espace premium.',
                 )}
               {authTab === 'signup' &&
                 tCommon(
                   'web.signupSubtitle',
-                  currentLang === 'AR'
-                    ? 'قم بإنشاء حسابك المجاني في ثوانٍ معدودة'
-                    : 'Créez votre compte client gratuit en quelques secondes.',
+                  'Créez votre compte client gratuit en quelques secondes.',
                 )}
               {authTab === 'forgot' &&
-                (currentLang === 'AR'
-                  ? 'أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور.'
-                  : 'Entrez votre email pour recevoir les instructions de réinitialisation.')}
+                tCommon(
+                  'web.forgotSubtitle',
+                  'Entrez votre email pour recevoir les instructions de réinitialisation.',
+                )}
             </p>
           </div>
 
@@ -302,12 +274,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
             <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                  {tCommon(
-                    'web.emailLabel',
-                    currentLang === 'AR'
-                      ? 'البريد الإلكتروني'
-                      : 'Adresse Email',
-                  )}
+                  {tCommon('web.emailLabel', 'Adresse Email')}
                 </label>
                 <input
                   type="email"
@@ -321,10 +288,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                  {tCommon(
-                    'web.passwordLabel',
-                    currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe',
-                  )}
+                  {tCommon('web.passwordLabel', 'Mot de Passe')}
                 </label>
                 <input
                   type="password"
@@ -346,12 +310,10 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                   }}
                   className="text-[#F97316] hover:underline bg-transparent border-0 p-0 cursor-pointer"
                 >
-                  {currentLang === 'AR'
-                    ? 'هل نسيت كلمة المرور؟'
-                    : 'Forgot Password?'}
+                  {tCommon('web.forgotPasswordLink', 'Forgot Password?')}
                 </button>
                 <span className="text-[10px]">
-                  {currentLang === 'AR' ? 'تسجيل آمن' : 'Secure login'}
+                  {tCommon('web.secureLoginBadge', 'Secure login')}
                 </span>
               </div>
 
@@ -359,19 +321,14 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                 type="submit"
                 className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
               >
-                {tCommon(
-                  'web.secureLoginButton',
-                  currentLang === 'AR' ? 'دخول آمن' : 'Connexion Sécurisée',
-                )}
+                {tCommon('web.secureLoginButton', 'Connexion Sécurisée')}
               </button>
 
               <div className="border-t border-slate-200 dark:border-slate-800 pt-4 mt-6">
                 <p className="text-[10px] text-slate-400 dark:text-slate-500 text-center font-bold mb-2.5">
                   {tCommon(
                     'web.demoAccountsLabel',
-                    currentLang === 'AR'
-                      ? 'حسابات التجربة الفورية'
-                      : 'COMPTES DE DÉMO DE PLOMBERIE (ACCÈS DIRECT)',
+                    'COMPTES DE DÉMO DE PLOMBERIE (ACCÈS DIRECT)',
                   )}
                 </p>
                 <div className="grid grid-cols-2 gap-3 text-center">
@@ -381,12 +338,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                       setSigninEmail('user@demo.com');
                       setSigninPassword('user123');
                       showToast(
-                        tCommon(
-                          'web.signingIn',
-                          currentLang === 'AR'
-                            ? 'جاري تسجيل الدخول...'
-                            : 'Connexion en cours...',
-                        ),
+                        tCommon('web.signingIn', 'Connexion en cours...'),
                         'info',
                       );
                       setTimeout(() => {
@@ -404,12 +356,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                         };
                         startWebSession(userSession, 'Accueil');
                         showToast(
-                          t('web.autoText40', {
-                            defaultValue:
-                              currentLang === 'AR'
-                                ? 'مرحباً بك أحمد بن علي'
-                                : 'Ravi de vous revoir, Ahmed Ben Ali !',
-                          }),
+                          tCommon('web.welcomeUser', 'Ravi de vous revoir, Ahmed Ben Ali !'),
                           'success',
                         );
                       }, 250);
@@ -424,12 +371,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                       setSigninEmail('admin@demo.com');
                       setSigninPassword('admin123');
                       showToast(
-                        tCommon(
-                          'web.signingIn',
-                          currentLang === 'AR'
-                            ? 'جاري تسجيل الدخول...'
-                            : 'Connexion en cours...',
-                        ),
+                        tCommon('web.signingIn', 'Connexion en cours...'),
                         'info',
                       );
                       setTimeout(() => {
@@ -447,12 +389,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                         };
                         startWebSession(adminSession, 'AdminAccueil');
                         showToast(
-                          t('web.autoText42', {
-                            defaultValue:
-                              currentLang === 'AR'
-                                ? 'مرحباً بك حضرة المدير'
-                                : "Bienvenue dans votre espace d'administration !",
-                          }),
+                          tCommon('web.welcomeAdmin', "Bienvenue dans votre espace d'administration !"),
                           'success',
                         );
                       }, 250);
@@ -466,12 +403,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                  {t('web.autoText43', {
-                    defaultValue:
-                      currentLang === 'AR'
-                        ? 'ليس لديك حساب؟'
-                        : `Nouveau sur ${businessName} ?`,
-                  })}{' '}
+                  {tCommon('web.noAccountQuestion', `Nouveau sur ${businessName} ?`)}{' '}
                   <button
                     type="button"
                     onClick={() => {
@@ -481,12 +413,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                     }}
                     className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
                   >
-                    {t('web.autoText44', {
-                      defaultValue:
-                        currentLang === 'AR'
-                          ? 'أنشئ حساباً جديداً'
-                          : 'Créer un compte',
-                    })}
+                    {tCommon('web.createAccountLink', 'Créer un compte')}
                   </button>
                 </p>
               </div>
@@ -498,21 +425,14 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               onSubmit={e => {
                 e.preventDefault();
                 setForgotStatusMessage(
-                  currentLang === 'AR'
-                    ? 'تم إرسال رابط إعادة تعيين كلمة المرور بنجاح !'
-                    : 'Le lien de réinitialisation a été envoyé !',
+                  tCommon('web.resetLinkSent', 'Le lien de réinitialisation a été envoyé !'),
                 );
               }}
               className="space-y-4"
             >
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                  {tCommon(
-                    'web.emailLabel',
-                    currentLang === 'AR'
-                      ? 'البريد الإلكتروني'
-                      : 'Adresse Email',
-                  )}
+                  {tCommon('web.emailLabel', 'Adresse Email')}
                 </label>
                 <input
                   type="email"
@@ -534,9 +454,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                 type="submit"
                 className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
               >
-                {currentLang === 'AR'
-                  ? 'إرسال رابط إعادة التعيين'
-                  : 'Send reset link'}
+                {tCommon('web.sendResetLinkButton', 'Send reset link')}
               </button>
 
               <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
@@ -548,9 +466,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                   }}
                   className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
                 >
-                  {currentLang === 'AR'
-                    ? 'العودة إلى تسجيل الدخول'
-                    : 'Back to sign in'}
+                  {tCommon('web.backToSignIn', 'Back to sign in')}
                 </button>
               </div>
             </form>
@@ -560,10 +476,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
             <form onSubmit={handleSignUp} className="space-y-4">
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                  {t('web.autoText45', {
-                    defaultValue:
-                      currentLang === 'AR' ? 'الاسم الكامل' : 'Nom Complet',
-                  })}
+                  {tCommon('web.fullNameLabel', 'Nom Complet')}
                 </label>
                 <input
                   type="text"
@@ -578,10 +491,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                    {t('web.autoText46', {
-                      defaultValue:
-                        currentLang === 'AR' ? 'البريد الإلكتروني' : 'Email',
-                    })}
+                    {tCommon('web.emailLabel', 'Email')}
                   </label>
                   <input
                     type="email"
@@ -594,10 +504,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                    {t('web.autoText47', {
-                      defaultValue:
-                        currentLang === 'AR' ? 'الهاتف' : 'Téléphone',
-                    })}
+                    {tCommon('web.phoneLabel', 'Téléphone')}
                   </label>
                   <input
                     type="text"
@@ -612,12 +519,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <div className="space-y-2">
                 <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                  {t('web.autoText48', {
-                    defaultValue:
-                      currentLang === 'AR'
-                        ? 'المدينة / الولاية'
-                        : 'Ville / Gouvernorat',
-                  })}
+                  {tCommon('web.cityGovernorateLabel', 'Ville / Gouvernorat')}
                 </label>
                 <select
                   value={signupCity}
@@ -636,10 +538,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                    {t('web.autoText49', {
-                      defaultValue:
-                        currentLang === 'AR' ? 'كلمة المرور' : 'Mot de Passe',
-                    })}
+                    {tCommon('web.passwordLabel', 'Mot de Passe')}
                   </label>
                   <input
                     type="password"
@@ -652,12 +551,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-left">
-                    {t('web.autoText50', {
-                      defaultValue:
-                        currentLang === 'AR'
-                          ? 'تأكيد كلمة المرور'
-                          : 'Confirmation',
-                    })}
+                    {tCommon('web.confirmPasswordLabel', 'Confirmation')}
                   </label>
                   <input
                     type="password"
@@ -674,22 +568,12 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                 type="submit"
                 className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3.5 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
               >
-                {t('web.autoText51', {
-                  defaultValue:
-                    currentLang === 'AR'
-                      ? 'إنشاء حساب جديد'
-                      : 'Créer mon compte client',
-                })}
+                {tCommon('web.createAccountButton', 'Créer mon compte client')}
               </button>
 
               <div className="text-center pt-3 border-t border-slate-200 dark:border-slate-850">
                 <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-                  {t('web.autoText52', {
-                    defaultValue:
-                      currentLang === 'AR'
-                        ? 'لديك حساب بالفعل؟'
-                        : 'Déjà inscrit ?',
-                  })}{' '}
+                  {tCommon('web.alreadyRegisteredQuestion', 'Déjà inscrit ?')}{' '}
                   <button
                     type="button"
                     onClick={() => {
@@ -702,10 +586,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                     }}
                     className="text-[#F97316] font-extrabold hover:underline bg-transparent border-0 p-0 cursor-pointer"
                   >
-                    {t('web.autoText53', {
-                      defaultValue:
-                        currentLang === 'AR' ? 'تسجيل الدخول' : 'Se connecter',
-                    })}
+                    {tCommon('web.signInLink', 'Se connecter')}
                   </button>
                 </p>
               </div>
@@ -721,24 +602,17 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
                 setSessionUser(null);
                 setActiveTab('Accueil');
                 showToast(
-                  t('web.autoText54', {
-                    defaultValue:
-                      currentLang === 'AR'
-                        ? 'تصفح بصفتك زائر'
-                        : 'Accès Invité autorisé.',
-                  }),
+                  tCommon('web.guestAccessToast', 'Accès Invité autorisé.'),
                   'info',
                 );
               }}
               className="w-full bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-300 dark:border-slate-850 text-slate-650 hover:text-slate-800 dark:text-slate-350 dark:hover:text-white text-xs font-black py-3.5 rounded-xl transition flex items-center justify-center gap-2 hover:scale-[1.01] transform"
             >
               <span>
-                {t('web.autoText55', {
-                  defaultValue:
-                    currentLang === 'AR'
-                      ? 'المواصلة كزائر (مجهول) ←'
-                      : "Continuer en tant qu'invité (Anonyme) →",
-                })}
+                {tCommon(
+                  'web.continueAsGuestButton',
+                  "Continuer en tant qu'invité (Anonyme) →",
+                )}
               </span>
             </button>
           </div>

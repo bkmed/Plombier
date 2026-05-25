@@ -68,11 +68,8 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
         </div>
       </div>
       <div className="text-slate-400 text-[10px] font-black uppercase tracking-wider">
-        {t('web.autoText30', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'جاري تحميل التطبيق الفاخر...'
-              : 'Chargement premium...',
+        {t('web.loadingPremium', {
+          defaultValue: 'Chargement premium...',
         })}{' '}
         {loadingProgress}%
       </div>

@@ -1,26 +1,24 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { updateUser, deleteUser } from '../../../store/slices/usersSlice';
 
 interface AdminUsersProps {
   currentLang: string;
-  usersList: any[];
-  sessionUser: any;
-  dispatch: any;
   showToast: any;
   t: any;
-  updateUser: any;
-  deleteUser: any;
 }
 
 export const AdminUsers: React.FC<AdminUsersProps> = ({
   currentLang,
-  usersList,
-  sessionUser,
-  dispatch,
   showToast,
   t,
-  updateUser,
-  deleteUser,
 }) => {
+  const dispatch = useDispatch();
+  const usersList = useSelector((state: RootState) => state.users.items);
+  const sessionUser = useSelector(
+    (state: RootState) => (state as any).webSession?.sessionUser,
+  );
   const [editingUser, setEditingUser] = React.useState<any | null>(null);
   const [editUserName, setEditUserName] = React.useState('');
   const [editUserEmail, setEditUserEmail] = React.useState('');
@@ -73,6 +71,10 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
           : 'Voulez-vous supprimer définitivement cet utilisateur ?',
       )
     ) {
+      // Clear editing state if deleting the current user being edited
+      if (editingUser?.id === userId) {
+        setEditingUser(null);
+      }
       dispatch(deleteUser(userId));
       showToast(
         currentLang === 'AR' ? 'تم حذف المستخدم' : 'Utilisateur supprimé !',
@@ -116,9 +118,12 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({
       return;
     }
 
-    const updated = {
+    const newStatus = (currentStatus === 'active' ? 'rejected' : 'active') as
+      | 'active'
+      | 'rejected';
+    const updated: any = {
       ...target,
-      status: currentStatus === 'active' ? 'rejected' : 'active',
+      status: newStatus,
       updatedAt: new Date().toISOString(),
     };
     dispatch(updateUser(updated));

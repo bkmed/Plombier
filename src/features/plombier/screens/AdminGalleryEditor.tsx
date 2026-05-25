@@ -47,12 +47,20 @@ const AdminGalleryEditor = () => {
     setStatusMessage(null);
 
     if (!title.trim()) {
-      setErrorMessage(translate('admin.galleryTitleRequired', { defaultValue: 'Le titre est requis.' }));
+      setErrorMessage(
+        translate('admin.galleryTitleRequired', {
+          defaultValue: 'Le titre est requis.',
+        }),
+      );
       return;
     }
 
     if (!imageUri) {
-      setErrorMessage(translate('admin.galleryImageRequired', { defaultValue: 'Veuillez sélectionner une image.' }));
+      setErrorMessage(
+        translate('admin.galleryImageRequired', {
+          defaultValue: 'Veuillez sélectionner une image.',
+        }),
+      );
       return;
     }
 
@@ -68,10 +76,18 @@ const AdminGalleryEditor = () => {
 
     if (editingItem) {
       dispatch(updateGalleryItem(item));
-      setStatusMessage(translate('admin.galleryUpdated', { defaultValue: 'Image de la galerie mise à jour.' }));
+      setStatusMessage(
+        translate('admin.galleryUpdated', {
+          defaultValue: 'Image de la galerie mise à jour.',
+        }),
+      );
     } else {
       dispatch(addGalleryItem(item));
-      setStatusMessage(translate('admin.galleryAdded', { defaultValue: 'Image ajoutée à la galerie.' }));
+      setStatusMessage(
+        translate('admin.galleryAdded', {
+          defaultValue: 'Image ajoutée à la galerie.',
+        }),
+      );
     }
 
     closeGalleryModal();
@@ -93,7 +109,11 @@ const AdminGalleryEditor = () => {
     if (editingItem?.id === id) {
       resetForm();
     }
-    setStatusMessage(translate('admin.galleryDeleted', { defaultValue: 'Image supprimée de la galerie.' }));
+    setStatusMessage(
+      translate('admin.galleryDeleted', {
+        defaultValue: 'Image supprimée de la galerie.',
+      }),
+    );
   };
 
   return (
@@ -101,7 +121,11 @@ const AdminGalleryEditor = () => {
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <div>
-            <h3 className="font-black text-3xl">{translate('admin.galleryTitle', { defaultValue: 'Gérer la galerie' })}</h3>
+            <h3 className="font-black text-3xl">
+              {translate('admin.galleryTitle', {
+                defaultValue: 'Gérer la galerie',
+              })}
+            </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
               {translate('admin.galleryDescription', {
                 defaultValue:
@@ -118,7 +142,9 @@ const AdminGalleryEditor = () => {
               }}
               className="bg-[#F97316] text-white px-4 py-2 rounded-2xl font-black hover:bg-[#e0630b] transition"
             >
-              {translate('admin.addGalleryImage', { defaultValue: '+ Ajouter une image' })}
+              {translate('admin.addGalleryImage', {
+                defaultValue: '+ Ajouter une image',
+              })}
             </button>
           </div>
         </div>
@@ -138,21 +164,32 @@ const AdminGalleryEditor = () => {
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
           <div>
-            <h4 className="text-xl font-black">{translate('admin.galleryListTitle', { defaultValue: 'Liste des images de la galerie' })}</h4>
+            <h4 className="text-xl font-black">
+              {translate('admin.galleryListTitle', {
+                defaultValue: 'Liste des images de la galerie',
+              })}
+            </h4>
             <p className="text-sm text-slate-500 dark:text-slate-400">
-              {translate('admin.galleryListDescription', { defaultValue: 'Gérez les visuels qui s’affichent sur la page Galerie.' })}
+              {translate('admin.galleryListDescription', {
+                defaultValue:
+                  'Gérez les visuels qui s’affichent sur la page Galerie.',
+              })}
             </p>
           </div>
           <span className="text-sm text-slate-500 dark:text-slate-400">
             {translate('admin.galleryItemsCount', {
-              defaultValue: `${items.length} élément${items.length === 1 ? '' : 's'}`,
+              defaultValue: `${items.length} élément${
+                items.length === 1 ? '' : 's'
+              }`,
             })}
           </span>
         </div>
 
         {items.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">
-            {translate('admin.noGalleryImages', { defaultValue: 'Aucune image ajoutée pour le moment.' })}
+            {translate('admin.noGalleryImages', {
+              defaultValue: 'Aucune image ajoutée pour le moment.',
+            })}
           </div>
         ) : (
           <div className="grid gap-4">
@@ -183,8 +220,12 @@ const AdminGalleryEditor = () => {
                     </div>
                   ) : null}
                   <div className="text-[11px] text-slate-400">
-                    {translate('admin.updatedOn', { defaultValue: 'Mis à jour le ' })}
-                    {new Date(item.updatedAt || item.createdAt).toLocaleDateString()}
+                    {translate('admin.updatedOn', {
+                      defaultValue: 'Mis à jour le ',
+                    })}
+                    {new Date(
+                      item.updatedAt || item.createdAt,
+                    ).toLocaleDateString()}
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 justify-between">
@@ -193,14 +234,18 @@ const AdminGalleryEditor = () => {
                     onClick={() => handleEdit(item)}
                     className="w-full bg-blue-600 text-white rounded-xl px-4 py-3 font-black hover:bg-blue-700 transition"
                   >
-                    {translate('admin.editButton', { defaultValue: 'Modifier' })}
+                    {translate('admin.editButton', {
+                      defaultValue: 'Modifier',
+                    })}
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDelete(item.id)}
                     className="w-full bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
                   >
-                    {translate('admin.deleteButton', { defaultValue: 'Supprimer' })}
+                    {translate('admin.deleteButton', {
+                      defaultValue: 'Supprimer',
+                    })}
                   </button>
                 </div>
               </div>
@@ -223,8 +268,12 @@ const AdminGalleryEditor = () => {
             <div className="p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-black text-slate-850 dark:text-white">
                 {editingItem
-                  ? translate('admin.editGalleryImageTitle', { defaultValue: 'Modifier une image de galerie' })
-                  : translate('admin.addGalleryImageTitle', { defaultValue: 'Ajouter une image à la galerie' })}
+                  ? translate('admin.editGalleryImageTitle', {
+                      defaultValue: 'Modifier une image de galerie',
+                    })
+                  : translate('admin.addGalleryImageTitle', {
+                      defaultValue: 'Ajouter une image à la galerie',
+                    })}
               </h2>
 
               {errorMessage && (
@@ -241,14 +290,18 @@ const AdminGalleryEditor = () => {
                   <input
                     value={title}
                     onChange={e => setTitle(e.target.value)}
-                    placeholder={translate('admin.placeholder.title', { defaultValue: 'Titre' })}
+                    placeholder={translate('admin.placeholder.title', {
+                      defaultValue: 'Titre',
+                    })}
                     required
                     className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                   />
                   <input
                     value={subtitle}
                     onChange={e => setSubtitle(e.target.value)}
-                    placeholder={translate('admin.placeholder.subtitle', { defaultValue: 'Sous-titre' })}
+                    placeholder={translate('admin.placeholder.subtitle', {
+                      defaultValue: 'Sous-titre',
+                    })}
                     className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                   />
                 </div>
@@ -256,7 +309,9 @@ const AdminGalleryEditor = () => {
                 <textarea
                   value={description}
                   onChange={e => setDescription(e.target.value)}
-                  placeholder={translate('admin.placeholder.description', { defaultValue: 'Description' })}
+                  placeholder={translate('admin.placeholder.description', {
+                    defaultValue: 'Description',
+                  })}
                   className="w-full min-h-[140px] px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
 
@@ -273,11 +328,30 @@ const AdminGalleryEditor = () => {
                     </div>
                   </div>
                   <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 text-sm text-slate-500 dark:text-slate-400">
-                    <p className="font-black text-sm mb-2">{translate('admin.tipTitle', { defaultValue: 'Conseil :' })}</p>
+                    <p className="font-black text-sm mb-2">
+                      {translate('admin.tipTitle', {
+                        defaultValue: 'Conseil :',
+                      })}
+                    </p>
                     <ul className="list-disc pl-5 space-y-2">
-                      <li>{translate('admin.tip.chooseImage', { defaultValue: 'Choisissez une image claire et représentative.' })}</li>
-                      <li>{translate('admin.tip.addTitle', { defaultValue: 'Ajoutez un titre court et un sous-titre pertinent.' })}</li>
-                      <li>{translate('admin.tip.descriptionHelp', { defaultValue: "La description aide vos clients à comprendre la réalisation." })}</li>
+                      <li>
+                        {translate('admin.tip.chooseImage', {
+                          defaultValue:
+                            'Choisissez une image claire et représentative.',
+                        })}
+                      </li>
+                      <li>
+                        {translate('admin.tip.addTitle', {
+                          defaultValue:
+                            'Ajoutez un titre court et un sous-titre pertinent.',
+                        })}
+                      </li>
+                      <li>
+                        {translate('admin.tip.descriptionHelp', {
+                          defaultValue:
+                            'La description aide vos clients à comprendre la réalisation.',
+                        })}
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -288,15 +362,21 @@ const AdminGalleryEditor = () => {
                     onClick={closeGalleryModal}
                     className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-5 py-3 rounded-xl transition"
                   >
-                    {translate('admin.cancelButton', { defaultValue: 'Annuler' })}
+                    {translate('admin.cancelButton', {
+                      defaultValue: 'Annuler',
+                    })}
                   </button>
                   <button
                     type="submit"
                     className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-sm transition"
                   >
                     {editingItem
-                      ? translate('admin.saveGalleryChanges', { defaultValue: 'Enregistrer les modifications' })
-                      : translate('admin.addToGallery', { defaultValue: 'Ajouter à la galerie' })}
+                      ? translate('admin.saveGalleryChanges', {
+                          defaultValue: 'Enregistrer les modifications',
+                        })
+                      : translate('admin.addToGallery', {
+                          defaultValue: 'Ajouter à la galerie',
+                        })}
                   </button>
                 </div>
               </form>

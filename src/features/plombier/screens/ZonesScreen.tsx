@@ -208,9 +208,7 @@ const ZonesScreen = ({
           <div className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-500">
               *{' '}
-              {currentLang === 'AR'
-                ? 'تغطية فورية وسريعة على مدار الساعة'
-                : "Zone couverte par les équipes d'intervention directes."}
+              {t.urgentCoverageText}
             </span>
             <a
               href="https://maps.google.com"
@@ -226,7 +224,7 @@ const ZonesScreen = ({
         <div className="lg:col-span-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <div>
             <span className="bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-extrabold text-[8.5px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-              {currentLang === 'AR' ? 'حالة طوارئ قصوى' : 'URGENT'}
+              {t.urgentStatusBadge}
             </span>
             <h2 className="text-xl font-black text-slate-850 dark:text-slate-100 mt-3">
               {t.demande_intervention}

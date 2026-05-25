@@ -1,29 +1,29 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import {
+  addCategory,
+  updateCategory,
+  deleteCategory,
+} from '../../../store/slices/categoriesSlice';
 import CategoryImageInput from '../components/CategoryImageInput';
 
 interface AdminCategoriesProps {
   currentLang: string;
-  reduxCategories: any[];
-  products: any[];
-  dispatch: any;
   showToast: any;
   translate: any;
-  addCategory: any;
-  updateCategory: any;
-  deleteCategory: any;
 }
 
 export const AdminCategories: React.FC<AdminCategoriesProps> = ({
   currentLang,
-  reduxCategories,
-  products,
-  dispatch,
   showToast,
   translate,
-  addCategory,
-  updateCategory,
-  deleteCategory,
 }) => {
+  const dispatch = useDispatch();
+  const reduxCategories = useSelector(
+    (state: RootState) => state.categories.items,
+  );
+  const products = useSelector((state: RootState) => state.parts.listings);
   const [showCategoryModal, setShowCategoryModal] = React.useState(false);
   const [editingCategory, setEditingCategory] = React.useState<any | null>(
     null,
@@ -154,6 +154,12 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
         }),
       )
     ) {
+      // Clear editing state if deleting the current category being edited
+      if (editingCategory?.id === id) {
+        setEditingCategory(null);
+        setEditCategoryName('');
+        setNewCategoryImage(null);
+      }
       dispatch(deleteCategory(id));
       showToast(
         translate('web.autoText27', {

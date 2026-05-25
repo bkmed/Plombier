@@ -17,18 +17,7 @@ import {
 } from '../store/slices/webSessionSlice';
 import { addCategory } from '../store/slices/categoriesSlice';
 import { addService } from '../store/slices/servicesSlice';
-import {
-  toggleFavoriteAction,
-  updateListing,
-  addListing,
-  deleteListing,
-} from '../store/slices/partsSlice';
-import {
-  addCategory as addCategoryRedux,
-  updateCategory,
-  deleteCategory,
-} from '../store/slices/categoriesSlice';
-import { updateUser, deleteUser } from '../store/slices/usersSlice';
+import { toggleFavoriteAction } from '../store/slices/partsSlice';
 
 // Shared Components & Screens
 import { WebSplashScreen } from '../features/plombier/components/WebSplashScreen';
@@ -96,7 +85,7 @@ export const AppNavigator = () => {
   const galleryManageLabel = translate('web.galleryManageLabel', {
     defaultValue: 'Gérer la galerie',
   });
-  const isRTL = currentLang === 'AR';
+  const isRTL = i18n.language === 'ar';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
   const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
@@ -140,15 +129,7 @@ export const AppNavigator = () => {
     setActiveTab('Accueil');
     await signOut();
     showToast(
-      tCommon(
-        'web.logoutSuccess',
-        translate('web.autoText15', {
-          defaultValue:
-            currentLang === 'AR'
-              ? 'تم تسجيل خروجك بنجاح'
-              : 'Déconnexion réussie ! A bientôt.',
-        }),
-      ),
+      tCommon('web.logoutSuccess', 'Déconnexion réussie ! A bientôt.'),
       'info',
     );
   };
@@ -157,15 +138,7 @@ export const AppNavigator = () => {
     if (e) e.stopPropagation();
     if (currentRole === 'anonyme') {
       showToast(
-        tCommon(
-          'web.favoriteLoginRequired',
-          translate('web.autoText2', {
-            defaultValue:
-              currentLang === 'AR'
-                ? 'يرجى تسجيل الدخول لحفظ المفضلة'
-                : 'Veuillez vous connecter pour gérer vos favoris.',
-          }),
-        ),
+        tCommon('web.favoriteLoginRequired', 'Veuillez vous connecter pour gérer vos favoris.'),
         'info',
       );
       return;
@@ -173,28 +146,12 @@ export const AppNavigator = () => {
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
       showToast(
-        tCommon(
-          'web.favoriteRemoved',
-          translate('web.autoText3', {
-            defaultValue:
-              currentLang === 'AR'
-                ? 'تمت إزالته من المفضلة'
-                : 'Retiré des favoris',
-          }),
-        ),
+        tCommon('web.favoriteRemoved', 'Retiré des favoris'),
         'info',
       );
     } else {
       showToast(
-        tCommon(
-          'web.favoriteAdded',
-          translate('web.autoText4', {
-            defaultValue:
-              currentLang === 'AR'
-                ? 'أضيف إلى المفضلة !'
-                : 'Ajouté aux favoris !',
-          }),
-        ),
+        tCommon('web.favoriteAdded', 'Ajouté aux favoris !'),
         'success',
       );
     }
@@ -308,7 +265,7 @@ export const AppNavigator = () => {
 
   useEffect(() => {
     i18n.changeLanguage(currentLang.toLowerCase());
-    document.documentElement.dir = currentLang === 'AR' ? 'rtl' : 'ltr';
+    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
   }, [currentLang, i18n]);
 
   useEffect(() => {
@@ -510,28 +467,16 @@ export const AppNavigator = () => {
           {activeTab === 'GestionAnnonce' && (
             <AdminAnnonces
               currentLang={currentLang}
-              products={products}
-              reduxCategories={reduxCategories}
-              dispatch={dispatch}
               showToast={showToast}
               translate={translate}
-              addListing={addListing}
-              updateListing={updateListing}
-              deleteListing={deleteListing}
             />
           )}
 
           {activeTab === 'GestionCategorie' && (
             <AdminCategories
               currentLang={currentLang}
-              reduxCategories={reduxCategories}
-              products={products}
-              dispatch={dispatch}
               showToast={showToast}
               translate={translate}
-              addCategory={addCategoryRedux}
-              updateCategory={updateCategory}
-              deleteCategory={deleteCategory}
             />
           )}
 
@@ -550,13 +495,8 @@ export const AppNavigator = () => {
           {activeTab === 'GestionUser' && (
             <AdminUsers
               currentLang={currentLang}
-              usersList={usersList}
-              sessionUser={sessionUser}
-              dispatch={dispatch}
               showToast={showToast}
               t={translate}
-              updateUser={updateUser}
-              deleteUser={deleteUser}
             />
           )}
 

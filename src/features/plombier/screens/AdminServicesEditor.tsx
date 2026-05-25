@@ -51,7 +51,9 @@ const AdminServicesEditor = () => {
     if (editingId) {
       dispatch(updateService(payload));
       setStatusMessage(
-        translate('admin.serviceUpdated', { defaultValue: 'Service mis à jour.' }),
+        translate('admin.serviceUpdated', {
+          defaultValue: 'Service mis à jour.',
+        }),
       );
     } else {
       dispatch(addService(payload));
@@ -85,7 +87,9 @@ const AdminServicesEditor = () => {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="font-black text-3xl">
-              {translate('admin.servicesTitle', { defaultValue: 'Gérer les services' })}
+              {translate('admin.servicesTitle', {
+                defaultValue: 'Gérer les services',
+              })}
             </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
               {translate('admin.servicesDescription', {
@@ -111,17 +115,25 @@ const AdminServicesEditor = () => {
             }}
             className="bg-[#F97316] text-white px-4 py-2 rounded-2xl font-black hover:bg-[#e0630b] transition"
           >
-            {translate('admin.addServiceButton', { defaultValue: '+ Ajouter un service' })}
+            {translate('admin.addServiceButton', {
+              defaultValue: '+ Ajouter un service',
+            })}
           </button>
         </div>
       </div>
 
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <h4 className="text-xl font-black mb-4">
-          {translate('admin.servicesListTitle', { defaultValue: 'Liste des services' })}
+          {translate('admin.servicesListTitle', {
+            defaultValue: 'Liste des services',
+          })}
         </h4>
         {services.length === 0 ? (
-          <div>{translate('admin.noServices', { defaultValue: 'Aucun service défini.' })}</div>
+          <div>
+            {translate('admin.noServices', {
+              defaultValue: 'Aucun service défini.',
+            })}
+          </div>
         ) : (
           <div className="space-y-4">
             {services.map(s => (
@@ -142,13 +154,17 @@ const AdminServicesEditor = () => {
                     onClick={() => handleEdit(s)}
                     className="px-3 py-1 bg-blue-600 text-white rounded-xl"
                   >
-                    {translate('admin.editButton', { defaultValue: 'Modifier' })}
+                    {translate('admin.editButton', {
+                      defaultValue: 'Modifier',
+                    })}
                   </button>
                   <button
                     onClick={() => handleDelete(s.id)}
                     className="px-3 py-1 bg-rose-600 text-white rounded-xl"
                   >
-                    {translate('admin.deleteButton', { defaultValue: 'Supprimer' })}
+                    {translate('admin.deleteButton', {
+                      defaultValue: 'Supprimer',
+                    })}
                   </button>
                 </div>
               </div>
@@ -173,8 +189,12 @@ const AdminServicesEditor = () => {
             <div className="p-6 sm:p-8 space-y-6">
               <h2 className="text-xl font-black text-slate-850 dark:text-white">
                 {editingId
-                  ? translate('admin.editServiceTitle', { defaultValue: 'Modifier le service' })
-                  : translate('admin.addServiceTitle', { defaultValue: 'Ajouter un service' })}
+                  ? translate('admin.editServiceTitle', {
+                      defaultValue: 'Modifier le service',
+                    })
+                  : translate('admin.addServiceTitle', {
+                      defaultValue: 'Ajouter un service',
+                    })}
               </h2>
 
               <form
@@ -223,14 +243,18 @@ const AdminServicesEditor = () => {
                     }}
                     className="bg-slate-200 px-4 py-2 rounded-2xl"
                   >
-                    {translate('admin.cancelButton', { defaultValue: 'Annuler' })}
+                    {translate('admin.cancelButton', {
+                      defaultValue: 'Annuler',
+                    })}
                   </button>
                   <button
                     type="submit"
                     className="bg-[#F97316] text-white px-4 py-2 rounded-2xl"
                   >
                     {editingId
-                      ? translate('admin.saveButton', { defaultValue: 'Enregistrer' })
+                      ? translate('admin.saveButton', {
+                          defaultValue: 'Enregistrer',
+                        })
                       : translate('admin.addServiceModalButton', {
                           defaultValue: '+ Ajouter le service',
                         })}
