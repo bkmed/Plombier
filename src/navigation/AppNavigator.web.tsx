@@ -2856,10 +2856,10 @@ export const AppNavigator = () => {
               <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
                 <div className="text-center max-w-2xl mx-auto mb-16">
                   <h2 className="text-3xl font-black tracking-tight">
-                    {t.nos_services}
+                    {translate('webServices.nos_services')}
                   </h2>
                   <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
-                    {t.nos_services_subtitle}
+                    {translate('webServices.nos_services_subtitle')}
                   </p>
                 </div>
 

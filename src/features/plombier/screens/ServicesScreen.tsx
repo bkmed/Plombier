@@ -20,13 +20,13 @@ const ServicesScreen = ({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left bg-slate-50 dark:bg-transparent">
       <div className="text-center max-w-3xl mx-auto mb-16">
         <span className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
-          {t('nos_services')}
+          {t('webServices.nos_services')}
         </span>
         <h1 className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
-          {t('nos_services')}
+          {t('webServices.nos_services')}
         </h1>
         <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
-          {t('nos_services_subtitle')}
+          {t('webServices.nos_services_subtitle')}
         </p>
       </div>
 
@@ -83,7 +83,7 @@ const ServicesScreen = ({
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
                 <span className="absolute top-2.5 left-2.5 bg-slate-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
-                  {currentLang === 'AR' ? 'قبل التدخل' : 'AVANT'}
+                  {t('services_local.before_intervention')}
                 </span>
                 <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
                   {service.imgBefore
@@ -95,7 +95,7 @@ const ServicesScreen = ({
 
               <div className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
                 <span className="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
-                  {currentLang === 'AR' ? 'بعد التدخل' : 'APRÈS'}
+                  {t('services_local.after_intervention')}
                 </span>
                 <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
                   {service.imgAfter
