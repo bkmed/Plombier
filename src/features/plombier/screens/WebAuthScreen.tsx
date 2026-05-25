@@ -4,7 +4,6 @@ import { WebSessionUser, Role } from '../utils/webTranslations';
 
 interface WebAuthScreenProps {
   businessName: string;
-  currentLang: string;
   nextLanguage: string;
   currentTheme: string;
   setCurrentLang: (lang: any) => void;

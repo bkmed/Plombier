@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '../../../context/ToastContext';
 
-type Lang = 'FR' | 'AR' | 'EN';
 interface ZonesScreenProps {
-  currentLang: Lang;
   t: Record<string, any>;
   supportWhatsAppDigits: string;
   supportWhatsAppNumber: string;
@@ -26,7 +24,6 @@ const ALL_CITIES_BY_ZONE: Record<string, { city: string; area: string }[]> = {
 };
 
 const ZonesScreen = ({
-  currentLang,
   t,
   supportWhatsAppDigits,
   supportWhatsAppNumber,

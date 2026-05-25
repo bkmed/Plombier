@@ -3,7 +3,6 @@ import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { ProductVisual } from '../components/ProductSVGs';
 
 interface HomeScreenWebProps {
-  currentLang: string;
   nextLanguage: string;
   experienceYears: number;
   supportWhatsAppDigits: string;
@@ -17,7 +16,6 @@ interface HomeScreenWebProps {
 }
 
 export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
-  currentLang,
   experienceYears,
   supportWhatsAppDigits,
   galleryItems,
@@ -28,6 +26,8 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
   setSelectedProduct,
   toggleFavorite,
 }) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    t(key, { defaultValue });
   return (
     <div className="animate-fade-in text-left bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100">
       {/* Premium Hero Banner */}
@@ -39,14 +39,16 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               Tunisie Dépannage Express 24h/7j
             </span>
             <h1 className="text-4xl sm:text-6xl font-black tracking-tight mt-6 leading-tight">
-              {currentLang === 'AR'
-                ? 'أفضل وأسرع خدمات الترصيص والصيانة في تونس'
-                : 'Vos Urgences Plomberie Réglées en un Record'}
+              {tCommon(
+                'web.homeHeroTitle',
+                'Vos Urgences Plomberie Réglées en un Record',
+              )}
             </h1>
             <p className="text-slate-300 text-base sm:text-lg font-medium mt-4 max-w-xl">
-              {currentLang === 'AR'
-                ? 'نحن هنا لتلبية جميع احتياجاتكم في صيانة الترصيص، تكييف الهواء، والتدفئة المركزية مع توفير سوق قطع غيار مستعملة وموثوقة.'
-                : 'Artisans plombiers qualifiés à votre service pour les fuites, pannes thermiques et raccordements gaz dans tout le pays.'}
+              {tCommon(
+                'web.homeHeroDescription',
+                'Artisans plombiers qualifiés à votre service pour les fuites, pannes thermiques et raccordements gaz dans tout le pays.',
+              )}
             </p>
 
             {/* Action buttons CTAs */}
@@ -131,34 +133,34 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               {
                 title: t('plomberie_generale'),
                 icon: 'plumbing',
-                desc:
-                  currentLang === 'AR'
-                    ? 'إصلاح التسربات وتجديد شبكات المياه المنزلية والعمومية.'
-                    : 'Recherche de fuites, installations de sanitaires et de chauffe-eau.',
+                desc: tCommon(
+                  'web.servicePlumbingDesc',
+                  'Recherche de fuites, installations de sanitaires et de chauffe-eau.',
+                ),
               },
               {
                 title: t('climatisation'),
                 icon: 'ac',
-                desc:
-                  currentLang === 'AR'
-                    ? 'تركيب المكيفات، صيانة شاملة وشحن الغاز المعتمد.'
-                    : 'Installation de climatiseurs split, recharges de gaz et entretien.',
+                desc: tCommon(
+                  'web.serviceAcDesc',
+                  'Installation de climatiseurs split, recharges de gaz et entretien.',
+                ),
               },
               {
                 title: t('installation_gaz'),
                 icon: 'gas',
-                desc:
-                  currentLang === 'AR'
-                    ? 'تمديد وتوصيل مواسير الغاز المنزلي مع السلامة الكلية.'
-                    : 'Tuyauteries de gaz conformes, branchements et détection de fuites.',
+                desc: tCommon(
+                  'web.serviceGasDesc',
+                  'Tuyauteries de gaz conformes, branchements et détection de fuites.',
+                ),
               },
               {
                 title: t('chauffage_central'),
                 icon: 'heater',
-                desc:
-                  currentLang === 'AR'
-                    ? 'صيانة وضبط المراجل الحرارية والمشعات للتوفير.'
-                    : 'Chaudières, détartrages de radiateurs et régulations connectées.',
+                desc: tCommon(
+                  'web.serviceHeatingDesc',
+                  'Chaudières, détartrages de radiateurs et régulations connectées.',
+                ),
               },
             ] as Array<{
               title: string;
@@ -206,21 +208,20 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               Galerie Réalisations
             </span>
             <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-              {currentLang === 'AR'
-                ? 'صور من عملنا الحقيقي'
-                : 'Nos Réalisations en Images'}
+              {tCommon('web.gallerySectionTitle', 'Nos Réalisations en Images')}
             </h2>
             <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 max-w-2xl">
-              {currentLang === 'AR'
-                ? 'استعرض صور المشاريع الحقيقية التي تم تنفيذها بواسطة فريقنا، مع عناوين ووصف موجز لكل عمل.'
-                : 'Découvrez une sélection de projets réels ajoutés par l’administrateur, accompagnés de titres, sous-titres et descriptions.'}
+              {tCommon(
+                'web.gallerySectionDescription',
+                'Découvrez une sélection de projets réels ajoutés par l’administrateur, accompagnés de titres, sous-titres et descriptions.',
+              )}
             </p>
           </div>
           <button
             onClick={() => setActiveTab('Gallery')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#F97316] bg-transparent px-6 py-3 text-xs font-black uppercase tracking-wider text-[#F97316] shadow-sm transition hover:bg-[#F97316] hover:text-white"
           >
-            {currentLang === 'AR' ? 'عرض المزيد' : 'Voir la galerie'}
+            {tCommon('web.viewGalleryButton', 'Voir la galerie')}
           </button>
         </div>
 
@@ -274,9 +275,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 {t('pieces')}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
-                {currentLang === 'AR'
-                  ? 'استعرض أحدث قطع الغيار المستعملة المضمونة المتوفرة في الكتالوج لدينا.'
-                  : "Équipez-vous au meilleur prix avec nos pièces d'occasion révisées et testées."}
+                {tCommon(
+                  'web.usedPartsDescription',
+                  "Équipez-vous au meilleur prix avec nos pièces d'occasion révisées et testées.",
+                )}
               </p>
             </div>
             <button
@@ -348,7 +350,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                       }}
                       className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
                     >
-                      {currentLang === 'AR' ? 'اتصل لشراء' : 'Commander'}
+                      {tCommon('web.buyButton', 'Commander')}
                     </button>
                   </div>
                 </div>

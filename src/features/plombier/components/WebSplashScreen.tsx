@@ -5,7 +5,6 @@ interface WebSplashScreenProps {
   showSplash: boolean;
   loadingProgress: number;
   businessName: string;
-  currentLang: string;
   t: (key: string, options?: any) => string;
 }
 
@@ -13,9 +12,11 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
   showSplash,
   loadingProgress,
   businessName,
-  currentLang,
   t,
 }) => {
+  const tCommon = (key: string, defaultValue: string) =>
+    t(key, { defaultValue });
+
   if (!showSplash) return null;
 
   return (
@@ -48,8 +49,11 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
         <div className="text-[#F97316] text-[10px] sm:text-xs font-black tracking-widest uppercase mt-2.5">
           {t('tagline')}
         </div>
-        <div className="text-slate-400/60 text-xs font-bold mt-2 font-arabic">
-          سباكة · تكييف · غاز · تدفئة مركزية
+        <div className="text-slate-400/60 text-xs font-bold mt-2">
+          {tCommon(
+            'web.splashServiceList',
+            'سباكة · تكييف · غاز · تدفئة مركزية',
+          )}
         </div>
       </div>
 

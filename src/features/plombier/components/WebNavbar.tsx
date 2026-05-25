@@ -4,7 +4,6 @@ import { Role, WebSessionUser } from '../utils/webTranslations';
 
 interface WebNavbarProps {
   businessName: string;
-  currentLang: string;
   nextLanguage: string;
   currentTheme: string;
   currentRole: Role;
@@ -73,7 +72,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
               {businessName}
             </span>
             <p className="text-[9px] text-[#F97316] font-bold tracking-widest uppercase mt-0.5 leading-none">
-              {t.tagline}
+              {t('tagline')}
             </p>
           </div>
         </button>
@@ -131,12 +130,27 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                 </button>
               ))
             : [
-                { id: 'Accueil', label: t.accueil },
-                { id: 'Services', label: t.services },
-                { id: 'Zones', label: t.zones },
-                { id: 'Marketplace', label: t.pieces },
+                {
+                  id: 'Accueil',
+                  label: t('web.accueil', { defaultValue: 'Accueil' }),
+                },
+                {
+                  id: 'Services',
+                  label: t('web.services', { defaultValue: 'Services' }),
+                },
+                {
+                  id: 'Zones',
+                  label: t('web.zones', { defaultValue: 'Zones' }),
+                },
+                {
+                  id: 'Marketplace',
+                  label: t('web.pieces', { defaultValue: 'Marketplace' }),
+                },
                 { id: 'Gallery', label: galleryTitle },
-                { id: 'Profile', label: t.mon_profil },
+                {
+                  id: 'Profile',
+                  label: t('web.mon_profil', { defaultValue: 'Mon profil' }),
+                },
               ].map(link => (
                 <button
                   key={link.id}
@@ -284,12 +298,27 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
               </button>
             ))
           : [
-              { id: 'Accueil', label: t.accueil },
-              { id: 'Services', label: t.services },
-              { id: 'Zones', label: t.zones },
-              { id: 'Marketplace', label: t.pieces },
+              {
+                id: 'Accueil',
+                label: t('web.accueil', { defaultValue: 'Accueil' }),
+              },
+              {
+                id: 'Services',
+                label: t('web.services', { defaultValue: 'Services' }),
+              },
+              {
+                id: 'Zones',
+                label: t('web.zones', { defaultValue: 'Zones' }),
+              },
+              {
+                id: 'Marketplace',
+                label: t('web.pieces', { defaultValue: 'Marketplace' }),
+              },
               { id: 'Gallery', label: galleryTitle },
-              { id: 'Profile', label: t.mon_profil },
+              {
+                id: 'Profile',
+                label: t('web.mon_profil', { defaultValue: 'Mon profil' }),
+              },
             ].map(link => (
               <button
                 key={link.id}

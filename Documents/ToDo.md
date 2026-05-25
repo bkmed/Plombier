@@ -1,1 +1,0 @@
-lors de supresion dans tt les interface dadmin la list refreshi pas

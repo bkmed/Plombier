@@ -332,14 +332,12 @@ export const AppNavigator = () => {
         showSplash={showSplash}
         loadingProgress={loadingProgress}
         businessName={businessName}
-        currentLang={currentLang}
         t={translate}
       />
 
       {!bypassAuth && !sessionUser && (
         <WebAuthScreen
           businessName={businessName}
-          currentLang={currentLang}
           nextLanguage={nextLanguage}
           currentTheme={currentTheme}
           setCurrentLang={setCurrentLang}
@@ -357,7 +355,6 @@ export const AppNavigator = () => {
       {(bypassAuth || sessionUser) && (
         <WebNavbar
           businessName={businessName}
-          currentLang={currentLang}
           nextLanguage={nextLanguage}
           currentTheme={currentTheme}
           currentRole={currentRole}
@@ -380,7 +377,6 @@ export const AppNavigator = () => {
         <main className="min-h-[calc(100vh-280px)] bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300">
           {activeTab === 'Accueil' && (
             <HomeScreenWeb
-              currentLang={currentLang}
               nextLanguage={nextLanguage}
               experienceYears={experienceYears}
               supportWhatsAppDigits={supportWhatsAppDigits}
@@ -400,7 +396,6 @@ export const AppNavigator = () => {
 
           {activeTab === 'Zones' && (
             <ZonesScreen
-              currentLang={currentLang}
               t={translate}
               supportWhatsAppDigits={supportWhatsAppDigits}
               supportWhatsAppNumber={supportWhatsAppNumber}
