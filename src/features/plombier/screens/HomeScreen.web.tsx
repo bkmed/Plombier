@@ -28,6 +28,28 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 }) => {
   const tCommon = (key: string, defaultValue: string) =>
     t(key, { defaultValue });
+  const stats = [
+    {
+      val: `${experienceYears}+`,
+      lbl: tCommon('web.experience_lbl'),
+      color: 'text-[#1E3A5F] dark:text-sky-400',
+    },
+    {
+      val: tCommon('web.dispo_val'),
+      lbl: tCommon('web.dispo_lbl'),
+      color: 'text-[#F97316]',
+    },
+    {
+      val: tCommon('web.gov_val'),
+      lbl: tCommon('web.gov_lbl'),
+      color: 'text-[#1E3A5F] dark:text-sky-400',
+    },
+    {
+      val: tCommon('web.satisfaction_val'),
+      lbl: tCommon('web.satisfaction_lbl'),
+      color: 'text-emerald-500',
+    },
+  ];
   return (
     <div className="animate-fade-in text-left bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100">
       {/* Premium Hero Banner */}
@@ -79,28 +101,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
       <section className="bg-slate-150 dark:bg-slate-900/60 py-10 border-y border-slate-200 dark:border-slate-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {[
-              {
-                val: `${experienceYears}+`,
-                lbl: t('experience_lbl'),
-                color: 'text-[#1E3A5F] dark:text-sky-400',
-              },
-              {
-                val: t('dispo_val'),
-                lbl: t('dispo_lbl'),
-                color: 'text-[#F97316]',
-              },
-              {
-                val: t('gov_val'),
-                lbl: t('gov_lbl'),
-                color: 'text-[#1E3A5F] dark:text-sky-400',
-              },
-              {
-                val: t('satisfaction_val'),
-                lbl: t('satisfaction_lbl'),
-                color: 'text-emerald-500',
-              },
-            ].map((stat, idx) => (
+            {stats.map((stat, idx) => (
               <div key={idx} className="space-y-1">
                 <div
                   className={`text-3xl sm:text-4xl font-black tracking-tight ${stat.color}`}
@@ -131,7 +132,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
           {(
             [
               {
-                title: t('plomberie_generale'),
+                title: tCommon('web.plomberie_generale'),
                 icon: 'plumbing',
                 desc: tCommon(
                   'web.servicePlumbingDesc',
@@ -139,7 +140,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 ),
               },
               {
-                title: t('climatisation'),
+                title: tCommon('web.climatisation'),
                 icon: 'ac',
                 desc: tCommon(
                   'web.serviceAcDesc',
@@ -147,7 +148,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 ),
               },
               {
-                title: t('installation_gaz'),
+                title: tCommon('web.installation_gaz'),
                 icon: 'gas',
                 desc: tCommon(
                   'web.serviceGasDesc',
@@ -155,7 +156,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 ),
               },
               {
-                title: t('chauffage_central'),
+                title: tCommon('web.chauffage_central'),
                 icon: 'heater',
                 desc: tCommon(
                   'web.serviceHeatingDesc',
@@ -195,7 +196,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             onClick={() => setActiveTab('Services')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#1E3A5F] px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:bg-[#152a47] dark:bg-sky-600 dark:hover:bg-sky-500"
           >
-            {t('voir_tout')}
+            {tCommon('web.voir_tout')}
           </button>
         </div>
       </section>

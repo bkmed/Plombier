@@ -261,7 +261,7 @@ const AdminServicesEditor = () => {
                   placeholder={translate('admin.placeholder.nameKey', {
                     defaultValue: 'clé nom (ex: plomberie_generale)',
                   })}
-                  className="w-full px-4 py-3 rounded-3xl border"
+                  className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
                 <input
                   value={icon}
@@ -269,7 +269,7 @@ const AdminServicesEditor = () => {
                   placeholder={translate('admin.placeholder.icon', {
                     defaultValue: 'icone (plumbing|ac|gas|heater)',
                   })}
-                  className="w-full px-4 py-3 rounded-3xl border"
+                  className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
                 <input
                   value={descKey}
@@ -277,7 +277,7 @@ const AdminServicesEditor = () => {
                   placeholder={translate('admin.placeholder.descKey', {
                     defaultValue: 'clé description (ex: plomberie_desc_long)',
                   })}
-                  className="w-full px-4 py-3 rounded-3xl border"
+                  className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
                 <input
                   value={ptsKeys}
@@ -285,7 +285,7 @@ const AdminServicesEditor = () => {
                   placeholder={translate('admin.placeholder.ptsKeys', {
                     defaultValue: 'clés bullets séparées par ,',
                   })}
-                  className="w-full px-4 py-3 rounded-3xl border"
+                  className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
 
                 <div className="flex gap-3 items-center justify-end md:col-span-2 pt-4">
@@ -295,7 +295,7 @@ const AdminServicesEditor = () => {
                       setShowModal(false);
                       reset();
                     }}
-                    className="bg-slate-200 px-4 py-2 rounded-2xl"
+                    className="bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-250 text-xs font-black px-5 py-3 rounded-xl transition"
                   >
                     {translate('admin.cancelButton', {
                       defaultValue: 'Annuler',
