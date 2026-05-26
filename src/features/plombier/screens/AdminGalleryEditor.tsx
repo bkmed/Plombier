@@ -25,6 +25,8 @@ const AdminGalleryEditor = () => {
   const [showGalleryModal, setShowGalleryModal] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<GalleryItem | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const resetForm = () => {
     setTitle('');
@@ -104,9 +106,15 @@ const AdminGalleryEditor = () => {
     setShowGalleryModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteGalleryItem(id));
-    if (editingItem?.id === id) {
+  const handleDeleteClick = (item: GalleryItem) => {
+    setItemToDelete(item);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (!itemToDelete) return;
+    dispatch(deleteGalleryItem(itemToDelete.id));
+    if (editingItem?.id === itemToDelete.id) {
       resetForm();
     }
     setStatusMessage(
@@ -114,6 +122,13 @@ const AdminGalleryEditor = () => {
         defaultValue: 'Image supprimée de la galerie.',
       }),
     );
+    setShowDeleteConfirm(false);
+    setItemToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setItemToDelete(null);
   };
 
   return (
@@ -240,7 +255,7 @@ const AdminGalleryEditor = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => handleDeleteClick(item)}
                     className="w-full bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
                   >
                     {translate('admin.deleteButton', {
@@ -253,6 +268,45 @@ const AdminGalleryEditor = () => {
           </div>
         )}
       </div>
+
+      {showDeleteConfirm && itemToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                {translate('admin.confirmDelete', {
+                  defaultValue: 'Confirmer la suppression',
+                })}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                {translate('admin.confirmDeleteGalleryImage', {
+                  defaultValue: 'Êtes-vous sûr de vouloir supprimer cette image ? Cette action est irréversible.',
+                })}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={cancelDelete}
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+              >
+                {translate('admin.cancelButton', {
+                  defaultValue: 'Annuler',
+                })}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+              >
+                {translate('admin.deleteButton', {
+                  defaultValue: 'Supprimer',
+                })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showGalleryModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">

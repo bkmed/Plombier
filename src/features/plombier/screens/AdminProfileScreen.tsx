@@ -69,6 +69,8 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
   const [profilePhone, setProfilePhone] = useState('');
   const [zoneInput, setZoneInput] = useState('');
   const [editingZoneIndex, setEditingZoneIndex] = useState<number | null>(null);
+  const [zoneToDelete, setZoneToDelete] = useState<number | null>(null);
+  const [showZoneDeleteConfirm, setShowZoneDeleteConfirm] = useState(false);
   const zones = useSelector(
     (state: RootState) => state.plombierSettings?.interventionZones ?? [],
   );
@@ -178,12 +180,25 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
     setZoneInput('');
   };
 
-  const handleDeleteZone = (index: number) => {
-    dispatch(removeInterventionZone(index));
-    if (editingZoneIndex === index) {
+  const handleDeleteZoneClick = (index: number) => {
+    setZoneToDelete(index);
+    setShowZoneDeleteConfirm(true);
+  };
+
+  const confirmDeleteZone = () => {
+    if (zoneToDelete === null) return;
+    dispatch(removeInterventionZone(zoneToDelete));
+    if (editingZoneIndex === zoneToDelete) {
       handleCancelZoneEdit();
     }
     showToast(tr('admin.successZoneDeleted'), 'success');
+    setShowZoneDeleteConfirm(false);
+    setZoneToDelete(null);
+  };
+
+  const cancelDeleteZone = () => {
+    setShowZoneDeleteConfirm(false);
+    setZoneToDelete(null);
   };
 
   return (
@@ -356,7 +371,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleDeleteZone(index)}
+                        onClick={() => handleDeleteZoneClick(index)}
                         className="text-[10px] font-black uppercase tracking-wider text-rose-500 hover:underline"
                       >
                         {tr('common.delete')}
@@ -474,6 +489,37 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
           </form>
         </div>
       </div>
+
+      {showZoneDeleteConfirm && zoneToDelete !== null && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                {tr('admin.confirmDelete')}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                {tr('admin.confirmDeleteZone', { defaultValue: 'Êtes-vous sûr de vouloir supprimer cette zone ? Cette action est irréversible.' })}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={cancelDeleteZone}
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+              >
+                {tr('admin.cancelButton')}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteZone}
+                className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+              >
+                {tr('admin.deleteButton', { defaultValue: 'Supprimer' })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

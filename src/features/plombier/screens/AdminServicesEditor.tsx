@@ -25,6 +25,8 @@ const AdminServicesEditor = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const reset = () => {
     setNameKey('plomberie_generale');
@@ -74,11 +76,24 @@ const AdminServicesEditor = () => {
     setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    dispatch(deleteService(id));
+  const handleDeleteClick = (service: Service) => {
+    setServiceToDelete(service);
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    if (!serviceToDelete) return;
+    dispatch(deleteService(serviceToDelete.id));
     setStatusMessage(
       translate('admin.serviceDeleted', { defaultValue: 'Service supprimé.' }),
     );
+    setShowDeleteConfirm(false);
+    setServiceToDelete(null);
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setServiceToDelete(null);
   };
 
   return (
@@ -159,7 +174,7 @@ const AdminServicesEditor = () => {
                     })}
                   </button>
                   <button
-                    onClick={() => handleDelete(s.id)}
+                    onClick={() => handleDeleteClick(s)}
                     className="px-3 py-1 bg-rose-600 text-white rounded-xl"
                   >
                     {translate('admin.deleteButton', {
@@ -172,6 +187,44 @@ const AdminServicesEditor = () => {
           </div>
         )}
       </div>
+      {showDeleteConfirm && serviceToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                {translate('admin.confirmDelete', {
+                  defaultValue: 'Confirmer la suppression',
+                })}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                {translate('admin.confirmDeleteService', {
+                  defaultValue: 'Êtes-vous sûr de vouloir supprimer ce service ? Cette action est irréversible.',
+                })}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={cancelDelete}
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+              >
+                {translate('admin.cancelButton', {
+                  defaultValue: 'Annuler',
+                })}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDelete}
+                className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+              >
+                {translate('admin.deleteButton', {
+                  defaultValue: 'Supprimer',
+                })}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
           <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-3xl w-full shadow-2xl overflow-hidden relative">

@@ -38,6 +38,8 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   const [annonceImage, setAnnonceImage] = React.useState('faucet');
   const [annonceIsFeatured, setAnnonceIsFeatured] = React.useState(false);
   const [annonceIsAvailable, setAnnonceIsAvailable] = React.useState(true);
+  const [annonceToDelete, setAnnonceToDelete] = React.useState<any | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
   const openAddAnnonce = () => {
     setEditingProduct(null);
@@ -126,27 +128,34 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
     setShowAdminModal(false);
   };
 
-  const handleDeleteAnnonce = (id: string) => {
-    if (
-      window.confirm(
-        translate('web.autoText19', {
-          defaultValue: 'Voulez-vous vraiment supprimer cette annonce ?',
-        }),
-      )
-    ) {
-      // Clear editing state if deleting the current product being edited
-      if (editingProduct?.id === id) {
-        setEditingProduct(null);
-        setShowAdminModal(false);
-      }
-      dispatch(deleteListing(id));
-      showToast(
-        translate('web.autoText20', {
-          defaultValue: 'Annonce supprimée !',
-        }),
-        'info',
-      );
+  const handleDeleteAnnonceClick = (id: string) => {
+    const product = products.find(p => p.id === id);
+    if (product) {
+      setAnnonceToDelete(product);
+      setShowDeleteConfirm(true);
     }
+  };
+
+  const confirmDeleteAnnonce = () => {
+    if (!annonceToDelete) return;
+    if (editingProduct?.id === annonceToDelete.id) {
+      setEditingProduct(null);
+      setShowAdminModal(false);
+    }
+    dispatch(deleteListing(annonceToDelete.id));
+    showToast(
+      translate('web.autoText20', {
+        defaultValue: 'Annonce supprimée !',
+      }),
+      'info',
+    );
+    setShowDeleteConfirm(false);
+    setAnnonceToDelete(null);
+  };
+
+  const cancelDeleteAnnonce = () => {
+    setShowDeleteConfirm(false);
+    setAnnonceToDelete(null);
   };
 
   return (
@@ -246,7 +255,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                         {tCommon('adminAnnonces.edit', 'Modifier')}
                       </button>
                       <button
-                        onClick={() => handleDeleteAnnonce(prod.id)}
+                        onClick={() => handleDeleteAnnonceClick(prod.id)}
                         className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition"
                       >
                         {tCommon('adminAnnonces.delete', 'Supprimer')}
@@ -259,6 +268,39 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
           </table>
         </div>
       </div>
+
+      {showDeleteConfirm && annonceToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                {tCommon('admin.confirmDelete', 'Confirmer la suppression')}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                {translate('web.autoText19', {
+                  defaultValue: 'Voulez-vous vraiment supprimer cette annonce ?',
+                })}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={cancelDeleteAnnonce}
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+              >
+                {tCommon('admin.cancelButton', 'Annuler')}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteAnnonce}
+                className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+              >
+                {tCommon('adminAnnonces.delete', 'Supprimer')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showAdminModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">

@@ -37,6 +37,8 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
   const [categoryErrorMessage, setCategoryErrorMessage] = React.useState<
     string | null
   >(null);
+  const [categoryToDelete, setCategoryToDelete] = React.useState<any | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
   const openAddCategoryModal = () => {
     setEditingCategory(null);
@@ -131,28 +133,32 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
     setShowCategoryModal(false);
   };
 
-  const handleDeleteCategory = (id: string, name: string) => {
-    if (
-      window.confirm(
-        translate('web.autoText26', {
-          defaultValue: `Voulez-vous supprimer la catégorie "${name}" ?`,
-        }),
-      )
-    ) {
-      // Clear editing state if deleting the current category being edited
-      if (editingCategory?.id === id) {
-        setEditingCategory(null);
-        setEditCategoryName('');
-        setNewCategoryImage(null);
-      }
-      dispatch(deleteCategory(id));
-      showToast(
-        translate('web.autoText27', {
-          defaultValue: 'Catégorie supprimée !',
-        }),
-        'info',
-      );
+  const handleDeleteCategoryClick = (id: string, name: string) => {
+    setCategoryToDelete({ id, name });
+    setShowDeleteConfirm(true);
+  };
+
+  const confirmDeleteCategory = () => {
+    if (!categoryToDelete) return;
+    if (editingCategory?.id === categoryToDelete.id) {
+      setEditingCategory(null);
+      setEditCategoryName('');
+      setNewCategoryImage(null);
     }
+    dispatch(deleteCategory(categoryToDelete.id));
+    showToast(
+      translate('web.autoText27', {
+        defaultValue: 'Catégorie supprimée !',
+      }),
+      'info',
+    );
+    setShowDeleteConfirm(false);
+    setCategoryToDelete(null);
+  };
+
+  const cancelDeleteCategory = () => {
+    setShowDeleteConfirm(false);
+    setCategoryToDelete(null);
   };
 
   return (
@@ -255,7 +261,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                         {tCommon('adminCategories.rename', 'Renommer')}
                       </button>
                       <button
-                        onClick={() => handleDeleteCategory(cat.id, cat.name)}
+                        onClick={() => handleDeleteCategoryClick(cat.id, cat.name)}
                         className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
                       >
                         Supprimer
@@ -268,6 +274,39 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
           </tbody>
         </table>
       </div>
+
+      {showDeleteConfirm && categoryToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                {tCommon('admin.confirmDelete', 'Confirmer la suppression')}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                {translate('web.autoText26', {
+                  defaultValue: `Voulez-vous supprimer la catégorie "${categoryToDelete.name}" ?`,
+                })}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={cancelDeleteCategory}
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+              >
+                {tCommon('admin.cancelButton', 'Annuler')}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteCategory}
+                className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+              >
+                {tCommon('admin.deleteButton', 'Supprimer')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showCategoryModal && (
         <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">

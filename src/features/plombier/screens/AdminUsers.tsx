@@ -23,6 +23,8 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
   const [editUserRole, setEditUserRole] = React.useState<'admin' | 'user'>(
     'user',
   );
+  const [userToDelete, setUserToDelete] = React.useState<any | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
   const handleStartEditUser = (user: any) => {
     setEditingUser(user);
@@ -57,26 +59,32 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
     setEditingUser(null);
   };
 
-  const handleDeleteUser = (userId: string, role: string) => {
+  const handleDeleteUserClick = (userId: string, role: string) => {
     if (role === 'admin') return;
-    if (
-      window.confirm(
-        tCommon(
-          'adminUsers.confirmDeleteUser',
-          'Voulez-vous supprimer définitivement cet utilisateur ?',
-        ),
-      )
-    ) {
-      // Clear editing state if deleting the current user being edited
-      if (editingUser?.id === userId) {
-        setEditingUser(null);
-      }
-      dispatch(deleteUser(userId));
-      showToast(
-        tCommon('adminUsers.userDeleted', 'Utilisateur supprimé !'),
-        'info',
-      );
+    const user = usersList.find(u => u.id === userId);
+    if (user) {
+      setUserToDelete(user);
+      setShowDeleteConfirm(true);
     }
+  };
+
+  const confirmDeleteUser = () => {
+    if (!userToDelete) return;
+    if (editingUser?.id === userToDelete.id) {
+      setEditingUser(null);
+    }
+    dispatch(deleteUser(userToDelete.id));
+    showToast(
+      tCommon('adminUsers.userDeleted', 'Utilisateur supprimé !'),
+      'info',
+    );
+    setShowDeleteConfirm(false);
+    setUserToDelete(null);
+  };
+
+  const cancelDeleteUser = () => {
+    setShowDeleteConfirm(false);
+    setUserToDelete(null);
   };
 
   const handleToggleUserRole = (userId: string, currentVal: string) => {
@@ -276,7 +284,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                         Modifier
                       </button>
                       <button
-                        onClick={() => handleDeleteUser(u.id, u.role)}
+                        onClick={() => handleDeleteUserClick(u.id, u.role)}
                         disabled={u.role === 'admin'}
                         className={`px-2.5 py-1 rounded font-black transition ${
                           u.role === 'admin'
@@ -315,6 +323,40 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
           </table>
         </div>
       </div>
+
+      {showDeleteConfirm && userToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <div>
+              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+                {tCommon('admin.confirmDelete', 'Confirmer la suppression')}
+              </h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+                {tCommon(
+                  'adminUsers.confirmDeleteUser',
+                  'Voulez-vous supprimer définitivement cet utilisateur ?',
+                )}
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={cancelDeleteUser}
+                className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
+              >
+                {tCommon('admin.cancelButton', 'Annuler')}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteUser}
+                className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
+              >
+                {tCommon('adminUsers.delete', 'Supprimer')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
