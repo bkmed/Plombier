@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAtbyzTYA_R5CzRQttX-4FA0A50s0h4qb0</string>
+	<string>AIzaSyC3_JCd-fucnP-yFSIARVPOYOiUvZAu5C4</string>
 	<key>GCM_SENDER_ID</key>
-	<string>26819369963</string>
+	<string>963735956251</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.bk.plombier</string>
 	<key>PROJECT_ID</key>
-	<string>plombier-ce455</string>
+	<string>plombier-602fd</string>
 	<key>STORAGE_BUCKET</key>
-	<string>plombier-ce455.firebasestorage.app</string>
+	<string>plombier-602fd.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:26819369963:ios:63ff955639937518e597ae</string>
+	<string>1:963735956251:ios:9279b4eb5f501489b901be</string>
 </dict>
 </plist>
