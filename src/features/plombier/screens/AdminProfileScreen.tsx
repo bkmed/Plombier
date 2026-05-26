@@ -498,7 +498,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 {tr('admin.confirmDelete')}
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-                {tr('admin.confirmDeleteZone', { defaultValue: 'Êtes-vous sûr de vouloir supprimer cette zone ? Cette action est irréversible.' })}
+                {tr('admin.confirmDeleteZone')}
               </p>
             </div>
             <div className="flex gap-3">
@@ -514,7 +514,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 onClick={confirmDeleteZone}
                 className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
               >
-                {tr('admin.deleteButton', { defaultValue: 'Supprimer' })}
+                {tr('admin.deleteButton')}
               </button>
             </div>
           </div>

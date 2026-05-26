@@ -37,7 +37,9 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
   const [categoryErrorMessage, setCategoryErrorMessage] = React.useState<
     string | null
   >(null);
-  const [categoryToDelete, setCategoryToDelete] = React.useState<any | null>(null);
+  const [categoryToDelete, setCategoryToDelete] = React.useState<any | null>(
+    null,
+  );
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
   const openAddCategoryModal = () => {
@@ -261,7 +263,9 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                         {tCommon('adminCategories.rename', 'Renommer')}
                       </button>
                       <button
-                        onClick={() => handleDeleteCategoryClick(cat.id, cat.name)}
+                        onClick={() =>
+                          handleDeleteCategoryClick(cat.id, cat.name)
+                        }
                         className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
                       >
                         Supprimer

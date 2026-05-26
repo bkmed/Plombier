@@ -102,16 +102,24 @@ export const FooterLinks = ({
         </Text>
         <View className="space-y-2 text-xs font-semibold text-slate-600 dark:text-slate-300">
           <TouchableOpacity onPress={() => setActiveTab('Informations')}>
-            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('informations')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
+              {t('informations')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('Politique')}>
-            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('politique')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
+              {t('politique')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('Conditions')}>
-            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('conditions_util')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
+              {t('conditions_util')}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setActiveTab('PlanSite')}>
-            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">{t('plan_site')}</Text>
+            <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
+              {t('plan_site')}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -131,7 +139,9 @@ export const FooterLinks = ({
 
           {supportEmail ? (
             <TouchableOpacity onPress={() => openMail(supportEmail)}>
-              <Text className="text-slate-600 dark:text-slate-300 flex items-center gap-2">✉️ {supportEmail}</Text>
+              <Text className="text-slate-600 dark:text-slate-300 flex items-center gap-2">
+                ✉️ {supportEmail}
+              </Text>
             </TouchableOpacity>
           ) : null}
 

@@ -95,7 +95,10 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                 },
                 {
                   id: 'AdminGallery',
-                  label: tCommon('web.gallery.manageGallery', galleryManageLabel),
+                  label: tCommon(
+                    'web.gallery.manageGallery',
+                    galleryManageLabel,
+                  ),
                 },
                 {
                   id: 'AdminServices',

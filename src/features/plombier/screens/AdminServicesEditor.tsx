@@ -198,7 +198,8 @@ const AdminServicesEditor = () => {
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
                 {translate('admin.confirmDeleteService', {
-                  defaultValue: 'Êtes-vous sûr de vouloir supprimer ce service ? Cette action est irréversible.',
+                  defaultValue:
+                    'Êtes-vous sûr de vouloir supprimer ce service ? Cette action est irréversible.',
                 })}
               </p>
             </div>

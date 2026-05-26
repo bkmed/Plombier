@@ -280,7 +280,8 @@ const AdminGalleryEditor = () => {
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
                 {translate('admin.confirmDeleteGalleryImage', {
-                  defaultValue: 'Êtes-vous sûr de vouloir supprimer cette image ? Cette action est irréversible.',
+                  defaultValue:
+                    'Êtes-vous sûr de vouloir supprimer cette image ? Cette action est irréversible.',
                 })}
               </p>
             </div>

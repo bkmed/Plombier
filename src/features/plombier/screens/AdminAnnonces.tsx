@@ -38,7 +38,9 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   const [annonceImage, setAnnonceImage] = React.useState('faucet');
   const [annonceIsFeatured, setAnnonceIsFeatured] = React.useState(false);
   const [annonceIsAvailable, setAnnonceIsAvailable] = React.useState(true);
-  const [annonceToDelete, setAnnonceToDelete] = React.useState<any | null>(null);
+  const [annonceToDelete, setAnnonceToDelete] = React.useState<any | null>(
+    null,
+  );
   const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
 
   const openAddAnnonce = () => {
@@ -278,7 +280,8 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
               </h3>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
                 {translate('web.autoText19', {
-                  defaultValue: 'Voulez-vous vraiment supprimer cette annonce ?',
+                  defaultValue:
+                    'Voulez-vous vraiment supprimer cette annonce ?',
                 })}
               </p>
             </div>
