@@ -64,7 +64,7 @@ const ServicesScreen = ({
                 </Text>
               </View>
 
-              <Text className="text-xs sm:text-sm text-slate-500 dark:text-slate-405 leading-relaxed font-semibold">
+              <Text className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-semibold">
                 {translateServiceField(service.desc)}
               </Text>
 
@@ -73,7 +73,7 @@ const ServicesScreen = ({
                   service.pts.map((point: string, idx2: number) => (
                     <li key={idx2} className="flex items-center gap-2">
                       <Text className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                      <Text>{translateServiceField(point)}</Text>
+                      <Text className="text-slate-600 dark:text-slate-300 flex-1">{translateServiceField(point)}</Text>
                     </li>
                   ))}
               </ul>

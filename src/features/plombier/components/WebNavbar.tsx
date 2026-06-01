@@ -181,8 +181,8 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
   };
 
   const drawerStyle: any = {
-    overflow: 'hidden',
-    maxHeight: mobileOpen ? 640 : 0,
+    overflowY: 'auto',
+    maxHeight: mobileOpen ? 'calc(100vh - 72px)' : 0,
     opacity: mobileOpen ? 1 : 0,
     transition:
       'max-height 0.35s cubic-bezier(0.4,0,0.2,1), opacity 0.25s ease',
@@ -233,8 +233,8 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
             </View>
           </TouchableOpacity>
 
-          {/* ── Desktop Nav links (lg+) ── */}
-          <View className="hidden lg:flex flex-row items-center gap-1">
+          {/* ── Desktop Nav links (xl+) ── */}
+          <View className="hidden xl:flex flex-row items-center gap-1">
             {links.map(link => {
               const isActive = activeTab === link.id;
               return (
@@ -411,10 +411,10 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
               )}
             </View>
 
-            {/* ── Hamburger — mobile/tablet only (lg:hidden) ── */}
+            {/* ── Hamburger — mobile/tablet only (xl:hidden) ── */}
             <TouchableOpacity
               onPress={() => setMobileOpen(prev => !prev)}
-              className="lg:hidden"
+              className="xl:hidden"
               style={{ ...btnBase, width: 40, height: 40 } as any}
               accessibilityLabel={
                 mobileOpen ? 'Fermer le menu' : 'Ouvrir le menu'
@@ -430,7 +430,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
         </View>
 
         {/* ── Mobile drawer (slide-down) ── */}
-        <View className="lg:hidden" style={drawerStyle}>
+        <View className="xl:hidden" style={drawerStyle}>
           <View style={{ padding: 16, gap: 4 } as any}>
             {links.map(link => {
               const isActive = activeTab === link.id;
