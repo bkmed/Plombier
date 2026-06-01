@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,23 +18,6 @@ const AdminServicesEditor = () => {
   const services = useSelector((state: RootState) =>
     selectServices(state),
   ) as Service[];
-  const [servicesList, setServicesList] = useState<Service[]>(services || []);
-
-  useEffect(() => {
-    // Normalize incoming services to ensure unique keys in the UI
-    const incoming = services || [];
-    const seen = new Set<string>();
-    const normalized = incoming.map((s, idx) => {
-      let id = s.id;
-      if (!id || seen.has(id)) {
-        id = `srv-${Date.now()}-${idx}-${Math.floor(Math.random() * 1000000)}`;
-        return { ...s, id };
-      }
-      seen.add(id);
-      return s;
-    });
-    setServicesList(normalized);
-  }, [services]);
   const [nameKey, setNameKey] = useState('plomberie_generale');
   const [icon, setIcon] = useState('plumbing');
   const [descKey, setDescKey] = useState('plomberie_desc_long');
@@ -129,8 +112,6 @@ const AdminServicesEditor = () => {
   const confirmDelete = () => {
     if (!serviceToDelete) return;
     dispatch(deleteService(serviceToDelete.id));
-    // update local list immediately so UI reflects deletion without full refresh
-    setServicesList(prev => prev.filter(s => s.id !== serviceToDelete.id));
     setStatusMessage(
       translate('admin.serviceDeleted', { defaultValue: 'Service supprimé.' }),
     );
@@ -198,7 +179,7 @@ const AdminServicesEditor = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {servicesList.map(s => (
+            {services.map(s => (
               <div
                 key={s.id}
                 className="flex items-center justify-between border p-3 rounded-2xl"

@@ -45,7 +45,7 @@ const ServicesScreen = ({
       <div className="space-y-16">
         {services.map((service, idx) => (
           <div
-            key={service.name}
+            key={service.id || `${service.name}-${idx}`}
             className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center border-b border-slate-200 dark:border-slate-800 pb-16 last:border-b-0 last:pb-0 ${
               idx % 2 === 1 ? 'lg:flex-row-reverse' : ''
             }`}
