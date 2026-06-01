@@ -88,6 +88,8 @@ export const AppNavigator = () => {
   const isRTL = i18n.language === 'ar';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
+  const dispoVal = plombierSettings.dispoVal || translate('web.dispo_val', { defaultValue: '24/7' });
+  const govVal = plombierSettings.govVal || translate('web.gov_val', { defaultValue: '24' });
   const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
   const nextLanguage =
     languageOrder[
@@ -379,6 +381,8 @@ export const AppNavigator = () => {
             <HomeScreenWeb
               nextLanguage={nextLanguage}
               experienceYears={experienceYears}
+              dispoVal={dispoVal}
+              govVal={govVal}
               supportWhatsAppDigits={supportWhatsAppDigits}
               galleryItems={galleryItems}
               products={products}

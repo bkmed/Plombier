@@ -5,6 +5,8 @@ import { RootState } from '../../../store';
 import { selectServices } from '../../../store/slices/servicesSlice';
 import { useTranslation } from 'react-i18next';
 
+const SERVICE_TRANSLATION_PREFIX = 'services_local.';
+
 const ServicesScreen = ({
   supportWhatsAppDigits,
 }: {
@@ -12,6 +14,19 @@ const ServicesScreen = ({
 }) => {
   const services = useSelector((state: RootState) => selectServices(state));
   const { t } = useTranslation();
+
+  const translateServiceField = (key?: string) => {
+    const trimmedKey = key?.trim();
+    if (!trimmedKey) return '';
+
+    const namespacedKey = trimmedKey.startsWith(SERVICE_TRANSLATION_PREFIX)
+      ? trimmedKey
+      : `${SERVICE_TRANSLATION_PREFIX}${trimmedKey}`;
+
+    return t(namespacedKey, {
+      defaultValue: t(trimmedKey, { defaultValue: trimmedKey }),
+    });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left bg-slate-50 dark:bg-transparent">
@@ -41,16 +56,16 @@ const ServicesScreen = ({
                   <ServiceIcon
                     name={service.icon as ServiceIconName}
                     className="w-5 h-5"
-                    title={t(`services_local.${service.name}`)}
+                    title={translateServiceField(service.name)}
                   />
                 </div>
                 <h2 className="text-xl sm:text-2xl font-black text-slate-850 dark:text-slate-100">
-                  {t(`services_local.${service.name}`)}
+                  {translateServiceField(service.name)}
                 </h2>
               </div>
 
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-405 leading-relaxed font-semibold">
-                {service.desc ? t(`services_local.${service.desc}`) : ''}
+                {translateServiceField(service.desc)}
               </p>
 
               <ul className="space-y-2.5 font-bold text-xs text-slate-650 dark:text-slate-300">
@@ -58,16 +73,20 @@ const ServicesScreen = ({
                   service.pts.map((point: string, idx2: number) => (
                     <li key={idx2} className="flex items-center gap-2">
                       <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-                      <span>{t(`services_local.${point}`)}</span>
+                      <span>{translateServiceField(point)}</span>
                     </li>
                   ))}
               </ul>
 
               <a
                 href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
-                  (service.whatsappText ? t(service.whatsappText) : '') +
+                  (service.whatsappText
+                    ? t(service.whatsappText, {
+                        defaultValue: service.whatsappText,
+                      })
+                    : '') +
                     ' ' +
-                    t(`services_local.${service.name}`),
+                    translateServiceField(service.name),
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -84,7 +103,7 @@ const ServicesScreen = ({
                 </span>
                 <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
                   {service.imgBefore
-                    ? t(`services_local.${service.imgBefore}`)
+                    ? translateServiceField(service.imgBefore)
                     : ''}
                 </div>
                 <div className="h-1 bg-amber-500 rounded-full w-full" />
@@ -96,7 +115,7 @@ const ServicesScreen = ({
                 </span>
                 <div className="flex-1 flex items-center justify-center p-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight mt-6">
                   {service.imgAfter
-                    ? t(`services_local.${service.imgAfter}`)
+                    ? translateServiceField(service.imgAfter)
                     : ''}
                 </div>
                 <div className="h-1 bg-emerald-500 rounded-full w-full" />

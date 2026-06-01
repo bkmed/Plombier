@@ -1309,6 +1309,7 @@
       "parts_section_desc": "Equip yourself at the best price with our tested and inspected used parts.",
       "call_to_buy": "Order Now"
     },
+    "tndSymbol": "DT",
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
   },
   "demander_devis": "Request a Quote",

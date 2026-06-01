@@ -6,6 +6,8 @@ interface HomeScreenWebProps {
   nextLanguage: string;
   experienceYears: number;
   supportWhatsAppDigits: string;
+  dispoVal?: string;
+  govVal?: string;
   galleryItems: any[];
   products: any[];
   favorites: string[];
@@ -18,6 +20,8 @@ interface HomeScreenWebProps {
 export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
   experienceYears,
   supportWhatsAppDigits,
+  dispoVal,
+  govVal,
   galleryItems,
   products,
   favorites,
@@ -26,8 +30,8 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
   setSelectedProduct,
   toggleFavorite,
 }) => {
-  const tCommon = (key: string, defaultValue: string) =>
-    t(key, { defaultValue });
+  const tCommon = (key: string, defaultValue?: string) =>
+    t(key, { defaultValue: defaultValue ?? key });
   const stats = [
     {
       val: `${experienceYears}+`,
@@ -35,12 +39,12 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
       color: 'text-[#1E3A5F] dark:text-sky-400',
     },
     {
-      val: tCommon('web.dispo_val'),
+      val: dispoVal || tCommon('web.dispo_val'),
       lbl: tCommon('web.dispo_lbl'),
       color: 'text-[#F97316]',
     },
     {
-      val: tCommon('web.gov_val'),
+      val: govVal || tCommon('web.gov_val'),
       lbl: tCommon('web.gov_lbl'),
       color: 'text-[#1E3A5F] dark:text-sky-400',
     },
@@ -58,19 +62,13 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl">
             <span className="bg-[#F97316] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
-              Tunisie Dépannage Express 24h/7j
+              {tCommon('web.home.hero_badge')}
             </span>
             <h1 className="text-4xl sm:text-6xl font-black tracking-tight mt-6 leading-tight">
-              {tCommon(
-                'web.homeHeroTitle',
-                'Vos Urgences Plomberie Réglées en un Record',
-              )}
+              {tCommon('web.home.hero_title')}
             </h1>
             <p className="text-slate-300 text-base sm:text-lg font-medium mt-4 max-w-xl">
-              {tCommon(
-                'web.homeHeroDescription',
-                'Artisans plombiers qualifiés à votre service pour les fuites, pannes thermiques et raccordements gaz dans tout le pays.',
-              )}
+              {tCommon('web.home.hero_subtitle')}
             </p>
 
             {/* Action buttons CTAs */}
@@ -90,7 +88,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
               >
-                <span>{t('whatsapp')} Support 24/7</span>
+                <span>
+                  {t('whatsapp')} {tCommon('web.home.support_badge')}
+                </span>
               </a>
             </div>
           </div>
@@ -134,34 +134,22 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               {
                 title: tCommon('web.plomberie_generale'),
                 icon: 'plumbing',
-                desc: tCommon(
-                  'web.servicePlumbingDesc',
-                  'Recherche de fuites, installations de sanitaires et de chauffe-eau.',
-                ),
+                desc: tCommon('web.home.service_desc_plumbing'),
               },
               {
                 title: tCommon('web.climatisation'),
                 icon: 'ac',
-                desc: tCommon(
-                  'web.serviceAcDesc',
-                  'Installation de climatiseurs split, recharges de gaz et entretien.',
-                ),
+                desc: tCommon('web.home.service_desc_ac'),
               },
               {
                 title: tCommon('web.installation_gaz'),
                 icon: 'gas',
-                desc: tCommon(
-                  'web.serviceGasDesc',
-                  'Tuyauteries de gaz conformes, branchements et détection de fuites.',
-                ),
+                desc: tCommon('web.home.service_desc_gas'),
               },
               {
                 title: tCommon('web.chauffage_central'),
                 icon: 'heater',
-                desc: tCommon(
-                  'web.serviceHeatingDesc',
-                  'Chaudières, détartrages de radiateurs et régulations connectées.',
-                ),
+                desc: tCommon('web.home.service_desc_heater'),
               },
             ] as Array<{
               title: string;
@@ -206,23 +194,20 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <div>
             <span className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">
-              Galerie Réalisations
+              {tCommon('web.gallery_realizations')}
             </span>
             <h2 className="mt-3 text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
-              {tCommon('web.gallerySectionTitle', 'Nos Réalisations en Images')}
+              {tCommon('web.home.gallery_section_title')}
             </h2>
             <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 max-w-2xl">
-              {tCommon(
-                'web.gallerySectionDescription',
-                'Découvrez une sélection de projets réels ajoutés par l’administrateur, accompagnés de titres, sous-titres et descriptions.',
-              )}
+              {tCommon('web.home.gallery_section_desc')}
             </p>
           </div>
           <button
             onClick={() => setActiveTab('Gallery')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#F97316] bg-transparent px-6 py-3 text-xs font-black uppercase tracking-wider text-[#F97316] shadow-sm transition hover:bg-[#F97316] hover:text-white"
           >
-            {tCommon('web.viewGalleryButton', 'Voir la galerie')}
+            {tCommon('web.view_all')}
           </button>
         </div>
 
@@ -259,10 +244,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 
           {galleryItems.length === 0 && (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 dark:bg-slate-900 p-8 text-center text-slate-500 dark:text-slate-400">
-              {tCommon(
-                'web.homeEmptyGallery',
-                'Aucune photo ajoutée pour le moment. Les réalisations réelles apparaîtront ici dès qu’elles seront publiées par l’administrateur.',
-              )}
+              {tCommon('web.home.gallery_section_empty')}
             </div>
           )}
         </div>
@@ -277,10 +259,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 {t('pieces')}
               </h2>
               <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
-                {tCommon(
-                  'web.usedPartsDescription',
-                  "Équipez-vous au meilleur prix avec nos pièces d'occasion révisées et testées.",
-                )}
+                {tCommon('web.home.parts_section_desc')}
               </p>
             </div>
             <button
@@ -342,7 +321,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                   <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
                     <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200">
                       {prod.price}{' '}
-                      <span className="text-[9px] font-bold">DT</span>
+                      <span className="text-[9px] font-bold">
+                        {tCommon('web.tndSymbol')}
+                      </span>
                     </div>
 
                     <button
@@ -352,7 +333,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                       }}
                       className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
                     >
-                      {tCommon('web.buyButton', 'Commander')}
+                      {tCommon('web.home.call_to_buy')}
                     </button>
                   </div>
                 </div>

@@ -6,6 +6,8 @@ interface PlombierSettingsState {
   interventionZones: string[];
   supportEmail: string;
   supportPhone: string;
+  dispoVal?: string;
+  govVal?: string;
 }
 
 const initialState: PlombierSettingsState = {
@@ -14,6 +16,8 @@ const initialState: PlombierSettingsState = {
   interventionZones: ['Grand Tunis', 'Sahel', 'Sfax'],
   supportEmail: '',
   supportPhone: '',
+  dispoVal: '24/7',
+  govVal: '24',
 };
 
 const ensureInterventionZones = (state: PlombierSettingsState) => {
@@ -48,6 +52,12 @@ const plombierSettingsSlice = createSlice({
       }
       if (action.payload.supportPhone !== undefined) {
         state.supportPhone = action.payload.supportPhone;
+      }
+      if (action.payload.dispoVal !== undefined) {
+        state.dispoVal = action.payload.dispoVal;
+      }
+      if (action.payload.govVal !== undefined) {
+        state.govVal = action.payload.govVal;
       }
     },
     addInterventionZone: (state, action: PayloadAction<string>) => {

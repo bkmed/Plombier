@@ -15,6 +15,8 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
   setSelectedProduct,
 }) => {
   if (!selectedProduct) return null;
+  const tCommon = (key: string, options?: any) =>
+    t(key, { defaultValue: key, ...options });
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
@@ -54,7 +56,9 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
 
               <div className="text-xl font-black text-[#F97316]">
                 {selectedProduct.price}{' '}
-                <span className="text-sm font-bold">DT</span>
+                <span className="text-sm font-bold">
+                  {tCommon('web.tndSymbol')}
+                </span>
               </div>
             </div>
 
@@ -68,18 +72,21 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
                 }
                 className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3 rounded-xl transition text-center shadow flex items-center justify-center gap-1.5"
               >
-                <span>{t.call}</span>
+                <span>{tCommon('call')}</span>
               </a>
 
               <a
                 href={`https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
-                  `Bonjour, je suis intéressé par l'achat de la pièce d'occasion : ${selectedProduct.title} - ${selectedProduct.price} DT.`,
+                  tCommon('web.buy_piece_msg', {
+                    title: selectedProduct.title,
+                    price: selectedProduct.price,
+                  }),
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black py-3 rounded-xl transition text-center shadow flex items-center justify-center gap-1.5"
               >
-                <span>{t.whatsapp}</span>
+                <span>{tCommon('whatsapp')}</span>
               </a>
             </div>
           </div>

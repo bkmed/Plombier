@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '../../../store';
+import { updatePlombierSettings } from '../../../store/slices/plombierSettingsSlice';
 
 interface AdminDashboardProps {
   businessName: string;
@@ -18,6 +21,23 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const tCommon = (key: string, defaultValue: string) =>
     t(key, { defaultValue });
 
+  const dispatch = useDispatch();
+  const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
+  const [experience, setExperience] = useState<number>(plombierSettings.experienceYears || 15);
+  const [dispo, setDispo] = useState<string>(plombierSettings.dispoVal || '24/7');
+  const [gov, setGov] = useState<string>(plombierSettings.govVal || '24');
+
+  const saveSettings = () => {
+    dispatch(
+      updatePlombierSettings({
+        experienceYears: Number(experience) || 0,
+        dispoVal: dispo,
+        govVal: gov,
+      }),
+    );
+    alert(tCommon('admin.settingsSaved', 'Settings saved'));
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <h1 className="text-3xl font-black tracking-tight text-slate-850 dark:text-white">
@@ -29,6 +49,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           `View current activity metrics and stock status for ${businessName}.`,
         )}
       </p>
+
+      
 
       {/* Metrics cards row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">

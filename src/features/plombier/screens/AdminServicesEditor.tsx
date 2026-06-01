@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -10,12 +10,31 @@ import {
 } from '../../../store/slices/servicesSlice';
 import { RootState } from '../../../store';
 
+const SERVICE_TRANSLATION_PREFIX = 'services_local.';
+
 const AdminServicesEditor = () => {
   const { t: translate } = useTranslation();
   const dispatch = useDispatch();
   const services = useSelector((state: RootState) =>
     selectServices(state),
   ) as Service[];
+  const [servicesList, setServicesList] = useState<Service[]>(services || []);
+
+  useEffect(() => {
+    // Normalize incoming services to ensure unique keys in the UI
+    const incoming = services || [];
+    const seen = new Set<string>();
+    const normalized = incoming.map((s, idx) => {
+      let id = s.id;
+      if (!id || seen.has(id)) {
+        id = `srv-${Date.now()}-${idx}-${Math.floor(Math.random() * 1000000)}`;
+        return { ...s, id };
+      }
+      seen.add(id);
+      return s;
+    });
+    setServicesList(normalized);
+  }, [services]);
   const [nameKey, setNameKey] = useState('plomberie_generale');
   const [icon, setIcon] = useState('plumbing');
   const [descKey, setDescKey] = useState('plomberie_desc_long');
@@ -28,26 +47,52 @@ const AdminServicesEditor = () => {
   const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  const reset = () => {
+  const translateServiceField = (key?: string) => {
+    const trimmedKey = key?.trim();
+    if (!trimmedKey) return '';
+
+    const namespacedKey = trimmedKey.startsWith(SERVICE_TRANSLATION_PREFIX)
+      ? trimmedKey
+      : `${SERVICE_TRANSLATION_PREFIX}${trimmedKey}`;
+
+    return translate(namespacedKey, {
+      defaultValue: translate(trimmedKey, { defaultValue: trimmedKey }),
+    });
+  };
+
+  const reset = ({ clearStatus = true }: { clearStatus?: boolean } = {}) => {
     setNameKey('plomberie_generale');
     setIcon('plumbing');
     setDescKey('plomberie_desc_long');
     setPtsKeys('plomberie_desc_1,plomberie_desc_2,plomberie_desc_3');
     setEditingId(null);
-    setStatusMessage(null);
+    if (clearStatus) {
+      setStatusMessage(null);
+    }
     setShowModal(false);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const rawName = nameKey.trim();
+    const normalizedName = rawName.startsWith(SERVICE_TRANSLATION_PREFIX)
+      ? rawName
+      : `${SERVICE_TRANSLATION_PREFIX}${rawName}`;
+
     const payload: Service = {
-      id: editingId || `srv-${Date.now()}`,
-      name: nameKey,
-      icon,
-      desc: descKey,
-      pts: ptsKeys.split(',').map(s => s.trim()),
+      id:
+        editingId || `srv-${Date.now()}-${Math.floor(Math.random() * 1000000)}`,
+      name: normalizedName,
+      icon: icon.trim(),
+      desc: descKey.trim(),
+      pts: ptsKeys
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean),
       whatsappText: 'devis_msg',
-      createdAt: new Date().toISOString(),
+      createdAt:
+        services.find(service => service.id === editingId)?.createdAt ||
+        new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
     if (editingId) {
@@ -63,7 +108,7 @@ const AdminServicesEditor = () => {
         translate('admin.serviceAdded', { defaultValue: 'Service ajouté.' }),
       );
     }
-    reset();
+    reset({ clearStatus: false });
   };
 
   const handleEdit = (s: Service) => {
@@ -84,6 +129,8 @@ const AdminServicesEditor = () => {
   const confirmDelete = () => {
     if (!serviceToDelete) return;
     dispatch(deleteService(serviceToDelete.id));
+    // update local list immediately so UI reflects deletion without full refresh
+    setServicesList(prev => prev.filter(s => s.id !== serviceToDelete.id));
     setStatusMessage(
       translate('admin.serviceDeleted', { defaultValue: 'Service supprimé.' }),
     );
@@ -151,17 +198,17 @@ const AdminServicesEditor = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {services.map(s => (
+            {servicesList.map(s => (
               <div
                 key={s.id}
                 className="flex items-center justify-between border p-3 rounded-2xl"
               >
                 <div>
                   <div className="font-black">
-                    {translate(s.name, { defaultValue: s.name })}
+                    {translateServiceField(s.name)}
                   </div>
                   <div className="text-sm text-slate-500">
-                    {translate(s.desc || '', { defaultValue: s.desc || '' })}
+                    {translateServiceField(s.desc)}
                   </div>
                 </div>
                 <div className="flex gap-2">

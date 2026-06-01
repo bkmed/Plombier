@@ -132,8 +132,7 @@ const MarketplaceScreen = ({
   t,
   setSelectedProduct,
 }: MarketplaceScreenProps) => {
-  const tCommon = (key: string, defaultValue: string) =>
-    t(key, { defaultValue });
+  const tCommon = (key: string) => t(key, { defaultValue: key });
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
@@ -192,12 +191,9 @@ const MarketplaceScreen = ({
     event.stopPropagation();
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
-      showToast(tCommon('web.favoriteRemoved', 'Retiré des favoris'), 'info');
+      showToast(tCommon('web.favoriteRemoved'), 'info');
     } else {
-      showToast(
-        tCommon('web.favoriteAdded', 'Ajouté aux favoris !'),
-        'success',
-      );
+      showToast(tCommon('web.favoriteAdded'), 'success');
     }
   };
 
@@ -205,27 +201,26 @@ const MarketplaceScreen = ({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <div>
-          <h1 className="text-3xl font-black tracking-tight">{t.pieces}</h1>
+          <h1 className="text-3xl font-black tracking-tight">
+            {tCommon('pieces')}
+          </h1>
           <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
-            {tCommon(
-              'web.marketplaceIntro',
-              "Recherchez et filtrez nos pièces de rechange de plomberie d'occasion certifiées.",
-            )}
+            {tCommon('web.marketplaceIntro')}
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">
-            {t.tri} :
+            {tCommon('tri')} :
           </span>
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
             className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-850 dark:text-slate-250 focus:outline-none"
           >
-            <option value="featured">{t.recommande}</option>
-            <option value="price_asc">{t.prix_croissant}</option>
-            <option value="price_desc">{t.prix_decroissant}</option>
+            <option value="featured">{tCommon('recommande')}</option>
+            <option value="price_asc">{tCommon('prix_croissant')}</option>
+            <option value="price_desc">{tCommon('prix_decroissant')}</option>
           </select>
         </div>
       </div>
@@ -234,19 +229,16 @@ const MarketplaceScreen = ({
         <div className="lg:col-span-3 space-y-6">
           <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
             <h3 className="text-sm font-black uppercase tracking-wider">
-              {t.filtres}
+              {tCommon('filtres')}
             </h3>
 
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
-                {t.rechercher}
+                {tCommon('rechercher')}
               </label>
               <input
                 type="text"
-                placeholder={tCommon(
-                  'web.marketplaceSearchPlaceholder',
-                  'Grohe, boiler, radiateur...',
-                )}
+                placeholder={tCommon('web.marketplaceSearchPlaceholder')}
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
@@ -255,7 +247,7 @@ const MarketplaceScreen = ({
 
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
-                Catégories
+                {tCommon('web.categories')}
               </label>
               <div className="space-y-1.5">
                 <button
@@ -267,7 +259,7 @@ const MarketplaceScreen = ({
                       : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
                   }`}
                 >
-                  {t.toutes_categories}
+                  {tCommon('toutes_categories')}
                 </button>
                 {reduxCategories.map(cat => (
                   <button
@@ -288,7 +280,7 @@ const MarketplaceScreen = ({
 
             <div className="space-y-2">
               <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
-                {t.etat}
+                {tCommon('etat')}
               </label>
               <div className="grid grid-cols-2 gap-2 text-center">
                 {['Tous', 'comme neuf', 'bon état', 'pour pièces'].map(cond => (
@@ -302,7 +294,9 @@ const MarketplaceScreen = ({
                         : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-350'
                     }`}
                   >
-                    {cond === 'Tous' ? t.tous : cond}
+                    {cond === 'Tous'
+                      ? tCommon('tous')
+                      : tCommon(`web.conditions.${cond}`)}
                   </button>
                 ))}
               </div>
@@ -310,8 +304,12 @@ const MarketplaceScreen = ({
 
             <div className="space-y-3">
               <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                <span>{t.prix} Max</span>
-                <span className="text-[#F97316]">{priceMax} DT</span>
+                <span>
+                  {tCommon('prix')} {tCommon('web.maxLabel')}
+                </span>
+                <span className="text-[#F97316]">
+                  {priceMax} {tCommon('web.tndSymbol')}
+                </span>
               </div>
               <input
                 type="range"
@@ -330,7 +328,7 @@ const MarketplaceScreen = ({
           {sortedProducts.length === 0 ? (
             <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
               <p className="text-sm text-slate-400 font-bold">
-                {t.aucun_produit}
+                {tCommon('aucun_produit')}
               </p>
             </div>
           ) : (
@@ -386,7 +384,9 @@ const MarketplaceScreen = ({
                     <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
                       <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-250">
                         {prod.price}{' '}
-                        <span className="text-[9.5px] font-bold">DT</span>
+                        <span className="text-[9.5px] font-bold">
+                          {tCommon('web.tndSymbol')}
+                        </span>
                       </div>
 
                       <button
@@ -396,7 +396,7 @@ const MarketplaceScreen = ({
                         }}
                         className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition"
                       >
-                        {tCommon('web.buyButton', 'Commander')}
+                        {tCommon('web.home.call_to_buy')}
                       </button>
                     </div>
                   </div>

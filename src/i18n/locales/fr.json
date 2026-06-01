@@ -108,6 +108,29 @@
     "errorZoneExists": "Cette zone existe déjà.",
     "successZoneAdded": "Nouvelle zone ajoutée !",
     "successZoneDeleted": "Zone supprimée !",
+    "servicesTitle": "Gérer les services",
+    "servicesDescription": "Ajoutez, modifiez ou supprimez les services disponibles aux utilisateurs.",
+    "addServiceButton": "+ Ajouter un service",
+    "servicesListTitle": "Liste des services",
+    "noServices": "Aucun service défini.",
+    "editButton": "Modifier",
+    "deleteButton": "Supprimer",
+    "confirmDelete": "Confirmer la suppression",
+    "confirmDeleteService": "Êtes-vous sûr de vouloir supprimer ce service ? Cette action est irréversible.",
+    "cancelButton": "Annuler",
+    "editServiceTitle": "Modifier le service",
+    "addServiceTitle": "Ajouter un service",
+    "saveButton": "Enregistrer",
+    "addServiceModalButton": "+ Ajouter le service",
+    "serviceAdded": "Service ajouté.",
+    "serviceUpdated": "Service mis à jour.",
+    "serviceDeleted": "Service supprimé.",
+    "placeholder": {
+      "nameKey": "clé nom (ex: plomberie_generale)",
+      "icon": "icône (plumbing|ac|gas|heater)",
+      "descKey": "clé description (ex: plomberie_desc_long)",
+      "ptsKeys": "clés bullets séparées par ,"
+    },
     "purchases": {
       "title": "Gestion des Achats",
       "total": "Total",
@@ -1480,6 +1503,7 @@
       "parts_section_desc": "Équipez-vous au meilleur prix avec nos pièces d'occasion révisées et testées.",
       "call_to_buy": "Commander"
     },
+    "tndSymbol": "DT",
     "buy_piece_msg": "Bonjour, je suis intéressé par l'achat de la pièce d'occasion : {{title}} - {{price}} DT."
   },
   "auth_hardcoded": {

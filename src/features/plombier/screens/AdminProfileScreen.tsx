@@ -65,6 +65,8 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
   const [experienceYearsInput, setExperienceYearsInput] = useState('');
   const [supportEmailInput, setSupportEmailInput] = useState('');
   const [supportPhoneInput, setSupportPhoneInput] = useState('');
+  const [dispoValInput, setDispoValInput] = useState('');
+  const [govValInput, setGovValInput] = useState('');
   const [profileEmail, setProfileEmail] = useState('');
   const [profilePhone, setProfilePhone] = useState('');
   const [zoneInput, setZoneInput] = useState('');
@@ -86,6 +88,8 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
     setExperienceYearsInput(String(plombierSettings?.experienceYears ?? 15));
     setSupportEmailInput(plombierSettings?.supportEmail || user?.email || '');
     setSupportPhoneInput(plombierSettings?.supportPhone || user?.phone || '');
+    setDispoValInput(plombierSettings?.dispoVal || '24/7');
+    setGovValInput(plombierSettings?.govVal || '24');
   }, [user, plombierSettings]);
 
   const handleAdminProfileUpdate = async (e: React.FormEvent) => {
@@ -139,6 +143,8 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
         experienceYears: Math.round(years),
         supportEmail: supportEmailInput.trim(),
         supportPhone: supportPhoneInput.trim(),
+        dispoVal: dispoValInput,
+        govVal: govValInput,
       }),
     );
     showToast(tr('admin.successBrandUpdated'), 'success');
@@ -284,6 +290,28 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 max="80"
                 value={experienceYearsInput}
                 onChange={e => setExperienceYearsInput(e.target.value)}
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                {tr('admin.dispoValLabel')}
+              </label>
+              <input
+                type="text"
+                value={dispoValInput}
+                onChange={e => setDispoValInput(e.target.value)}
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                {tr('admin.govValLabel')}
+              </label>
+              <input
+                type="text"
+                value={govValInput}
+                onChange={e => setGovValInput(e.target.value)}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
             </div>
