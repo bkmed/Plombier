@@ -60,7 +60,7 @@ const servicesSlice = createSlice({
 export const { setServices, addService, updateService, deleteService } =
   servicesSlice.actions;
 
-export const selectServices = (state: { services: ServicesState }) =>
-  state.services.items;
+export const selectServices = (state: { services?: ServicesState }) =>
+  state.services?.items || [];
 
 export default servicesSlice.reducer;

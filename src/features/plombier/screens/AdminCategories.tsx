@@ -21,9 +21,11 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
     translate(key, { defaultValue });
   const dispatch = useDispatch();
   const reduxCategories = useSelector(
-    (state: RootState) => state.categories.items,
+    (state: RootState) => state.categories?.items || [],
   );
-  const products = useSelector((state: RootState) => state.parts.listings);
+  const products = useSelector(
+    (state: RootState) => state.parts?.listings || [],
+  );
   const [showCategoryModal, setShowCategoryModal] = React.useState(false);
   const [editingCategory, setEditingCategory] = React.useState<any | null>(
     null,

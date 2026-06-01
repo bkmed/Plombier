@@ -136,10 +136,14 @@ const MarketplaceScreen = ({
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
-  const products = useSelector((state: RootState) => state.parts.listings);
-  const favorites = useSelector((state: RootState) => state.parts.favorites);
+  const products = useSelector(
+    (state: RootState) => state.parts?.listings || [],
+  );
+  const favorites = useSelector(
+    (state: RootState) => state.parts?.favorites || [],
+  );
   const reduxCategories = useSelector(
-    (state: RootState) => state.categories.items,
+    (state: RootState) => state.categories?.items || [],
   );
 
   const [searchQuery, setSearchQuery] = useState('');

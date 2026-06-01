@@ -8,16 +8,13 @@ import {
   selectServices,
   Service,
 } from '../../../store/slices/servicesSlice';
-import { RootState } from '../../../store';
 
 const SERVICE_TRANSLATION_PREFIX = 'services_local.';
 
 const AdminServicesEditor = () => {
   const { t: translate } = useTranslation();
   const dispatch = useDispatch();
-  const services = useSelector((state: RootState) =>
-    selectServices(state),
-  ) as Service[];
+  const services = useSelector(selectServices) as Service[];
   const [nameKey, setNameKey] = useState('plomberie_generale');
   const [icon, setIcon] = useState('plumbing');
   const [descKey, setDescKey] = useState('plomberie_desc_long');

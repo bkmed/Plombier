@@ -27,12 +27,12 @@ import { WebFooter } from '../features/plombier/components/WebFooter';
 import { ProductDetailModal } from '../features/plombier/components/ProductDetailModal';
 
 // Screens
-import HomeScreenWeb from '../features/plombier/screens/HomeScreen.web';
+import HomeScreenWeb from '../features/plombier/screens/HomeScreen';
 import ServicesScreen from '../features/plombier/screens/ServicesScreen';
 import ZonesScreen from '../features/plombier/screens/ZonesScreen';
 import MarketplaceScreen from '../features/plombier/screens/MarketplaceScreen';
 import GalleryScreen from '../features/plombier/screens/GalleryScreen';
-import ProfileScreenWeb from '../features/plombier/screens/ProfileScreen.web';
+import ProfileScreenWeb from '../features/plombier/screens/ProfileScreen';
 import LegalPages from '../features/plombier/screens/LegalPages';
 import AdminDashboard from '../features/plombier/screens/AdminDashboard';
 import AdminAnnonces from '../features/plombier/screens/AdminAnnonces';
@@ -56,22 +56,28 @@ export const AppNavigator = () => {
   const { t: translate, i18n } = useTranslation();
 
   const dispatch = useDispatch();
-  const products = useSelector((state: RootState) => state.parts.listings);
-  const favorites = useSelector((state: RootState) => state.parts.favorites);
+  const products = useSelector(
+    (state: RootState) => state.parts?.listings || [],
+  );
+  const favorites = useSelector(
+    (state: RootState) => state.parts?.favorites || [],
+  );
   const reduxCategories = useSelector(
-    (state: RootState) => state.categories.items,
+    (state: RootState) => state.categories?.items || [],
   );
-  const usersList = useSelector((state: RootState) => state.users.items);
-  const galleryItems = useSelector((state: RootState) => state.gallery.items);
-  const plombierSettings = useSelector(
-    (state: RootState) => state.plombierSettings,
+  const usersList = useSelector(
+    (state: RootState) => state.users?.items || [],
   );
-  const uiState = useSelector((state: RootState) => state.ui);
-  const { currentLang, currentTheme, activeTab, bypassAuth } = uiState;
+  const galleryItems = useSelector(
+    (state: RootState) => state.gallery?.items || [],
+  );
+  const plombierSettings =
+    useSelector((state: RootState) => state.plombierSettings) || ({} as any);
+  const uiState = useSelector((state: RootState) => state.ui) || ({} as any);
+  const { currentLang = 'FR', currentTheme = 'light', activeTab = 'Accueil', bypassAuth = false } = uiState;
 
-  const { sessionUser, currentRole } = useSelector(
-    (state: RootState) => (state as any).webSession,
-  );
+  const { sessionUser, currentRole } =
+    useSelector((state: RootState) => (state as any).webSession) || {};
 
   // Splash Screen
   const [showSplash, setShowSplash] = useState(true);

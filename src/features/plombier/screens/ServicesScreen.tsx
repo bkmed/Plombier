@@ -1,7 +1,6 @@
 import React from 'react';
 import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
 import { selectServices } from '../../../store/slices/servicesSlice';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +11,7 @@ const ServicesScreen = ({
 }: {
   supportWhatsAppDigits?: string;
 }) => {
-  const services = useSelector((state: RootState) => selectServices(state));
+  const services = useSelector(selectServices);
   const { t } = useTranslation();
 
   const translateServiceField = (key?: string) => {

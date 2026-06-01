@@ -20,9 +20,11 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   const tCommon = (key: string, defaultValue: string) =>
     translate(key, { defaultValue });
   const dispatch = useDispatch();
-  const products = useSelector((state: RootState) => state.parts.listings);
+  const products = useSelector(
+    (state: RootState) => state.parts?.listings || [],
+  );
   const reduxCategories = useSelector(
-    (state: RootState) => state.categories.items,
+    (state: RootState) => state.categories?.items || [],
   );
   const [showAdminModal, setShowAdminModal] = React.useState(false);
   const [editingProduct, setEditingProduct] = React.useState<any | null>(null);
