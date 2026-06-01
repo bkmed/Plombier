@@ -475,10 +475,7 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'AdminManage' && (
-            <AdminManage
-              t={translate}
-              setActiveTab={setActiveTab}
-            />
+            <AdminManage t={translate} setActiveTab={setActiveTab} />
           )}
 
           {activeTab === 'GestionAnnonce' && (

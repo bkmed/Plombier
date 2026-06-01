@@ -15,31 +15,31 @@ const AdminManage: React.FC<AdminManageProps> = ({ t, setActiveTab }) => {
       id: 'GestionAnnonce',
       label: tCommon('web.manageAds', 'Manage Ads'),
       icon: '📢',
-      description: 'Gérer les annonces et publications'
+      description: 'Gérer les annonces et publications',
     },
     {
       id: 'GestionCategorie',
       label: tCommon('web.manageCategories', 'Manage Categories'),
       icon: '🗂️',
-      description: 'Gérer les catégories de produits'
+      description: 'Gérer les catégories de produits',
     },
     {
       id: 'AdminServices',
       label: tCommon('web.servicesLabel', 'Services'),
       icon: '🔧',
-      description: 'Gérer les services proposés'
+      description: 'Gérer les services proposés',
     },
     {
       id: 'GestionUser',
       label: tCommon('web.manageUsers', 'User Manage'),
       icon: '👥',
-      description: 'Gérer les utilisateurs et permissions'
+      description: 'Gérer les utilisateurs et permissions',
     },
     {
       id: 'AdminGallery',
       label: tCommon('web.gallery.manageGallery', 'Manage Gallery'),
       icon: '🖼️',
-      description: 'Gérer les images de la galerie'
+      description: 'Gérer les images de la galerie',
     },
   ];
 
@@ -50,7 +50,7 @@ const AdminManage: React.FC<AdminManageProps> = ({ t, setActiveTab }) => {
       </Text>
 
       <View className="flex flex-row flex-wrap -mx-3">
-        {manageLinks.map((link) => (
+        {manageLinks.map(link => (
           <View key={link.id} className="w-full sm:w-1/2 lg:w-1/3 px-3 mb-6">
             <TouchableOpacity
               onPress={() => setActiveTab(link.id)}
@@ -58,9 +58,13 @@ const AdminManage: React.FC<AdminManageProps> = ({ t, setActiveTab }) => {
             >
               <View className="flex flex-row items-center mb-4">
                 <Text className="text-4xl mr-4">{link.icon}</Text>
-                <Text className="text-xl font-bold text-slate-800 dark:text-slate-200">{link.label}</Text>
+                <Text className="text-xl font-bold text-slate-800 dark:text-slate-200">
+                  {link.label}
+                </Text>
               </View>
-              <Text className="text-sm text-slate-500 dark:text-slate-400">{link.description}</Text>
+              <Text className="text-sm text-slate-500 dark:text-slate-400">
+                {link.description}
+              </Text>
             </TouchableOpacity>
           </View>
         ))}

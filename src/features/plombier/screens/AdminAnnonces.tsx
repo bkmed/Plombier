@@ -315,7 +315,10 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
         {/* Mobile Card View */}
         <View className="flex flex-col lg:hidden divide-y divide-slate-100 dark:divide-slate-700">
           {paginatedProducts.map(prod => (
-            <View key={prod.id} className="p-4 flex flex-col gap-4 hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition">
+            <View
+              key={prod.id}
+              className="p-4 flex flex-col gap-4 hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition"
+            >
               <View className="flex flex-row items-center justify-between gap-2">
                 <View className="flex flex-row items-center gap-3 flex-1">
                   <View className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
@@ -330,7 +333,9 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     </Text>
                   </View>
                 </View>
-                <Text className="font-black text-sm text-right shrink-0">{prod.price} TND</Text>
+                <Text className="font-black text-sm text-right shrink-0">
+                  {prod.price} TND
+                </Text>
               </View>
 
               <View className="flex flex-row items-center justify-between">
