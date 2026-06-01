@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import HomeScreen from '../features/plombier/screens/HomeScreen';
 import ServicesScreen from '../features/plombier/screens/ServicesScreen';
 import ZonesScreen from '../features/plombier/screens/ZonesScreen';
@@ -114,9 +115,9 @@ export const renderWebScreen = ({
       );
     case 'Gallery':
       return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+        <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
           <GalleryScreen />
-        </div>
+        </View>
       );
     case 'Profile':
       return (
@@ -143,7 +144,13 @@ export const renderWebScreen = ({
     case 'Politique':
     case 'Conditions':
     case 'PlanSite':
-      return <LegalPages page={activeTab as any} t={translate} setActiveTab={setActiveTab} />;
+      return (
+        <LegalPages
+          page={activeTab as any}
+          t={translate}
+          setActiveTab={setActiveTab}
+        />
+      );
     case 'AdminAccueil':
       return (
         <AdminDashboard
@@ -160,20 +167,22 @@ export const renderWebScreen = ({
       return <AdminCategories showToast={showToast} translate={translate} />;
     case 'AdminGallery':
       return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+        <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
           <AdminGalleryEditor />
-        </div>
+        </View>
       );
     case 'AdminServices':
       return (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+        <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
           <AdminServicesEditor />
-        </div>
+        </View>
       );
     case 'GestionUser':
       return <AdminUsers showToast={showToast} t={translate} />;
     case 'AdminProfile':
-      return <AdminProfileScreen currentLang={currentLang} t={translate} />;
+      return (
+        <AdminProfileScreen currentLang={currentLang as any} t={translate} />
+      );
     case 'Analytics':
       return <AdminAnalyticsScreen t={translate} />;
     default:

@@ -29,7 +29,10 @@ import { WebNavbar } from '../features/plombier/components/WebNavbar';
 import { WebFooter } from '../features/plombier/components/WebFooter';
 import { ProductDetailModal } from '../features/plombier/components/ProductDetailModal';
 
-import { Role, WebSessionUser } from '../features/plombier/utils/webTranslations';
+import {
+  Role,
+  WebSessionUser,
+} from '../features/plombier/utils/webTranslations';
 import { User } from '../services/authService';
 
 const WebAppNavigator = () => {
@@ -47,16 +50,19 @@ const WebAppNavigator = () => {
   const reduxCategories = useSelector(
     (state: RootState) => state.categories?.items || [],
   );
-  const usersList = useSelector(
-    (state: RootState) => state.users?.items || [],
-  );
+  const usersList = useSelector((state: RootState) => state.users?.items || []);
   const galleryItems = useSelector(
     (state: RootState) => state.gallery?.items || [],
   );
   const plombierSettings =
     useSelector((state: RootState) => state.plombierSettings) || ({} as any);
   const uiState = useSelector((state: RootState) => state.ui) || ({} as any);
-  const { currentLang = 'FR', currentTheme = 'light', activeTab = 'Accueil', bypassAuth = false } = uiState;
+  const {
+    currentLang = 'FR',
+    currentTheme = 'light',
+    activeTab = 'Accueil',
+    bypassAuth = false,
+  } = uiState;
 
   const { sessionUser, currentRole } =
     useSelector((state: RootState) => (state as any).webSession) || {};
@@ -76,8 +82,11 @@ const WebAppNavigator = () => {
   const isRTL = i18n.language === 'ar';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
-  const dispoVal = plombierSettings.dispoVal || translate('web.dispo_val', { defaultValue: '24/7' });
-  const govVal = plombierSettings.govVal || translate('web.gov_val', { defaultValue: '24' });
+  const dispoVal =
+    plombierSettings.dispoVal ||
+    translate('web.dispo_val', { defaultValue: '24/7' });
+  const govVal =
+    plombierSettings.govVal || translate('web.gov_val', { defaultValue: '24' });
   const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
   const nextLanguage =
     languageOrder[
@@ -248,13 +257,13 @@ const WebAppNavigator = () => {
   });
 
   return (
-    <div
+    <View
       className={`min-h-screen font-sans antialiased transition-colors duration-300 ${
         currentTheme === 'dark'
           ? 'bg-[#0B0F19] text-slate-100'
           : 'bg-slate-50 text-slate-800'
       }`}
-      dir={isRTL ? 'rtl' : 'ltr'}
+      style={{ direction: isRTL ? 'rtl' : 'ltr' }}
     >
       <WebSplashScreen
         showSplash={showSplash}
@@ -302,9 +311,9 @@ const WebAppNavigator = () => {
       )}
 
       {(bypassAuth || sessionUser) && (
-        <main className="min-h-[calc(100vh-280px)] bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300">
+        <View className="min-h-[calc(100vh-280px)] bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300">
           {activeScreen}
-        </main>
+        </View>
       )}
 
       <ProductDetailModal
@@ -326,7 +335,7 @@ const WebAppNavigator = () => {
           setActiveTab={setActiveTab}
         />
       )}
-    </div>
+    </View>
   );
 };
 
@@ -334,7 +343,8 @@ const MobileAppNavigator = () => (
   <View style={styles.mobileContainer}>
     <Text style={styles.mobileTitle}>Plombier mobile</Text>
     <Text style={styles.mobileBody}>
-      Le même fichier `AppNavigator.tsx` gère maintenant à la fois web et mobile.
+      Le même fichier `AppNavigator.tsx` gère maintenant à la fois web et
+      mobile.
     </Text>
   </View>
 );

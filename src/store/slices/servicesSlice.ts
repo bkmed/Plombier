@@ -43,7 +43,9 @@ const servicesSlice = createSlice({
       const hasDuplicateId = state.items.some(item => item.id === service.id);
       const id =
         !service.id || hasDuplicateId
-          ? `srv-${Date.now()}-${state.items.length}-${Math.floor(Math.random() * 1000000)}`
+          ? `srv-${Date.now()}-${state.items.length}-${Math.floor(
+              Math.random() * 1000000,
+            )}`
           : service.id;
       state.items.push({ ...service, id });
     },

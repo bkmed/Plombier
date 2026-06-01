@@ -1,4 +1,5 @@
 import React from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import {
@@ -163,31 +164,31 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
-        <div>
-          <h1 className="text-3xl font-black tracking-tight">
+    <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <View className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
+        <View>
+          <Text className="text-3xl font-black tracking-tight">
             {tCommon('adminAnnonces.title', 'Gestion des Annonces')}
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
+          </Text>
+          <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
             {tCommon(
               'adminAnnonces.description',
               'Créez de nouvelles fiches produits, modifiez les descriptifs et gérez les disponibilités.',
             )}
-          </p>
-        </div>
+          </Text>
+        </View>
 
-        <button
-          onClick={openAddAnnonce}
+        <TouchableOpacity
+          onPress={openAddAnnonce}
           className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl shadow-md transition"
         >
           {tCommon('adminAnnonces.addAnnouncement', '+ Ajouter une annonce')}
-        </button>
-      </div>
+        </TouchableOpacity>
+      </View>
 
       {/* Listings Admin Table */}
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
+      <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden">
+        <View className="overflow-x-auto">
           <table className="w-full text-xs text-left font-semibold">
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
               <tr>
@@ -209,36 +210,36 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                 <th className="px-6 py-4 text-center">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-750 text-slate-700 dark:text-slate-200">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
               {products.map(prod => (
                 <tr
                   key={prod.id}
-                  className="hover:bg-slate-50/55 dark:hover:bg-slate-750/30 transition"
+                  className="hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition"
                 >
                   <td className="px-6 py-4 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                    <View className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
                       <ProductVisual image={prod.image} className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <div className="font-black text-slate-850 dark:text-slate-100">
+                    </View>
+                    <View>
+                      <View className="font-black text-slate-800 dark:text-slate-100">
                         {prod.title}
-                      </div>
-                      <span className="text-[10px] text-slate-400 font-semibold">
+                      </View>
+                      <Text className="text-[10px] text-slate-400 font-semibold">
                         {prod.subtitle}
-                      </span>
-                    </div>
+                      </Text>
+                    </View>
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
                     {prod.category}
                   </td>
                   <td className="px-6 py-4 font-black">{prod.price} TND</td>
                   <td className="px-6 py-4">
-                    <span className="bg-slate-150 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-350">
+                    <Text className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-300">
                       {prod.condition}
-                    </span>
+                    </Text>
                   </td>
                   <td className="px-6 py-4">
-                    <span
+                    <Text
                       className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
                         prod.isAvailable
                           ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-500/10'
@@ -248,77 +249,75 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       {prod.isAvailable
                         ? tCommon('adminAnnonces.available', 'Disponible')
                         : tCommon('adminAnnonces.sold', 'Vendu')}
-                    </span>
+                    </Text>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <div className="flex justify-center gap-2">
-                      <button
-                        onClick={() => openEditAnnonce(prod)}
+                    <View className="flex justify-center gap-2">
+                      <TouchableOpacity
+                        onPress={() => openEditAnnonce(prod)}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition"
                       >
                         {tCommon('adminAnnonces.edit', 'Modifier')}
-                      </button>
-                      <button
-                        onClick={() => handleDeleteAnnonceClick(prod.id)}
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleDeleteAnnonceClick(prod.id)}
                         className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition"
                       >
                         {tCommon('adminAnnonces.delete', 'Supprimer')}
-                      </button>
-                    </div>
+                      </TouchableOpacity>
+                    </View>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
+        </View>
+      </View>
 
       {showDeleteConfirm && annonceToDelete && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
-            <div>
-              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+        <View className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <View>
+              <Text className="text-xl font-black text-slate-900 dark:text-white">
                 {tCommon('admin.confirmDelete', 'Confirmer la suppression')}
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+              </Text>
+              <Text className="text-sm text-slate-500 dark:text-slate-400 mt-2">
                 {translate('web.autoText19', {
                   defaultValue:
                     'Voulez-vous vraiment supprimer cette annonce ?',
                 })}
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={cancelDeleteAnnonce}
+              </Text>
+            </View>
+            <View className="flex gap-3">
+              <TouchableOpacity
+                onPress={cancelDeleteAnnonce}
                 className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
               >
                 {tCommon('admin.cancelButton', 'Annuler')}
-              </button>
-              <button
-                type="button"
-                onClick={confirmDeleteAnnonce}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={confirmDeleteAnnonce}
                 className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
               >
                 {tCommon('adminAnnonces.delete', 'Supprimer')}
-              </button>
-            </div>
-          </div>
-        </div>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       )}
 
       {showAdminModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-lg w-full shadow-2xl overflow-hidden relative">
-            <button
-              onClick={() => setShowAdminModal(false)}
-              className="absolute top-4 right-4 z-10 w-8.5 h-8.5 rounded-full bg-slate-100 dark:bg-slate-750 text-slate-500 hover:text-slate-850 dark:hover:text-slate-100 flex items-center justify-center font-bold"
+        <View className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in text-left">
+          <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-lg w-full shadow-2xl overflow-hidden relative">
+            <TouchableOpacity
+              onPress={() => setShowAdminModal(false)}
+              className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-slate-100 flex items-center justify-center font-bold"
             >
               ✕
-            </button>
+            </TouchableOpacity>
 
-            <div className="p-6 sm:p-8 space-y-6">
-              <h2 className="text-xl font-black text-slate-850 dark:text-white">
+            <View className="p-6 sm:p-8 space-y-6">
+              <Text className="text-xl font-black text-slate-800 dark:text-white">
                 {editingProduct
                   ? tCommon(
                       'adminAnnonces.modalEditTitle',
@@ -328,46 +327,40 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       'adminAnnonces.modalCreateTitle',
                       '+ Ajouter une annonce',
                     )}
-              </h2>
+              </Text>
 
-              <form
-                onSubmit={handleSaveAnnonce}
-                className="space-y-4 text-xs font-semibold"
-              >
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+              <View className="space-y-4 text-xs font-semibold">
+                <View className="grid grid-cols-2 gap-4">
+                  <View className="space-y-2">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                       Titre *
-                    </label>
-                    <input
-                      type="text"
-                      required
+                    </Text>
+                    <TextInput
                       placeholder="Ex: Mitigeur évier"
                       value={annonceTitle}
-                      onChange={e => setAnnonceTitle(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                      onChangeText={setAnnonceTitle}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
                     />
-                  </div>
+                  </View>
 
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                  <View className="space-y-2">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                       Sous-Titre / Marque
-                    </label>
-                    <input
-                      type="text"
+                    </Text>
+                    <TextInput
                       placeholder="Ex: GROHE chromé"
                       value={annonceSubtitle}
-                      onChange={e => setAnnonceSubtitle(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                      onChangeText={setAnnonceSubtitle}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
                     />
-                  </div>
-                </div>
+                  </View>
+                </View>
 
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                <View className="grid grid-cols-3 gap-4">
+                  <View className="space-y-2">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                       Catégorie
-                    </label>
+                    </Text>
                     <select
                       value={annonceCategory}
                       onChange={e => setAnnonceCategory(e.target.value)}
@@ -379,26 +372,24 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                         </option>
                       ))}
                     </select>
-                  </div>
+                  </View>
 
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                  <View className="space-y-2">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                       Prix (TND) *
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="1"
-                      value={annoncePrice}
-                      onChange={e => setAnnoncePrice(Number(e.target.value))}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                    </Text>
+                    <TextInput
+                      keyboardType="numeric"
+                      value={String(annoncePrice)}
+                      onChangeText={text => setAnnoncePrice(Number(text))}
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
                     />
-                  </div>
+                  </View>
 
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                  <View className="space-y-2">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                       État
-                    </label>
+                    </Text>
                     <select
                       value={annonceCondition}
                       onChange={e => setAnnonceCondition(e.target.value as any)}
@@ -408,14 +399,14 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       <option value="bon état">Bon état</option>
                       <option value="pour pièces">Pour pièces</option>
                     </select>
-                  </div>
-                </div>
+                  </View>
+                </View>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                <View className="grid grid-cols-2 gap-4">
+                  <View className="space-y-2">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                       Représentation Visuelle
-                    </label>
+                    </Text>
                     <select
                       value={annonceImage}
                       onChange={e => setAnnonceImage(e.target.value)}
@@ -431,59 +422,83 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                         Canalisation / Raccords (Pipes)
                       </option>
                     </select>
-                  </div>
+                  </View>
 
-                  <div className="flex gap-4 items-center justify-around h-full pt-5">
-                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-750 dark:text-slate-350">
-                      <input
-                        type="checkbox"
-                        checked={annonceIsFeatured}
-                        onChange={e => setAnnonceIsFeatured(e.target.checked)}
-                        className="accent-[#F97316] w-4.5 h-4.5"
-                      />
-                      <span>En Vedette</span>
-                    </label>
-                    <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-slate-750 dark:text-slate-350">
-                      <input
-                        type="checkbox"
-                        checked={annonceIsAvailable}
-                        onChange={e => setAnnonceIsAvailable(e.target.checked)}
-                        className="accent-[#F97316] w-4.5 h-4.5"
-                      />
-                      <span>Disponible</span>
-                    </label>
-                  </div>
-                </div>
+                  <View className="flex flex-row gap-4 items-center justify-around h-full pt-5">
+                    <TouchableOpacity
+                      onPress={() => setAnnonceIsFeatured(!annonceIsFeatured)}
+                      className="flex flex-row items-center gap-2"
+                    >
+                      <View
+                        className={`w-5 h-5 rounded border ${
+                          annonceIsFeatured
+                            ? 'bg-[#F97316] border-[#F97316]'
+                            : 'border-slate-300 dark:border-slate-700'
+                        } flex items-center justify-center`}
+                      >
+                        {annonceIsFeatured && (
+                          <Text className="text-white text-[10px] font-bold">
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                      <Text className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                        En Vedette
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => setAnnonceIsAvailable(!annonceIsAvailable)}
+                      className="flex flex-row items-center gap-2"
+                    >
+                      <View
+                        className={`w-5 h-5 rounded border ${
+                          annonceIsAvailable
+                            ? 'bg-[#F97316] border-[#F97316]'
+                            : 'border-slate-300 dark:border-slate-700'
+                        } flex items-center justify-center`}
+                      >
+                        {annonceIsAvailable && (
+                          <Text className="text-white text-[10px] font-bold">
+                            ✓
+                          </Text>
+                        )}
+                      </View>
+                      <Text className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                        Disponible
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
-                <div className="space-y-2">
-                  <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+                <View className="space-y-2">
+                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                     Description technique *
-                  </label>
-                  <textarea
-                    required
-                    rows={3}
+                  </Text>
+                  <TextInput
+                    multiline={true}
+                    numberOfLines={3}
                     placeholder="Détails du produit..."
                     value={annonceDescription}
-                    onChange={e => setAnnonceDescription(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4.5 py-3 text-xs font-semibold focus:outline-none"
+                    onChangeText={setAnnonceDescription}
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
                   />
-                </div>
+                </View>
 
-                <button
-                  type="submit"
+                <TouchableOpacity
+                  onPress={() => handleSaveAnnonce({} as any)}
                   className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
                 >
                   {tCommon(
                     'adminAnnonces.modalSubmit',
                     'Enregistrer les modifications',
                   )}
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
       )}
-    </div>
+    </View>
   );
 };
 export default AdminAnnonces;

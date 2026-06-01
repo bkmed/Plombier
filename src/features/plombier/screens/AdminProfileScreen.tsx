@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useAuth } from '../../../context/AuthContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
@@ -208,142 +209,129 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-      <h1 className="text-3xl font-black tracking-tight">
+    <View className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <Text className="text-3xl font-black tracking-tight">
         {tr('admin.adminProfileTitle')}
-      </h1>
-      <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
+      </Text>
+      <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
         {tr('admin.adminProfileDescription')}
-      </p>
+      </Text>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 items-start">
-        <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 text-center shadow-sm space-y-6">
-          <div className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-[#F97316] mx-auto border-2 border-[#F97316]">
+      <View className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10 items-start">
+        <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 text-center shadow-sm space-y-6">
+          <View className="w-20 h-20 bg-slate-900 rounded-full flex items-center justify-center text-3xl font-black text-[#F97316] mx-auto border-2 border-[#F97316]">
             ★
-          </div>
-          <div>
-            <h3 className="text-base font-black text-slate-850 dark:text-slate-100">
+          </View>
+          <View>
+            <Text className="text-base font-black text-slate-800 dark:text-slate-100">
               {user?.name || tr('admin.defaultAdminName')}
-            </h3>
-            <span className="inline-block mt-1 text-[8.5px] font-black px-3 py-1 rounded-full uppercase bg-amber-100 text-amber-700">
+            </Text>
+            <Text className="inline-block mt-1 text-[8.5px] font-black px-3 py-1 rounded-full uppercase bg-amber-100 text-amber-700">
               {tr('admin.administratorRole')}
-            </span>
-          </div>
-          <div className="text-left text-xs font-semibold text-slate-400 space-y-2 border-t border-slate-100 dark:border-slate-700 pt-4">
-            <div>
+            </Text>
+          </View>
+          <View className="text-left text-xs font-semibold text-slate-400 space-y-2 border-t border-slate-100 dark:border-slate-700 pt-4">
+            <View>
               {tr('common.email')}:{' '}
-              <span className="font-black text-slate-700 dark:text-slate-200">
+              <Text className="font-black text-slate-700 dark:text-slate-200">
                 {profileEmail}
-              </span>
-            </div>
-            <div>
+              </Text>
+            </View>
+            <View>
               {tr('support.whatsapp')}:{' '}
-              <span className="font-black text-slate-700 dark:text-slate-200">
-                {plombierSettings.supportPhone || profilePhone}
-              </span>
-            </div>
-            <div>
+              <Text className="font-black text-slate-700 dark:text-slate-200">
+                {plombierSettings?.supportPhone || profilePhone}
+              </Text>
+            </View>
+            <View>
               {tr('support.email_label')}:{' '}
-              <span className="font-black text-slate-700 dark:text-slate-200">
-                {plombierSettings.supportEmail || profileEmail}
-              </span>
-            </div>
-            <div>
+              <Text className="font-black text-slate-700 dark:text-slate-200">
+                {plombierSettings?.supportEmail || profileEmail}
+              </Text>
+            </View>
+            <View>
               {tr('admin.status')}:{' '}
-              <span className="font-black text-emerald-500">
+              <Text className="font-black text-emerald-500">
                 {tr('admin.active')}
-              </span>
-            </div>
-          </div>
-        </div>
+              </Text>
+            </View>
+          </View>
+        </View>
 
-        <div className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <h3 className="text-sm font-black uppercase tracking-wider">
+        <View className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+          <Text className="text-sm font-black uppercase tracking-wider">
             {tr('admin.contactSecurity')}
-          </h3>
+          </Text>
 
-          <form
-            onSubmit={handleAdminBrandSettingsUpdate}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6"
-          >
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <View className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {tr('admin.businessNameLabel')}
-              </label>
-              <input
-                type="text"
-                required
+              </Text>
+              <TextInput
                 value={businessNameInput}
-                onChange={e => setBusinessNameInput(e.target.value)}
+                onChangeText={setBusinessNameInput}
                 placeholder="Ex: Mohamed Ben Khedher"
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {tr('admin.experienceYearsLabel')}
-              </label>
-              <input
-                type="number"
-                required
-                min="1"
-                max="80"
+              </Text>
+              <TextInput
+                keyboardType="numeric"
                 value={experienceYearsInput}
-                onChange={e => setExperienceYearsInput(e.target.value)}
+                onChangeText={setExperienceYearsInput}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {tr('admin.dispoValLabel')}
-              </label>
-              <input
-                type="text"
+              </Text>
+              <TextInput
                 value={dispoValInput}
-                onChange={e => setDispoValInput(e.target.value)}
+                onChangeText={setDispoValInput}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {tr('admin.govValLabel')}
-              </label>
-              <input
-                type="text"
+              </Text>
+              <TextInput
                 value={govValInput}
-                onChange={e => setGovValInput(e.target.value)}
+                onChangeText={setGovValInput}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="sm:col-span-2">
-              <button
-                type="submit"
+            </View>
+            <View className="sm:col-span-2">
+              <TouchableOpacity
+                onPress={() => handleAdminBrandSettingsUpdate({} as any)}
                 className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
               >
                 {tr('admin.saveBrandIdentity')}
-              </button>
-            </div>
-          </form>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-          <div className="space-y-6 border-b border-slate-100 dark:border-slate-700 pb-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-              <div>
-                <h3 className="text-sm font-black uppercase tracking-wider">
+          <View className="space-y-6 border-b border-slate-100 dark:border-slate-700 pb-6">
+            <View className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <View>
+                <Text className="text-sm font-black uppercase tracking-wider">
                   {tr('admin.interventionZones')}
-                </h3>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                </Text>
+                <Text className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
                   {tr('admin.interventionZonesDescription')}
-                </p>
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                </Text>
+              </View>
+              <Text className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                 {zones.length} {tr('admin.zonesLabel')}
-              </span>
-            </div>
+              </Text>
+            </View>
 
-            <form
-              onSubmit={handleZoneSubmit}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-3"
-            >
+            <View className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <select
                 value={zoneInput}
                 onChange={e => setZoneInput(e.target.value)}
@@ -358,197 +346,179 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                   </option>
                 ))}
               </select>
-              <div className="flex flex-wrap gap-2 items-center">
-                <button
-                  type="submit"
+              <View className="flex flex-wrap gap-2 items-center">
+                <TouchableOpacity
+                  onPress={() => handleZoneSubmit({} as any)}
                   className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-5 py-3 rounded-xl transition shadow-sm uppercase tracking-wider"
                 >
                   {editingZoneIndex !== null
                     ? tr('admin.saveZone')
                     : tr('admin.addZone')}
-                </button>
+                </TouchableOpacity>
                 {editingZoneIndex !== null && (
-                  <button
-                    type="button"
-                    onClick={handleCancelZoneEdit}
+                  <TouchableOpacity
+                    onPress={handleCancelZoneEdit}
                     className="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-xs font-black px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 transition hover:bg-slate-200 dark:hover:bg-slate-800"
                   >
                     {tr('common.cancel')}
-                  </button>
+                  </TouchableOpacity>
                 )}
-              </div>
-            </form>
+              </View>
+            </View>
 
-            <div className="grid grid-cols-1 gap-3">
+            <View className="grid grid-cols-1 gap-3">
               {zones.length > 0 ? (
                 zones.map((zone, index) => (
-                  <div
+                  <View
                     key={`${zone}-${index}`}
                     className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-4 py-3"
                   >
-                    <span className="text-sm font-black text-slate-700 dark:text-slate-100">
+                    <Text className="text-sm font-black text-slate-700 dark:text-slate-100">
                       {zone}
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleEditZone(index)}
+                    </Text>
+                    <View className="flex items-center gap-2">
+                      <TouchableOpacity
+                        onPress={() => handleEditZone(index)}
                         className="text-[10px] font-black uppercase tracking-wider text-[#1E3A5F] hover:underline"
                       >
                         {tr('common.edit')}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteZoneClick(index)}
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => handleDeleteZoneClick(index)}
                         className="text-[10px] font-black uppercase tracking-wider text-rose-500 hover:underline"
                       >
                         {tr('common.delete')}
-                      </button>
-                    </div>
-                  </div>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 ))
               ) : (
-                <div className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-4 py-3 text-slate-500 dark:text-slate-400 text-sm">
+                <View className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-4 py-3 text-slate-500 dark:text-slate-400 text-sm">
                   {tr('admin.noZonesYet')}
-                </div>
+                </View>
               )}
-            </div>
-          </div>
+            </View>
+          </View>
 
-          <form
-            onSubmit={handleAdminProfileUpdate}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6"
-          >
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <View className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {getTranslation('admin.admin_edit_email')}
-              </label>
-              <input
-                type="email"
-                required
+              </Text>
+              <TextInput
+                keyboardType="email-address"
                 value={profileEmail}
-                onChange={e => setProfileEmail(e.target.value)}
+                onChangeText={setProfileEmail}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {getTranslation('admin.admin_edit_phone')}
-              </label>
-              <input
-                type="tel"
-                required
+              </Text>
+              <TextInput
+                keyboardType="phone-pad"
                 value={profilePhone}
-                onChange={e => setProfilePhone(e.target.value)}
+                onChangeText={setProfilePhone}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {getTranslation('support.email_label')}
-              </label>
-              <input
-                type="email"
-                required
+              </Text>
+              <TextInput
+                keyboardType="email-address"
                 value={supportEmailInput}
-                onChange={e => setSupportEmailInput(e.target.value)}
+                onChangeText={setSupportEmailInput}
                 placeholder="support@plombier-tunisie.tn"
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {getTranslation('support.whatsapp')}
-              </label>
-              <input
-                type="tel"
-                required
+              </Text>
+              <TextInput
+                keyboardType="phone-pad"
                 value={supportPhoneInput}
-                onChange={e => setSupportPhoneInput(e.target.value)}
+                onChangeText={setSupportPhoneInput}
                 placeholder="+216 22 456 789"
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-            <div className="sm:col-span-2">
-              <button
-                type="submit"
+            </View>
+            <View className="sm:col-span-2">
+              <TouchableOpacity
+                onPress={() => handleAdminProfileUpdate({} as any)}
                 className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
               >
                 {tr('admin.saveContactDetails')}
-              </button>
-            </div>
-          </form>
+              </TouchableOpacity>
+            </View>
+          </View>
 
-          <form
-            onSubmit={e => {
-              e.preventDefault();
-              showToast(tr('admin.adminPasswordUpdated'), 'success');
-            }}
-            className="space-y-4"
-          >
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <View className="space-y-4">
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {tr('admin.newAdminPassword')}
-              </label>
-              <input
-                type="password"
-                required
+              </Text>
+              <TextInput
+                secureTextEntry
                 placeholder="Ex: admin123"
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
               />
-            </div>
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+            </View>
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                 {tr('admin.confirmPassword')}
-              </label>
-              <input
-                type="password"
-                required
+              </Text>
+              <TextInput
+                secureTextEntry
                 placeholder="Ex: admin123"
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
               />
-            </div>
-            <button
-              type="submit"
+            </View>
+            <TouchableOpacity
+              onPress={() =>
+                showToast(tr('admin.adminPasswordUpdated'), 'success')
+              }
               className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-sm uppercase tracking-wider"
             >
               {tr('admin.updateSecurity')}
-            </button>
-          </form>
-        </div>
-      </div>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
 
       {showZoneDeleteConfirm && zoneToDelete !== null && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
-            <div>
-              <h3 className="text-xl font-black text-slate-900 dark:text-white">
+        <View className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+          <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-[28px] max-w-sm w-full shadow-2xl p-6 text-center space-y-6">
+            <View>
+              <Text className="text-xl font-black text-slate-900 dark:text-white">
                 {tr('admin.confirmDelete')}
-              </h3>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+              </Text>
+              <Text className="text-sm text-slate-500 dark:text-slate-400 mt-2">
                 {tr('admin.confirmDeleteZone')}
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <button
-                type="button"
-                onClick={cancelDeleteZone}
+              </Text>
+            </View>
+            <View className="flex gap-3">
+              <TouchableOpacity
+                onPress={cancelDeleteZone}
                 className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
               >
                 {tr('admin.cancelButton')}
-              </button>
-              <button
-                type="button"
-                onClick={confirmDeleteZone}
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={confirmDeleteZone}
                 className="flex-1 bg-rose-600 text-white rounded-xl px-4 py-3 font-black hover:bg-rose-700 transition"
               >
                 {tr('admin.deleteButton')}
-              </button>
-            </div>
-          </div>
-        </div>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
       )}
-    </div>
+    </View>
   );
 };
 

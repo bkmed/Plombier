@@ -21,7 +21,9 @@ const normalizePersistedServices = createTransform(
       items: inboundState.items.map((service, idx) => {
         let id = service.id;
         if (!id || seenIds.has(id)) {
-          id = `srv-${Date.now()}-${idx}-${Math.floor(Math.random() * 1000000)}`;
+          id = `srv-${Date.now()}-${idx}-${Math.floor(
+            Math.random() * 1000000,
+          )}`;
         }
         seenIds.add(id);
         return { ...service, id };
@@ -93,7 +95,11 @@ const persistConfig = {
   transforms: [normalizePersistedServices],
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const persistedReducer = persistReducer(
+  persistConfig,
+  rootReducer as any,
+) as typeof rootReducer;
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -107,5 +113,5 @@ export const store = configureStore({
 
 export const persistor = persistStore(store);
 
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;

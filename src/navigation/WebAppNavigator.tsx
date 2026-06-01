@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
@@ -65,16 +66,19 @@ export const AppNavigator = () => {
   const reduxCategories = useSelector(
     (state: RootState) => state.categories?.items || [],
   );
-  const usersList = useSelector(
-    (state: RootState) => state.users?.items || [],
-  );
+  const usersList = useSelector((state: RootState) => state.users?.items || []);
   const galleryItems = useSelector(
     (state: RootState) => state.gallery?.items || [],
   );
   const plombierSettings =
     useSelector((state: RootState) => state.plombierSettings) || ({} as any);
   const uiState = useSelector((state: RootState) => state.ui) || ({} as any);
-  const { currentLang = 'FR', currentTheme = 'light', activeTab = 'Accueil', bypassAuth = false } = uiState;
+  const {
+    currentLang = 'FR',
+    currentTheme = 'light',
+    activeTab = 'Accueil',
+    bypassAuth = false,
+  } = uiState;
 
   const { sessionUser, currentRole } =
     useSelector((state: RootState) => (state as any).webSession) || {};
@@ -94,8 +98,11 @@ export const AppNavigator = () => {
   const isRTL = i18n.language === 'ar';
   const businessName = plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
-  const dispoVal = plombierSettings.dispoVal || translate('web.dispo_val', { defaultValue: '24/7' });
-  const govVal = plombierSettings.govVal || translate('web.gov_val', { defaultValue: '24' });
+  const dispoVal =
+    plombierSettings.dispoVal ||
+    translate('web.dispo_val', { defaultValue: '24/7' });
+  const govVal =
+    plombierSettings.govVal || translate('web.gov_val', { defaultValue: '24' });
   const languageOrder: Array<'FR' | 'AR' | 'EN'> = ['FR', 'AR', 'EN'];
   const nextLanguage =
     languageOrder[
@@ -328,13 +335,12 @@ export const AppNavigator = () => {
   }, [businessName]);
 
   return (
-    <div
+    <View
       className={`min-h-screen font-sans antialiased transition-colors duration-300 ${
         currentTheme === 'dark'
           ? 'bg-[#0B0F19] text-slate-100'
           : 'bg-slate-50 text-slate-800'
       }`}
-      dir={isRTL ? 'rtl' : 'ltr'}
     >
       <WebSplashScreen
         showSplash={showSplash}
@@ -421,9 +427,9 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'Gallery' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+            <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
               <GalleryScreen />
-            </div>
+            </View>
           )}
 
           {activeTab === 'Profile' && (
@@ -476,15 +482,15 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'AdminGallery' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+            <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
               <AdminGalleryEditor />
-            </div>
+            </View>
           )}
 
           {activeTab === 'AdminServices' && (
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+            <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
               <AdminServicesEditor />
-            </div>
+            </View>
           )}
 
           {activeTab === 'GestionUser' && (
@@ -492,7 +498,10 @@ export const AppNavigator = () => {
           )}
 
           {activeTab === 'AdminProfile' && (
-            <AdminProfileScreen currentLang={currentLang} t={translate} />
+            <AdminProfileScreen
+              currentLang={currentLang as any}
+              t={translate}
+            />
           )}
 
           {activeTab === 'Analytics' && <AdminAnalyticsScreen t={translate} />}
@@ -518,7 +527,7 @@ export const AppNavigator = () => {
           setActiveTab={setActiveTab}
         />
       )}
-    </div>
+    </View>
   );
 };
 export default AppNavigator;

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import {
@@ -188,10 +189,7 @@ const MarketplaceScreen = ({
     });
   }, [filteredProducts, sortBy]);
 
-  const toggleFavorite = (
-    id: string,
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
+  const toggleFavorite = (id: string, event: any) => {
     event.stopPropagation();
     dispatch(toggleFavoriteAction(id));
     if (favorites.includes(id)) {
@@ -202,154 +200,171 @@ const MarketplaceScreen = ({
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
-        <div>
-          <h1 className="text-3xl font-black tracking-tight">
+    <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <View className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+        <View>
+          <Text className="text-3xl font-black tracking-tight">
             {tCommon('pieces')}
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
+          </Text>
+          <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
             {tCommon('web.marketplaceIntro')}
-          </p>
-        </div>
+          </Text>
+        </View>
 
-        <div className="flex items-center gap-3">
-          <span className="text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+        <View className="flex items-center gap-3">
+          <Text className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
             {tCommon('tri')} :
-          </span>
+          </Text>
           <select
             value={sortBy}
             onChange={e => setSortBy(e.target.value)}
-            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-850 dark:text-slate-250 focus:outline-none"
+            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none"
           >
             <option value="featured">{tCommon('recommande')}</option>
             <option value="price_asc">{tCommon('prix_croissant')}</option>
             <option value="price_desc">{tCommon('prix_decroissant')}</option>
           </select>
-        </div>
-      </div>
+        </View>
+      </View>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        <div className="lg:col-span-3 space-y-6">
-          <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
-            <h3 className="text-sm font-black uppercase tracking-wider">
+      <View className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <View className="lg:col-span-3 space-y-6">
+          <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
+            <Text className="text-sm font-black uppercase tracking-wider">
               {tCommon('filtres')}
-            </h3>
+            </Text>
 
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                 {tCommon('rechercher')}
-              </label>
-              <input
-                type="text"
+              </Text>
+              <TextInput
                 placeholder={tCommon('web.marketplaceSearchPlaceholder')}
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChangeText={setSearchQuery}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
+            </View>
 
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                 {tCommon('web.categories')}
-              </label>
-              <div className="space-y-1.5">
-                <button
-                  type="button"
-                  onClick={() => setSelectedCategoryFilter('Toutes')}
+              </Text>
+              <View className="space-y-1.5">
+                <TouchableOpacity
+                  onPress={() => setSelectedCategoryFilter('Toutes')}
                   className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition ${
                     selectedCategoryFilter === 'Toutes'
                       ? 'bg-[#1E3A5F] text-white shadow-sm'
-                      : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
+                      : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`}
                 >
-                  {tCommon('toutes_categories')}
-                </button>
+                  <Text
+                    className={`font-bold ${
+                      selectedCategoryFilter === 'Toutes'
+                        ? 'text-white'
+                        : 'text-slate-500'
+                    }`}
+                  >
+                    {tCommon('toutes_categories')}
+                  </Text>
+                </TouchableOpacity>
                 {reduxCategories.map(cat => (
-                  <button
+                  <TouchableOpacity
                     key={cat.id}
-                    type="button"
-                    onClick={() => setSelectedCategoryFilter(cat.name)}
+                    onPress={() => setSelectedCategoryFilter(cat.name)}
                     className={`w-full text-left px-3.5 py-2 rounded-xl text-xs font-bold transition ${
                       selectedCategoryFilter === cat.name
                         ? 'bg-[#1E3A5F] text-white shadow-sm'
-                        : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-750'
+                        : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700'
                     }`}
                   >
-                    {cat.name}
-                  </button>
+                    <Text
+                      className={`font-bold ${
+                        selectedCategoryFilter === cat.name
+                          ? 'text-white'
+                          : 'text-slate-500'
+                      }`}
+                    >
+                      {cat.name}
+                    </Text>
+                  </TouchableOpacity>
                 ))}
-              </div>
-            </div>
+              </View>
+            </View>
 
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-slate-450 uppercase tracking-widest">
+            <View className="space-y-2">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                 {tCommon('etat')}
-              </label>
-              <div className="grid grid-cols-2 gap-2 text-center">
+              </Text>
+              <View className="grid grid-cols-2 gap-2 text-center">
                 {['Tous', 'comme neuf', 'bon état', 'pour pièces'].map(cond => (
-                  <button
-                    type="button"
+                  <TouchableOpacity
                     key={cond}
-                    onClick={() => setSelectedConditionFilter(cond)}
+                    onPress={() => setSelectedConditionFilter(cond)}
                     className={`px-2 py-2 rounded-xl border text-[10px] font-black capitalize transition leading-none ${
                       selectedConditionFilter === cond
                         ? 'bg-[#1E3A5F] border-[#1E3A5F] text-white'
-                        : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-350'
+                        : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-500 hover:border-slate-300'
                     }`}
                   >
-                    {cond === 'Tous'
-                      ? tCommon('tous')
-                      : tCommon(`web.conditions.${cond}`)}
-                  </button>
+                    <Text
+                      className={`text-[10px] font-black text-center ${
+                        selectedConditionFilter === cond
+                          ? 'text-white'
+                          : 'text-slate-500'
+                      }`}
+                    >
+                      {cond === 'Tous'
+                        ? tCommon('tous')
+                        : tCommon(`web.conditions.${cond}`)}
+                    </Text>
+                  </TouchableOpacity>
                 ))}
-              </div>
-            </div>
+              </View>
+            </View>
 
-            <div className="space-y-3">
-              <div className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                <span>
+            <View className="space-y-3">
+              <View className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <Text>
                   {tCommon('prix')} {tCommon('web.maxLabel')}
-                </span>
-                <span className="text-[#F97316]">
+                </Text>
+                <Text className="text-[#F97316]">
                   {priceMax} {tCommon('web.tndSymbol')}
-                </span>
-              </div>
-              <input
-                type="range"
-                min="10"
-                max="1000"
-                step="10"
-                value={priceMax}
-                onChange={e => setPriceMax(Number(e.target.value))}
-                className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-[#F97316]"
+                </Text>
+              </View>
+              <TextInput
+                keyboardType="numeric"
+                value={priceMax.toString()}
+                onChangeText={text => setPriceMax(Number(text) || 0)}
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none focus:border-[#F97316]"
               />
-            </div>
-          </div>
-        </div>
+            </View>
+          </View>
+        </View>
 
-        <div className="lg:col-span-9">
+        <View className="lg:col-span-9">
           {sortedProducts.length === 0 ? (
-            <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
-              <p className="text-sm text-slate-400 font-bold">
+            <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
+              <Text className="text-sm text-slate-400 font-bold">
                 {tCommon('aucun_produit')}
-              </p>
-            </div>
+              </Text>
+            </View>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+            <View className="grid grid-cols-2 sm:grid-cols-3 gap-6">
               {sortedProducts.map(prod => (
-                <div
+                <TouchableOpacity
                   key={prod.id}
-                  onClick={() => setSelectedProduct(prod)}
+                  onPress={() => setSelectedProduct(prod)}
                   className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg hover:border-[#1E3A5F] dark:hover:border-slate-500 transition-all duration-300 group flex flex-col justify-between cursor-pointer"
                 >
-                  <div className="bg-slate-50 dark:bg-slate-900 py-10 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 relative">
-                    <span className="absolute top-3 right-3 z-10 bg-slate-200 dark:bg-slate-750 text-slate-700 dark:text-slate-350 text-[8.5px] font-extrabold uppercase px-2 py-0.5 rounded-full">
+                  <View className="bg-slate-50 dark:bg-slate-900 py-10 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 relative">
+                    <Text className="absolute top-3 right-3 z-10 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[8.5px] font-extrabold uppercase px-2 py-0.5 rounded-full">
                       {prod.condition}
-                    </span>
+                    </Text>
 
-                    <button
-                      onClick={e => toggleFavorite(prod.id, e)}
+                    <TouchableOpacity
+                      onPress={e => toggleFavorite(prod.id, e)}
                       className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
                     >
                       <svg
@@ -367,50 +382,46 @@ const MarketplaceScreen = ({
                       >
                         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                       </svg>
-                    </button>
+                    </TouchableOpacity>
 
                     <ProductVisual image={prod.image} />
-                  </div>
+                  </View>
 
-                  <div className="p-4 text-left flex-1 flex flex-col justify-between">
-                    <div>
-                      <span className="text-[9px] font-black text-slate-450 uppercase tracking-wider">
+                  <View className="p-4 text-left flex-1 flex flex-col justify-between">
+                    <View>
+                      <Text className="text-[9px] font-black text-slate-500 uppercase tracking-wider">
                         {prod.category}
-                      </span>
-                      <h4 className="text-xs sm:text-sm font-black text-slate-850 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
+                      </Text>
+                      <Text className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
                         {prod.title}
-                      </h4>
-                      <p className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">
+                      </Text>
+                      <Text className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">
                         {prod.subtitle}
-                      </p>
-                    </div>
+                      </Text>
+                    </View>
 
-                    <div className="flex items-center justify-between border-t border-slate-50 dark:border-slate-750 pt-3 mt-4">
-                      <div className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-250">
+                    <View className="flex items-center justify-between border-t border-slate-50 dark:border-slate-700 pt-3 mt-4">
+                      <View className="text-xs sm:text-sm font-black text-slate-800 dark:border-slate-700 text-slate-200">
                         {prod.price}{' '}
-                        <span className="text-[9.5px] font-bold">
+                        <Text className="text-[9.5px] font-bold">
                           {tCommon('web.tndSymbol')}
-                        </span>
-                      </div>
+                        </Text>
+                      </View>
 
-                      <button
-                        onClick={e => {
-                          e.stopPropagation();
-                          setSelectedProduct(prod);
-                        }}
-                        className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition"
-                      >
-                        {tCommon('web.home.call_to_buy')}
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                      <View className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition">
+                        <Text className="text-white font-black text-[10px]">
+                          {tCommon('web.home.call_to_buy')}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               ))}
-            </div>
+            </View>
           )}
-        </div>
-      </div>
-    </div>
+        </View>
+      </View>
+    </View>
   );
 };
 

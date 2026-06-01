@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../store';
-import { updatePlombierSettings } from '../../../store/slices/plombierSettingsSlice';
+import React from 'react';
+import { View, Text } from 'react-native';
 
 interface AdminDashboardProps {
   businessName: string;
@@ -21,39 +19,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const tCommon = (key: string, defaultValue: string) =>
     t(key, { defaultValue });
 
-  const dispatch = useDispatch();
-  const plombierSettings = useSelector((state: RootState) => state.plombierSettings);
-  const [experience, setExperience] = useState<number>(plombierSettings.experienceYears || 15);
-  const [dispo, setDispo] = useState<string>(plombierSettings.dispoVal || '24/7');
-  const [gov, setGov] = useState<string>(plombierSettings.govVal || '24');
-
-  const saveSettings = () => {
-    dispatch(
-      updatePlombierSettings({
-        experienceYears: Number(experience) || 0,
-        dispoVal: dispo,
-        govVal: gov,
-      }),
-    );
-    alert(tCommon('admin.settingsSaved', 'Settings saved'));
-  };
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-      <h1 className="text-3xl font-black tracking-tight text-slate-850 dark:text-white">
+    <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <Text className="text-3xl font-black tracking-tight text-slate-800 dark:text-white">
         {tCommon('admin.dashboardTitle', 'Admin dashboard')}
-      </h1>
-      <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
+      </Text>
+      <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
         {tCommon(
           'admin.dashboardDescription',
           `View current activity metrics and stock status for ${businessName}.`,
         )}
-      </p>
-
-      
+      </Text>
 
       {/* Metrics cards row */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+      <View className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
         {[
           {
             title: tCommon('admin.activeListingsTitle', 'Active listings'),
@@ -80,30 +59,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             color: 'border-l-4 border-rose-500',
           },
         ].map((m, idx) => (
-          <div
+          <View
             key={idx}
             className={`bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm ${m.color}`}
           >
-            <span className="text-[10px] font-black text-slate-450 dark:text-slate-400 uppercase tracking-widest">
+            <Text className="text-[10px] font-black text-slate-500 dark:text-slate-400 uppercase tracking-widest">
               {m.title}
-            </span>
-            <h3 className="text-3xl font-black text-slate-850 dark:text-white mt-2 leading-none">
+            </Text>
+            <Text className="text-3xl font-black text-slate-800 dark:text-white mt-2 leading-none">
               {m.val}
-            </h3>
-            <p className="text-[10px] text-slate-400 mt-2 font-semibold">
+            </Text>
+            <Text className="text-[10px] text-slate-400 mt-2 font-semibold">
               {m.desc}
-            </p>
-          </div>
+            </Text>
+          </View>
         ))}
-      </div>
+      </View>
 
       {/* Activity Ledgers / System logs */}
-      <div className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm mt-10">
-        <h3 className="text-base font-black text-slate-850 dark:text-white mb-6">
+      <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm mt-10">
+        <Text className="text-base font-black text-slate-800 dark:text-white mb-6">
           {tCommon('admin.recentActivityTitle', 'Recent admin action history')}
-        </h3>
+        </Text>
 
-        <div className="space-y-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
+        <View className="space-y-4 text-xs font-semibold text-slate-500 dark:text-slate-400">
           {[
             {
               log: tCommon(
@@ -146,12 +125,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400',
             },
           ].map((l, idx) => (
-            <div
+            <View
               key={idx}
-              className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-750 pb-3 last:border-b-0 last:pb-0"
+              className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-700 pb-3 last:border-b-0 last:pb-0"
             >
-              <div className="flex items-center gap-3">
-                <span
+              <View className="flex items-center gap-3">
+                <Text
                   className={`px-2.5 py-1 rounded-md text-[9px] font-black uppercase tracking-wider ${
                     l.badge === 'Intervention'
                       ? 'bg-rose-100 text-rose-600'
@@ -161,17 +140,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   }`}
                 >
                   {l.badge}
-                </span>
-                <p className="text-slate-800 dark:text-slate-200">{l.log}</p>
-              </div>
-              <span className="text-[10px] text-slate-400 whitespace-nowrap">
+                </Text>
+                <Text className="text-slate-800 dark:text-slate-200">
+                  {l.log}
+                </Text>
+              </View>
+              <Text className="text-[10px] text-slate-400 whitespace-nowrap">
                 {l.time}
-              </span>
-            </div>
+              </Text>
+            </View>
           ))}
-        </div>
-      </div>
-    </div>
+        </View>
+      </View>
+    </View>
   );
 };
 export default AdminDashboard;
