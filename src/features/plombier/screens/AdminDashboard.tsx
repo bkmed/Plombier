@@ -16,8 +16,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   usersList,
   t,
 }) => {
-  const tCommon = (key: string, defaultValue: string) =>
-    t(key, { defaultValue });
+  const tCommon = (key: string, defaultValue: string, options?: Record<string, any>) =>
+    t(key, { defaultValue, ...options });
 
   return (
     <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
@@ -28,6 +28,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         {tCommon(
           'admin.dashboardDescription',
           `View current activity metrics and stock status for ${businessName}.`,
+          { businessName }
         )}
       </Text>
 
