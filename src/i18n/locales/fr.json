@@ -1224,6 +1224,7 @@
     "mon_profil": "Mon profil",
     "paiement": "Paiement",
     "admin": "Admin",
+    "manage": "Gérer",
     "tagline": "Plomberie · Climatisation · Gaz · Chauffage",
     "whatsapp_msg": "Bonjour, j'ai besoin d'un plombier.",
     "devis_msg": "Bonjour, je souhaite demander un devis pour le service : ",
@@ -1542,6 +1543,9 @@
   "common_hardcoded": {
     "logout_success": "Déconnexion réussie! A bientôt.",
     "urgent": "URGENT",
-    "loading_premium": "Chargement premium..."
+    "loading_premium": "Chargement premium...",
+     "web": {
+      "manage": "Manage"
+    }
   }
 }

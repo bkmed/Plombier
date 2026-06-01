@@ -1317,6 +1317,7 @@
     "adminUsersLabel": "المستخدمين",
     "adminProfileLabel": "الملف",
     "adminAnalyticsLabel": "التحليلات",
+    "manage": "إدارة",
     "authLoginRegisterButton": "تسجيل الدخول / التسجيل",
     "logoutButton": "خروج",
     "passwordsMismatch": "كلمات المرور غير متطابقة",
@@ -1542,6 +1543,9 @@
   "common_hardcoded": {
     "logout_success": "تم تسجيل خروجك بنجاح",
     "urgent": "حالة طوارئ قصوى",
-    "loading_premium": "جاري تحميل التطبيق الفاخر..."
+    "loading_premium": "جاري تحميل التطبيق الفاخر...",
+     "web": {
+      "manage": "إدارة"
+    }
   }
 }

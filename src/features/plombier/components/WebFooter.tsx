@@ -28,7 +28,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({
     t(key, { defaultValue: fallback });
 
   const openWhatsApp = () => {
-    const msg = tc('whatsapp_msg', "Bonjour, j'ai besoin d'un plombier.");
+    const msg = tc('web.whatsapp_msg', "Bonjour, j'ai besoin d'un plombier.");
     const url = `https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
       msg,
     )}`;
@@ -55,7 +55,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({
             </Text>
             <Text className="text-xs leading-relaxed font-semibold">
               {tc(
-                'foot_desc',
+                'web.foot_desc',
                 'Votre expert en plomberie, climatisation et gaz en Tunisie.',
               )}
             </Text>
@@ -73,7 +73,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({
         <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800 mt-10 pt-6 text-center text-xs font-bold">
           <Text>
             {tc(
-              'credits',
+              'web.credits',
               `© ${new Date().getFullYear()} ${businessName}. Tous droits réservés.`,
             )}
           </Text>

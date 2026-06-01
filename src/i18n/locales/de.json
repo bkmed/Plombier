@@ -1224,6 +1224,7 @@
     "mon_profil": "Profile",
     "paiement": "Payment",
     "admin": "Admin",
+    "manage": "Verwalten",
     "tagline": "Plumbing · Air Conditioning · Gaz · Heating",
     "whatsapp_msg": "Hello, I need a plumber.",
     "devis_msg": "Hello, I would like to request a quote for: ",
@@ -1542,6 +1543,9 @@
   "common_hardcoded": {
     "logout_success": "Logout successful! See you soon.",
     "urgent": "URGENT",
-    "loading_premium": "Loading premium..."
+    "loading_premium": "Loading premium...",
+    "web": {
+      "manage": "Verwalten"
+    }
   }
 }

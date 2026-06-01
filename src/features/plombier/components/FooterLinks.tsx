@@ -70,7 +70,7 @@ export const FooterLinks = ({
           {currentRole === 'admin' && (
             <TouchableOpacity onPress={() => setActiveTab('AdminManage')}>
               <Text className="text-slate-600 dark:text-slate-300 hover:text-[#F97316]">
-                {t('web.manage', { defaultValue: 'Manage' })}
+                {t('web.manage')}
               </Text>
             </TouchableOpacity>
           )}

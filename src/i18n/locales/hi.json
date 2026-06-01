@@ -1317,6 +1317,7 @@
     "adminUsersLabel": "Manage users",
     "adminProfileLabel": "Profile",
     "adminAnalyticsLabel": "Analytics",
+    "manage": "प्रबंधित करें",
     "authLoginRegisterButton": "Login / Register",
     "logoutButton": "Logout",
     "passwordsMismatch": "Passwords do not match",
@@ -1542,6 +1543,9 @@
   "common_hardcoded": {
     "logout_success": "Logout successful! See you soon.",
     "urgent": "URGENT",
-    "loading_premium": "Loading premium..."
+    "loading_premium": "Loading premium...",
+    "web": {
+      "manage": "प्रबंधित करें"
+    }
   }
 }
