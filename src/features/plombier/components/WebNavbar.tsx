@@ -30,7 +30,6 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
   sessionUser,
   activeTab,
   isRTL,
-  galleryManageLabel,
   galleryTitle,
   t,
   setActiveTab,
@@ -69,29 +68,9 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
       icon: '🏠',
     },
     {
-      id: 'GestionAnnonce',
-      label: tCommon('web.manageAds', 'Annonces'),
-      icon: '📢',
-    },
-    {
-      id: 'GestionCategorie',
-      label: tCommon('web.manageCategories', 'Catégories'),
-      icon: '🗂️',
-    },
-    {
-      id: 'AdminGallery',
-      label: tCommon('web.gallery.manageGallery', galleryManageLabel),
-      icon: '🖼️',
-    },
-    {
-      id: 'AdminServices',
-      label: tCommon('web.servicesLabel', 'Services'),
-      icon: '🔧',
-    },
-    {
-      id: 'GestionUser',
-      label: tCommon('web.manageUsers', 'Membres'),
-      icon: '👥',
+      id: 'AdminManage',
+      label: tCommon('web.manage', 'Manage'),
+      icon: '⚙️',
     },
     {
       id: 'AdminProfile',

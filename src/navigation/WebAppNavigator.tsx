@@ -43,6 +43,7 @@ import AdminProfileScreen from '../features/plombier/screens/AdminProfileScreen'
 import AdminAnalyticsScreen from '../features/plombier/screens/AdminAnalyticsScreen';
 import AdminGalleryEditor from '../features/plombier/screens/AdminGalleryEditor';
 import AdminServicesEditor from '../features/plombier/screens/AdminServicesEditor';
+import AdminManage from '../features/plombier/screens/AdminManage';
 
 import {
   Role,
@@ -470,6 +471,13 @@ export const AppNavigator = () => {
               products={products}
               reduxCategories={reduxCategories}
               usersList={usersList}
+            />
+          )}
+
+          {activeTab === 'AdminManage' && (
+            <AdminManage
+              t={translate}
+              setActiveTab={setActiveTab}
             />
           )}
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { setActiveTab } from '../../../store/slices/uiSlice';
 import {
   addListing,
   updateListing,
@@ -190,6 +191,16 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
 
   return (
     <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <TouchableOpacity
+        onPress={() => dispatch(setActiveTab('AdminManage'))}
+        className="mb-6 bg-slate-200 dark:bg-slate-700 px-4 py-2 rounded-xl self-start"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
+          ← Retour à Manage
+        </Text>
+      </TouchableOpacity>
+
       <View className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
         <View>
           <Text className="text-3xl font-black tracking-tight">
@@ -212,10 +223,11 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       </View>
 
       {/* Listings Admin Table */}
-      <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden">
-        <View className="overflow-x-auto">
-          <table className="w-full text-xs text-left font-semibold">
-            <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
+      <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
+        {/* Desktop Table View */}
+        <View className="hidden lg:block overflow-x-auto w-full">
+          <table className="w-full min-w-[800px] text-xs text-left font-semibold">
+            <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400 whitespace-nowrap">
               <tr>
                 <th className="px-6 py-4">
                   {tCommon('adminAnnonces.columnPiece', 'Pièce')}
@@ -239,19 +251,21 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
               {paginatedProducts.map(prod => (
                 <tr
                   key={prod.id}
-                  className="hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition"
+                  className="hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition whitespace-nowrap"
                 >
-                  <td className="px-6 py-4 flex items-center gap-3">
-                    <View className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
-                      <ProductVisual image={prod.image} className="w-6 h-6" />
-                    </View>
-                    <View>
-                      <View className="font-black text-slate-800 dark:text-slate-100">
-                        {prod.title}
+                  <td className="px-6 py-4">
+                    <View className="flex flex-row items-center gap-3">
+                      <View className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                        <ProductVisual image={prod.image} className="w-6 h-6" />
                       </View>
-                      <Text className="text-[10px] text-slate-400 font-semibold">
-                        {prod.subtitle}
-                      </Text>
+                      <View>
+                        <View className="font-black text-slate-800 dark:text-slate-100">
+                          {prod.title}
+                        </View>
+                        <Text className="text-[10px] text-slate-400 font-semibold">
+                          {prod.subtitle}
+                        </Text>
+                      </View>
                     </View>
                   </td>
                   <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
@@ -277,7 +291,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     </Text>
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <View className="flex justify-center gap-2">
+                    <View className="flex flex-row justify-center gap-2">
                       <TouchableOpacity
                         onPress={() => openEditAnnonce(prod)}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition"
@@ -296,6 +310,64 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
               ))}
             </tbody>
           </table>
+        </View>
+
+        {/* Mobile Card View */}
+        <View className="flex flex-col lg:hidden divide-y divide-slate-100 dark:divide-slate-700">
+          {paginatedProducts.map(prod => (
+            <View key={prod.id} className="p-4 flex flex-col gap-4 hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition">
+              <View className="flex flex-row items-center justify-between gap-2">
+                <View className="flex flex-row items-center gap-3 flex-1">
+                  <View className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-900 flex items-center justify-center shrink-0">
+                    <ProductVisual image={prod.image} className="w-7 h-7" />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="font-black text-slate-800 dark:text-slate-100 text-[13px]">
+                      {prod.title}
+                    </Text>
+                    <Text className="text-[10px] text-slate-400 font-semibold mt-0.5">
+                      {prod.category} • {prod.subtitle}
+                    </Text>
+                  </View>
+                </View>
+                <Text className="font-black text-sm text-right shrink-0">{prod.price} TND</Text>
+              </View>
+
+              <View className="flex flex-row items-center justify-between">
+                <View className="flex flex-row gap-2">
+                  <Text className="bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-300">
+                    {prod.condition}
+                  </Text>
+                  <Text
+                    className={`px-2 py-1 rounded text-[10px] font-black uppercase ${
+                      prod.isAvailable
+                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-500/10'
+                        : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-500/10'
+                    }`}
+                  >
+                    {prod.isAvailable
+                      ? tCommon('adminAnnonces.available', 'Disponible')
+                      : tCommon('adminAnnonces.sold', 'Vendu')}
+                  </Text>
+                </View>
+
+                <View className="flex flex-row gap-2">
+                  <TouchableOpacity
+                    onPress={() => openEditAnnonce(prod)}
+                    className="bg-blue-600 hover:bg-blue-700 w-8 h-8 flex items-center justify-center rounded-lg transition shadow-sm"
+                  >
+                    <Text className="text-white text-xs">✏️</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteAnnonceClick(prod.id)}
+                    className="bg-rose-600 hover:bg-rose-700 w-8 h-8 flex items-center justify-center rounded-lg transition shadow-sm"
+                  >
+                    <Text className="text-white text-xs">🗑️</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          ))}
         </View>
 
         {totalPages > 1 || products.length > 5 ? (

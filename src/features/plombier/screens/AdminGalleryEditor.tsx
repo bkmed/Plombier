@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { setActiveTab } from '../../../store/slices/uiSlice';
 import CategoryImageInput from '../components/CategoryImageInput';
 import {
   addGalleryItem,
@@ -155,6 +156,16 @@ const AdminGalleryEditor = () => {
 
   return (
     <View className="space-y-8">
+      <TouchableOpacity
+        onPress={() => dispatch(setActiveTab('AdminManage'))}
+        className="mb-6 bg-slate-200 dark:bg-slate-700 px-4 py-2 rounded-xl self-start"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
+          ← Retour à Manage
+        </Text>
+      </TouchableOpacity>
+
       <View className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <View className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <View>

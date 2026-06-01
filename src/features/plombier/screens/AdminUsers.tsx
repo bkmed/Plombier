@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { updateUser, deleteUser } from '../../../store/slices/usersSlice';
+import { setActiveTab } from '../../../store/slices/uiSlice';
 
 interface AdminUsersProps {
   showToast: any;
@@ -146,6 +147,16 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
 
   return (
     <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <TouchableOpacity
+        onPress={() => dispatch(setActiveTab('AdminManage'))}
+        className="mb-6 bg-slate-200 dark:bg-slate-700 px-4 py-2 rounded-xl self-start"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
+          ← Retour à Manage
+        </Text>
+      </TouchableOpacity>
+
       <Text className="text-3xl font-black tracking-tight">
         {tCommon('adminUsers.title', 'Gestion des Comptes Membres')}
       </Text>

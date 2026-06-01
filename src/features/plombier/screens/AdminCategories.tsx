@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
+import { setActiveTab } from '../../../store/slices/uiSlice';
 import {
   addCategory,
   updateCategory,
@@ -194,6 +195,16 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
 
   return (
     <View className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+      <TouchableOpacity
+        onPress={() => dispatch(setActiveTab('AdminManage'))}
+        className="mb-6 bg-slate-200 dark:bg-slate-700 px-4 py-2 rounded-xl self-start"
+        style={{ alignSelf: 'flex-start' }}
+      >
+        <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
+          ← Retour à Manage
+        </Text>
+      </TouchableOpacity>
+
       <Text className="text-3xl font-black tracking-tight">
         {tCommon('adminCategories.title', 'Gestion des Catégories')}
       </Text>
@@ -246,8 +257,9 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
 
       {/* Categories list table */}
       <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
-        <table className="w-full text-xs text-left font-semibold">
-          <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
+        <View className="overflow-x-auto w-full">
+          <table className="w-full min-w-[600px] text-xs text-left font-semibold">
+            <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400 whitespace-nowrap">
             <tr>
               <th className="px-6 py-4">Nom de la Catégorie</th>
               <th className="px-6 py-4">Nombre d'Articles</th>
@@ -262,10 +274,10 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
               return (
                 <tr
                   key={cat.id}
-                  className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition"
+                  className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition whitespace-nowrap"
                 >
                   <td className="px-6 py-4">
-                    <View className="flex items-center gap-3">
+                    <View className="flex flex-row items-center gap-3">
                       {cat.imageUri ? (
                         <img
                           src={cat.imageUri}
@@ -282,7 +294,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                     {count} articles
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <View className="flex justify-center gap-2">
+                    <View className="flex flex-row justify-center gap-2">
                       <TouchableOpacity
                         onPress={() => openEditCategoryModal(cat)}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
@@ -304,6 +316,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
             })}
           </tbody>
         </table>
+        </View>
 
         {totalPages > 1 || reduxCategories.length > 5 ? (
           <View className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-200">
