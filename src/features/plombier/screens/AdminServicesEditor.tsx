@@ -28,6 +28,13 @@ const AdminServicesEditor = () => {
   const [serviceToDelete, setServiceToDelete] = useState<Service | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalPages = Math.ceil(services.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedServices = services.slice(startIndex, startIndex + itemsPerPage);
+
   const translateServiceField = (key?: string) => {
     const trimmedKey = key?.trim();
     if (!trimmedKey) return '';
@@ -88,6 +95,9 @@ const AdminServicesEditor = () => {
       setStatusMessage(
         translate('admin.serviceAdded', { defaultValue: 'Service ajouté.' }),
       );
+      // Go to last page to see the new item
+      const newTotalPages = Math.ceil((services.length + 1) / itemsPerPage);
+      setCurrentPage(newTotalPages);
     }
     reset({ clearStatus: false });
   };
@@ -109,6 +119,16 @@ const AdminServicesEditor = () => {
 
   const confirmDelete = () => {
     if (!serviceToDelete) return;
+
+    // Adjust current page if we delete the last item of the current page
+    const remainingItemsOnPage = services.filter(s => s.id !== serviceToDelete.id).length;
+    const newTotalPages = Math.ceil(remainingItemsOnPage / itemsPerPage);
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(newTotalPages);
+    } else if (newTotalPages === 0) {
+      setCurrentPage(1);
+    }
+
     dispatch(deleteService(serviceToDelete.id));
     setStatusMessage(
       translate('admin.serviceDeleted', { defaultValue: 'Service supprimé.' }),
@@ -175,45 +195,120 @@ const AdminServicesEditor = () => {
             })}
           </View>
         ) : (
-          <View className="space-y-4">
-            {services.map(s => (
-              <View
-                key={s.id}
-                className="flex items-center justify-between border p-3 rounded-2xl"
-              >
-                <View>
-                  <View className="font-black">
-                    {translateServiceField(s.name)}
+          <>
+            <View className="space-y-4">
+              {paginatedServices.map(s => (
+                <View
+                  key={s.id}
+                  className="flex items-center justify-between border p-3 rounded-2xl"
+                >
+                  <View>
+                    <View className="font-black">
+                      {translateServiceField(s.name)}
+                    </View>
+                    <Text className="text-sm text-slate-500">
+                      {translateServiceField(s.desc)}
+                    </Text>
                   </View>
-                  <Text className="text-sm text-slate-500">
-                    {translateServiceField(s.desc)}
-                  </Text>
+                  <View className="flex flex-row gap-2">
+                    <TouchableOpacity
+                      onPress={() => handleEdit(s)}
+                      className="px-3 py-1 bg-blue-600 text-white rounded-xl"
+                    >
+                      <Text className="text-white text-xs">
+                        {translate('admin.editButton', {
+                          defaultValue: 'Modifier',
+                        })}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handleDeleteClick(s)}
+                      className="px-3 py-1 bg-rose-600 text-white rounded-xl"
+                    >
+                      <Text className="text-white text-xs">
+                        {translate('admin.deleteButton', {
+                          defaultValue: 'Supprimer',
+                        })}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View className="flex flex-row gap-2">
-                  <TouchableOpacity
-                    onPress={() => handleEdit(s)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded-xl"
+              ))}
+            </View>
+
+            {totalPages > 1 || services.length > 5 ? (
+              <View className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+                <View className="flex flex-row items-center gap-2">
+                  <Text className="text-xs text-slate-500 dark:text-slate-400">
+                    {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
+                  </Text>
+                  <select
+                    value={itemsPerPage}
+                    onChange={e => {
+                      setItemsPerPage(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold focus:outline-none text-slate-700 dark:text-slate-200"
                   >
-                    <Text className="text-white text-xs">
-                      {translate('admin.editButton', {
-                        defaultValue: 'Modifier',
-                      })}
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => handleDeleteClick(s)}
-                    className="px-3 py-1 bg-rose-600 text-white rounded-xl"
-                  >
-                    <Text className="text-white text-xs">
-                      {translate('admin.deleteButton', {
-                        defaultValue: 'Supprimer',
-                      })}
-                    </Text>
-                  </TouchableOpacity>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={50}>50</option>
+                  </select>
+                </View>
+
+                <View className="flex flex-row items-center gap-4">
+                  <Text className="text-xs text-slate-500 dark:text-slate-400">
+                    {translate('admin.paginationInfo', {
+                      defaultValue: 'Page {{page}} sur {{totalPages}}',
+                      page: currentPage,
+                      totalPages: totalPages || 1,
+                    })}
+                  </Text>
+
+                  <View className="flex flex-row items-center gap-1">
+                    <TouchableOpacity
+                      disabled={currentPage === 1}
+                      onPress={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      className={`px-3 py-1.5 rounded-lg border text-xs font-black transition ${
+                        currentPage === 1
+                          ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200/60 dark:border-slate-700/60 cursor-not-allowed'
+                          : 'bg-white dark:bg-slate-900 text-slate-750 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      {translate('admin.prevPage', { defaultValue: 'Précédent' })}
+                    </TouchableOpacity>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+                      <TouchableOpacity
+                        key={pageNum}
+                        onPress={() => setCurrentPage(pageNum)}
+                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-black transition ${
+                          currentPage === pageNum
+                            ? 'bg-[#F97316] text-white'
+                            : 'bg-white dark:bg-slate-900 text-slate-750 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        }`}
+                      >
+                        {pageNum}
+                      </TouchableOpacity>
+                    ))}
+
+                    <TouchableOpacity
+                      disabled={currentPage === totalPages || totalPages === 0}
+                      onPress={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      className={`px-3 py-1.5 rounded-lg border text-xs font-black transition ${
+                        currentPage === totalPages || totalPages === 0
+                          ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200/60 dark:border-slate-700/60 cursor-not-allowed'
+                          : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-55 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      {translate('admin.nextPage', { defaultValue: 'Suivant' })}
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-            ))}
-          </View>
+            ) : null}
+          </>
         )}
       </View>
       {showDeleteConfirm && serviceToDelete && (

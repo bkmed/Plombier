@@ -28,6 +28,12 @@ const AdminGalleryEditor = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<GalleryItem | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const totalPages = Math.ceil(items.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedItems = items.slice(startIndex, startIndex + itemsPerPage);
 
   const resetForm = () => {
     setTitle('');
@@ -91,6 +97,9 @@ const AdminGalleryEditor = () => {
           defaultValue: 'Image ajoutée à la galerie.',
         }),
       );
+      // Go to last page to see new item if added
+      const newTotalPages = Math.ceil((items.length + 1) / itemsPerPage);
+      setCurrentPage(newTotalPages);
     }
 
     closeGalleryModal();
@@ -114,6 +123,16 @@ const AdminGalleryEditor = () => {
 
   const confirmDelete = () => {
     if (!itemToDelete) return;
+    
+    // Adjust current page if we delete the last item of the current page
+    const remainingItemsOnPage = items.filter(i => i.id !== itemToDelete.id).length;
+    const newTotalPages = Math.ceil(remainingItemsOnPage / itemsPerPage);
+    if (currentPage > newTotalPages && newTotalPages > 0) {
+      setCurrentPage(newTotalPages);
+    } else if (newTotalPages === 0) {
+      setCurrentPage(1);
+    }
+
     dispatch(deleteGalleryItem(itemToDelete.id));
     if (editingItem?.id === itemToDelete.id) {
       resetForm();
@@ -207,8 +226,9 @@ const AdminGalleryEditor = () => {
             })}
           </View>
         ) : (
-          <View className="grid gap-4">
-            {items.map(item => (
+          <>
+            <View className="grid gap-4">
+            {paginatedItems.map(item => (
               <View
                 key={item.id}
                 className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 shadow-sm"
@@ -264,6 +284,80 @@ const AdminGalleryEditor = () => {
               </View>
             ))}
           </View>
+
+          {totalPages > 1 || items.length > 5 ? (
+            <View className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200">
+              <View className="flex flex-row items-center gap-2">
+                <Text className="text-xs text-slate-500 dark:text-slate-400">
+                  {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
+                </Text>
+                <select
+                  value={itemsPerPage}
+                  onChange={e => {
+                    setItemsPerPage(Number(e.target.value));
+                    setCurrentPage(1);
+                  }}
+                  className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold focus:outline-none text-slate-700 dark:text-slate-200"
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={50}>50</option>
+                </select>
+              </View>
+
+              <View className="flex flex-row items-center gap-4">
+                <Text className="text-xs text-slate-500 dark:text-slate-400">
+                  {translate('admin.paginationInfo', {
+                    defaultValue: 'Page {{page}} sur {{totalPages}}',
+                    page: currentPage,
+                    totalPages: totalPages || 1,
+                  })}
+                </Text>
+
+                <View className="flex flex-row items-center gap-1">
+                  <TouchableOpacity
+                    disabled={currentPage === 1}
+                    onPress={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                    className={`px-3 py-1.5 rounded-lg border text-xs font-black transition ${
+                      currentPage === 1
+                        ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200/60 dark:border-slate-700/60 cursor-not-allowed'
+                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {translate('admin.prevPage', { defaultValue: 'Précédent' })}
+                  </TouchableOpacity>
+
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+                    <TouchableOpacity
+                      key={pageNum}
+                      onPress={() => setCurrentPage(pageNum)}
+                      className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-black transition ${
+                        currentPage === pageNum
+                          ? 'bg-[#F97316] text-white'
+                          : 'bg-white dark:bg-slate-900 text-slate-750 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      {pageNum}
+                    </TouchableOpacity>
+                  ))}
+
+                  <TouchableOpacity
+                    disabled={currentPage === totalPages || totalPages === 0}
+                    onPress={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                    className={`px-3 py-1.5 rounded-lg border text-xs font-black transition ${
+                      currentPage === totalPages || totalPages === 0
+                        ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200/60 dark:border-slate-700/60 cursor-not-allowed'
+                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-55 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {translate('admin.nextPage', { defaultValue: 'Suivant' })}
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          ) : null}
+          </>
         )}
       </View>
 
