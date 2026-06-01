@@ -17,7 +17,7 @@ import {
   clearSession,
 } from '../store/slices/webSessionSlice';
 import { addCategory } from '../store/slices/categoriesSlice';
-import { addService } from '../store/slices/servicesSlice';
+import { setServices } from '../store/slices/servicesSlice';
 import { initialWebCategories, initialWebServices } from './webData';
 import { renderWebScreen } from './webScreenMap';
 import { toggleFavoriteAction } from '../store/slices/partsSlice';
@@ -164,7 +164,7 @@ const WebAppNavigator = () => {
     }
     const servicesSeeded = (window as any).__initialServicesSeeded;
     if (!servicesSeeded) {
-      initialWebServices.forEach(s => dispatch(addService(s)));
+      dispatch(setServices(initialWebServices));
       (window as any).__initialServicesSeeded = true;
     }
   }, [reduxCategories, dispatch]);

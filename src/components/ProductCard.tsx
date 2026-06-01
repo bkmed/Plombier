@@ -12,7 +12,6 @@ import { useTranslation } from 'react-i18next';
 import { useCurrency } from '../utils/currencyUtils';
 import { Product } from '../database/schema';
 
-
 interface ProductCardProps {
   product: Product;
   onPress: () => void;

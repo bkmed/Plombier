@@ -17,7 +17,7 @@ import {
   clearSession,
 } from '../store/slices/webSessionSlice';
 import { addCategory } from '../store/slices/categoriesSlice';
-import { addService } from '../store/slices/servicesSlice';
+import { setServices } from '../store/slices/servicesSlice';
 import { toggleFavoriteAction } from '../store/slices/partsSlice';
 
 // Shared Components & Screens
@@ -273,7 +273,7 @@ export const AppNavigator = () => {
           updatedAt: new Date().toISOString(),
         },
       ];
-      initialServices.forEach(s => dispatch(addService(s)));
+      dispatch(setServices(initialServices));
       (window as any).__initialServicesSeeded = true;
     }
   }, [reduxCategories, dispatch]);

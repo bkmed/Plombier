@@ -33,7 +33,10 @@ const AdminServicesEditor = () => {
 
   const totalPages = Math.ceil(services.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedServices = services.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedServices = services.slice(
+    startIndex,
+    startIndex + itemsPerPage,
+  );
 
   const translateServiceField = (key?: string) => {
     const trimmedKey = key?.trim();
@@ -121,7 +124,9 @@ const AdminServicesEditor = () => {
     if (!serviceToDelete) return;
 
     // Adjust current page if we delete the last item of the current page
-    const remainingItemsOnPage = services.filter(s => s.id !== serviceToDelete.id).length;
+    const remainingItemsOnPage = services.filter(
+      s => s.id !== serviceToDelete.id,
+    ).length;
     const newTotalPages = Math.ceil(remainingItemsOnPage / itemsPerPage);
     if (currentPage > newTotalPages && newTotalPages > 0) {
       setCurrentPage(newTotalPages);
@@ -240,7 +245,9 @@ const AdminServicesEditor = () => {
               <View className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 pt-6 border-t border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-200">
                 <View className="flex flex-row items-center gap-2">
                   <Text className="text-xs text-slate-500 dark:text-slate-400">
-                    {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
+                    {translate('admin.itemsPerPage', {
+                      defaultValue: 'Éléments par page :',
+                    })}
                   </Text>
                   <select
                     value={itemsPerPage}
@@ -269,33 +276,41 @@ const AdminServicesEditor = () => {
                   <View className="flex flex-row items-center gap-1">
                     <TouchableOpacity
                       disabled={currentPage === 1}
-                      onPress={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      onPress={() =>
+                        setCurrentPage(prev => Math.max(prev - 1, 1))
+                      }
                       className={`px-3 py-1.5 rounded-lg border text-xs font-black transition ${
                         currentPage === 1
                           ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200/60 dark:border-slate-700/60 cursor-not-allowed'
                           : 'bg-white dark:bg-slate-900 text-slate-750 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
-                      {translate('admin.prevPage', { defaultValue: 'Précédent' })}
+                      {translate('admin.prevPage', {
+                        defaultValue: 'Précédent',
+                      })}
                     </TouchableOpacity>
 
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
-                      <TouchableOpacity
-                        key={pageNum}
-                        onPress={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-black transition ${
-                          currentPage === pageNum
-                            ? 'bg-[#F97316] text-white'
-                            : 'bg-white dark:bg-slate-900 text-slate-750 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
-                        }`}
-                      >
-                        {pageNum}
-                      </TouchableOpacity>
-                    ))}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      pageNum => (
+                        <TouchableOpacity
+                          key={pageNum}
+                          onPress={() => setCurrentPage(pageNum)}
+                          className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-black transition ${
+                            currentPage === pageNum
+                              ? 'bg-[#F97316] text-white'
+                              : 'bg-white dark:bg-slate-900 text-slate-750 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+                          }`}
+                        >
+                          {pageNum}
+                        </TouchableOpacity>
+                      ),
+                    )}
 
                     <TouchableOpacity
                       disabled={currentPage === totalPages || totalPages === 0}
-                      onPress={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      onPress={() =>
+                        setCurrentPage(prev => Math.min(prev + 1, totalPages))
+                      }
                       className={`px-3 py-1.5 rounded-lg border text-xs font-black transition ${
                         currentPage === totalPages || totalPages === 0
                           ? 'bg-slate-100 dark:bg-slate-800 text-slate-400 border-slate-200/60 dark:border-slate-700/60 cursor-not-allowed'

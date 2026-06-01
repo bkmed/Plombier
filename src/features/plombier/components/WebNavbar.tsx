@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { LogoSVG } from './LogoSVG';
 import { Role, WebSessionUser } from '../utils/webTranslations';
 
@@ -234,62 +234,71 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
           </TouchableOpacity>
 
           {/* ── Desktop Nav links (xl+) ── */}
-          <View className="hidden xl:flex flex-row items-center gap-1">
-            {links.map(link => {
-              const isActive = activeTab === link.id;
-              return (
-                <TouchableOpacity
-                  key={link.id}
-                  onPress={() => setActiveTab(link.id)}
-                  style={
-                    {
-                      paddingHorizontal: 14,
-                      paddingVertical: 8,
-                      borderRadius: 10,
-                      position: 'relative',
-                      backgroundColor: isActive
-                        ? 'rgba(249,115,22,0.10)'
-                        : 'transparent',
-                      transition: 'background 0.18s',
-                    } as any
-                  }
-                >
-                  <Text
+          <View
+            className="hidden xl:flex flex-row items-center gap-1 flex-1 mx-4"
+            style={{ overflow: 'hidden' } as any}
+          >
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: 'center', gap: 4 } as any}
+            >
+              {links.map(link => {
+                const isActive = activeTab === link.id;
+                return (
+                  <TouchableOpacity
+                    key={link.id}
+                    onPress={() => setActiveTab(link.id)}
                     style={
                       {
-                        fontSize: 12,
-                        fontWeight: '800',
-                        letterSpacing: 0.8,
-                        textTransform: 'uppercase',
-                        color: isActive
-                          ? '#F97316'
-                          : isDark
-                          ? '#94A3B8'
-                          : '#475569',
-                        transition: 'color 0.18s',
+                        paddingHorizontal: 14,
+                        paddingVertical: 8,
+                        borderRadius: 10,
+                        position: 'relative',
+                        backgroundColor: isActive
+                          ? 'rgba(249,115,22,0.10)'
+                          : 'transparent',
+                        transition: 'background 0.18s',
                       } as any
                     }
                   >
-                    {link.label}
-                  </Text>
-                  {isActive && (
-                    <View
+                    <Text
                       style={
                         {
-                          position: 'absolute',
-                          bottom: 0,
-                          left: 10,
-                          right: 10,
-                          height: 2,
-                          borderRadius: 2,
-                          backgroundColor: '#F97316',
+                          fontSize: 12,
+                          fontWeight: '800',
+                          letterSpacing: 0.8,
+                          textTransform: 'uppercase',
+                          color: isActive
+                            ? '#F97316'
+                            : isDark
+                            ? '#94A3B8'
+                            : '#475569',
+                          transition: 'color 0.18s',
                         } as any
                       }
-                    />
-                  )}
-                </TouchableOpacity>
-              );
-            })}
+                    >
+                      {link.label}
+                    </Text>
+                    {isActive && (
+                      <View
+                        style={
+                          {
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 10,
+                            right: 10,
+                            height: 2,
+                            borderRadius: 2,
+                            backgroundColor: '#F97316',
+                          } as any
+                        }
+                      />
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
           </View>
 
           {/* ── Right controls ── */}

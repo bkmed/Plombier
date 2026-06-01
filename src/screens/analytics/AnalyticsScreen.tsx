@@ -15,7 +15,6 @@ import {
 } from '../../services/analyticsService';
 import { Theme } from '../../theme';
 
-
 export const AnalyticsScreen = () => {
   const { theme } = useTheme();
   const { t } = useTranslation();
