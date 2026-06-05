@@ -82,7 +82,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
               onPress={() => setActiveTab('Accueil')}
               className="text-xs font-black text-slate-400 hover:text-slate-600"
             >
-              {tCommon('retour_accueil', "← Retour à l'accueil")}
+              {tCommon('web.retour_accueil', "← Retour à l'accueil")}
             </TouchableOpacity>
           </View>
         </View>
@@ -90,11 +90,11 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
         // LOGGED CLIENT INTERFACE
         <View>
           <Text className="text-3xl font-black tracking-tight">
-            {tCommon('tableau_bord', 'Mon tableau de bord')}
+            {tCommon('web.tableau_bord', 'Mon tableau de bord')}
           </Text>
           <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
             {tCommon(
-              'tableau_bord_desc',
+              'web.tableau_bord_desc',
               'Gérez vos favoris, votre sécurité et vos préférences.',
             )}
           </Text>
@@ -115,7 +115,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     {profileName}
                   </Text>
                   <Text className="inline-block mt-1 text-[9px] font-black px-3 py-1 rounded-full uppercase bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-500/10">
-                    {tCommon('compte_particulier', 'Compte Particulier')}
+                    {tCommon('web.compte_particulier', 'Compte Particulier')}
                   </Text>
                 </View>
 
@@ -131,7 +131,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                   </View>
                   <View className="space-y-1">
                     <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
-                      {tCommon('telephone', 'Téléphone')}
+                      {tCommon('web.telephone', 'Téléphone')}
                     </Text>
                     <Text className="font-black text-slate-800 dark:text-slate-200">
                       {profilePhone}
@@ -139,7 +139,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                   </View>
                   <View className="space-y-1">
                     <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
-                      {tCommon('ville', 'Ville')}
+                      {tCommon('web.ville', 'Ville')}
                     </Text>
                     <Text className="font-black text-slate-800 dark:text-slate-200">
                       {profileCity}
@@ -151,13 +151,13 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
               {/* Security details updates */}
               <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
                 <Text className="text-sm font-black uppercase tracking-wider">
-                  {tCommon('securite', 'Sécurité')}
+                  {tCommon('web.securite', 'Sécurité')}
                 </Text>
 
                 <View className="space-y-4">
                   <View className="space-y-2">
                     <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      {tCommon('mdp_actuel', 'Mot de passe actuel')}
+                      {tCommon('web.mdp_actuel', 'Mot de passe actuel')}
                     </Text>
                     <TextInput
                       secureTextEntry
@@ -169,7 +169,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
 
                   <View className="space-y-2">
                     <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      {tCommon('nouveau_mdp', 'Nouveau mot de passe')}
+                      {tCommon('web.nouveau_mdp', 'Nouveau mot de passe')}
                     </Text>
                     <TextInput
                       secureTextEntry
@@ -194,7 +194,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     }}
                     className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[11px] font-black py-3 rounded-xl transition shadow-sm uppercase tracking-wider"
                   >
-                    {tCommon('mettre_a_jour', 'Mettre à jour')}
+                    {tCommon('web.mettre_a_jour', 'Mettre à jour')}
                   </TouchableOpacity>
                 </View>
               </View>
@@ -202,22 +202,22 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
               {/* Payment maintenance card (moved into Profile) */}
               <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
                 <Text className="bg-amber-100 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-extrabold text-[9px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-                  {tCommon('maintenance', 'Maintenance')}
+                  {tCommon('web.maintenance', 'Maintenance')}
                 </Text>
 
                 <Text className="text-lg font-black text-slate-800 dark:text-slate-100">
-                  {tCommon('bientot_dispo', 'Bientôt disponible')}
+                  {tCommon('web.bientot_dispo', 'Bientôt disponible')}
                 </Text>
                 <Text className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed font-semibold">
                   {tCommon(
-                    'maintenance_desc',
+                    'web.maintenance_desc',
                     'Le paiement en ligne sera disponible très prochainement.',
                   )}
                 </Text>
 
                 <View className="space-y-3 pt-4 max-w-full">
                   <View className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <Text>{tCommon('progression', 'Progression')}</Text>
+                    <Text>{tCommon('web.progression', 'Progression')}</Text>
                     <Text className="text-[#F97316]">85%</Text>
                   </View>
                   <View className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -227,8 +227,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     />
                   </View>
                   <Text className="text-[9px] text-slate-500 dark:text-slate-500 font-bold uppercase tracking-wide">
-                    Tests d'homologation de sécurité SSL et cryptage en cours
-                    avec la SMT.
+                    {tCommon('web.sslTestsInProgress', "Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.")}
                   </Text>
                 </View>
 
@@ -261,7 +260,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                       }}
                       className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4 py-3 rounded-xl transition"
                     >
-                      {tCommon('avertir', "M'avertir")}
+                      {tCommon('web.avertir', "M'avertir")}
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -272,13 +271,13 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
             <View className="lg:col-span-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
               <View className="flex justify-between items-center">
                 <Text className="text-sm font-black uppercase tracking-wider">
-                  {tCommon('mes_favoris', 'Mes favoris')}
+                  {tCommon('web.mes_favoris', 'Mes favoris')}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setActiveTab('Marketplace')}
                   className="text-xs font-black text-[#F97316] hover:underline"
                 >
-                  {tCommon('parcourir_market', 'Parcourir le marketplace')}
+                  {tCommon('web.parcourir_market', 'Parcourir le marketplace')}
                 </TouchableOpacity>
               </View>
 
@@ -286,7 +285,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                 <View className="border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center space-y-3">
                   <Text className="text-xs text-slate-400 font-bold">
                     {tCommon(
-                      'plus_favoris_desc',
+                      'web.plus_favoris_desc',
                       "Aucun favori pour l'instant. Explorez le marketplace !",
                     )}
                   </Text>
@@ -294,7 +293,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     onPress={() => setActiveTab('Marketplace')}
                     className="bg-slate-100 dark:bg-slate-700 px-4 py-2 rounded-xl text-xs font-black"
                   >
-                    {tCommon('boutique_acces', 'Accéder à la boutique')}
+                    {tCommon('web.boutique_acces', 'Accéder à la boutique')}
                   </TouchableOpacity>
                 </View>
               ) : (
@@ -339,7 +338,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                             onPress={() => setSelectedProduct(prod)}
                             className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black py-2.5 rounded-lg transition"
                           >
-                            {tCommon('consulter', 'Consulter')}
+                            {tCommon('web.consulter', 'Consulter')}
                           </TouchableOpacity>
                         </View>
                       </View>

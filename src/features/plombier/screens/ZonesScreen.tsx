@@ -22,6 +22,33 @@ const ALL_CITIES_BY_ZONE: Record<string, { city: string; area: string }[]> = {
     { city: 'Mahdia', area: 'Sahel' },
   ],
   Sfax: [{ city: 'Sfax', area: 'Sfax' }],
+  'Ariana': [{ city: 'Ariana', area: 'Ariana' }],
+  'Béja': [{ city: 'Béja', area: 'Béja' }],
+  'Ben Arous': [{ city: 'Ben Arous', area: 'Ben Arous' }],
+  'Bizerte': [{ city: 'Bizerte', area: 'Bizerte' }],
+  'Gabès': [{ city: 'Gabès', area: 'Gabès' }],
+  'Gafsa': [{ city: 'Gafsa', area: 'Gafsa' }],
+  'Jendouba': [{ city: 'Jendouba', area: 'Jendouba' }],
+  'Kairouan': [{ city: 'Kairouan', area: 'Kairouan' }],
+  'Kasserine': [{ city: 'Kasserine', area: 'Kasserine' }],
+  'Kébili': [{ city: 'Kébili', area: 'Kébili' }],
+  'Le Kef': [{ city: 'Le Kef', area: 'Le Kef' }],
+  'Mahdia': [{ city: 'Mahdia', area: 'Mahdia' }],
+  'La Manouba': [{ city: 'La Manouba', area: 'La Manouba' }],
+  'Médenine': [{ city: 'Médenine', area: 'Médenine' }],
+  'Monastir': [{ city: 'Monastir', area: 'Monastir' }],
+  'Nabeul': [{ city: 'Nabeul', area: 'Nabeul' }],
+  'Sidi Bouzid': [{ city: 'Sidi Bouzid', area: 'Sidi Bouzid' }],
+  'Siliana': [{ city: 'Siliana', area: 'Siliana' }],
+  'Sousse': [{ city: 'Sousse', area: 'Sousse' }],
+  'Tataouine': [{ city: 'Tataouine', area: 'Tataouine' }],
+  'Tozeur': [{ city: 'Tozeur', area: 'Tozeur' }],
+  'Tunis': [{ city: 'Tunis', area: 'Tunis' }],
+  'Zaghouan': [{ city: 'Zaghouan', area: 'Zaghouan' }],
+};
+
+const getZoneTranslationKey = (zone: string) => {
+  return `zones.${zone.toLowerCase().replace(/ /g, '_').replace(/é/g, 'e').replace(/è/g, 'e')}`;
 };
 
 const ZonesScreen = ({
@@ -147,7 +174,7 @@ const ZonesScreen = ({
             {selectedGovernorat && (
               <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-900/95 text-white p-4 rounded-2xl border border-[#F97316]/30 shadow-xl max-w-[220px] backdrop-blur-sm animate-fade-in text-center">
                 <Text className="text-[10px] font-black text-[#F97316] uppercase tracking-wider">
-                  {selectedGovernorat}
+                  {t[getZoneTranslationKey(selectedGovernorat)] || selectedGovernorat}
                 </Text>
                 <Text className="text-xs font-black mt-1">
                   Intervention Express
@@ -198,10 +225,10 @@ const ZonesScreen = ({
                   className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2"
                 >
                   <Text className="text-xs font-black text-slate-800 dark:text-slate-100">
-                    {item.city}
+                    {t[getZoneTranslationKey(item.city)] || item.city}
                   </Text>
                   <Text className="text-[9px] font-bold uppercase tracking-wide text-slate-400">
-                    {item.area}
+                    {t[getZoneTranslationKey(item.area)] || item.area}
                   </Text>
                 </View>
               ))}
@@ -270,7 +297,7 @@ const ZonesScreen = ({
                 >
                   {cityOptions.map(city => (
                     <option key={city} value={city}>
-                      {city}
+                      {t[getZoneTranslationKey(city)] || city}
                     </option>
                   ))}
                 </select>

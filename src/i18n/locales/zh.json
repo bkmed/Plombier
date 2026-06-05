@@ -804,21 +804,31 @@
   },
   "profile": {
     "title": "Profile",
-    "display": "Display",
-    "language": "Language",
-    "currency": "Currency",
+    "display": "显示",
+    "language": "语言",
+    "currency": "货币",
     "dark_mode": "Dark Mode",
     "hide_balances": "Hide Balances",
     "budget": "Budget",
     "monthly_budget": "Monthly Budget",
     "daily_budget": "Daily Budget",
-    "notifications": "Notifications",
-    "shortcuts": "Shortcuts",
-    "data": "Data",
+    "notifications": "通知",
+    "shortcuts": "快捷方式",
+    "data": "数据",
     "export": "Export CSV",
     "reset_all": "Reset All Data",
     "about": "About",
-    "version": "Version"
+    "version": "Version",
+    "verifiedWallet": "已验证的钱包",
+    "hideBalances": "隐藏余额",
+    "budgetAlerts": "预算与提醒",
+    "monthlyBudget": "每月预算",
+    "exportCsv": "导出 CSV",
+    "resetTitle": "重置？",
+    "resetMessage": "此操作无法撤消",
+    "resetConfirm": "重置",
+    "resetAllData": "重置所有数据",
+    "signOut": "退出登录"
   },
   "users": {
     "title": "用户管理",
@@ -1503,7 +1513,10 @@
       "call_to_buy": "Order Now"
     },
     "tndSymbol": "DT",
-    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
+    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
+    "maxLabel": "最大",
+    "categories": "分类",
+    "sslTestsInProgress": "与 SMT 正在进行 SSL 安全批准测试和加密。"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1568,5 +1581,27 @@
     "web": {
       "manage": "管理"
     }
-  }
+  },
+  "prix": "价格",
+  "prix_croissant": "价格：从低到高",
+  "prix_decroissant": "价格：从高到低",
+  "recommande": "推荐",
+  "aucun_produit": "未找到产品",
+  "filtres": "筛选",
+  "rechercher": "搜索",
+  "etat": "状态",
+  "tous": "全部",
+  "tri": "排序方式",
+  "toutes_categories": "所有类别",
+  "servicesInterventionsDesc": "干预服务",
+  "galleryPhotosDesc": "已完成工作的照片",
+  "manageProductsDesc": "创建新的产品列表并管理可用性。",
+  "manageCategoriesDesc": "组织您的产品系列和备件。",
+  "manageServicesLabel": "管理服务",
+  "manageServicesDesc": "编辑提供的服务和前后对比图。",
+  "manageUsersDesc": "管理会员帐户，更新角色和权限。",
+  "manageGalleryLabel": "管理图库",
+  "manageGalleryDesc": "添加，编辑或删除图库中的照片。",
+  "adminProfileDesc": "配置网站名称，WhatsApp联系人和安全性。",
+  "globalAnalyticsDesc": "查看访问图表，参与率和共享。"
 }

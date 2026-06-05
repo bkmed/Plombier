@@ -804,21 +804,31 @@
   },
   "profile": {
     "title": "Profile",
-    "display": "Display",
-    "language": "Language",
-    "currency": "Currency",
+    "display": "प्रदर्शन",
+    "language": "भाषा",
+    "currency": "मुद्रा",
     "dark_mode": "Dark Mode",
     "hide_balances": "Hide Balances",
     "budget": "Budget",
     "monthly_budget": "Monthly Budget",
     "daily_budget": "Daily Budget",
-    "notifications": "Notifications",
-    "shortcuts": "Shortcuts",
-    "data": "Data",
+    "notifications": "सूचनाएं",
+    "shortcuts": "शॉर्टकट",
+    "data": "डेटा",
     "export": "Export CSV",
     "reset_all": "Reset All Data",
     "about": "About",
-    "version": "Version"
+    "version": "Version",
+    "verifiedWallet": "सत्यापित वॉलेट",
+    "hideBalances": "शेष छिपाएं",
+    "budgetAlerts": "बजट और अलर्ट",
+    "monthlyBudget": "मासिक बजट",
+    "exportCsv": "CSV निर्यात करें",
+    "resetTitle": "रीसेट करें?",
+    "resetMessage": "इसे पूर्ववत नहीं किया जा सकता",
+    "resetConfirm": "रीसेट",
+    "resetAllData": "सभी डेटा रीसेट करें",
+    "signOut": "साइन आउट"
   },
   "users": {
     "title": "उपयोगकर्ता प्रबंधन",
@@ -1503,7 +1513,10 @@
       "call_to_buy": "Order Now"
     },
     "tndSymbol": "DT",
-    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
+    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
+    "maxLabel": "अधिकतम",
+    "categories": "श्रेणियां",
+    "sslTestsInProgress": "SMT के साथ SSL सुरक्षा अनुमोदन परीक्षण और एन्क्रिप्शन प्रगति पर है।"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1568,5 +1581,27 @@
     "web": {
       "manage": "प्रबंधित करें"
     }
-  }
+  },
+  "prix": "कीमत",
+  "prix_croissant": "कीमत: कम से अधिक",
+  "prix_decroissant": "कीमत: अधिक से कम",
+  "recommande": "विशेष रुप से प्रदर्शित",
+  "aucun_produit": "कोई उत्पाद नहीं मिला",
+  "filtres": "फ़िल्टर",
+  "rechercher": "खोजें",
+  "etat": "स्थिति",
+  "tous": "सभी",
+  "tri": "क्रमबद्ध करें",
+  "toutes_categories": "सभी श्रेणियां",
+  "servicesInterventionsDesc": "हस्तक्षेप सेवाएँ",
+  "galleryPhotosDesc": "पूरे किए गए काम की तस्वीरें",
+  "manageProductsDesc": "नई उत्पाद सूची बनाएँ और उपलब्धता प्रबंधित करें।",
+  "manageCategoriesDesc": "अपने उत्पाद परिवारों और स्पेयर पार्ट्स को व्यवस्थित करें।",
+  "manageServicesLabel": "सेवाएँ प्रबंधित करें",
+  "manageServicesDesc": "प्रस्तावित सेवाओं और पहले/बाद के चित्रों को संपादित करें।",
+  "manageUsersDesc": "सदस्य खातों का प्रबंधन करें, भूमिकाएँ और अनुमतियाँ अपडेट करें।",
+  "manageGalleryLabel": "गैलरी प्रबंधित करें",
+  "manageGalleryDesc": "गैलरी से तस्वीरें जोड़ें, संपादित करें या हटाएँ।",
+  "adminProfileDesc": "साइट का नाम, व्हाट्सएप संपर्क और सुरक्षा कॉन्फ़िगर करें।",
+  "globalAnalyticsDesc": "विज़िट चार्ट, सहभागिता दरें और शेयर देखें।"
 }

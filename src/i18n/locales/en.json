@@ -183,6 +183,17 @@
     "errorZoneExists": "This zone already exists.",
     "successZoneAdded": "New zone added!",
     "successZoneDeleted": "Zone deleted!",
+    "servicesInterventionsDesc": "Intervention services",
+    "galleryPhotosDesc": "Photos of completed work",
+    "manageProductsDesc": "Create new product listings and manage availability.",
+    "manageCategoriesDesc": "Organize your product families and spare parts.",
+    "manageServicesLabel": "Manage Services",
+    "manageServicesDesc": "Edit offered services and before/after illustrations.",
+    "manageUsersDesc": "Manage member accounts, update roles and permissions.",
+    "manageGalleryLabel": "Manage Gallery",
+    "manageGalleryDesc": "Add, edit or delete photos from the gallery.",
+    "adminProfileDesc": "Configure the site name, WhatsApp contact and security.",
+    "globalAnalyticsDesc": "View visit charts, engagement rates and shares.",
     "purchases": {
       "title": "Purchases",
       "total": "Total",
@@ -219,6 +230,34 @@
     "modalEditTitle": "Modifier l'annonce",
     "modalCreateTitle": "+ Ajouter une annonce",
     "modalSubmit": "Enregistrer les modifications"
+  },
+  "zones": {
+    "grand_tunis": "Greater Tunis",
+    "sahel": "Sahel",
+    "ariana": "Ariana",
+    "beja": "Beja",
+    "ben_arous": "Ben Arous",
+    "bizerte": "Bizerte",
+    "gabes": "Gabes",
+    "gafsa": "Gafsa",
+    "jendouba": "Jendouba",
+    "kairouan": "Kairouan",
+    "kasserine": "Kasserine",
+    "kebili": "Kebili",
+    "le_kef": "Le Kef",
+    "mahdia": "Mahdia",
+    "la_manouba": "La Manouba",
+    "medenine": "Medenine",
+    "monastir": "Monastir",
+    "nabeul": "Nabeul",
+    "sfax": "Sfax",
+    "sidi_bouzid": "Sidi Bouzid",
+    "siliana": "Siliana",
+    "sousse": "Sousse",
+    "tataouine": "Tataouine",
+    "tozeur": "Tozeur",
+    "tunis": "Tunis",
+    "zaghouan": "Zaghouan"
   },
   "webServices": {
     "nos_services": "Our Services",
@@ -342,7 +381,14 @@
     "freelance": "Freelance",
     "gift": "Gift",
     "investment": "Investment",
-    "other": "Other"
+    "other": "Other",
+    "robinetterie": "Faucets",
+    "chauffe_eau": "Water Heaters",
+    "canalisation": "Piping",
+    "climatisation": "Air Conditioning",
+    "radiateurs": "Radiators",
+    "vannes": "Valves",
+    "autre": "Other"
   },
   "chat": {
     "noMessages": "No messages yet. Say hi!",
@@ -857,22 +903,22 @@
     "soldOut": "SOLD OUT"
   },
   "profile": {
-    "title": "Profile",
+    "verifiedWallet": "Verified Wallet",
     "display": "Display",
     "language": "Language",
     "currency": "Currency",
-    "dark_mode": "Dark Mode",
-    "hide_balances": "Hide Balances",
-    "budget": "Budget",
-    "monthly_budget": "Monthly Budget",
-    "daily_budget": "Daily Budget",
+    "hideBalances": "Hide Balances",
+    "budgetAlerts": "Budget & Alerts",
+    "monthlyBudget": "Monthly Budget",
     "notifications": "Notifications",
     "shortcuts": "Shortcuts",
     "data": "Data",
-    "export": "Export CSV",
-    "reset_all": "Reset All Data",
-    "about": "About",
-    "version": "Version"
+    "exportCsv": "Export CSV",
+    "resetTitle": "Reset?",
+    "resetMessage": "This cannot be undone",
+    "resetConfirm": "Reset",
+    "resetAllData": "Reset All Data",
+    "signOut": "Sign Out"
   },
   "users": {
     "title": "User Management",
@@ -1563,7 +1609,15 @@
       "call_to_buy": "Order Now"
     },
     "tndSymbol": "DT",
-    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
+    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
+    "conditions": {
+      "comme_neuf": "Like new",
+      "bon_etat": "Good condition",
+      "pour_pieces": "For parts"
+    },
+    "maxLabel": "Max",
+    "categories": "Categories",
+    "sslTestsInProgress": "SSL security approval tests and encryption in progress with the SMT."
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1684,5 +1738,27 @@
     "modalCancel": "Cancel",
     "saveEdit": "Save",
     "add": "Add"
-  }
+  },
+  "toutes_categories": "All categories",
+  "tri": "Sort by",
+  "prix": "Price",
+  "prix_croissant": "Price: low to high",
+  "prix_decroissant": "Price: high to low",
+  "recommande": "Featured",
+  "aucun_produit": "No products found",
+  "filtres": "Filters",
+  "rechercher": "Search",
+  "etat": "Condition",
+  "tous": "All",
+  "servicesInterventionsDesc": "Intervention services",
+  "galleryPhotosDesc": "Photos of completed work",
+  "manageProductsDesc": "Create new product listings and manage availability.",
+  "manageCategoriesDesc": "Organize your product families and spare parts.",
+  "manageServicesLabel": "Manage Services",
+  "manageServicesDesc": "Edit offered services and before/after illustrations.",
+  "manageUsersDesc": "Manage member accounts, update roles and permissions.",
+  "manageGalleryLabel": "Manage Gallery",
+  "manageGalleryDesc": "Add, edit or delete photos from the gallery.",
+  "adminProfileDesc": "Configure the site name, WhatsApp contact and security.",
+  "globalAnalyticsDesc": "View visit charts, engagement rates and shares."
 }

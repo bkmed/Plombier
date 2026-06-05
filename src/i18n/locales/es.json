@@ -804,21 +804,31 @@
   },
   "profile": {
     "title": "Profile",
-    "display": "Display",
-    "language": "Language",
-    "currency": "Currency",
+    "display": "Pantalla",
+    "language": "Idioma",
+    "currency": "Moneda",
     "dark_mode": "Dark Mode",
     "hide_balances": "Hide Balances",
     "budget": "Budget",
     "monthly_budget": "Monthly Budget",
     "daily_budget": "Daily Budget",
-    "notifications": "Notifications",
-    "shortcuts": "Shortcuts",
-    "data": "Data",
+    "notifications": "Notificaciones",
+    "shortcuts": "Atajos",
+    "data": "Datos",
     "export": "Export CSV",
     "reset_all": "Reset All Data",
     "about": "About",
-    "version": "Version"
+    "version": "Version",
+    "verifiedWallet": "Billetera verificada",
+    "hideBalances": "Ocultar saldos",
+    "budgetAlerts": "Presupuesto y Alertas",
+    "monthlyBudget": "Presupuesto mensual",
+    "exportCsv": "Exportar CSV",
+    "resetTitle": "¿Reiniciar?",
+    "resetMessage": "Esto no se puede deshacer",
+    "resetConfirm": "Reiniciar",
+    "resetAllData": "Restablecer todos los datos",
+    "signOut": "Cerrar sesión"
   },
   "users": {
     "title": "Gestión de usuarios",
@@ -1503,7 +1513,10 @@
       "call_to_buy": "Order Now"
     },
     "tndSymbol": "DT",
-    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
+    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
+    "maxLabel": "Máx",
+    "categories": "Categorías",
+    "sslTestsInProgress": "Pruebas de aprobación de seguridad SSL y cifrado en progreso con la SMT."
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1568,5 +1581,27 @@
     "web": {
       "manage": "Gestionar"
     }
-  }
+  },
+  "prix": "Precio",
+  "prix_croissant": "Precio: menor a mayor",
+  "prix_decroissant": "Precio: mayor a menor",
+  "recommande": "Destacado",
+  "aucun_produit": "No se encontraron productos",
+  "filtres": "Filtros",
+  "rechercher": "Buscar",
+  "etat": "Estado",
+  "tous": "Todos",
+  "tri": "Ordenar por",
+  "toutes_categories": "Todas las categorías",
+  "servicesInterventionsDesc": "Servicios de intervención",
+  "galleryPhotosDesc": "Fotos de trabajos completados",
+  "manageProductsDesc": "Crear nuevos listados de productos y gestionar la disponibilidad.",
+  "manageCategoriesDesc": "Organizar sus familias de productos y repuestos.",
+  "manageServicesLabel": "Gestionar Servicios",
+  "manageServicesDesc": "Editar los servicios ofrecidos e ilustraciones de antes/después.",
+  "manageUsersDesc": "Gestionar cuentas de miembros, actualizar roles y permisos.",
+  "manageGalleryLabel": "Gestionar Galería",
+  "manageGalleryDesc": "Añadir, editar o eliminar fotos de la galería.",
+  "adminProfileDesc": "Configurar el nombre del sitio, contacto de WhatsApp y seguridad.",
+  "globalAnalyticsDesc": "Ver gráficos de visitas, tasas de participación y compartidos."
 }

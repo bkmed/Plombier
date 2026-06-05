@@ -89,7 +89,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       title: tCommon('webServices.services_title', 'Services'),
       count: services.length,
-      desc: "Services d'interventions",
+      desc: tCommon('admin.servicesInterventionsDesc', "Services d'interventions"),
       icon: '🔧',
       bg: '#FFFBEB',
       countColor: '#D97706',
@@ -107,7 +107,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       title: tCommon('gallery.title', 'Galerie'),
       count: galleryItems.length,
-      desc: 'Photos de réalisations',
+      desc: tCommon('admin.galleryPhotosDesc', 'Photos de réalisations'),
       icon: '🖼️',
       bg: '#FFF1F2',
       countColor: '#E11D48',
@@ -119,7 +119,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 'GestionAnnonce',
       label: tCommon('admin.manageProducts', 'Gérer les Annonces'),
-      desc: 'Créez de nouvelles fiches produits et gérez les disponibilités.',
+      desc: tCommon('admin.manageProductsDesc', 'Créez de nouvelles fiches produits et gérez les disponibilités.'),
       icon: '📢',
       gradientFrom: '#3B82F6',
       gradientTo: '#06B6D4',
@@ -127,15 +127,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 'GestionCategorie',
       label: tCommon('admin.manageCategories', 'Gérer les Catégories'),
-      desc: 'Organisez vos familles de produits et pièces.',
+      desc: tCommon('admin.manageCategoriesDesc', 'Organisez vos familles de produits et pièces.'),
       icon: '🗂️',
       gradientFrom: '#A855F7',
       gradientTo: '#6366F1',
     },
     {
       id: 'AdminServices',
-      label: 'Gérer les Services',
-      desc: "Modifiez les services proposés et les illustrations avant/après.",
+      label: tCommon('admin.manageServicesLabel', 'Gérer les Services'),
+      desc: tCommon('admin.manageServicesDesc', "Modifiez les services proposés et les illustrations avant/après."),
       icon: '🔧',
       gradientFrom: '#F59E0B',
       gradientTo: '#F97316',
@@ -143,15 +143,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 'GestionUser',
       label: tCommon('web.manageUsers', 'Gérer les Utilisateurs'),
-      desc: 'Gérez les comptes membres, mettez à jour les rôles et permissions.',
+      desc: tCommon('admin.manageUsersDesc', 'Gérez les comptes membres, mettez à jour les rôles et permissions.'),
       icon: '👥',
       gradientFrom: '#10B981',
       gradientTo: '#14B8A6',
     },
     {
       id: 'AdminGallery',
-      label: 'Gérer la Galerie',
-      desc: 'Ajoutez, modifiez ou supprimez des photos de réalisations.',
+      label: tCommon('admin.manageGalleryLabel', 'Gérer la Galerie'),
+      desc: tCommon('admin.manageGalleryDesc', 'Ajoutez, modifiez ou supprimez des photos de réalisations.'),
       icon: '🖼️',
       gradientFrom: '#EC4899',
       gradientTo: '#F43F5E',
@@ -159,7 +159,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 'AdminProfile',
       label: tCommon('admin.adminProfileTitle', 'Identité & Profil'),
-      desc: 'Configurez le nom du site, contact WhatsApp et sécurité.',
+      desc: tCommon('admin.adminProfileDesc', 'Configurez le nom du site, contact WhatsApp et sécurité.'),
       icon: '⚙️',
       gradientFrom: '#475569',
       gradientTo: '#1E293B',
@@ -167,7 +167,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 'Analytics',
       label: tCommon('admin.globalAnalytics', 'Statistiques Détaillées'),
-      desc: "Visualisez les graphiques de visites, taux d'engagement et partages.",
+      desc: tCommon('admin.globalAnalyticsDesc', "Visualisez les graphiques de visites, taux d'engagement et partages."),
       icon: '📈',
       gradientFrom: '#4F46E5',
       gradientTo: '#7C3AED',
@@ -259,9 +259,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             {/* Quick metric pills */}
             <View style={styles.metricsRow}>
               {[
-                { label: 'Vues', value: totalViews },
-                { label: 'Partages', value: totalShares },
-                { label: 'Appels', value: callClicks },
+                { label: tCommon('admin.totalViews', 'Vues'), value: totalViews },
+                { label: tCommon('admin.totalShares', 'Partages'), value: totalShares },
+                { label: tCommon('admin.callClicks', 'Appels'), value: callClicks },
               ].map((m, i) => (
                 <View key={i} style={styles.metricPill}>
                   <Text style={styles.metricLabel}>{m.label}</Text>

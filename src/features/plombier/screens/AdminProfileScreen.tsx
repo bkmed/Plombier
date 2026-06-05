@@ -79,7 +79,13 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
     (state: RootState) => state.plombierSettings?.interventionZones ?? [],
   );
 
-  const availableZones = ['Grand Tunis', 'Sahel', 'Sfax'];
+  const availableZones = [
+    'Grand Tunis', 'Sahel', 'Ariana', 'Béja', 'Ben Arous', 'Bizerte', 'Gabès', 'Gafsa', 'Jendouba', 'Kairouan', 'Kasserine', 'Kébili', 'Le Kef', 'Mahdia', 'La Manouba', 'Médenine', 'Monastir', 'Nabeul', 'Sfax', 'Sidi Bouzid', 'Siliana', 'Sousse', 'Tataouine', 'Tozeur', 'Tunis', 'Zaghouan'
+  ];
+
+  const getZoneTranslationKey = (zone: string) => {
+    return `zones.${zone.toLowerCase().replace(/ /g, '_').replace(/é/g, 'e').replace(/è/g, 'e')}`;
+  };
 
   useEffect(() => {
     if (user) {
@@ -357,7 +363,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 </option>
                 {availableZones.map(zone => (
                   <option key={zone} value={zone}>
-                    {zone}
+                    {getTranslation(getZoneTranslationKey(zone)) || zone}
                   </option>
                 ))}
               </select>
@@ -391,7 +397,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                     className="flex items-center justify-between gap-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-4 py-3"
                   >
                     <Text className="text-sm font-black text-slate-700 dark:text-slate-100">
-                      {zone}
+                      {getTranslation(getZoneTranslationKey(zone)) || zone}
                     </Text>
                     <View className="flex-row items-center gap-2">
                       <TouchableOpacity

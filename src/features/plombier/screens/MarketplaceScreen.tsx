@@ -134,7 +134,22 @@ const MarketplaceScreen = ({
   t,
   setSelectedProduct,
 }: MarketplaceScreenProps) => {
-  const tCommon = (key: string) => t(key, { defaultValue: key });
+  const tCommon = (key: string, defaultValue?: string) => t(key, { defaultValue: defaultValue || key });
+
+  const getCategoryKey = (catName: string) => {
+    return `categories.${catName.toLowerCase().replace(/[- ]/g, '_')}`;
+  };
+
+  const getConditionKey = (cond: string) => {
+    if (cond === 'Tous') return 'tous';
+    const map: Record<string, string> = {
+      'comme neuf': 'comme_neuf',
+      'bon état': 'bon_etat',
+      'pour pièces': 'pour_pieces'
+    };
+    return `web.conditions.${map[cond] || cond.toLowerCase().replace(/ /g, '_')}`;
+  };
+
   const dispatch = useDispatch();
   const { showToast } = useToast();
 
@@ -308,7 +323,7 @@ const MarketplaceScreen = ({
                           : 'text-slate-500'
                       }`}
                     >
-                      {cat.name}
+                      {tCommon(getCategoryKey(cat.name), cat.name)}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -339,7 +354,7 @@ const MarketplaceScreen = ({
                     >
                       {cond === 'Tous'
                         ? tCommon('tous')
-                        : tCommon(`web.conditions.${cond}`)}
+                        : tCommon(getConditionKey(cond), cond)}
                     </Text>
                   </TouchableOpacity>
                 ))}
@@ -382,7 +397,7 @@ const MarketplaceScreen = ({
                 >
                   <View className="bg-slate-50 dark:bg-slate-900 py-10 flex items-center justify-center border-b border-slate-100 dark:border-slate-800 relative">
                     <Text className="absolute top-3 right-3 z-10 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 text-[8.5px] font-extrabold uppercase px-2 py-0.5 rounded-full">
-                      {prod.condition}
+                      {tCommon(getConditionKey(prod.condition), prod.condition)}
                     </Text>
 
                     <TouchableOpacity
@@ -412,7 +427,7 @@ const MarketplaceScreen = ({
                   <View className="p-4 text-left flex-1 flex flex-col justify-between">
                     <View>
                       <Text className="text-[9px] font-black text-slate-500 uppercase tracking-wider">
-                        {prod.category}
+                        {tCommon(getCategoryKey(prod.category), prod.category)}
                       </Text>
                       <Text className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
                         {prod.title}

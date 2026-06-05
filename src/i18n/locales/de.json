@@ -804,21 +804,31 @@
   },
   "profile": {
     "title": "Profile",
-    "display": "Display",
-    "language": "Language",
-    "currency": "Currency",
+    "display": "Anzeige",
+    "language": "Sprache",
+    "currency": "Währung",
     "dark_mode": "Dark Mode",
     "hide_balances": "Hide Balances",
     "budget": "Budget",
     "monthly_budget": "Monthly Budget",
     "daily_budget": "Daily Budget",
-    "notifications": "Notifications",
-    "shortcuts": "Shortcuts",
-    "data": "Data",
+    "notifications": "Benachrichtigungen",
+    "shortcuts": "Verknüpfungen",
+    "data": "Daten",
     "export": "Export CSV",
     "reset_all": "Reset All Data",
     "about": "About",
-    "version": "Version"
+    "version": "Version",
+    "verifiedWallet": "Verifizierte Brieftasche",
+    "hideBalances": "Guthaben ausblenden",
+    "budgetAlerts": "Budget & Benachrichtigungen",
+    "monthlyBudget": "Monatliches Budget",
+    "exportCsv": "CSV exportieren",
+    "resetTitle": "Zurücksetzen?",
+    "resetMessage": "Dies kann nicht rückgängig gemacht werden",
+    "resetConfirm": "Zurücksetzen",
+    "resetAllData": "Alle Daten zurücksetzen",
+    "signOut": "Abmelden"
   },
   "users": {
     "title": "Benutzerverwaltung",
@@ -1503,7 +1513,10 @@
       "call_to_buy": "Order Now"
     },
     "tndSymbol": "DT",
-    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT."
+    "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
+    "maxLabel": "Max",
+    "categories": "Kategorien",
+    "sslTestsInProgress": "SSL-Sicherheitszulassungstests und Verschlüsselung mit der SMT im Gange."
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1568,5 +1581,27 @@
     "web": {
       "manage": "Verwalten"
     }
-  }
+  },
+  "prix": "Preis",
+  "prix_croissant": "Preis: aufsteigend",
+  "prix_decroissant": "Preis: absteigend",
+  "recommande": "Empfohlen",
+  "aucun_produit": "Keine Produkte gefunden",
+  "filtres": "Filter",
+  "rechercher": "Suchen",
+  "etat": "Zustand",
+  "tous": "Alle",
+  "tri": "Sortieren nach",
+  "toutes_categories": "Alle Kategorien",
+  "servicesInterventionsDesc": "Interventionsdienste",
+  "galleryPhotosDesc": "Fotos der abgeschlossenen Arbeiten",
+  "manageProductsDesc": "Erstellen Sie neue Produkteinträge und verwalten Sie die Verfügbarkeit.",
+  "manageCategoriesDesc": "Organisieren Sie Ihre Produktfamilien und Ersatzteile.",
+  "manageServicesLabel": "Dienste verwalten",
+  "manageServicesDesc": "Bearbeiten Sie angebotene Dienste und Vorher/Nachher-Illustrationen.",
+  "manageUsersDesc": "Mitgliedskonten verwalten, Rollen und Berechtigungen aktualisieren.",
+  "manageGalleryLabel": "Galerie verwalten",
+  "manageGalleryDesc": "Fotos aus der Galerie hinzufügen, bearbeiten oder löschen.",
+  "adminProfileDesc": "Konfigurieren Sie den Website-Namen, WhatsApp-Kontakt und Sicherheit.",
+  "globalAnalyticsDesc": "Besuchsdiagramme, Engagement-Raten und Freigaben anzeigen."
 }

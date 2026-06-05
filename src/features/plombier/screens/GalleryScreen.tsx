@@ -6,8 +6,10 @@ import {
   selectGalleryItems,
   GalleryItem,
 } from '../../../store/slices/gallerySlice';
+import { useTranslation } from 'react-i18next';
 
 const GalleryScreen = () => {
+  const { t } = useTranslation();
   const items = useSelector(selectGalleryItems) as GalleryItem[];
   const dispatch = useDispatch();
 
@@ -36,22 +38,19 @@ const GalleryScreen = () => {
     <View className="p-4 sm:p-6 lg:p-8">
       <View className="max-w-4xl mx-auto mb-10 text-center">
         <Text className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">
-          Galerie Réalisations
+          {t('web.gallery_realizations')}
         </Text>
         <Text className="mt-4 text-4xl sm:text-5xl font-black text-slate-900 dark:text-slate-100">
-          Photos réelles des interventions
+          {t('web.gallery_photos_real')}
         </Text>
         <Text className="mt-4 text-sm sm:text-base text-slate-500 dark:text-slate-400 leading-relaxed">
-          Retrouvez ici les dernières réalisations ajoutées par
-          l'administrateur, avec titre, sous-titre et description pour chaque
-          projet.
+          {t('web.gallery_desc')}
         </Text>
       </View>
 
       {items.length === 0 ? (
         <Text className="max-w-2xl mx-auto rounded-3xl border border-dashed border-slate-300 bg-slate-50 dark:bg-slate-900 p-10 text-center text-slate-500 dark:text-slate-400">
-          Aucune photo disponible pour le moment. Revenez bientôt pour découvrir
-          nos réalisations récentes.
+          {t('web.gallery_empty')}
         </Text>
       ) : (
         <View className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

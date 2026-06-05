@@ -183,6 +183,17 @@
     "errorZoneExists": "Cette zone existe déjà.",
     "successZoneAdded": "Nouvelle zone ajoutée !",
     "successZoneDeleted": "Zone supprimée !",
+    "servicesInterventionsDesc": "Services d'intervention",
+    "galleryPhotosDesc": "Photos de réalisations",
+    "manageProductsDesc": "Créez de nouvelles fiches produits et gérez les disponibilités.",
+    "manageCategoriesDesc": "Organisez vos familles de produits et pièces.",
+    "manageServicesLabel": "Gérer les Services",
+    "manageServicesDesc": "Modifiez les services proposés et les illustrations avant/après.",
+    "manageUsersDesc": "Gérez les comptes membres, mettez à jour les rôles et permissions.",
+    "manageGalleryLabel": "Gérer la Galerie",
+    "manageGalleryDesc": "Ajoutez, modifiez ou supprimez des photos de réalisations.",
+    "adminProfileDesc": "Configurez le nom du site, contact WhatsApp et sécurité.",
+    "globalAnalyticsDesc": "Visualisez les graphiques de visites, taux d'engagement et partages.",
     "purchases": {
       "title": "Gestion des Achats",
       "total": "Total",
@@ -219,6 +230,34 @@
     "modalEditTitle": "Modifier l'annonce",
     "modalCreateTitle": "+ Ajouter une annonce",
     "modalSubmit": "Enregistrer les modifications"
+  },
+  "zones": {
+    "grand_tunis": "Grand Tunis",
+    "sahel": "Sahel",
+    "ariana": "Ariana",
+    "beja": "Béja",
+    "ben_arous": "Ben Arous",
+    "bizerte": "Bizerte",
+    "gabes": "Gabès",
+    "gafsa": "Gafsa",
+    "jendouba": "Jendouba",
+    "kairouan": "Kairouan",
+    "kasserine": "Kasserine",
+    "kebili": "Kébili",
+    "le_kef": "Le Kef",
+    "mahdia": "Mahdia",
+    "la_manouba": "La Manouba",
+    "medenine": "Médenine",
+    "monastir": "Monastir",
+    "nabeul": "Nabeul",
+    "sfax": "Sfax",
+    "sidi_bouzid": "Sidi Bouzid",
+    "siliana": "Siliana",
+    "sousse": "Sousse",
+    "tataouine": "Tataouine",
+    "tozeur": "Tozeur",
+    "tunis": "Tunis",
+    "zaghouan": "Zaghouan"
   },
   "webServices": {
     "nos_services": "Nos Services",
@@ -342,7 +381,14 @@
     "freelance": "Freelance",
     "gift": "Cadeau",
     "investment": "Investissement",
-    "other": "Autre"
+    "other": "Autre",
+    "robinetterie": "Robinetterie",
+    "chauffe_eau": "Chauffe-eau",
+    "canalisation": "Canalisation",
+    "climatisation": "Climatisation",
+    "radiateurs": "Radiateurs",
+    "vannes": "Vannes",
+    "autre": "Autre"
   },
   "chat": {
     "noMessages": "Pas encore de messages. Dites bonjour !",
@@ -857,22 +903,22 @@
     "soldOut": "ÉPUISÉ"
   },
   "profile": {
-    "title": "Profil",
+    "verifiedWallet": "Portefeuille vérifié",
     "display": "Affichage",
     "language": "Langue",
     "currency": "Devise",
-    "dark_mode": "Mode sombre",
-    "hide_balances": "Masquer les soldes",
-    "budget": "Budget",
-    "monthly_budget": "Budget mensuel",
-    "daily_budget": "Budget quotidien",
+    "hideBalances": "Masquer les soldes",
+    "budgetAlerts": "Budget & Alertes",
+    "monthlyBudget": "Budget mensuel",
     "notifications": "Notifications",
     "shortcuts": "Raccourcis",
-    "data": "Donnees",
-    "export": "Exporter CSV",
-    "reset_all": "Tout reinitialiser",
-    "about": "A propos",
-    "version": "Version"
+    "data": "Données",
+    "exportCsv": "Exporter CSV",
+    "resetTitle": "Réinitialiser ?",
+    "resetMessage": "Cette action est irréversible",
+    "resetConfirm": "Réinitialiser",
+    "resetAllData": "Supprimer toutes les données",
+    "signOut": "Se déconnecter"
   },
   "users": {
     "title": "Gestion des utilisateurs",
@@ -1563,7 +1609,15 @@
       "call_to_buy": "Commander"
     },
     "tndSymbol": "DT",
-    "buy_piece_msg": "Bonjour, je suis intéressé par l'achat de la pièce d'occasion : {{title}} - {{price}} DT."
+    "buy_piece_msg": "Bonjour, je suis intéressé par l'achat de la pièce d'occasion : {{title}} - {{price}} DT.",
+    "conditions": {
+      "comme_neuf": "Comme neuf",
+      "bon_etat": "Bon état",
+      "pour_pieces": "Pour pièces"
+    },
+    "maxLabel": "Max",
+    "categories": "Catégories",
+    "sslTestsInProgress": "Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT."
   },
   "auth_hardcoded": {
     "signin_title": "Connexion",
@@ -1684,5 +1738,27 @@
     "modalCancel": "Annuler",
     "saveEdit": "Enregistrer",
     "add": "Ajouter"
-  }
+  },
+  "toutes_categories": "Toutes les catégories",
+  "tri": "Trier par",
+  "prix": "Prix",
+  "prix_croissant": "Prix : bas à élevé",
+  "prix_decroissant": "Prix : élevé à bas",
+  "recommande": "En vedette",
+  "aucun_produit": "Aucun produit trouvé",
+  "filtres": "Filtres",
+  "rechercher": "Rechercher",
+  "etat": "État",
+  "tous": "Tous",
+  "servicesInterventionsDesc": "Services d'intervention",
+  "galleryPhotosDesc": "Photos de réalisations",
+  "manageProductsDesc": "Créez de nouvelles fiches produits et gérez les disponibilités.",
+  "manageCategoriesDesc": "Organisez vos familles de produits et pièces.",
+  "manageServicesLabel": "Gérer les Services",
+  "manageServicesDesc": "Modifiez les services proposés et les illustrations avant/après.",
+  "manageUsersDesc": "Gérez les comptes membres, mettez à jour les rôles et permissions.",
+  "manageGalleryLabel": "Gérer la Galerie",
+  "manageGalleryDesc": "Ajoutez, modifiez ou supprimez des photos de réalisations.",
+  "adminProfileDesc": "Configurez le nom du site, contact WhatsApp et sécurité.",
+  "globalAnalyticsDesc": "Visualisez les graphiques de visites, taux d'engagement et partages."
 }
