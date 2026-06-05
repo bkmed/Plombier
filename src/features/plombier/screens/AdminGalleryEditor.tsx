@@ -52,7 +52,7 @@ const AdminGalleryEditor = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     setErrorMessage(null);
     setStatusMessage(null);
 

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PlombierSettingsState {
   businessName: string;
+  businessNameAr: string;
   experienceYears: number;
   interventionZones: string[];
   supportEmail: string;
@@ -12,6 +13,7 @@ interface PlombierSettingsState {
 
 const initialState: PlombierSettingsState = {
   businessName: 'Plombier Tunisie',
+  businessNameAr: 'سباك تونس',
   experienceYears: 15,
   interventionZones: ['Grand Tunis', 'Sahel', 'Sfax'],
   supportEmail: '',
@@ -36,6 +38,9 @@ const plombierSettingsSlice = createSlice({
     ) => {
       if (action.payload.businessName !== undefined) {
         state.businessName = action.payload.businessName;
+      }
+      if (action.payload.businessNameAr !== undefined) {
+        state.businessNameAr = action.payload.businessNameAr;
       }
       if (action.payload.experienceYears !== undefined) {
         state.experienceYears = action.payload.experienceYears;

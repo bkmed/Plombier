@@ -187,7 +187,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             onPress={() => setActiveTab('Services')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#1E3A5F] px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:bg-[#152a47] dark:bg-sky-600 dark:hover:bg-sky-500"
           >
-            {tCommon('web.voir_tout')}
+            <Text className="text-white font-black">{tCommon('web.voir_tout')}</Text>
           </TouchableOpacity>
         </View>
       </section>
@@ -210,7 +210,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             onPress={() => setActiveTab('Gallery')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#F97316] bg-transparent px-6 py-3 text-xs font-black uppercase tracking-wider text-[#F97316] shadow-sm transition hover:bg-[#F97316] hover:text-white"
           >
-            {tCommon('web.view_all')}
+            <Text>{tCommon('web.view_all')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -336,7 +336,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                       }}
                       className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
                     >
-                      {tCommon('web.home.call_to_buy')}
+                      <Text className="text-white font-black">{tCommon('web.home.call_to_buy')}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>

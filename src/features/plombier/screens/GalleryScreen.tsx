@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text } from 'react-native';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { View, Text, TouchableOpacity, Linking } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { trackPageView, trackShare } from '../../../store/slices/analyticsSlice';
 import {
   selectGalleryItems,
   GalleryItem,
@@ -8,6 +9,28 @@ import {
 
 const GalleryScreen = () => {
   const items = useSelector(selectGalleryItems) as GalleryItem[];
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(trackPageView('Gallery'));
+  }, [dispatch]);
+
+  const handleShare = (item: GalleryItem, platform: 'facebook' | 'whatsapp') => {
+    dispatch(trackShare({ platform, item: item.title }));
+    
+    // Use the current domain or a default one
+    const url = encodeURIComponent(window.location?.href || 'https://plombier.example.com/gallery');
+    const text = encodeURIComponent(`Regardez ceci : ${item.title} - ${item.subtitle || ''}`);
+    
+    let shareUrl = '';
+    if (platform === 'facebook') {
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    } else {
+      shareUrl = `https://wa.me/?text=${text}%20${url}`;
+    }
+    
+    Linking.openURL(shareUrl);
+  };
 
   return (
     <View className="p-4 sm:p-6 lg:p-8">
@@ -26,10 +49,10 @@ const GalleryScreen = () => {
       </View>
 
       {items.length === 0 ? (
-        <View className="max-w-2xl mx-auto rounded-3xl border border-dashed border-slate-300 bg-slate-50 dark:bg-slate-900 p-10 text-center text-slate-500 dark:text-slate-400">
+        <Text className="max-w-2xl mx-auto rounded-3xl border border-dashed border-slate-300 bg-slate-50 dark:bg-slate-900 p-10 text-center text-slate-500 dark:text-slate-400">
           Aucune photo disponible pour le moment. Revenez bientôt pour découvrir
           nos réalisations récentes.
-        </View>
+        </Text>
       ) : (
         <View className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item: GalleryItem) => (
@@ -45,19 +68,35 @@ const GalleryScreen = () => {
                 />
               </View>
               <View className="p-5">
-                <View className="font-black text-lg text-slate-900 dark:text-slate-100">
+                <Text className="font-black text-lg text-slate-900 dark:text-slate-100">
                   {item.title}
-                </View>
+                </Text>
                 {item.subtitle && (
-                  <View className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                  <Text className="mt-2 text-sm text-slate-500 dark:text-slate-400">
                     {item.subtitle}
-                  </View>
+                  </Text>
                 )}
                 {item.description && (
-                  <View className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                  <Text className="mt-4 text-sm leading-6 text-slate-600 dark:text-slate-300">
                     {item.description}
-                  </View>
+                  </Text>
                 )}
+                
+                {/* Share Buttons */}
+                <View className="mt-6 flex flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                  <TouchableOpacity
+                    onPress={() => handleShare(item, 'facebook')}
+                    className="flex-1 bg-[#1877F2] text-white rounded-xl py-2 flex items-center justify-center transition hover:bg-[#166FE5]"
+                  >
+                    <Text className="text-white text-xs font-black">Facebook</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleShare(item, 'whatsapp')}
+                    className="flex-1 bg-[#25D366] text-white rounded-xl py-2 flex items-center justify-center transition hover:bg-[#20BD5A]"
+                  >
+                    <Text className="text-white text-xs font-black">WhatsApp</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
           ))}

@@ -32,8 +32,8 @@ interface WebScreenMapProps {
   toggleFavorite: (id: string, e?: React.MouseEvent) => void;
   supportWhatsAppNumber: string;
   interventionZones: string[];
-  usersList: any[];
-  reduxCategories: any[];
+  usersList?: any[];
+  reduxCategories?: any[];
   currentRole: string;
   currentLang: string;
   businessName: string;
@@ -157,8 +157,7 @@ export const renderWebScreen = ({
           t={translate}
           businessName={businessName}
           products={products}
-          reduxCategories={reduxCategories}
-          usersList={usersList}
+          setActiveTab={setActiveTab}
         />
       );
     case 'GestionAnnonce':

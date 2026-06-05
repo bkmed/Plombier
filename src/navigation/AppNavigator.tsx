@@ -80,7 +80,7 @@ const WebAppNavigator = () => {
     defaultValue: 'Gérer la galerie',
   });
   const isRTL = i18n.language === 'ar';
-  const businessName = plombierSettings.businessName || 'Plombier Tunisie';
+  const businessName = (isRTL && plombierSettings.businessNameAr) ? plombierSettings.businessNameAr : (plombierSettings.businessName || 'Plombier Tunisie');
   const experienceYears = plombierSettings.experienceYears || 15;
   const dispoVal =
     plombierSettings.dispoVal ||

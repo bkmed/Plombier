@@ -65,7 +65,7 @@ const AdminServicesEditor = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     const rawName = nameKey.trim();
     const normalizedName = rawName.startsWith(SERVICE_TRANSLATION_PREFIX)
       ? rawName

@@ -67,7 +67,7 @@ export const AppNavigator = () => {
   const reduxCategories = useSelector(
     (state: RootState) => state.categories?.items || [],
   );
-  const usersList = useSelector((state: RootState) => state.users?.items || []);
+
   const galleryItems = useSelector(
     (state: RootState) => state.gallery?.items || [],
   );
@@ -97,7 +97,7 @@ export const AppNavigator = () => {
     defaultValue: 'Gérer la galerie',
   });
   const isRTL = i18n.language === 'ar';
-  const businessName = plombierSettings.businessName || 'Plombier Tunisie';
+  const businessName = (isRTL && plombierSettings.businessNameAr) ? plombierSettings.businessNameAr : (plombierSettings.businessName || 'Plombier Tunisie');
   const experienceYears = plombierSettings.experienceYears || 15;
   const dispoVal =
     plombierSettings.dispoVal ||
@@ -469,8 +469,7 @@ export const AppNavigator = () => {
               t={translate}
               businessName={businessName}
               products={products}
-              reduxCategories={reduxCategories}
-              usersList={usersList}
+              setActiveTab={setActiveTab}
             />
           )}
 

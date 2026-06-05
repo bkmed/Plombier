@@ -261,9 +261,9 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
           <table className="w-full min-w-[600px] text-xs text-left font-semibold">
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400 whitespace-nowrap">
               <tr>
-                <th className="px-6 py-4">Nom de la Catégorie</th>
-                <th className="px-6 py-4">Nombre d'Articles</th>
-                <th className="px-6 py-4 text-center">Actions</th>
+                <th className="px-6 py-4">{tCommon('adminCategories.tableCategoryName', 'Nom de la Catégorie')}</th>
+                <th className="px-6 py-4">{tCommon('adminCategories.tableArticleCount', "Nombre d'Articles")}</th>
+                <th className="px-6 py-4 text-center">{tCommon('adminCategories.tableActions', 'Actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
@@ -291,7 +291,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                       </View>
                     </td>
                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                      {count} articles
+                      {count} {tCommon('adminCategories.articles', 'articles')}
                     </td>
                     <td className="px-6 py-4 text-center">
                       <View className="flex flex-row justify-center gap-2">
@@ -307,7 +307,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                           }
                           className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
                         >
-                          Supprimer
+                          {tCommon('adminCategories.delete', 'Supprimer')}
                         </TouchableOpacity>
                       </View>
                     </td>

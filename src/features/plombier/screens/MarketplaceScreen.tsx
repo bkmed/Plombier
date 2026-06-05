@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { useMemo, useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Linking } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import {
   toggleFavoriteAction,
   type Product,
 } from '../../../store/slices/partsSlice';
+import { trackPageView, trackShare } from '../../../store/slices/analyticsSlice';
 import { useToast } from '../../../context/ToastContext';
 
 interface MarketplaceScreenProps {
@@ -136,6 +137,27 @@ const MarketplaceScreen = ({
   const tCommon = (key: string) => t(key, { defaultValue: key });
   const dispatch = useDispatch();
   const { showToast } = useToast();
+
+  useEffect(() => {
+    dispatch(trackPageView('Marketplace'));
+  }, [dispatch]);
+
+  const handleShare = (product: Product, platform: 'facebook' | 'whatsapp', event: any) => {
+    event.stopPropagation();
+    dispatch(trackShare({ platform, item: product.title }));
+    
+    const url = encodeURIComponent(window.location?.href || 'https://plombier.example.com/marketplace');
+    const text = encodeURIComponent(`Découvrez cette pièce : ${product.title} - ${product.price} TND`);
+    
+    let shareUrl = '';
+    if (platform === 'facebook') {
+      shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+    } else {
+      shareUrl = `https://wa.me/?text=${text}%20${url}`;
+    }
+    
+    Linking.openURL(shareUrl);
+  };
 
   const products = useSelector(
     (state: RootState) => state.parts?.listings || [],
@@ -401,18 +423,34 @@ const MarketplaceScreen = ({
                     </View>
 
                     <View className="flex items-center justify-between border-t border-slate-50 dark:border-slate-700 pt-3 mt-4">
-                      <View className="text-xs sm:text-sm font-black text-slate-800 dark:border-slate-700 text-slate-200">
+                      <Text className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-200">
                         {prod.price}{' '}
                         <Text className="text-[9.5px] font-bold">
                           {tCommon('web.tndSymbol')}
                         </Text>
-                      </View>
+                      </Text>
 
                       <View className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition">
                         <Text className="text-white font-black text-[10px]">
                           {tCommon('web.home.call_to_buy')}
                         </Text>
                       </View>
+                    </View>
+                    
+                    {/* Share Buttons */}
+                    <View className="mt-3 flex flex-row gap-2 border-t border-slate-100 dark:border-slate-700 pt-3">
+                      <TouchableOpacity
+                        onPress={(e) => handleShare(prod, 'facebook', e)}
+                        className="flex-1 bg-[#1877F2] rounded-lg py-1.5 flex items-center justify-center"
+                      >
+                        <Text className="text-white text-[9px] font-black">Facebook</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={(e) => handleShare(prod, 'whatsapp', e)}
+                        className="flex-1 bg-[#25D366] rounded-lg py-1.5 flex items-center justify-center"
+                      >
+                        <Text className="text-white text-[9px] font-black">WhatsApp</Text>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </TouchableOpacity>

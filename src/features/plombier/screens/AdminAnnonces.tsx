@@ -86,7 +86,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
   };
 
   const handleSaveAnnonce = (e: React.FormEvent) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     if (!annonceTitle || !annonceDescription || annoncePrice <= 0) {
       showToast(
         translate('web.autoText16', {

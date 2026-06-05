@@ -1,0 +1,2120 @@
+[
+  {
+    "key": "admin.galleryTitleRequired",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        61,
+        "translate('admin.galleryTitleRequired', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryImageRequired",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        70,
+        "translate('admin.galleryImageRequired', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryUpdated",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        90,
+        "translate('admin.galleryUpdated', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryAdded",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        97,
+        "translate('admin.galleryAdded', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryDeleted",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        144,
+        "translate('admin.galleryDeleted', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryTitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        173,
+        "{translate('admin.galleryTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryDescription",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        178,
+        "{translate('admin.galleryDescription', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.addGalleryImage",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        192,
+        "{translate('admin.addGalleryImage', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryListTitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        215,
+        "{translate('admin.galleryListTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryListDescription",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        220,
+        "{translate('admin.galleryListDescription', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.galleryItemsCount",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        227,
+        "{translate('admin.galleryItemsCount', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.noGalleryImages",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        237,
+        "{translate('admin.noGalleryImages', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.updatedOn",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        271,
+        "{translate('admin.updatedOn', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.editButton",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        284,
+        "{translate('admin.editButton', {",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        235,
+        "{translate('admin.editButton', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.deleteButton",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        292,
+        "{translate('admin.deleteButton', {",
+        null
+      ],
+      [
+        "screens/AdminGalleryEditor.tsx",
+        416,
+        "{translate('admin.deleteButton', {",
+        null
+      ],
+      [
+        "screens/AdminProfileScreen.tsx",
+        530,
+        "<Text className=\"text-white font-black\">{tr('admin.deleteButton')}</Text>",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        245,
+        "{translate('admin.deleteButton', {",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        372,
+        "{translate('admin.deleteButton', {",
+        null
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        425,
+        "{tCommon('admin.deleteButton', 'Supprimer')}",
+        "Supprimer"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.itemsPerPage",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        305,
+        "{translate('admin.itemsPerPage', {",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        259,
+        "{translate('admin.itemsPerPage', {",
+        null
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        325,
+        "{translate('admin.itemsPerPage', {",
+        null
+      ],
+      [
+        "screens/AdminAnnonces.tsx",
+        382,
+        "{translate('admin.itemsPerPage', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.paginationInfo",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        326,
+        "{translate('admin.paginationInfo', {",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        280,
+        "{translate('admin.paginationInfo', {",
+        null
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        346,
+        "{translate('admin.paginationInfo', {",
+        null
+      ],
+      [
+        "screens/AdminAnnonces.tsx",
+        403,
+        "{translate('admin.paginationInfo', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.prevPage",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        345,
+        "{translate('admin.prevPage', {",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        299,
+        "{translate('admin.prevPage', {",
+        null
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        363,
+        "{translate('admin.prevPage', { defaultValue: 'Précédent' })}",
+        "Précédent"
+      ],
+      [
+        "screens/AdminAnnonces.tsx",
+        420,
+        "{translate('admin.prevPage', { defaultValue: 'Précédent' })}",
+        "Précédent"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.nextPage",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        377,
+        "{translate('admin.nextPage', { defaultValue: 'Suivant' })}",
+        "Suivant"
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        331,
+        "{translate('admin.nextPage', { defaultValue: 'Suivant' })}",
+        "Suivant"
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        393,
+        "{translate('admin.nextPage', { defaultValue: 'Suivant' })}",
+        "Suivant"
+      ],
+      [
+        "screens/AdminAnnonces.tsx",
+        450,
+        "{translate('admin.nextPage', { defaultValue: 'Suivant' })}",
+        "Suivant"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.confirmDelete",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        392,
+        "{translate('admin.confirmDelete', {",
+        null
+      ],
+      [
+        "screens/AdminProfileScreen.tsx",
+        513,
+        "{tr('admin.confirmDelete')}",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        345,
+        "{translate('admin.confirmDelete', {",
+        null
+      ],
+      [
+        "screens/AdminUsers.tsx",
+        338,
+        "{tCommon('admin.confirmDelete', 'Confirmer la suppression')}",
+        "Confirmer la suppression"
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        406,
+        "{tCommon('admin.confirmDelete', 'Confirmer la suppression')}",
+        "Confirmer la suppression"
+      ],
+      [
+        "screens/AdminAnnonces.tsx",
+        463,
+        "{tCommon('admin.confirmDelete', 'Confirmer la suppression')}",
+        "Confirmer la suppression"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.confirmDeleteGalleryImage",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        397,
+        "{translate('admin.confirmDeleteGalleryImage', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.cancelButton",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        408,
+        "{translate('admin.cancelButton', {",
+        null
+      ],
+      [
+        "screens/AdminGalleryEditor.tsx",
+        528,
+        "{translate('admin.cancelButton', {",
+        null
+      ],
+      [
+        "screens/AdminProfileScreen.tsx",
+        524,
+        "<Text className=\"text-slate-700 dark:text-slate-200 font-black\">{tr('admin.cancelButton')}</Text>",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        362,
+        "{translate('admin.cancelButton', {",
+        null
+      ],
+      [
+        "screens/AdminServicesEditor.tsx",
+        447,
+        "{translate('admin.cancelButton', {",
+        null
+      ],
+      [
+        "screens/AdminUsers.tsx",
+        352,
+        "{tCommon('admin.cancelButton', 'Annuler')}",
+        "Annuler"
+      ],
+      [
+        "screens/AdminCategories.tsx",
+        419,
+        "{tCommon('admin.cancelButton', 'Annuler')}",
+        "Annuler"
+      ],
+      [
+        "screens/AdminAnnonces.tsx",
+        477,
+        "{tCommon('admin.cancelButton', 'Annuler')}",
+        "Annuler"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.editGalleryImageTitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        438,
+        "? translate('admin.editGalleryImageTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.addGalleryImageTitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        441,
+        ": translate('admin.addGalleryImageTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.title",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        457,
+        "placeholder={translate('admin.placeholder.title', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.subtitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        465,
+        "placeholder={translate('admin.placeholder.subtitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.description",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        476,
+        "placeholder={translate('admin.placeholder.description', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.tipTitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        496,
+        "{translate('admin.tipTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.tip.chooseImage",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        502,
+        "{translate('admin.tip.chooseImage', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.tip.addTitle",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        508,
+        "{translate('admin.tip.addTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.tip.descriptionHelp",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        514,
+        "{translate('admin.tip.descriptionHelp', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.saveGalleryChanges",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        537,
+        "? translate('admin.saveGalleryChanges', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.addToGallery",
+    "occurrences": [
+      [
+        "screens/AdminGalleryEditor.tsx",
+        540,
+        ": translate('admin.addToGallery', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.dispoValLabel",
+    "occurrences": [
+      [
+        "screens/AdminProfileScreen.tsx",
+        306,
+        "{tr('admin.dispoValLabel')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.govValLabel",
+    "occurrences": [
+      [
+        "screens/AdminProfileScreen.tsx",
+        316,
+        "{tr('admin.govValLabel')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.confirmDeleteZone",
+    "occurrences": [
+      [
+        "screens/AdminProfileScreen.tsx",
+        516,
+        "{tr('admin.confirmDeleteZone')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.serviceUpdated",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        93,
+        "translate('admin.serviceUpdated', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.serviceAdded",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        100,
+        "translate('admin.serviceAdded', { defaultValue: 'Service ajouté.' }),",
+        "Service ajouté."
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.serviceDeleted",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        140,
+        "translate('admin.serviceDeleted', { defaultValue: 'Service supprimé.' }),",
+        "Service supprimé."
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.servicesTitle",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        167,
+        "{translate('admin.servicesTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.servicesDescription",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        172,
+        "{translate('admin.servicesDescription', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.addServiceButton",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        194,
+        "{translate('admin.addServiceButton', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.servicesListTitle",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        203,
+        "{translate('admin.servicesListTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.noServices",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        209,
+        "{translate('admin.noServices', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.confirmDeleteService",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        350,
+        "{translate('admin.confirmDeleteService', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.editServiceTitle",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        397,
+        "? translate('admin.editServiceTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.addServiceTitle",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        400,
+        ": translate('admin.addServiceTitle', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.nameKey",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        409,
+        "placeholder={translate('admin.placeholder.nameKey', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.icon",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        417,
+        "placeholder={translate('admin.placeholder.icon', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.descKey",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        425,
+        "placeholder={translate('admin.placeholder.descKey', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.placeholder.ptsKeys",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        433,
+        "placeholder={translate('admin.placeholder.ptsKeys', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.saveButton",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        456,
+        "? translate('admin.saveButton', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "admin.addServiceModalButton",
+    "occurrences": [
+      [
+        "screens/AdminServicesEditor.tsx",
+        459,
+        ": translate('admin.addServiceModalButton', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "pieces",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        229,
+        "{tCommon('pieces')}",
+        null
+      ],
+      [
+        "screens/HomeScreen.tsx",
+        262,
+        "{t('pieces')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "tri",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        238,
+        "{tCommon('tri')} :",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "recommande",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        245,
+        "<option value=\"featured\">{tCommon('recommande')}</option>",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "prix_croissant",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        246,
+        "<option value=\"price_asc\">{tCommon('prix_croissant')}</option>",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "prix_decroissant",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        247,
+        "<option value=\"price_desc\">{tCommon('prix_decroissant')}</option>",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "filtres",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        256,
+        "{tCommon('filtres')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "rechercher",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        261,
+        "{tCommon('rechercher')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.categories",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        273,
+        "{tCommon('web.categories')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "toutes_categories",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        291,
+        "{tCommon('toutes_categories')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "etat",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        320,
+        "{tCommon('etat')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "tous",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        341,
+        "? tCommon('tous')",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "prix",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        352,
+        "{tCommon('prix')} {tCommon('web.maxLabel')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.maxLabel",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        352,
+        "{tCommon('prix')} {tCommon('web.maxLabel')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "aucun_produit",
+    "occurrences": [
+      [
+        "screens/MarketplaceScreen.tsx",
+        372,
+        "{tCommon('aucun_produit')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "retour_accueil",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        85,
+        "{tCommon('retour_accueil', \"← Retour à l'accueil\")}",
+        "← Retour à l"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "tableau_bord",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        93,
+        "{tCommon('tableau_bord', 'Mon tableau de bord')}",
+        "Mon tableau de bord"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "compte_particulier",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        118,
+        "{tCommon('compte_particulier', 'Compte Particulier')}",
+        "Compte Particulier"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "telephone",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        134,
+        "{tCommon('telephone', 'Téléphone')}",
+        "Téléphone"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "ville",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        142,
+        "{tCommon('ville', 'Ville')}",
+        "Ville"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "securite",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        154,
+        "{tCommon('securite', 'Sécurité')}",
+        "Sécurité"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "mdp_actuel",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        160,
+        "{tCommon('mdp_actuel', 'Mot de passe actuel')}",
+        "Mot de passe actuel"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "nouveau_mdp",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        172,
+        "{tCommon('nouveau_mdp', 'Nouveau mot de passe')}",
+        "Nouveau mot de passe"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "mettre_a_jour",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        197,
+        "{tCommon('mettre_a_jour', 'Mettre à jour')}",
+        "Mettre à jour"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "maintenance",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        205,
+        "{tCommon('maintenance', 'Maintenance')}",
+        "Maintenance"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "bientot_dispo",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        209,
+        "{tCommon('bientot_dispo', 'Bientôt disponible')}",
+        "Bientôt disponible"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "progression",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        220,
+        "<Text>{tCommon('progression', 'Progression')}</Text>",
+        "Progression"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "avertir",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        264,
+        "{tCommon('avertir', \"M'avertir\")}",
+        "M"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "mes_favoris",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        275,
+        "{tCommon('mes_favoris', 'Mes favoris')}",
+        "Mes favoris"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "parcourir_market",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        281,
+        "{tCommon('parcourir_market', 'Parcourir le marketplace')}",
+        "Parcourir le marketplace"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "boutique_acces",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        297,
+        "{tCommon('boutique_acces', 'Accéder à la boutique')}",
+        "Accéder à la boutique"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "consulter",
+    "occurrences": [
+      [
+        "screens/ProfileScreen.tsx",
+        342,
+        "{tCommon('consulter', 'Consulter')}",
+        "Consulter"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.userUpdated",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        58,
+        "tCommon('adminUsers.userUpdated', 'Utilisateur mis à jour avec succès !'),",
+        "Utilisateur mis à jour avec succès !"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.userDeleted",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        80,
+        "tCommon('adminUsers.userDeleted', 'Utilisateur supprimé !'),",
+        "Utilisateur supprimé !"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.roleUpdated",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        103,
+        "tCommon('adminUsers.roleUpdated', \"Rôle de l'utilisateur modifié !\"),",
+        "Rôle de l"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.title",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        161,
+        "{tCommon('adminUsers.title', 'Gestion des Comptes Membres')}",
+        "Gestion des Comptes Membres"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.editUserTitle",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        175,
+        "{tCommon('adminUsers.editUserTitle', 'Modifier un utilisateur')}",
+        "Modifier un utilisateur"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.cancel",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        188,
+        "{tCommon('adminUsers.cancel', 'Annuler')}",
+        "Annuler"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.phonePlaceholder",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        212,
+        "placeholder={tCommon('adminUsers.phonePlaceholder', 'Téléphone')}",
+        "Téléphone"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.saveChanges",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        230,
+        "{tCommon('adminUsers.saveChanges', 'Enregistrer')}",
+        "Enregistrer"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.delete",
+    "occurrences": [
+      [
+        "screens/AdminUsers.tsx",
+        306,
+        ": tCommon('adminUsers.delete', 'Supprimer')}",
+        "Supprimer"
+      ],
+      [
+        "screens/AdminUsers.tsx",
+        358,
+        "{tCommon('adminUsers.delete', 'Supprimer')}",
+        "Supprimer"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "whatsapp_msg",
+    "occurrences": [
+      [
+        "screens/HomeScreen.tsx",
+        88,
+        "t('whatsapp_msg'),",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "whatsapp",
+    "occurrences": [
+      [
+        "screens/HomeScreen.tsx",
+        95,
+        "{t('whatsapp')} {tCommon('web.home.support_badge')}",
+        null
+      ],
+      [
+        "components/ProductDetailModal.tsx",
+        105,
+        "{tCommon('whatsapp')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText21",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        91,
+        "translate('web.autoText21', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText22",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        106,
+        "translate('web.autoText22', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText25",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        122,
+        "translate('web.autoText25', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText23",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        137,
+        "translate('web.autoText23', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText27",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        182,
+        "translate('web.autoText27', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.title",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        209,
+        "{tCommon('adminCategories.title', 'Gestion des Catégories')}",
+        "Gestion des Catégories"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.editHeading",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        222,
+        "? tCommon('adminCategories.editHeading', 'Modifier la catégorie')",
+        "Modifier la catégorie"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.cancelEdit",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        246,
+        "{tCommon('adminCategories.cancelEdit', 'Annuler la modification')}",
+        "Annuler la modification"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.addCategory",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        253,
+        "{tCommon('adminCategories.addCategory', '+ Ajouter une catégorie')}",
+        "+ Ajouter une catégorie"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.rename",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        302,
+        "{tCommon('adminCategories.rename', 'Renommer')}",
+        "Renommer"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText26",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        409,
+        "{translate('web.autoText26', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.modalCancel",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        503,
+        "{tCommon('adminCategories.modalCancel', 'Annuler')}",
+        "Annuler"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.saveEdit",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        510,
+        "? tCommon('adminCategories.saveEdit', 'Enregistrer')",
+        "Enregistrer"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminCategories.add",
+    "occurrences": [
+      [
+        "screens/AdminCategories.tsx",
+        511,
+        ": tCommon('adminCategories.add', 'Ajouter')}",
+        "Ajouter"
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText16",
+    "occurrences": [
+      [
+        "screens/AdminAnnonces.tsx",
+        92,
+        "translate('web.autoText16', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText17",
+    "occurrences": [
+      [
+        "screens/AdminAnnonces.tsx",
+        116,
+        "translate('web.autoText17', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText18",
+    "occurrences": [
+      [
+        "screens/AdminAnnonces.tsx",
+        137,
+        "translate('web.autoText18', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText20",
+    "occurrences": [
+      [
+        "screens/AdminAnnonces.tsx",
+        178,
+        "translate('web.autoText20', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "web.autoText19",
+    "occurrences": [
+      [
+        "screens/AdminAnnonces.tsx",
+        466,
+        "{translate('web.autoText19', {",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "adminUsers.description",
+    "occurrences": [
+      [
+        "screens/AdminDashboard.tsx",
+        66,
+        "desc: tCommon('adminUsers.description', 'Gérez les comptes membres, mettez à jour les rôles et permissions.'),",
+        "Gérez les comptes membres, mettez à jour les rôles et permissions."
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "tagline",
+    "occurrences": [
+      [
+        "components/WebSplashScreen.tsx",
+        33,
+        "{t('tagline')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "call",
+    "occurrences": [
+      [
+        "components/ProductDetailModal.tsx",
+        96,
+        "{tCommon('call')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "categoryImageInput.unavailableMobile",
+    "occurrences": [
+      [
+        "components/CategoryImageInput.tsx",
+        33,
+        "alert(tCommon('categoryImageInput.unavailableMobile'));",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "categoryImageInput.previewAlt",
+    "occurrences": [
+      [
+        "components/CategoryImageInput.tsx",
+        43,
+        "alt={tCommon('categoryImageInput.previewAlt')}",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  },
+  {
+    "key": "categoryImageInput.chooseImage",
+    "occurrences": [
+      [
+        "components/CategoryImageInput.tsx",
+        78,
+        "<Text>{tCommon('categoryImageInput.chooseImage')}</Text>",
+        null
+      ]
+    ],
+    "status": {
+      "ar": null,
+      "en": null,
+      "fr": null
+    }
+  }
+]

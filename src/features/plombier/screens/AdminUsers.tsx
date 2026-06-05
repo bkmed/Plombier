@@ -41,7 +41,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
   };
 
   const handleSaveUserEdit = (e: React.FormEvent) => {
-    e.preventDefault();
+    if (e?.preventDefault) e.preventDefault();
     if (!editingUser) return;
 
     const updatedUser = {
@@ -219,8 +219,8 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
               }
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             >
-              <option value="user">Utilisateur</option>
-              <option value="admin">Administrateur</option>
+              <option value="user">{tCommon('adminUsers.roleUser', 'Utilisateur')}</option>
+              <option value="admin">{tCommon('adminUsers.roleAdmin', 'Administrateur')}</option>
             </select>
             <View className="md:col-span-2 flex justify-end gap-3">
               <TouchableOpacity
@@ -240,12 +240,12 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
           <table className="w-full text-xs text-left font-semibold">
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
               <tr>
-                <th className="px-6 py-4">{t.nom_complet}</th>
-                <th className="px-6 py-4">Adresse Email</th>
-                <th className="px-6 py-4">{t.telephone}</th>
-                <th className="px-6 py-4">Rôle</th>
-                <th className="px-6 py-4">Statut</th>
-                <th className="px-6 py-4 text-center">Actions</th>
+                <th className="px-6 py-4">{tCommon('adminUsers.tableFullName', 'Nom complet')}</th>
+                <th className="px-6 py-4">{tCommon('adminUsers.tableEmail', 'Adresse Email')}</th>
+                <th className="px-6 py-4">{tCommon('adminUsers.tablePhone', 'Téléphone')}</th>
+                <th className="px-6 py-4">{tCommon('adminUsers.tableRole', 'Rôle')}</th>
+                <th className="px-6 py-4">{tCommon('adminUsers.tableStatus', 'Statut')}</th>
+                <th className="px-6 py-4 text-center">{tCommon('adminUsers.tableActions', 'Actions')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
@@ -287,7 +287,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                         onPress={() => handleStartEditUser(u)}
                         className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-white px-2.5 py-1 rounded transition"
                       >
-                        Modifier
+                        {tCommon('adminUsers.btnEdit', 'Modifier')}
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleDeleteUserClick(u.id, u.role)}
@@ -309,7 +309,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                         onPress={() => handleToggleUserRole(u.id, u.role)}
                         className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-white px-2.5 py-1 rounded transition"
                       >
-                        {u.role === 'admin' ? 'Rétrograder' : 'Promouvoir'}
+                        {u.role === 'admin' ? tCommon('adminUsers.btnDemote', 'Rétrograder') : tCommon('adminUsers.btnPromote', 'Promouvoir')}
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleToggleUserStatus(u.id, u.status)}
@@ -319,7 +319,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                             : 'bg-emerald-600 hover:bg-emerald-700'
                         }`}
                       >
-                        {u.status === 'active' ? 'Bloquer' : 'Activer'}
+                        {u.status === 'active' ? tCommon('adminUsers.btnBlock', 'Bloquer') : tCommon('adminUsers.btnActivate', 'Activer')}
                       </TouchableOpacity>
                     </View>
                   </td>
