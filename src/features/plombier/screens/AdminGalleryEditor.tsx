@@ -22,6 +22,12 @@ const AdminGalleryEditor = () => {
   const [title, setTitle] = useState('');
   const [subtitle, setSubtitle] = useState('');
   const [description, setDescription] = useState('');
+  // Arabic translations
+  const [titleAr, setTitleAr] = useState('');
+  const [subtitleAr, setSubtitleAr] = useState('');
+  const [descriptionAr, setDescriptionAr] = useState('');
+  // Active language tab in modal: 'fr' | 'ar'
+  const [langTab, setLangTab] = useState<'fr' | 'ar'>('fr');
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   const [showGalleryModal, setShowGalleryModal] = useState(false);
@@ -40,6 +46,10 @@ const AdminGalleryEditor = () => {
     setTitle('');
     setSubtitle('');
     setDescription('');
+    setTitleAr('');
+    setSubtitleAr('');
+    setDescriptionAr('');
+    setLangTab('fr');
     setImageUri(null);
     setEditingItem(null);
     setErrorMessage(null);
@@ -74,6 +84,11 @@ const AdminGalleryEditor = () => {
       return;
     }
 
+    const arTranslation: { title?: string; subtitle?: string; description?: string } = {};
+    if (titleAr.trim()) arTranslation.title = titleAr.trim();
+    if (subtitleAr.trim()) arTranslation.subtitle = subtitleAr.trim();
+    if (descriptionAr.trim()) arTranslation.description = descriptionAr.trim();
+
     const item: GalleryItem = {
       id: editingItem ? editingItem.id : `gal-${Date.now()}`,
       title: title.trim(),
@@ -82,6 +97,10 @@ const AdminGalleryEditor = () => {
       imageUri,
       createdAt: editingItem ? editingItem.createdAt : new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      translations:
+        Object.keys(arTranslation).length > 0
+          ? { ...editingItem?.translations, ar: arTranslation }
+          : editingItem?.translations,
     };
 
     if (editingItem) {
@@ -111,6 +130,11 @@ const AdminGalleryEditor = () => {
     setTitle(item.title);
     setSubtitle(item.subtitle || '');
     setDescription(item.description || '');
+    // Pre-fill Arabic translations if they exist
+    setTitleAr(item.translations?.ar?.title || '');
+    setSubtitleAr(item.translations?.ar?.subtitle || '');
+    setDescriptionAr(item.translations?.ar?.description || '');
+    setLangTab('fr');
     setImageUri(item.imageUri);
     setErrorMessage(null);
     setStatusMessage(null);
@@ -452,40 +476,93 @@ const AdminGalleryEditor = () => {
               )}
 
               <View className="space-y-6 text-xs font-semibold">
-                <View className="grid gap-4 md:grid-cols-2">
-                  <TextInput
-                    value={title}
-                    onChangeText={setTitle}
-                    placeholder={translate('admin.placeholder.title', {
-                      defaultValue: 'Titre',
-                    })}
-                    className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-                  />
-
-                  <TextInput
-                    value={subtitle}
-                    onChangeText={setSubtitle}
-                    placeholder={translate('admin.placeholder.subtitle', {
-                      defaultValue: 'Sous-titre',
-                    })}
-                    className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-                  />
+                {/* Language tabs */}
+                <View className="flex flex-row gap-2">
+                  <TouchableOpacity
+                    onPress={() => setLangTab('fr')}
+                    className={`px-4 py-2 rounded-xl font-black text-xs transition ${
+                      langTab === 'fr'
+                        ? 'bg-[#F97316] text-white'
+                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                    }`}
+                  >
+                    🇫🇷 Français
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setLangTab('ar')}
+                    className={`px-4 py-2 rounded-xl font-black text-xs transition ${
+                      langTab === 'ar'
+                        ? 'bg-[#F97316] text-white'
+                        : 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
+                    }`}
+                  >
+                    🇸🇦 العربية
+                  </TouchableOpacity>
                 </View>
 
-                <TextInput
-                  multiline={true}
-                  value={description}
-                  onChangeText={setDescription}
-                  placeholder={translate('admin.placeholder.description', {
-                    defaultValue: 'Description',
-                  })}
-                  className="w-full min-h-[140px] px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
-                />
+                {langTab === 'fr' ? (
+                  <>
+                    <View className="grid gap-4 md:grid-cols-2">
+                      <TextInput
+                        value={title}
+                        onChangeText={setTitle}
+                        placeholder={translate('admin.placeholder.title', {
+                          defaultValue: 'Titre (FR)',
+                        })}
+                        className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                      />
+                      <TextInput
+                        value={subtitle}
+                        onChangeText={setSubtitle}
+                        placeholder={translate('admin.placeholder.subtitle', {
+                          defaultValue: 'Sous-titre (FR)',
+                        })}
+                        className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                      />
+                    </View>
+                    <TextInput
+                      multiline={true}
+                      value={description}
+                      onChangeText={setDescription}
+                      placeholder={translate('admin.placeholder.description', {
+                        defaultValue: 'Description (FR)',
+                      })}
+                      className="w-full min-h-[140px] px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    />
+                  </>
+                ) : (
+                  <>
+                    <View className="grid gap-4 md:grid-cols-2">
+                      <TextInput
+                        value={titleAr}
+                        onChangeText={setTitleAr}
+                        placeholder="العنوان (AR)"
+                        textAlign="right"
+                        className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                      />
+                      <TextInput
+                        value={subtitleAr}
+                        onChangeText={setSubtitleAr}
+                        placeholder="العنوان الفرعي (AR)"
+                        textAlign="right"
+                        className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                      />
+                    </View>
+                    <TextInput
+                      multiline={true}
+                      value={descriptionAr}
+                      onChangeText={setDescriptionAr}
+                      placeholder="الوصف (AR)"
+                      textAlign="right"
+                      className="w-full min-h-[140px] px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
+                    />
+                  </>
+                )}
 
                 <View className="grid gap-4 md:grid-cols-[1.4fr_0.8fr] items-start">
                   <View>
                     <Text className="block text-sm font-semibold mb-2 text-slate-900 dark:text-slate-100">
-                      Image de la galerie
+                      {translate('admin.galleryImageLabel', { defaultValue: 'Image de la galerie' })}
                     </Text>
                     <View className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
                       <CategoryImageInput

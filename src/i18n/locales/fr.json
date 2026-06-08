@@ -69,6 +69,7 @@
     "galleryDeleted": "Image supprimée de la galerie.",
     "galleryTitleRequired": "Le titre est requis.",
     "galleryImageRequired": "Veuillez sélectionner une image.",
+    "galleryImageLabel": "Image de la galerie",
     "adminConsole": "Console d'administration",
     "revenue": "Revenu",
     "quickActions": "Actions rapides",
@@ -1632,6 +1633,7 @@
     "gallery_photos_real": "Photos réelles des interventions",
     "gallery_desc": "Retrouvez ici les dernières réalisations ajoutées par l'administrateur, avec titre, sous-titre et description pour chaque projet.",
     "gallery_empty": "Aucune photo disponible pour le moment. Revenez bientôt pour découvrir nos réalisations récentes.",
+    "share_text": "Regardez cette réalisation : {{title}}",
     "home": {
       "hero_badge": "Tunisie Dépannage Express 24h/7j",
       "hero_title": "Vos Urgences Plomberie Réglées en un Record",
