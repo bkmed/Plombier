@@ -1509,7 +1509,7 @@
     "carte_interactive": "Direct Coverage Zone",
     "ouvrir_maps": "Open Google Maps",
     "envoyer_demande": "Submit Emergency Request",
-    "zones_directes": "Immediate 24/7 Intervention",
+    "zones_directes": "Direkte Interventionszonen",
     "gallery": {
       "title": "Manage Gallery",
       "manageGallery": "Manage Gallery",
@@ -1605,7 +1605,13 @@
       "comme_neuf": "Comme neuf",
       "bon_etat": "Bon état",
       "pour_pieces": "Pour pièces"
-    }
+    },
+    "zone_map_instructions": "Klicken Sie auf ein Gebiet für weitere Details",
+    "zone_grand_tunis_info": "Schnelle Intervention im Großraum Tunis",
+    "zone_sahel_info": "Schnelle Intervention im Sahel",
+    "zone_other_info": "Intervention verfügbar",
+    "request_name_phone_required": "Name und Telefonnummer erforderlich",
+    "request_submitted": "Anfrage erfolgreich gesendet"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1719,7 +1725,31 @@
     "tataouine": "Tataouine",
     "tozeur": "Tozeur",
     "tunis": "Tunis",
-    "zaghouan": "Zaghouan"
+    "zaghouan": "Zaghouan",
+    "zones": "Abgedeckte Zonen",
+    "zone_tagline": "Wir greifen in diesen Regionen schnell ein.",
+    "carte_interactive": "Interaktive Karte",
+    "villes_couvertes": "Abgedeckte Städte",
+    "whatsapp_msg": "Hallo, ich brauche eine dringende Intervention.",
+    "appeler_whatsapp": "WhatsApp kontaktieren",
+    "urgentCoverageText": "Farbige Zonen werden in weniger als 30 Minuten abgedeckt.",
+    "ouvrir_maps": "In Google Maps öffnen",
+    "urgentStatusBadge": "Dringende Intervention",
+    "demande_intervention": "Interventionsanfrage",
+    "nom_complet": "Vollständiger Name",
+    "telephone": "Telefon",
+    "ville": "Stadt",
+    "envoyer_demande": "Anfrage senden",
+    "intervention_express": "Express-Intervention",
+    "fermer": "Schließen",
+    "type_probleme": "Problemtyp",
+    "prob_fuite": "Wasserleck / Rohrleitungsbruch",
+    "prob_chauffe_eau": "Heizungsausfall",
+    "prob_climatiseur": "Klimaanlagenproblem",
+    "prob_gaz": "Gasleitung / Sicherheit",
+    "description": "Beschreibung",
+    "desc_placeholder": "Geben Sie Ihre Adresse, Etage oder das Problem an...",
+    "nom_placeholder": "Bsp: Max Mustermann"
   },
   "adminUsers": {
     "title": "Gestion des Comptes Membres",

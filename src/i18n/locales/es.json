@@ -1509,7 +1509,7 @@
     "carte_interactive": "Direct Coverage Zone",
     "ouvrir_maps": "Open Google Maps",
     "envoyer_demande": "Submit Emergency Request",
-    "zones_directes": "Immediate 24/7 Intervention",
+    "zones_directes": "Zonas de Intervención Directa",
     "gallery": {
       "title": "Manage Gallery",
       "manageGallery": "Manage Gallery",
@@ -1605,7 +1605,13 @@
       "comme_neuf": "Comme neuf",
       "bon_etat": "Bon état",
       "pour_pieces": "Pour pièces"
-    }
+    },
+    "zone_map_instructions": "Haz clic en una zona para más detalles",
+    "zone_grand_tunis_info": "Intervención rápida en el Gran Túnez",
+    "zone_sahel_info": "Intervención rápida en Sahel",
+    "zone_other_info": "Intervención disponible",
+    "request_name_phone_required": "Nombre y teléfono requeridos",
+    "request_submitted": "Solicitud enviada con éxito"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",
@@ -1719,7 +1725,31 @@
     "tataouine": "Tataouine",
     "tozeur": "Tozeur",
     "tunis": "Tunis",
-    "zaghouan": "Zaghouan"
+    "zaghouan": "Zaghouan",
+    "zones": "Zonas Cubiertas",
+    "zone_tagline": "Intervenimos rápidamente en estas regiones.",
+    "carte_interactive": "Mapa Interactivo",
+    "villes_couvertes": "Ciudades Cubiertas",
+    "whatsapp_msg": "Hola, necesito una intervención urgente.",
+    "appeler_whatsapp": "Contactar WhatsApp",
+    "urgentCoverageText": "Las zonas coloreadas están cubiertas en menos de 30 minutos.",
+    "ouvrir_maps": "Abrir en Google Maps",
+    "urgentStatusBadge": "Intervención Urgente",
+    "demande_intervention": "Solicitud de Intervención",
+    "nom_complet": "Nombre Completo",
+    "telephone": "Teléfono",
+    "ville": "Ciudad",
+    "envoyer_demande": "Enviar Solicitud",
+    "intervention_express": "Intervención Exprés",
+    "fermer": "Cerrar",
+    "type_probleme": "Tipo de Problema",
+    "prob_fuite": "Fuga de Agua / Tubería Rota",
+    "prob_chauffe_eau": "Avería del Calentador",
+    "prob_climatiseur": "Problema de Aire Acondicionado",
+    "prob_gaz": "Tubería de Gas / Seguridad",
+    "description": "Descripción",
+    "desc_placeholder": "Especifica tu dirección, piso o problema...",
+    "nom_placeholder": "Ej: Juan Pérez"
   },
   "adminUsers": {
     "title": "Gestion des Comptes Membres",

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, Linking } from 'react-native';
 import { useToast } from '../../../context/ToastContext';
 
 interface ZonesScreenProps {
-  t: Record<string, any>;
+  t: any;
   supportWhatsAppDigits: string;
   supportWhatsAppNumber: string;
   interventionZones?: string[];
@@ -65,13 +65,20 @@ const ZonesScreen = ({
 }: ZonesScreenProps) => {
   const { showToast } = useToast();
 
+  const tCommon = (key: string, defaultValue?: string) => {
+    if (typeof t === 'function') {
+      return t(key, { defaultValue });
+    }
+    return t?.[key] || defaultValue;
+  };
+
   const activeZones =
     interventionZones && interventionZones.length > 0
       ? interventionZones
       : ['Grand Tunis', 'Sahel', 'Sfax'];
 
   const coverageCities = activeZones.flatMap(
-    zone => ALL_CITIES_BY_ZONE[zone] || [],
+    zone => ALL_CITIES_BY_ZONE[zone] || [{ city: zone, area: zone }],
   );
 
   const cityOptions = coverageCities.map(item => item.city);
@@ -93,11 +100,11 @@ const ZonesScreen = ({
 
   const handleSubmit = () => {
     if (!interventionName || !interventionPhone) {
-      showToast(t.request_name_phone_required, 'error');
+      showToast(tCommon('web.request_name_phone_required', 'Nom et téléphone requis'), 'error');
       return;
     }
 
-    showToast(t.request_submitted, 'success');
+    showToast(tCommon('web.request_submitted', 'Demande envoyée avec succès'), 'success');
     setInterventionName('');
     setInterventionPhone('');
     setInterventionDetails('');
@@ -107,13 +114,13 @@ const ZonesScreen = ({
     <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 animate-fade-in text-left">
       <View className="text-center max-w-3xl mx-auto mb-16">
         <Text className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
-          {t.zones_directes}
+          {tCommon('web.zones_directes', 'Zones d\'intervention directes')}
         </Text>
         <Text className="text-3xl sm:text-4xl font-black tracking-tight mt-6 text-slate-900 dark:text-slate-100">
-          {t.zones}
+          {tCommon('zones.zones', 'Zones Couvertes')}
         </Text>
         <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
-          {t.zone_tagline}
+          {tCommon('zones.zone_tagline', 'Nous intervenons rapidement dans ces régions.')}
         </Text>
       </View>
 
@@ -121,10 +128,10 @@ const ZonesScreen = ({
         <View className="lg:col-span-7 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col justify-between min-h-[500px]">
           <View>
             <Text className="text-base font-black text-slate-800 dark:text-slate-100">
-              {t.carte_interactive}
+              {tCommon('zones.carte_interactive', 'Carte Interactive')}
             </Text>
             <Text className="text-slate-400 text-xs mt-1 font-semibold dark:text-slate-300">
-              {t.zone_map_instructions}
+              {tCommon('web.zone_map_instructions', 'Cliquez sur une zone pour plus de détails')}
             </Text>
           </View>
 
@@ -185,24 +192,23 @@ const ZonesScreen = ({
             {selectedGovernorat && (
               <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-900/95 text-white p-4 rounded-2xl border border-[#F97316]/30 shadow-xl max-w-[220px] backdrop-blur-sm animate-fade-in text-center">
                 <Text className="text-[10px] font-black text-[#F97316] uppercase tracking-wider">
-                  {t[getZoneTranslationKey(selectedGovernorat)] ||
-                    selectedGovernorat}
+                  {tCommon(getZoneTranslationKey(selectedGovernorat), selectedGovernorat)}
                 </Text>
                 <Text className="text-xs font-black mt-1 text-white">
-                  Intervention Express
+                  {tCommon('zones.intervention_express', 'Intervention Express')}
                 </Text>
                 <Text className="text-[10.5px] text-slate-300 mt-1 leading-relaxed">
                   {selectedGovernorat === 'Grand Tunis'
-                    ? t.zone_grand_tunis_info
+                    ? tCommon('web.zone_grand_tunis_info', 'Intervention rapide dans le Grand Tunis')
                     : selectedGovernorat === 'Sahel'
-                    ? t.zone_sahel_info
-                    : t.zone_other_info}
+                    ? tCommon('web.zone_sahel_info', 'Intervention rapide au Sahel')
+                    : tCommon('web.zone_other_info', 'Intervention disponible')}
                 </Text>
                 <TouchableOpacity
                   onPress={() => setSelectedGovernorat(null)}
                   className="mt-2.5 text-[9px] font-black text-rose-500 uppercase tracking-widest block mx-auto underline"
                 >
-                  Fermer
+                  {tCommon('zones.fermer', 'Fermer')}
                 </TouchableOpacity>
               </View>
             )}
@@ -211,22 +217,20 @@ const ZonesScreen = ({
           <View className="rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-4">
             <View className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
               <Text className="text-xs font-black uppercase tracking-widest text-slate-700 dark:text-slate-200">
-                {t.villes_couvertes}
+                {tCommon('zones.villes_couvertes', 'Villes Couvertes')}
               </Text>
               <TouchableOpacity
                 onPress={() =>
                   Linking.openURL(
                     `https://wa.me/${supportWhatsAppDigits}?text=${encodeURIComponent(
-                      typeof t.whatsapp_msg === 'string'
-                        ? t.whatsapp_msg
-                        : 'Bonjour',
+                      tCommon('zones.whatsapp_msg', 'Bonjour, j\'ai besoin d\'une intervention urgente.')
                     )}`,
                   )
                 }
                 className="inline-flex min-h-[40px] items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-[10px] font-black uppercase tracking-wider text-white transition hover:bg-emerald-700"
               >
                 <Text className="text-white text-center font-bold">
-                  {t.appeler_whatsapp}: {supportWhatsAppNumber}
+                  {tCommon('zones.appeler_whatsapp', 'Contacter WhatsApp')}: {supportWhatsAppNumber}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -237,10 +241,10 @@ const ZonesScreen = ({
                   className="rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-2"
                 >
                   <Text className="text-xs font-black text-slate-800 dark:text-slate-100">
-                    {t[getZoneTranslationKey(item.city)] || item.city}
+                    {tCommon(getZoneTranslationKey(item.city), item.city)}
                   </Text>
                   <Text className="text-[9px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-300">
-                    {t[getZoneTranslationKey(item.area)] || item.area}
+                    {tCommon(getZoneTranslationKey(item.area), item.area)}
                   </Text>
                 </View>
               ))}
@@ -249,14 +253,14 @@ const ZonesScreen = ({
 
           <View className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
             <Text className="text-xs font-bold text-slate-500 dark:text-slate-400">
-              * {t.urgentCoverageText}
+              * {tCommon('zones.urgentCoverageText', 'Les zones colorées sont couvertes en moins de 30 minutes.')}
             </Text>
             <TouchableOpacity
               onPress={() => Linking.openURL('https://maps.google.com')}
               className="text-xs font-black text-[#1E3A5F] dark:text-sky-400 hover:underline"
             >
               <Text className="text-[#1E3A5F] dark:text-sky-400 font-bold">
-                {t.ouvrir_maps}
+                {tCommon('zones.ouvrir_maps', 'Ouvrir dans Google Maps')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -265,20 +269,20 @@ const ZonesScreen = ({
         <View className="lg:col-span-5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
           <View>
             <Text className="bg-rose-100 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 font-extrabold text-[8.5px] px-3.5 py-1.5 rounded-full uppercase tracking-wider">
-              {t.urgentStatusBadge}
+              {tCommon('zones.urgentStatusBadge', 'Intervention Urgente')}
             </Text>
             <Text className="text-xl font-black text-slate-800 dark:text-slate-100 mt-3">
-              {t.demande_intervention}
+              {tCommon('zones.demande_intervention', 'Demande d\'intervention')}
             </Text>
           </View>
 
           <View className="space-y-4 font-semibold text-xs">
             <View className="space-y-2">
               <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
-                {t.nom_complet} *
+                {tCommon('zones.nom_complet', 'Nom Complet')} *
               </Text>
               <TextInput
-                placeholder="Ex: Mohamed Ben Khedher"
+                placeholder={tCommon('zones.nom_placeholder', 'Ex: Mohamed Ben Khedher')}
                 value={interventionName}
                 onChangeText={setInterventionName}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316] text-slate-900 dark:text-slate-100"
@@ -287,7 +291,7 @@ const ZonesScreen = ({
 
             <View className="space-y-2">
               <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
-                {t.telephone} *
+                {tCommon('zones.telephone', 'Téléphone')} *
               </Text>
               <TextInput
                 placeholder={supportWhatsAppNumber || '+216 22 456 789'}
@@ -300,7 +304,7 @@ const ZonesScreen = ({
             <View className="grid grid-cols-2 gap-4">
               <View className="space-y-2">
                 <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
-                  {t.ville}
+                  {tCommon('zones.ville', 'Ville')}
                 </Text>
                 <select
                   value={interventionGov}
@@ -309,7 +313,7 @@ const ZonesScreen = ({
                 >
                   {cityOptions.map(city => (
                     <option key={city} value={city}>
-                      {t[getZoneTranslationKey(city)] || city}
+                      {tCommon(getZoneTranslationKey(city), city)}
                     </option>
                   ))}
                 </select>
@@ -317,28 +321,28 @@ const ZonesScreen = ({
 
               <View className="space-y-2">
                 <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
-                  Type Problème
+                  {tCommon('zones.type_probleme', 'Type Problème')}
                 </Text>
                 <select
                   value={interventionProblem}
                   onChange={e => setInterventionProblem(e.target.value)}
                   className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
                 >
-                  <option value="Fuite d'eau">Fuite d'eau / Tuyau cassé</option>
-                  <option value="Panne Chauffe-eau">Panne Chauffe-eau</option>
-                  <option value="Climatisation">Problème Climatiseur</option>
-                  <option value="Gaz STEG">Tuyauterie Gaz / Sécurité</option>
+                  <option value="Fuite d'eau">{tCommon('zones.prob_fuite', "Fuite d'eau / Tuyau cassé")}</option>
+                  <option value="Panne Chauffe-eau">{tCommon('zones.prob_chauffe_eau', "Panne Chauffe-eau")}</option>
+                  <option value="Climatisation">{tCommon('zones.prob_climatiseur', "Problème Climatiseur")}</option>
+                  <option value="Gaz STEG">{tCommon('zones.prob_gaz', "Tuyauterie Gaz / Sécurité")}</option>
                 </select>
               </View>
             </View>
 
             <View className="space-y-2">
               <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
-                Description
+                {tCommon('zones.description', 'Description')}
               </Text>
               <TextInput
                 multiline={true}
-                placeholder="Précisez votre adresse, étage, ou problème..."
+                placeholder={tCommon('zones.desc_placeholder', 'Précisez votre adresse, étage, ou problème...')}
                 value={interventionDetails}
                 onChangeText={setInterventionDetails}
                 className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316] text-slate-900 dark:text-slate-100"
@@ -350,7 +354,7 @@ const ZonesScreen = ({
               className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider hover:scale-[1.01] transform"
             >
               <Text className="text-white text-center font-bold">
-                {t.envoyer_demande}
+                {tCommon('zones.envoyer_demande', 'Envoyer la demande')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -361,3 +365,4 @@ const ZonesScreen = ({
 };
 
 export default ZonesScreen;
+
