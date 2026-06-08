@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { useColorScheme } from 'nativewind';
 import { RootState } from '../store';
 import {
   setActiveTab as setActiveTabAction,
@@ -53,6 +54,7 @@ import {
 import { User } from '../services/authService';
 
 export const AppNavigator = () => {
+  const { colorScheme, setColorScheme } = useColorScheme();
   const { user: authUser, signIn, signOut } = useAuth();
   const { showToast } = useToast();
   const { t: translate, i18n } = useTranslation();
@@ -324,12 +326,13 @@ export const AppNavigator = () => {
   }, [authUser]);
 
   useEffect(() => {
+    setColorScheme(currentTheme);
     if (currentTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [currentTheme]);
+  }, [currentTheme, setColorScheme]);
 
   useEffect(() => {
     document.title = businessName ? `${businessName} | Plombier` : 'Plombier';

@@ -199,12 +199,12 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
       <View className="lg:col-span-7 flex items-center justify-center p-6 sm:p-12 bg-slate-100 dark:bg-[#080B11] transition-colors duration-300">
         <View className="w-full max-w-md space-y-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl relative transition-all duration-300">
           {/* Premium Floating Preferences Toolbar */}
-          <View className="absolute top-6 right-6 flex items-center gap-2">
+          <View className="absolute top-6 right-6 flex-row items-center gap-2 z-50">
             <TouchableOpacity
               onPress={() => setCurrentLang(nextLanguage)}
-              className="min-h-[44px] px-3.5 py-2 rounded-lg border text-[10px] font-black tracking-wider uppercase transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
+              className="h-11 px-3.5 rounded-lg border flex-row items-center justify-center transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
             >
-              <Text className="text-[10px] text-slate-700 dark:text-slate-200">
+              <Text className="text-[10px] font-black tracking-wider uppercase text-slate-700 dark:text-slate-200">
                 {nextLanguage === 'AR'
                   ? 'العربية'
                   : nextLanguage === 'EN'
@@ -217,9 +217,9 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               onPress={() =>
                 setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light')
               }
-              className="w-8 h-8 rounded-lg border flex items-center justify-center transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
+              className="w-11 h-11 rounded-lg border flex items-center justify-center transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
             >
-              <Text className="text-slate-700 dark:text-slate-200">
+              <Text className="text-base text-slate-700 dark:text-slate-200">
                 {currentTheme === 'light' ? '🌙' : '☀️'}
               </Text>
             </TouchableOpacity>
