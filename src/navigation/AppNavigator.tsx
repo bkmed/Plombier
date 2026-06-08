@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, View, Text, StyleSheet } from 'react-native';
+import { Platform, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
@@ -18,8 +18,6 @@ import {
 } from '../store/slices/webSessionSlice';
 import { addCategory } from '../store/slices/categoriesSlice';
 import { setServices } from '../store/slices/servicesSlice';
-import { initialWebCategories, initialWebServices } from './webData';
-import { renderWebScreen } from './webScreenMap';
 import { toggleFavoriteAction } from '../store/slices/partsSlice';
 
 // Shared Components & Screens
@@ -29,13 +27,32 @@ import { WebNavbar } from '../features/plombier/components/WebNavbar';
 import { WebFooter } from '../features/plombier/components/WebFooter';
 import { ProductDetailModal } from '../features/plombier/components/ProductDetailModal';
 
+// Screens
+import HomeScreenWeb from '../features/plombier/screens/HomeScreen';
+import ServicesScreen from '../features/plombier/screens/ServicesScreen';
+import ZonesScreen from '../features/plombier/screens/ZonesScreen';
+import MarketplaceScreen from '../features/plombier/screens/MarketplaceScreen';
+import GalleryScreen from '../features/plombier/screens/GalleryScreen';
+import ProfileScreenWeb from '../features/plombier/screens/ProfileScreen';
+import LegalPages from '../features/plombier/screens/LegalPages';
+import AdminDashboard from '../features/plombier/screens/AdminDashboard';
+import AdminAnnonces from '../features/plombier/screens/AdminAnnonces';
+import AdminCategories from '../features/plombier/screens/AdminCategories';
+import AdminUsers from '../features/plombier/screens/AdminUsers';
+import AdminProfileScreen from '../features/plombier/screens/AdminProfileScreen';
+import AdminAnalyticsScreen from '../features/plombier/screens/AdminAnalyticsScreen';
+import AdminGalleryEditor from '../features/plombier/screens/AdminGalleryEditor';
+import AdminServicesEditor from '../features/plombier/screens/AdminServicesEditor';
+import AdminManage from '../features/plombier/screens/AdminManage';
+
 import {
   Role,
   WebSessionUser,
+  LocalCategory,
 } from '../features/plombier/utils/webTranslations';
 import { User } from '../services/authService';
 
-const WebAppNavigator = () => {
+export const AppNavigator = () => {
   const { user: authUser, signIn, signOut } = useAuth();
   const { showToast } = useToast();
   const { t: translate, i18n } = useTranslation();
@@ -50,7 +67,6 @@ const WebAppNavigator = () => {
   const reduxCategories = useSelector(
     (state: RootState) => state.categories?.items || [],
   );
-  const usersList = useSelector((state: RootState) => state.users?.items || []);
   const galleryItems = useSelector(
     (state: RootState) => state.gallery?.items || [],
   );
@@ -80,7 +96,10 @@ const WebAppNavigator = () => {
     defaultValue: 'Gérer la galerie',
   });
   const isRTL = i18n.language === 'ar';
-  const businessName = (isRTL && plombierSettings.businessNameAr) ? plombierSettings.businessNameAr : (plombierSettings.businessName || 'Plombier Tunisie');
+  const businessName =
+    isRTL && plombierSettings.businessNameAr
+      ? plombierSettings.businessNameAr
+      : plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
   const dispoVal =
     plombierSettings.dispoVal ||
@@ -156,22 +175,174 @@ const WebAppNavigator = () => {
     }
   };
 
-  // Seed initial web state only on web
+  // Seed Initial state
   useEffect(() => {
-    if (Platform.OS !== 'web') return;
     if (reduxCategories.length === 0) {
-      initialWebCategories.forEach(cat => dispatch(addCategory(cat)));
+      const initialCats: LocalCategory[] = [
+        {
+          id: 'cat-1',
+          name: 'Robinetterie',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-2',
+          name: 'Chauffe-eau',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-3',
+          name: 'Canalisation',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-4',
+          name: 'Climatisation',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-5',
+          name: 'Radiateurs',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-6',
+          name: 'Vannes',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'cat-7',
+          name: 'Autre',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+      initialCats.forEach(cat => dispatch(addCategory(cat)));
     }
-    const servicesSeeded = (window as any).__initialServicesSeeded;
-    if (!servicesSeeded) {
-      dispatch(setServices(initialWebServices));
-      (window as any).__initialServicesSeeded = true;
+
+    // Only access window on web
+    if (Platform.OS === 'web') {
+      const servicesSeeded = (window as any).__initialServicesSeeded;
+      if (!servicesSeeded) {
+        const initialServices = [
+          {
+            id: 'srv-1',
+            name: 'plomberie_generale',
+            icon: 'plumbing',
+            desc: 'plomberie_desc_long',
+            pts: ['plomberie_desc_1', 'plomberie_desc_2', 'plomberie_desc_3'],
+            whatsappText: 'devis_msg',
+            imgBefore: 'service_before_plomberie',
+            imgAfter: 'service_after_plomberie',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: 'srv-2',
+            name: 'climatisation',
+            icon: 'ac',
+            desc: 'clim_desc_long',
+            pts: ['clim_desc_1', 'clim_desc_2', 'clim_desc_3'],
+            whatsappText: 'devis_msg',
+            imgBefore: 'service_before_clim',
+            imgAfter: 'service_after_clim',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: 'srv-3',
+            name: 'installation_gaz',
+            icon: 'gas',
+            desc: 'gaz_desc_long',
+            pts: ['gaz_desc_1', 'gaz_desc_2', 'gaz_desc_3'],
+            whatsappText: 'devis_msg',
+            imgBefore: 'service_before_gaz',
+            imgAfter: 'service_after_gaz',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+          {
+            id: 'srv-4',
+            name: 'chauffage_central',
+            icon: 'heater',
+            desc: 'chauffage_desc_long',
+            pts: ['chauffage_desc_1', 'chauffage_desc_2', 'chauffage_desc_3'],
+            whatsappText: 'devis_msg',
+            imgBefore: 'service_before_chauffage',
+            imgAfter: 'service_after_chauffage',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        ];
+        dispatch(setServices(initialServices));
+        (window as any).__initialServicesSeeded = true;
+      }
+    } else {
+      // On native, always seed services (no window flag available)
+      const initialServices = [
+        {
+          id: 'srv-1',
+          name: 'plomberie_generale',
+          icon: 'plumbing',
+          desc: 'plomberie_desc_long',
+          pts: ['plomberie_desc_1', 'plomberie_desc_2', 'plomberie_desc_3'],
+          whatsappText: 'devis_msg',
+          imgBefore: 'service_before_plomberie',
+          imgAfter: 'service_after_plomberie',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'srv-2',
+          name: 'climatisation',
+          icon: 'ac',
+          desc: 'clim_desc_long',
+          pts: ['clim_desc_1', 'clim_desc_2', 'clim_desc_3'],
+          whatsappText: 'devis_msg',
+          imgBefore: 'service_before_clim',
+          imgAfter: 'service_after_clim',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'srv-3',
+          name: 'installation_gaz',
+          icon: 'gas',
+          desc: 'gaz_desc_long',
+          pts: ['gaz_desc_1', 'gaz_desc_2', 'gaz_desc_3'],
+          whatsappText: 'devis_msg',
+          imgBefore: 'service_before_gaz',
+          imgAfter: 'service_after_gaz',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: 'srv-4',
+          name: 'chauffage_central',
+          icon: 'heater',
+          desc: 'chauffage_desc_long',
+          pts: ['chauffage_desc_1', 'chauffage_desc_2', 'chauffage_desc_3'],
+          whatsappText: 'devis_msg',
+          imgBefore: 'service_before_chauffage',
+          imgAfter: 'service_after_chauffage',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+      dispatch(setServices(initialServices));
     }
   }, [reduxCategories, dispatch]);
 
   useEffect(() => {
     i18n.changeLanguage(currentLang.toLowerCase());
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    if (Platform.OS === 'web') {
+      document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
+    }
   }, [currentLang, i18n]);
 
   useEffect(() => {
@@ -214,47 +385,20 @@ const WebAppNavigator = () => {
   }, [authUser]);
 
   useEffect(() => {
-    if (currentTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    if (Platform.OS === 'web') {
+      if (currentTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     }
   }, [currentTheme]);
 
   useEffect(() => {
-    document.title = businessName ? `${businessName} | Plombier` : 'Plombier';
+    if (Platform.OS === 'web') {
+      document.title = businessName ? `${businessName} | Plombier` : 'Plombier';
+    }
   }, [businessName]);
-
-  const activeScreen = renderWebScreen({
-    activeTab,
-    nextLanguage,
-    experienceYears,
-    dispoVal,
-    govVal,
-    supportWhatsAppDigits,
-    galleryItems,
-    products,
-    favorites,
-    translate,
-    setActiveTab,
-    setSelectedProduct,
-    toggleFavorite,
-    supportWhatsAppNumber,
-    interventionZones: plombierSettings.interventionZones || [],
-    usersList,
-    reduxCategories,
-    currentRole,
-    currentLang,
-    businessName,
-    profileName,
-    profileEmail,
-    profilePhone,
-    profileCity,
-    showToast,
-    setBypassAuth,
-    setSigninEmail: () => {},
-    setSigninPassword: () => {},
-  });
 
   return (
     <View
@@ -263,7 +407,6 @@ const WebAppNavigator = () => {
           ? 'bg-[#0B0F19] text-slate-100'
           : 'bg-slate-50 text-slate-800'
       }`}
-      style={{ direction: isRTL ? 'rtl' : 'ltr' }}
     >
       <WebSplashScreen
         showSplash={showSplash}
@@ -312,7 +455,125 @@ const WebAppNavigator = () => {
 
       {(bypassAuth || sessionUser) && (
         <View className="min-h-[calc(100vh-280px)] bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100 transition-colors duration-300">
-          {activeScreen}
+          {activeTab === 'Accueil' && (
+            <HomeScreenWeb
+              nextLanguage={nextLanguage}
+              experienceYears={experienceYears}
+              dispoVal={dispoVal}
+              govVal={govVal}
+              supportWhatsAppDigits={supportWhatsAppDigits}
+              galleryItems={galleryItems}
+              products={products}
+              favorites={favorites}
+              t={translate}
+              setActiveTab={setActiveTab}
+              setSelectedProduct={setSelectedProduct}
+              toggleFavorite={toggleFavorite}
+            />
+          )}
+
+          {activeTab === 'Services' && (
+            <ServicesScreen supportWhatsAppDigits={supportWhatsAppDigits} />
+          )}
+
+          {activeTab === 'Zones' && (
+            <ZonesScreen
+              t={translate}
+              supportWhatsAppDigits={supportWhatsAppDigits}
+              supportWhatsAppNumber={supportWhatsAppNumber}
+              interventionZones={plombierSettings.interventionZones}
+            />
+          )}
+
+          {activeTab === 'Marketplace' && (
+            <MarketplaceScreen
+              t={translate}
+              setSelectedProduct={setSelectedProduct}
+            />
+          )}
+
+          {activeTab === 'Gallery' && (
+            <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <GalleryScreen />
+            </View>
+          )}
+
+          {activeTab === 'Profile' && (
+            <ProfileScreenWeb
+              currentRole={currentRole}
+              businessName={businessName}
+              profileName={profileName}
+              profileEmail={profileEmail}
+              profilePhone={profilePhone}
+              profileCity={profileCity}
+              favorites={favorites}
+              products={products}
+              t={translate}
+              showToast={showToast}
+              setBypassAuth={setBypassAuth}
+              setSigninEmail={() => {}}
+              setSigninPassword={() => {}}
+              setActiveTab={setActiveTab}
+              toggleFavorite={toggleFavorite}
+              setSelectedProduct={setSelectedProduct}
+            />
+          )}
+
+          {['Informations', 'Politique', 'Conditions', 'PlanSite'].includes(
+            activeTab,
+          ) && (
+            <LegalPages
+              page={activeTab as any}
+              t={translate}
+              setActiveTab={setActiveTab}
+            />
+          )}
+
+          {activeTab === 'AdminAccueil' && (
+            <AdminDashboard
+              t={translate}
+              businessName={businessName}
+              products={products}
+              setActiveTab={setActiveTab}
+            />
+          )}
+
+          {activeTab === 'AdminManage' && (
+            <AdminManage t={translate} setActiveTab={setActiveTab} />
+          )}
+
+          {activeTab === 'GestionAnnonce' && (
+            <AdminAnnonces showToast={showToast} translate={translate} />
+          )}
+
+          {activeTab === 'GestionCategorie' && (
+            <AdminCategories showToast={showToast} translate={translate} />
+          )}
+
+          {activeTab === 'AdminGallery' && (
+            <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <AdminGalleryEditor />
+            </View>
+          )}
+
+          {activeTab === 'AdminServices' && (
+            <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
+              <AdminServicesEditor />
+            </View>
+          )}
+
+          {activeTab === 'GestionUser' && (
+            <AdminUsers showToast={showToast} t={translate} />
+          )}
+
+          {activeTab === 'AdminProfile' && (
+            <AdminProfileScreen
+              currentLang={currentLang as any}
+              t={translate}
+            />
+          )}
+
+          {activeTab === 'Analytics' && <AdminAnalyticsScreen t={translate} />}
         </View>
       )}
 
@@ -338,40 +599,5 @@ const WebAppNavigator = () => {
     </View>
   );
 };
-
-const MobileAppNavigator = () => (
-  <View style={styles.mobileContainer}>
-    <Text style={styles.mobileTitle}>Plombier mobile</Text>
-    <Text style={styles.mobileBody}>
-      Le même fichier `AppNavigator.tsx` gère maintenant à la fois web et
-      mobile.
-    </Text>
-  </View>
-);
-
-const styles = StyleSheet.create({
-  mobileContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-    backgroundColor: '#F8FAFC',
-  },
-  mobileTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  mobileBody: {
-    fontSize: 14,
-    color: '#475569',
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-});
-
-export const AppNavigator = () =>
-  Platform.OS === 'web' ? <WebAppNavigator /> : <MobileAppNavigator />;
 
 export default AppNavigator;

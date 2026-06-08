@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Linking, Platform } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import {
@@ -175,9 +175,11 @@ const MarketplaceScreen = ({
     event.stopPropagation();
     dispatch(trackShare({ platform, item: product.title }));
 
-    const url = encodeURIComponent(
-      window.location?.href || 'https://plombier.example.com/marketplace',
-    );
+    const pageUrl =
+      Platform.OS === 'web' && typeof window !== 'undefined'
+        ? (window as any).location?.href || 'https://plombier.example.com/marketplace'
+        : 'https://plombier.example.com/marketplace';
+    const url = encodeURIComponent(pageUrl);
     const text = encodeURIComponent(
       `Découvrez cette pièce : ${product.title} - ${product.price} TND`,
     );

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Platform } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   trackPageView,
@@ -27,9 +27,11 @@ const GalleryScreen = () => {
     dispatch(trackShare({ platform, item: item.title }));
 
     // Use the current domain or a default one
-    const url = encodeURIComponent(
-      window.location?.href || 'https://plombier.example.com/gallery',
-    );
+    const pageUrl =
+      Platform.OS === 'web' && typeof window !== 'undefined'
+        ? (window as any).location?.href || 'https://plombier.example.com/gallery'
+        : 'https://plombier.example.com/gallery';
+    const url = encodeURIComponent(pageUrl);
     const text = encodeURIComponent(
       `Regardez ceci : ${item.title} - ${item.subtitle || ''}`,
     );

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Platform } from 'react-native';
 import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectServices } from '../../../store/slices/servicesSlice';
@@ -30,9 +30,11 @@ const ServicesScreen = ({
     platform: 'facebook' | 'whatsapp',
   ) => {
     dispatch(trackShare({ platform, item: serviceName }));
-    const url = encodeURIComponent(
-      window.location?.href || 'https://plombier.example.com/services',
-    );
+    const pageUrl =
+      Platform.OS === 'web' && typeof window !== 'undefined'
+        ? (window as any).location?.href || 'https://plombier.example.com/services'
+        : 'https://plombier.example.com/services';
+    const url = encodeURIComponent(pageUrl);
     const text = encodeURIComponent(`Découvrez nos services : ${serviceName}`);
 
     let shareUrl = '';

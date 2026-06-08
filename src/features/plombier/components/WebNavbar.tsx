@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Platform } from 'react-native';
 import { LogoSVG } from './LogoSVG';
 import { Role, WebSessionUser } from '../utils/webTranslations';
 
@@ -48,17 +48,19 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
   const isDark = currentTheme === 'dark';
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 8);
-    window.addEventListener('scroll', handleScroll, { passive: true } as any);
-    return () => window.removeEventListener('scroll', handleScroll);
+    if (Platform.OS !== 'web') return;
+    const handleScroll = () => setScrolled((window as any).scrollY > 8);
+    (window as any).addEventListener('scroll', handleScroll, { passive: true });
+    return () => (window as any).removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
+    if (Platform.OS !== 'web') return;
     const handleResize = () => {
-      if (window.innerWidth >= 1024) setMobileOpen(false);
+      if ((window as any).innerWidth >= 1024) setMobileOpen(false);
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    (window as any).addEventListener('resize', handleResize);
+    return () => (window as any).removeEventListener('resize', handleResize);
   }, []);
 
   const adminLinks = [
