@@ -201,7 +201,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
         style={{ alignSelf: 'flex-start' }}
       >
         <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
-          {tCommon('backToManage', '← Retour à Manage')}
+          {tCommon('adminUsers.backToManage', '← Retour à Manage')}
         </Text>
       </TouchableOpacity>
 
