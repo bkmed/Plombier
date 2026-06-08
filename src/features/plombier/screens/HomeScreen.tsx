@@ -55,6 +55,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
       color: 'text-emerald-500',
     },
   ];
+
   return (
     <View className="animate-fade-in text-left bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100">
       {/* Premium Hero Banner */}
@@ -65,7 +66,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             <Text className="bg-[#F97316] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
               {tCommon('web.home.hero_badge')}
             </Text>
-            <Text className="text-4xl sm:text-6xl font-black tracking-tight mt-6 leading-tight">
+            <Text className="text-4xl sm:text-6xl font-black tracking-tight mt-6 leading-tight text-white">
               {tCommon('web.home.hero_title')}
             </Text>
             <Text className="text-slate-300 text-base sm:text-lg font-medium mt-4 max-w-xl">
@@ -78,7 +79,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 onPress={() => setActiveTab('Zones')}
                 className="bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
               >
-                <Text>{tCommon('web.contactez_experts')}</Text>
+                <Text className="text-white">
+                  {tCommon('web.contactez_experts')}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -91,7 +94,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                 }
                 className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-7 py-4 rounded-xl transition shadow-lg inline-flex items-center gap-2 hover:scale-[1.02] transform"
               >
-                <Text>
+                <Text className="text-white">
                   {t('whatsapp')} {tCommon('web.home.support_badge')}
                 </Text>
               </TouchableOpacity>
@@ -123,7 +126,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
       {/* Technical Services Key Cards */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
         <View className="text-center max-w-2xl mx-auto mb-16">
-          <Text className="text-3xl font-black tracking-tight">
+          <Text className="text-3xl font-black tracking-tight text-slate-800 dark:text-slate-100">
             {t('webServices.nos_services')}
           </Text>
           <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
@@ -172,7 +175,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                   title={serv.title}
                 />
               </View>
-              <Text className="text-base font-black group-hover:text-[#F97316] transition-colors">
+              <Text className="text-base font-black group-hover:text-[#F97316] transition-colors text-slate-800 dark:text-slate-100">
                 {serv.title}
               </Text>
               <Text className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
@@ -187,7 +190,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             onPress={() => setActiveTab('Services')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-[#1E3A5F] px-6 py-3 text-xs font-black uppercase tracking-wider text-white shadow-md transition hover:bg-[#152a47] dark:bg-sky-600 dark:hover:bg-sky-500"
           >
-            <Text className="text-white font-black">{tCommon('web.voir_tout')}</Text>
+            <Text className="text-white font-black">
+              {tCommon('web.voir_tout')}
+            </Text>
           </TouchableOpacity>
         </View>
       </section>
@@ -210,7 +215,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             onPress={() => setActiveTab('Gallery')}
             className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-[#F97316] bg-transparent px-6 py-3 text-xs font-black uppercase tracking-wider text-[#F97316] shadow-sm transition hover:bg-[#F97316] hover:text-white"
           >
-            <Text>{tCommon('web.view_all')}</Text>
+            <Text className="text-[#F97316]">{tCommon('web.view_all')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -258,7 +263,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
         <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <View className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <View>
-              <Text className="text-3xl font-black tracking-tight">
+              <Text className="text-3xl font-black tracking-tight text-slate-800 dark:text-slate-100">
                 {t('pieces')}
               </Text>
               <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3">
@@ -269,7 +274,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               onPress={() => setActiveTab('Marketplace')}
               className="text-xs font-black text-[#F97316] hover:underline flex items-center gap-1.5"
             >
-              <Text>{tCommon('web.boutique_acces')}</Text>
+              <Text className="text-[#F97316]">
+                {tCommon('web.boutique_acces')}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -313,7 +320,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
 
                 <View className="p-4 text-left flex-1 flex flex-col justify-between">
                   <View>
-                    <Text className="text-[9px] font-black text-slate-500 uppercase tracking-wider">
+                    <Text className="text-[9px] font-black text-slate-500 uppercase tracking-wider dark:text-slate-400">
                       {prod.category}
                     </Text>
                     <Text className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
@@ -336,7 +343,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                       }}
                       className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
                     >
-                      <Text className="text-white font-black">{tCommon('web.home.call_to_buy')}</Text>
+                      <Text className="text-white font-black">
+                        {tCommon('web.home.call_to_buy')}
+                      </Text>
                     </TouchableOpacity>
                   </View>
                 </View>

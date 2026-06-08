@@ -162,14 +162,16 @@ const AdminGalleryEditor = () => {
         style={{ alignSelf: 'flex-start' }}
       >
         <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
-          {translate('adminUsers.backToManage', { defaultValue: '← Retour à Manage' })}
+          {translate('adminUsers.backToManage', {
+            defaultValue: '← Retour à Manage',
+          })}
         </Text>
       </TouchableOpacity>
 
       <View className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <View className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <View>
-            <Text className="font-black text-3xl">
+            <Text className="font-black text-3xl text-slate-900 dark:text-slate-100">
               {translate('admin.galleryTitle', {
                 defaultValue: 'Gérer la galerie',
               })}
@@ -211,7 +213,7 @@ const AdminGalleryEditor = () => {
       <View className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <View className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
           <View>
-            <Text className="text-xl font-black">
+            <Text className="text-xl font-black text-slate-900 dark:text-slate-100">
               {translate('admin.galleryListTitle', {
                 defaultValue: 'Liste des images de la galerie',
               })}
@@ -459,6 +461,7 @@ const AdminGalleryEditor = () => {
                     })}
                     className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                   />
+
                   <TextInput
                     value={subtitle}
                     onChangeText={setSubtitle}
@@ -481,7 +484,7 @@ const AdminGalleryEditor = () => {
 
                 <View className="grid gap-4 md:grid-cols-[1.4fr_0.8fr] items-start">
                   <View>
-                    <Text className="block text-sm font-semibold mb-2">
+                    <Text className="block text-sm font-semibold mb-2 text-slate-900 dark:text-slate-100">
                       Image de la galerie
                     </Text>
                     <View className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
@@ -492,7 +495,7 @@ const AdminGalleryEditor = () => {
                     </View>
                   </View>
                   <View className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 text-sm text-slate-500 dark:text-slate-400">
-                    <Text className="font-black text-sm mb-2">
+                    <Text className="font-black text-sm mb-2 text-slate-500 dark:text-slate-400">
                       {translate('admin.tipTitle', {
                         defaultValue: 'Conseil :',
                       })}

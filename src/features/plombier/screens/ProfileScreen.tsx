@@ -89,7 +89,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
       ) : (
         // LOGGED CLIENT INTERFACE
         <View>
-          <Text className="text-3xl font-black tracking-tight">
+          <Text className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
             {tCommon('web.tableau_bord', 'Mon tableau de bord')}
           </Text>
           <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
@@ -122,7 +122,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                 {/* Profile information */}
                 <View className="border-t border-slate-100 dark:border-slate-700 pt-5 space-y-3.5 text-left font-semibold text-xs text-slate-500 dark:text-slate-500">
                   <View className="space-y-1">
-                    <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
+                    <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest dark:text-slate-300">
                       Email
                     </Text>
                     <Text className="font-black text-slate-800 dark:text-slate-200">
@@ -130,7 +130,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     </Text>
                   </View>
                   <View className="space-y-1">
-                    <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
+                    <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest dark:text-slate-300">
                       {tCommon('web.telephone', 'Téléphone')}
                     </Text>
                     <Text className="font-black text-slate-800 dark:text-slate-200">
@@ -138,7 +138,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     </Text>
                   </View>
                   <View className="space-y-1">
-                    <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest">
+                    <Text className="text-[8.5px] font-black text-slate-400 uppercase tracking-widest dark:text-slate-300">
                       {tCommon('web.ville', 'Ville')}
                     </Text>
                     <Text className="font-black text-slate-800 dark:text-slate-200">
@@ -150,13 +150,13 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
 
               {/* Security details updates */}
               <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
-                <Text className="text-sm font-black uppercase tracking-wider">
+                <Text className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-slate-100">
                   {tCommon('web.securite', 'Sécurité')}
                 </Text>
 
                 <View className="space-y-4">
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                       {tCommon('web.mdp_actuel', 'Mot de passe actuel')}
                     </Text>
                     <TextInput
@@ -168,7 +168,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                   </View>
 
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                       {tCommon('web.nouveau_mdp', 'Nouveau mot de passe')}
                     </Text>
                     <TextInput
@@ -217,7 +217,9 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
 
                 <View className="space-y-3 pt-4 max-w-full">
                   <View className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    <Text>{tCommon('web.progression', 'Progression')}</Text>
+                    <Text className="text-[10px] text-slate-400">
+                      {tCommon('web.progression', 'Progression')}
+                    </Text>
                     <Text className="text-[#F97316]">85%</Text>
                   </View>
                   <View className="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
@@ -227,12 +229,15 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                     />
                   </View>
                   <Text className="text-[9px] text-slate-500 dark:text-slate-500 font-bold uppercase tracking-wide">
-                    {tCommon('web.sslTestsInProgress', "Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.")}
+                    {tCommon(
+                      'web.sslTestsInProgress',
+                      "Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.",
+                    )}
                   </Text>
                 </View>
 
                 <View className="border-t border-slate-100 dark:border-slate-700 pt-4 mt-4">
-                  <Text className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">
+                  <Text className="text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center dark:text-slate-400">
                     {tCommon(
                       'web.profileNotifyMeHeader',
                       "M'avertir lors de la mise en service",
@@ -241,11 +246,15 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                   <View className="mt-3 flex gap-2">
                     <TextInput
                       keyboardType="email-address"
-                      placeholder={tCommon('web.email_placeholder', 'votre.email@domaine.tn')}
+                      placeholder={tCommon(
+                        'web.email_placeholder',
+                        'votre.email@domaine.tn',
+                      )}
                       value={newsletterEmail}
                       onChangeText={setNewsletterEmail}
                       className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"
                     />
+
                     <TouchableOpacity
                       onPress={() => {
                         if (!newsletterEmail) return;
@@ -270,7 +279,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
             {/* Right Favorites grid (lg:col-span-8) */}
             <View className="lg:col-span-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
               <View className="flex justify-between items-center">
-                <Text className="text-sm font-black uppercase tracking-wider">
+                <Text className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-slate-100">
                   {tCommon('web.mes_favoris', 'Mes favoris')}
                 </Text>
                 <TouchableOpacity
@@ -283,7 +292,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
 
               {favorites.length === 0 ? (
                 <View className="border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-10 text-center space-y-3">
-                  <Text className="text-xs text-slate-400 font-bold">
+                  <Text className="text-xs text-slate-400 font-bold dark:text-slate-300">
                     {tCommon(
                       'web.plus_favoris_desc',
                       "Aucun favori pour l'instant. Explorez le marketplace !",
@@ -329,7 +338,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                                 {prod.price} DT
                               </Text>
                             </View>
-                            <Text className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                            <Text className="text-[10px] text-slate-400 mt-1 line-clamp-2 leading-relaxed dark:text-slate-300">
                               {prod.description}
                             </Text>
                           </View>

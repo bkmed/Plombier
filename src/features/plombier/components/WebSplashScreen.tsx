@@ -28,11 +28,16 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
         <LogoSVG size={96} />
       </View>
       <View className="text-center mb-8">
-        <Text style={styles.title}>{businessName}</Text>
+        <Text
+          style={styles.title}
+          className="text-slate-900 dark:text-slate-100"
+        >
+          {businessName}
+        </Text>
         <Text className="text-[#F97316] text-[10px] sm:text-xs font-black tracking-widest uppercase mt-2.5">
           {t('tagline')}
         </Text>
-        <Text className="text-slate-400/60 text-xs font-bold mt-2">
+        <Text className="text-slate-400/60 text-xs font-bold mt-2 text-slate-900 dark:text-slate-100">
           {tCommon(
             'web.splashServiceList',
             'سباكة · تكييف · غاز · تدفئة مركزية',
@@ -52,7 +57,7 @@ export const WebSplashScreen: React.FC<WebSplashScreenProps> = ({
           />
         </View>
       </View>
-      <Text className="text-slate-400 text-[10px] font-black uppercase tracking-wider">
+      <Text className="text-slate-400 text-[10px] font-black uppercase tracking-wider dark:text-slate-300">
         {t('web.loadingPremium', {
           defaultValue: 'Chargement premium...',
         })}{' '}

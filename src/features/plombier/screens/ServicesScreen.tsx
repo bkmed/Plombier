@@ -3,7 +3,11 @@ import { View, Text, TouchableOpacity, Linking } from 'react-native';
 import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectServices } from '../../../store/slices/servicesSlice';
-import { trackPageView, trackShare, trackCallClick } from '../../../store/slices/analyticsSlice';
+import {
+  trackPageView,
+  trackShare,
+  trackCallClick,
+} from '../../../store/slices/analyticsSlice';
 import { useTranslation } from 'react-i18next';
 
 const SERVICE_TRANSLATION_PREFIX = 'services_local.';
@@ -21,18 +25,23 @@ const ServicesScreen = ({
     dispatch(trackPageView('Services'));
   }, [dispatch]);
 
-  const handleShare = (serviceName: string, platform: 'facebook' | 'whatsapp') => {
+  const handleShare = (
+    serviceName: string,
+    platform: 'facebook' | 'whatsapp',
+  ) => {
     dispatch(trackShare({ platform, item: serviceName }));
-    const url = encodeURIComponent(window.location?.href || 'https://plombier.example.com/services');
+    const url = encodeURIComponent(
+      window.location?.href || 'https://plombier.example.com/services',
+    );
     const text = encodeURIComponent(`Découvrez nos services : ${serviceName}`);
-    
+
     let shareUrl = '';
     if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     } else {
       shareUrl = `https://wa.me/?text=${text}%20${url}`;
     }
-    
+
     Linking.openURL(shareUrl);
   };
 
@@ -55,7 +64,7 @@ const ServicesScreen = ({
         <Text className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
           {t('webServices.nos_services')}
         </Text>
-        <Text className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
+        <Text className="text-3xl sm:text-4xl font-black tracking-tight mt-6 text-slate-900 dark:text-slate-100">
           {t('webServices.nos_services')}
         </Text>
         <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
@@ -93,7 +102,7 @@ const ServicesScreen = ({
                 {service.pts &&
                   service.pts.map((point: string, idx2: number) => (
                     <li key={idx2} className="flex items-center gap-2">
-                      <Text className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
+                      <Text className="w-1.5 h-1.5 bg-emerald-500 rounded-full text-slate-600 dark:text-slate-300" />
                       <Text className="text-slate-600 dark:text-slate-300 flex-1">
                         {translateServiceField(point)}
                       </Text>
@@ -119,22 +128,36 @@ const ServicesScreen = ({
                   }}
                   className="flex-1 inline-flex items-center justify-center gap-2 bg-[#F97316] hover:bg-[#e0630b] text-white text-xs font-black px-6 py-3.5 rounded-xl transition shadow-md hover:scale-[1.02] transform"
                 >
-                  <Text>{t('demander_devis')}</Text>
+                  <Text className="text-white">{t('demander_devis')}</Text>
                 </TouchableOpacity>
 
                 {/* Share Buttons */}
                 <View className="flex flex-row gap-2">
                   <TouchableOpacity
-                    onPress={() => handleShare(translateServiceField(service.name), 'facebook')}
+                    onPress={() =>
+                      handleShare(
+                        translateServiceField(service.name),
+                        'facebook',
+                      )
+                    }
                     className="bg-[#1877F2] rounded-xl px-4 py-3.5 flex items-center justify-center transition hover:bg-[#166FE5]"
                   >
-                    <Text className="text-white text-[10px] font-black">FB</Text>
+                    <Text className="text-white text-[10px] font-black">
+                      FB
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => handleShare(translateServiceField(service.name), 'whatsapp')}
+                    onPress={() =>
+                      handleShare(
+                        translateServiceField(service.name),
+                        'whatsapp',
+                      )
+                    }
                     className="bg-[#25D366] rounded-xl px-4 py-3.5 flex items-center justify-center transition hover:bg-[#20BD5A]"
                   >
-                    <Text className="text-white text-[10px] font-black">WA</Text>
+                    <Text className="text-white text-[10px] font-black">
+                      WA
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>

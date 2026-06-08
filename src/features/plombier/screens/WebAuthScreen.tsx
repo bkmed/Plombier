@@ -175,7 +175,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
           <View className="grid grid-cols-2 gap-6 pt-6">
             <View>
               <Text className="text-2xl font-black text-[#F97316]">24h/24</Text>
-              <Text className="text-[10px] text-slate-400 font-extrabold uppercase mt-1">
+              <Text className="text-[10px] text-slate-400 font-extrabold uppercase mt-1 dark:text-slate-300">
                 Intervention Urgente
               </Text>
             </View>
@@ -183,14 +183,14 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               <Text className="text-2xl font-black text-[#F97316]">
                 100% testé
               </Text>
-              <Text className="text-[10px] text-slate-400 font-extrabold uppercase mt-1">
+              <Text className="text-[10px] text-slate-400 font-extrabold uppercase mt-1 dark:text-slate-300">
                 Garantie Pièces
               </Text>
             </View>
           </View>
         </View>
 
-        <Text className="text-xs text-slate-500 font-bold relative z-10">
+        <Text className="text-xs text-slate-500 font-bold relative z-10 dark:text-slate-400">
           © 2026 {businessName}. Développé pour les particuliers et
           professionnels.
         </Text>
@@ -205,7 +205,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               onPress={() => setCurrentLang(nextLanguage)}
               className="min-h-[44px] px-3.5 py-2 rounded-lg border text-[10px] font-black tracking-wider uppercase transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
             >
-              <Text>
+              <Text className="text-[10px] text-slate-700 dark:text-slate-200">
                 {nextLanguage === 'AR'
                   ? 'العربية'
                   : nextLanguage === 'EN'
@@ -220,7 +220,9 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               }
               className="w-8 h-8 rounded-lg border flex items-center justify-center transition shadow-sm bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700"
             >
-              <Text>{currentTheme === 'light' ? '🌙' : '☀️'}</Text>
+              <Text className="text-slate-700 dark:text-slate-200">
+                {currentTheme === 'light' ? '🌙' : '☀️'}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -602,7 +604,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               }}
               className="w-full bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-600 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white text-xs font-black py-3.5 rounded-xl transition flex items-center justify-center gap-2 hover:scale-[1.01] transform"
             >
-              <Text>
+              <Text className="text-slate-600 dark:text-slate-300">
                 {tCommon(
                   'web.continueAsGuestButton',
                   "Continuer en tant qu'invité (Anonyme) →",

@@ -203,7 +203,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
 
       <View className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-10">
         <View>
-          <Text className="text-3xl font-black tracking-tight">
+          <Text className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
             {tCommon('adminAnnonces.title', 'Gestion des Annonces')}
           </Text>
           <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
@@ -262,7 +262,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                         <View className="font-black text-slate-800 dark:text-slate-100">
                           {prod.title}
                         </View>
-                        <Text className="text-[10px] text-slate-400 font-semibold">
+                        <Text className="text-[10px] text-slate-400 font-semibold dark:text-slate-300">
                           {prod.subtitle}
                         </Text>
                       </View>
@@ -328,12 +328,12 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     <Text className="font-black text-slate-800 dark:text-slate-100 text-[13px]">
                       {prod.title}
                     </Text>
-                    <Text className="text-[10px] text-slate-400 font-semibold mt-0.5">
+                    <Text className="text-[10px] text-slate-400 font-semibold mt-0.5 dark:text-slate-300">
                       {prod.category} • {prod.subtitle}
                     </Text>
                   </View>
                 </View>
-                <Text className="font-black text-sm text-right shrink-0">
+                <Text className="font-black text-sm text-right shrink-0 text-slate-900 dark:text-slate-100">
                   {prod.price} TND
                 </Text>
               </View>
@@ -513,33 +513,33 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
               <View className="space-y-4 text-xs font-semibold">
                 <View className="grid grid-cols-2 gap-4">
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Titre *
                     </Text>
                     <TextInput
                       placeholder="Ex: Mitigeur évier"
                       value={annonceTitle}
                       onChangeText={setAnnonceTitle}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
                     />
                   </View>
 
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Sous-Titre / Marque
                     </Text>
                     <TextInput
                       placeholder="Ex: GROHE chromé"
                       value={annonceSubtitle}
                       onChangeText={setAnnonceSubtitle}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
                     />
                   </View>
                 </View>
 
                 <View className="grid grid-cols-3 gap-4">
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Catégorie
                     </Text>
                     <select
@@ -556,19 +556,19 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                   </View>
 
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Prix (TND) *
                     </Text>
                     <TextInput
                       keyboardType="numeric"
                       value={String(annoncePrice)}
                       onChangeText={text => setAnnoncePrice(Number(text))}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
                     />
                   </View>
 
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       État
                     </Text>
                     <select
@@ -585,7 +585,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
 
                 <View className="grid grid-cols-2 gap-4">
                   <View className="space-y-2">
-                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                    <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Représentation Visuelle
                     </Text>
                     <select
@@ -652,7 +652,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                 </View>
 
                 <View className="space-y-2">
-                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                     Description technique *
                   </Text>
                   <TextInput
@@ -661,7 +661,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     placeholder="Détails du produit..."
                     value={annonceDescription}
                     onChangeText={setAnnonceDescription}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
                   />
                 </View>
 

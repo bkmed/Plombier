@@ -256,6 +256,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                           transition: 'color 0.18s',
                         } as any
                       }
+                      className="text-slate-900 dark:text-slate-100"
                     >
                       {link.label}
                     </Text>
@@ -302,6 +303,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                     color: isDark ? '#CBD5E1' : '#475569',
                   } as any
                 }
+                className="text-slate-900 dark:text-slate-100"
               >
                 {nextLanguage}
               </Text>
@@ -312,7 +314,10 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
               onPress={() => setCurrentTheme(isDark ? 'light' : 'dark')}
               style={{ ...btnBase, width: 36, height: 36 } as any}
             >
-              <Text style={{ fontSize: 16 } as any}>
+              <Text
+                style={{ fontSize: 16 } as any}
+                className="text-slate-900 dark:text-slate-100"
+              >
                 {isDark ? '☀️' : '🌙'}
               </Text>
             </TouchableOpacity>
@@ -339,6 +344,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                     style={
                       { color: '#fff', fontSize: 12, fontWeight: '800' } as any
                     }
+                    className="text-slate-900 dark:text-slate-100"
                   >
                     {tCommon('web.loginAction', "Connexion / S'inscrire")}
                   </Text>
@@ -367,6 +373,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                           color: isDark ? '#38BDF8' : '#1E3A5F',
                         } as any
                       }
+                      className="text-slate-900 dark:text-slate-100"
                     >
                       {sessionUser?.name} · {currentRole.toUpperCase()}
                     </Text>
@@ -391,6 +398,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                           fontWeight: '800',
                         } as any
                       }
+                      className="text-slate-900 dark:text-slate-100"
                     >
                       {tCommon('web.logoutAction', 'Déconnexion')}
                     </Text>
@@ -443,7 +451,12 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                     } as any
                   }
                 >
-                  <Text style={{ fontSize: 18 } as any}>{link.icon}</Text>
+                  <Text
+                    style={{ fontSize: 18 } as any}
+                    className="text-slate-900 dark:text-slate-100"
+                  >
+                    {link.icon}
+                  </Text>
                   <Text
                     style={
                       {
@@ -456,12 +469,16 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                           : '#334155',
                       } as any
                     }
+                    className="text-slate-900 dark:text-slate-100"
                   >
                     {link.label}
                   </Text>
                   {isActive && (
                     <View style={{ marginLeft: 'auto' } as any}>
-                      <Text style={{ color: '#F97316', fontSize: 16 } as any}>
+                      <Text
+                        style={{ color: '#F97316', fontSize: 16 } as any}
+                        className="text-slate-900 dark:text-slate-100"
+                      >
                         ›
                       </Text>
                     </View>
@@ -504,6 +521,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                     style={
                       { color: '#fff', fontSize: 14, fontWeight: '800' } as any
                     }
+                    className="text-slate-900 dark:text-slate-100"
                   >
                     {tCommon('web.loginAction', "Connexion / S'inscrire")}
                   </Text>
@@ -533,6 +551,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                           color: isDark ? '#38BDF8' : '#1E3A5F',
                         } as any
                       }
+                      className="text-slate-900 dark:text-slate-100"
                     >
                       👤 {sessionUser?.name} — {currentRole.toUpperCase()}
                     </Text>
@@ -559,6 +578,7 @@ export const WebNavbar: React.FC<WebNavbarProps> = ({
                           fontWeight: '800',
                         } as any
                       }
+                      className="text-slate-900 dark:text-slate-100"
                     >
                       {tCommon('web.logoutAction', 'Déconnexion')}
                     </Text>

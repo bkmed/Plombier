@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Pressable, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import {
   selectTotalPageViews,
@@ -19,28 +19,6 @@ interface AdminDashboardProps {
   setActiveTab?: (tab: string) => void;
 }
 
-const NavButton = ({
-  onPress,
-  children,
-  style,
-}: {
-  onPress: () => void;
-  children: React.ReactNode;
-  style?: any;
-}) => (
-  <Pressable
-    onPress={onPress}
-    style={({ pressed }) => [
-      styles.navButton,
-      Platform.OS === 'web' && styles.navButtonWeb,
-      pressed && styles.navButtonPressed,
-      style,
-    ]}
-  >
-    {children}
-  </Pressable>
-);
-
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   businessName,
   products,
@@ -55,13 +33,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   const nav = (tab: string) => () => setActiveTab && setActiveTab(tab);
 
-  // Selectors for other modules
   const categories = useSelector(selectAllCategories) || [];
   const users = useSelector(selectAllUsers) || [];
   const galleryItems = useSelector(selectGalleryItems) || [];
   const services = useSelector(selectServices) || [];
 
-  // Analytics
   const totalViews = useSelector(selectTotalPageViews);
   const totalShares = useSelector(selectTotalShares);
   const callClicks = useSelector(selectCallClicks);
@@ -73,8 +49,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       count: products.length,
       desc: tCommon('admin.activeListingsDesc', 'Fiches dans le catalogue'),
       icon: '📦',
-      bg: '#EFF6FF',
-      countColor: '#2563EB',
+      iconBg: 'bg-blue-100 dark:bg-blue-900/40',
+      countColor: 'text-blue-600 dark:text-blue-400',
       tab: 'GestionAnnonce',
     },
     {
@@ -82,17 +58,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       count: categories.length,
       desc: tCommon('admin.categoriesDesc', 'Familles de produits'),
       icon: '🗂️',
-      bg: '#F5F3FF',
-      countColor: '#7C3AED',
+      iconBg: 'bg-purple-100 dark:bg-purple-900/40',
+      countColor: 'text-purple-600 dark:text-purple-400',
       tab: 'GestionCategorie',
     },
     {
       title: tCommon('webServices.services_title', 'Services'),
       count: services.length,
-      desc: tCommon('admin.servicesInterventionsDesc', "Services d'interventions"),
+      desc: tCommon(
+        'admin.servicesInterventionsDesc',
+        "Services d'interventions",
+      ),
       icon: '🔧',
-      bg: '#FFFBEB',
-      countColor: '#D97706',
+      iconBg: 'bg-amber-100 dark:bg-amber-900/40',
+      countColor: 'text-amber-600 dark:text-amber-400',
       tab: 'AdminServices',
     },
     {
@@ -100,8 +79,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       count: users.length,
       desc: tCommon('admin.registeredUsersDesc', 'Membres inscrits'),
       icon: '👥',
-      bg: '#ECFDF5',
-      countColor: '#059669',
+      iconBg: 'bg-emerald-100 dark:bg-emerald-900/40',
+      countColor: 'text-emerald-600 dark:text-emerald-400',
       tab: 'GestionUser',
     },
     {
@@ -109,8 +88,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       count: galleryItems.length,
       desc: tCommon('admin.galleryPhotosDesc', 'Photos de réalisations'),
       icon: '🖼️',
-      bg: '#FFF1F2',
-      countColor: '#E11D48',
+      iconBg: 'bg-rose-100 dark:bg-rose-900/40',
+      countColor: 'text-rose-600 dark:text-rose-400',
       tab: 'AdminGallery',
     },
   ];
@@ -119,77 +98,109 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     {
       id: 'GestionAnnonce',
       label: tCommon('admin.manageProducts', 'Gérer les Annonces'),
-      desc: tCommon('admin.manageProductsDesc', 'Créez de nouvelles fiches produits et gérez les disponibilités.'),
+      desc: tCommon(
+        'admin.manageProductsDesc',
+        'Créez de nouvelles fiches produits et gérez les disponibilités.',
+      ),
       icon: '📢',
-      gradientFrom: '#3B82F6',
-      gradientTo: '#06B6D4',
+      iconBg: 'bg-blue-500',
     },
     {
       id: 'GestionCategorie',
       label: tCommon('admin.manageCategories', 'Gérer les Catégories'),
-      desc: tCommon('admin.manageCategoriesDesc', 'Organisez vos familles de produits et pièces.'),
+      desc: tCommon(
+        'admin.manageCategoriesDesc',
+        'Organisez vos familles de produits et pièces.',
+      ),
       icon: '🗂️',
-      gradientFrom: '#A855F7',
-      gradientTo: '#6366F1',
+      iconBg: 'bg-purple-500',
     },
     {
       id: 'AdminServices',
       label: tCommon('admin.manageServicesLabel', 'Gérer les Services'),
-      desc: tCommon('admin.manageServicesDesc', "Modifiez les services proposés et les illustrations avant/après."),
+      desc: tCommon(
+        'admin.manageServicesDesc',
+        'Modifiez les services proposés et les illustrations avant/après.',
+      ),
       icon: '🔧',
-      gradientFrom: '#F59E0B',
-      gradientTo: '#F97316',
+      iconBg: 'bg-amber-500',
     },
     {
       id: 'GestionUser',
       label: tCommon('web.manageUsers', 'Gérer les Utilisateurs'),
-      desc: tCommon('admin.manageUsersDesc', 'Gérez les comptes membres, mettez à jour les rôles et permissions.'),
+      desc: tCommon(
+        'admin.manageUsersDesc',
+        'Gérez les comptes membres, mettez à jour les rôles et permissions.',
+      ),
       icon: '👥',
-      gradientFrom: '#10B981',
-      gradientTo: '#14B8A6',
+      iconBg: 'bg-emerald-500',
     },
     {
       id: 'AdminGallery',
       label: tCommon('admin.manageGalleryLabel', 'Gérer la Galerie'),
-      desc: tCommon('admin.manageGalleryDesc', 'Ajoutez, modifiez ou supprimez des photos de réalisations.'),
+      desc: tCommon(
+        'admin.manageGalleryDesc',
+        'Ajoutez, modifiez ou supprimez des photos de réalisations.',
+      ),
       icon: '🖼️',
-      gradientFrom: '#EC4899',
-      gradientTo: '#F43F5E',
+      iconBg: 'bg-rose-500',
     },
     {
       id: 'AdminProfile',
       label: tCommon('admin.adminProfileTitle', 'Identité & Profil'),
-      desc: tCommon('admin.adminProfileDesc', 'Configurez le nom du site, contact WhatsApp et sécurité.'),
+      desc: tCommon(
+        'admin.adminProfileDesc',
+        'Configurez le nom du site, contact WhatsApp et sécurité.',
+      ),
       icon: '⚙️',
-      gradientFrom: '#475569',
-      gradientTo: '#1E293B',
+      iconBg: 'bg-slate-600',
     },
     {
       id: 'Analytics',
       label: tCommon('admin.globalAnalytics', 'Statistiques Détaillées'),
-      desc: tCommon('admin.globalAnalyticsDesc', "Visualisez les graphiques de visites, taux d'engagement et partages."),
+      desc: tCommon(
+        'admin.globalAnalyticsDesc',
+        "Visualisez les graphiques de visites, taux d'engagement et partages.",
+      ),
       icon: '📈',
-      gradientFrom: '#4F46E5',
-      gradientTo: '#7C3AED',
+      iconBg: 'bg-indigo-500',
+    },
+  ];
+
+  const metrics = [
+    {
+      label: tCommon('admin.totalViews', 'Vues'),
+      value: totalViews,
+      color: 'text-sky-600 dark:text-sky-400',
+    },
+    {
+      label: tCommon('admin.totalShares', 'Partages'),
+      value: totalShares,
+      color: 'text-violet-600 dark:text-violet-400',
+    },
+    {
+      label: tCommon('admin.callClicks', 'Appels'),
+      value: callClicks,
+      color: 'text-emerald-600 dark:text-emerald-400',
     },
   ];
 
   return (
-    <View style={styles.container}>
-
-      {/* Hero Welcome Banner */}
-      <View style={styles.hero}>
-        <View style={styles.heroBadge}>
-          <View style={styles.heroPulse} />
-          <Text style={styles.heroBadgeText}>
+    <View className="max-w-7xl mx-auto px-4 sm:px-6 py-10 w-full">
+      {/* ── Hero Banner ── */}
+      <View className="bg-gradient-to-br from-indigo-700 to-indigo-900 rounded-3xl p-8 sm:p-10 mb-10 overflow-hidden relative">
+        <View className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_80%_20%,#fff_0%,transparent_60%)] pointer-events-none" />
+        <View className="flex-row items-center gap-2 self-start bg-white/20 rounded-full px-4 py-1.5 mb-5">
+          <View className="w-2 h-2 rounded-full bg-emerald-400" />
+          <Text className="text-white text-[11px] font-bold">
             {tCommon('admin.adminConsole', "Console d'Administration")}
           </Text>
         </View>
-        <Text style={styles.heroTitle}>
+        <Text className="text-white text-3xl sm:text-4xl font-black tracking-tight mb-2">
           {tCommon('common.welcome', 'Bienvenue')},{' '}
           {tCommon('admin.defaultAdminName', 'Admin')} 👋
         </Text>
-        <Text style={styles.heroSubtitle}>
+        <Text className="text-indigo-200 text-sm font-medium max-w-lg leading-relaxed">
           {t('admin.dashboardDescription', {
             defaultValue: `Gérez l'activité globale, le catalogue et les configurations pour ${businessName}.`,
             businessName,
@@ -197,376 +208,152 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </Text>
       </View>
 
-      {/* Overview Stats Grid */}
-      <Text style={styles.sectionTitle}>
+      {/* ── Overview Stats ── */}
+      <Text className="text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">
         {tCommon('admin.status', "Vue d'Ensemble")}
       </Text>
-      <View style={styles.overviewGrid}>
+      <View className="flex-row flex-wrap gap-3 mb-10">
         {overviewCards.map((item, idx) => (
-          <NavButton key={idx} onPress={nav(item.tab)} style={styles.overviewCard}>
-            <View style={styles.overviewCardTop}>
-              <View style={[styles.overviewIconBg, { backgroundColor: item.bg }]}>
-                <Text style={styles.overviewIcon}>{item.icon}</Text>
+          <TouchableOpacity
+            key={idx}
+            onPress={nav(item.tab)}
+            className="flex-1 min-w-[130px] bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 shadow-sm hover:shadow-md hover:border-indigo-400 dark:hover:border-indigo-500 transition-all"
+          >
+            <View className="flex-row items-center justify-between mb-3">
+              <View
+                className={`w-10 h-10 rounded-xl items-center justify-center ${item.iconBg}`}
+              >
+                <Text className="text-lg">{item.icon}</Text>
               </View>
-              <Text style={[styles.overviewCount, { color: item.countColor }]}>
+              <Text className={`text-2xl font-black ${item.countColor}`}>
                 {item.count}
               </Text>
             </View>
-            <Text style={styles.overviewCardTitle}>{item.title}</Text>
-            <Text style={styles.overviewCardDesc}>{item.desc}</Text>
-          </NavButton>
+            <Text className="text-xs font-black text-slate-800 dark:text-slate-100 mb-0.5">
+              {item.title}
+            </Text>
+            <Text className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">
+              {item.desc}
+            </Text>
+          </TouchableOpacity>
         ))}
       </View>
 
-      <View style={styles.bottomGrid}>
-
+      {/* ── Bottom Grid ── */}
+      <View className="flex-row flex-wrap gap-6 items-start">
         {/* Quick Actions */}
-        <View style={styles.actionsPanel}>
-          <Text style={styles.sectionTitle}>
+        <View className="flex-[2] min-w-[280px]">
+          <Text className="text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">
             {tCommon('admin.quickActions', 'Raccourcis de Gestion')}
           </Text>
-          <View style={styles.actionsCard}>
-            {quickActions.map(action => (
-              <NavButton
+          <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-2 shadow-sm">
+            {quickActions.map((action, idx) => (
+              <TouchableOpacity
                 key={action.id}
                 onPress={nav(action.id)}
-                style={styles.actionRow}
+                className={`flex-row items-center gap-4 px-3 py-3.5 rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors ${
+                  idx < quickActions.length - 1
+                    ? 'border-b border-slate-100 dark:border-slate-700/50'
+                    : ''
+                }`}
               >
                 <View
-                  style={[
-                    styles.actionIconBg,
-                    { backgroundColor: action.gradientFrom },
-                  ]}
+                  className={`w-10 h-10 rounded-xl items-center justify-center ${action.iconBg}`}
                 >
-                  <Text style={styles.actionIcon}>{action.icon}</Text>
+                  <Text className="text-lg">{action.icon}</Text>
                 </View>
-                <View style={styles.actionText}>
-                  <Text style={styles.actionLabel}>{action.label}</Text>
-                  <Text style={styles.actionDesc}>{action.desc}</Text>
+                <View className="flex-1">
+                  <Text className="text-xs font-black text-slate-800 dark:text-slate-100 mb-0.5">
+                    {action.label}
+                  </Text>
+                  <Text className="text-[10px] text-slate-400 dark:text-slate-500 font-medium leading-relaxed">
+                    {action.desc}
+                  </Text>
                 </View>
-                <Text style={styles.actionArrow}>›</Text>
-              </NavButton>
+                <Text className="text-slate-300 dark:text-slate-600 text-xl font-bold">
+                  ›
+                </Text>
+              </TouchableOpacity>
             ))}
           </View>
         </View>
 
         {/* Activity Panel */}
-        <View style={styles.activityPanel}>
-          <Text style={styles.sectionTitle}>
+        <View className="flex-1 min-w-[240px]">
+          <Text className="text-[11px] font-black uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-4">
             {tCommon('admin.globalAnalytics', 'Activité & Trafic')}
           </Text>
-          <View style={styles.activityCard}>
-            {/* Quick metric pills */}
-            <View style={styles.metricsRow}>
-              {[
-                { label: tCommon('admin.totalViews', 'Vues'), value: totalViews },
-                { label: tCommon('admin.totalShares', 'Partages'), value: totalShares },
-                { label: tCommon('admin.callClicks', 'Appels'), value: callClicks },
-              ].map((m, i) => (
-                <View key={i} style={styles.metricPill}>
-                  <Text style={styles.metricLabel}>{m.label}</Text>
-                  <Text style={styles.metricValue}>{m.value}</Text>
+          <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-5 shadow-sm gap-4">
+            {/* Metric pills */}
+            <View className="flex-row gap-2">
+              {metrics.map((m, i) => (
+                <View
+                  key={i}
+                  className="flex-1 bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-3 items-center"
+                >
+                  <Text className="text-[8px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-1">
+                    {m.label}
+                  </Text>
+                  <Text className={`text-xl font-black ${m.color}`}>
+                    {m.value}
+                  </Text>
                 </View>
               ))}
             </View>
 
             {/* Top pages */}
-            <Text style={styles.subSectionTitle}>
-              {tCommon('admin.viewedPagesDetailTitle', 'Pages les plus consultées')}
-            </Text>
-            {Object.entries(pageViewsMap).length === 0 ? (
-              <Text style={styles.emptyText}>
-                {tCommon('admin.noPageViewsData', 'Aucune page consultée pour le moment.')}
+            <View>
+              <Text className="text-[9px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-500 mb-2">
+                {tCommon(
+                  'admin.viewedPagesDetailTitle',
+                  'Pages les plus consultées',
+                )}
               </Text>
-            ) : (
-              Object.entries(pageViewsMap)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 3)
-                .map(([page, views], idx) => (
-                  <View key={idx} style={styles.pageRow}>
-                    <Text style={styles.pageName} numberOfLines={1}>{page}</Text>
-                    <Text style={styles.pageViews}>
-                      {views} {tCommon('admin.viewsCount', 'vue(s)')}
-                    </Text>
-                  </View>
-                ))
-            )}
+              {Object.entries(pageViewsMap).length === 0 ? (
+                <Text className="text-xs text-slate-400 dark:text-slate-500 italic font-medium">
+                  {tCommon(
+                    'admin.noPageViewsData',
+                    'Aucune page consultée pour le moment.',
+                  )}
+                </Text>
+              ) : (
+                Object.entries(pageViewsMap)
+                  .sort((a, b) => (b[1] as number) - (a[1] as number))
+                  .slice(0, 3)
+                  .map(([page, views], idx) => (
+                    <View
+                      key={idx}
+                      className="flex-row items-center justify-between gap-2 py-2 border-b border-slate-100 dark:border-slate-700/50 last:border-0"
+                    >
+                      <Text
+                        className="text-xs font-bold text-slate-700 dark:text-slate-200 flex-1"
+                        numberOfLines={1}
+                      >
+                        {page}
+                      </Text>
+                      <Text className="text-[10px] font-black text-indigo-500 dark:text-indigo-400">
+                        {views as number}{' '}
+                        {tCommon('admin.viewsCount', 'vue(s)')}
+                      </Text>
+                    </View>
+                  ))
+              )}
+            </View>
 
             {/* Analytics link */}
-            <NavButton onPress={nav('Analytics')} style={styles.analyticsBtn}>
-              <Text style={styles.analyticsBtnText}>
+            <TouchableOpacity
+              onPress={nav('Analytics')}
+              className="bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 items-center hover:bg-indigo-50 dark:hover:bg-indigo-900/20 hover:border-indigo-300 dark:hover:border-indigo-700 transition-colors"
+            >
+              <Text className="text-xs font-black text-slate-600 dark:text-slate-300">
                 {tCommon('admin.globalAnalytics', 'Statistiques Détaillées')} →
               </Text>
-            </NavButton>
+            </TouchableOpacity>
           </View>
         </View>
-
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    maxWidth: 1280,
-    marginHorizontal: 'auto' as any,
-    paddingHorizontal: 24,
-    paddingVertical: 40,
-    width: '100%',
-  },
-  hero: {
-    backgroundColor: '#3730A3',
-    borderRadius: 24,
-    padding: 40,
-    marginBottom: 40,
-    overflow: 'hidden',
-  },
-  heroBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.15)',
-    borderRadius: 99,
-    paddingHorizontal: 14,
-    paddingVertical: 6,
-    alignSelf: 'flex-start',
-    marginBottom: 16,
-  },
-  heroPulse: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#34D399',
-    marginRight: 8,
-  },
-  heroBadgeText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  heroTitle: {
-    color: '#fff',
-    fontSize: 32,
-    fontWeight: '900',
-    marginBottom: 10,
-  },
-  heroSubtitle: {
-    color: '#C7D2FE',
-    fontSize: 15,
-    fontWeight: '500',
-    maxWidth: 600,
-    lineHeight: 22,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: 1.2,
-    color: '#475569',
-    marginBottom: 14,
-  },
-  overviewGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 14,
-    marginBottom: 40,
-  },
-  overviewCard: {
-    flexBasis: '18%',
-    minWidth: 140,
-    flex: 1,
-    backgroundColor: '#fff',
-    borderRadius: 18,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    padding: 18,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  overviewCardTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 14,
-  },
-  overviewIconBg: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  overviewIcon: { fontSize: 18 },
-  overviewCount: {
-    fontSize: 26,
-    fontWeight: '900',
-  },
-  overviewCardTitle: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: '#1E293B',
-    marginBottom: 3,
-  },
-  overviewCardDesc: {
-    fontSize: 10,
-    color: '#94A3B8',
-    fontWeight: '600',
-    lineHeight: 14,
-  },
-  bottomGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 24,
-    alignItems: 'flex-start',
-  },
-  actionsPanel: {
-    flex: 2,
-    minWidth: 300,
-  },
-  activityPanel: {
-    flex: 1,
-    minWidth: 260,
-  },
-  actionsCard: {
-    backgroundColor: '#fff',
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    padding: 8,
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 14,
-    borderRadius: 16,
-    marginBottom: 2,
-  },
-  actionIconBg: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 14,
-  },
-  actionIcon: { fontSize: 20 },
-  actionText: { flex: 1 },
-  actionLabel: {
-    fontSize: 13,
-    fontWeight: '800',
-    color: '#1E293B',
-    marginBottom: 2,
-  },
-  actionDesc: {
-    fontSize: 11,
-    color: '#94A3B8',
-    fontWeight: '500',
-    lineHeight: 16,
-  },
-  actionArrow: {
-    fontSize: 22,
-    color: '#CBD5E1',
-    fontWeight: '700',
-    marginLeft: 10,
-  },
-  activityCard: {
-    backgroundColor: '#fff',
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    padding: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 8,
-    elevation: 2,
-    gap: 16,
-  },
-  metricsRow: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  metricPill: {
-    flex: 1,
-    backgroundColor: '#F8FAFC',
-    borderRadius: 14,
-    padding: 12,
-    alignItems: 'center',
-  },
-  metricLabel: {
-    fontSize: 9,
-    fontWeight: '700',
-    color: '#94A3B8',
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    marginBottom: 4,
-  },
-  metricValue: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#1E293B',
-  },
-  subSectionTitle: {
-    fontSize: 10,
-    fontWeight: '900',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    color: '#64748B',
-    marginBottom: 8,
-  },
-  pageRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 7,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
-  },
-  pageName: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#334155',
-    flex: 1,
-    marginRight: 8,
-  },
-  pageViews: {
-    fontSize: 10,
-    fontWeight: '900',
-    color: '#6366F1',
-  },
-  emptyText: {
-    fontSize: 12,
-    color: '#94A3B8',
-    fontStyle: 'italic',
-  },
-  analyticsBtn: {
-    backgroundColor: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    borderRadius: 14,
-    paddingVertical: 12,
-    alignItems: 'center',
-    marginTop: 4,
-  },
-  analyticsBtnText: {
-    fontSize: 12,
-    fontWeight: '900',
-    color: '#475569',
-  },
-  navButton: {
-    cursor: 'pointer' as any,
-  },
-  navButtonWeb: {
-    // Additional web-specific styles if needed
-  },
-  navButtonPressed: {
-    opacity: 0.7,
-  },
-});
 
 export default AdminDashboard;

@@ -75,7 +75,9 @@ const CategoryImageInput = ({
           marginRight: 12,
         }}
       >
-        <Text>{tCommon('categoryImageInput.chooseImage')}</Text>
+        <Text className="text-slate-900 dark:text-slate-100">
+          {tCommon('categoryImageInput.chooseImage')}
+        </Text>
       </TouchableOpacity>
       {imageUri ? (
         <Image

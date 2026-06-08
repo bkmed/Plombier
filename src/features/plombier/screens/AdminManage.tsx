@@ -57,7 +57,9 @@ const AdminManage: React.FC<AdminManageProps> = ({ t, setActiveTab }) => {
               className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition"
             >
               <View className="flex flex-row items-center mb-4">
-                <Text className="text-4xl mr-4">{link.icon}</Text>
+                <Text className="text-4xl mr-4 text-slate-900 dark:text-slate-100">
+                  {link.icon}
+                </Text>
                 <Text className="text-xl font-bold text-slate-800 dark:text-slate-200">
                   {link.label}
                 </Text>

@@ -156,14 +156,16 @@ const AdminServicesEditor = () => {
         style={{ alignSelf: 'flex-start' }}
       >
         <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
-          {translate('adminUsers.backToManage', { defaultValue: '← Retour à Manage' })}
+          {translate('adminUsers.backToManage', {
+            defaultValue: '← Retour à Manage',
+          })}
         </Text>
       </TouchableOpacity>
 
       <View className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
         <View className="flex items-center justify-between mb-6">
           <View>
-            <Text className="font-black text-3xl">
+            <Text className="font-black text-3xl text-slate-900 dark:text-slate-100">
               {translate('admin.servicesTitle', {
                 defaultValue: 'Gérer les services',
               })}
@@ -199,7 +201,7 @@ const AdminServicesEditor = () => {
       </View>
 
       <View className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 shadow-sm">
-        <Text className="text-xl font-black mb-4">
+        <Text className="text-xl font-black mb-4 text-slate-900 dark:text-slate-100">
           {translate('admin.servicesListTitle', {
             defaultValue: 'Liste des services',
           })}
@@ -222,7 +224,7 @@ const AdminServicesEditor = () => {
                     <View className="font-black">
                       {translateServiceField(s.name)}
                     </View>
-                    <Text className="text-sm text-slate-500">
+                    <Text className="text-sm text-slate-500 dark:text-slate-400">
                       {translateServiceField(s.desc)}
                     </Text>
                   </View>
@@ -358,7 +360,7 @@ const AdminServicesEditor = () => {
                 onPress={cancelDelete}
                 className="flex-1 bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl px-4 py-3 font-black hover:bg-slate-300 dark:hover:bg-slate-600 transition"
               >
-                <Text className="text-center font-bold">
+                <Text className="text-center font-bold text-slate-700 dark:text-slate-200">
                   {translate('admin.cancelButton', {
                     defaultValue: 'Annuler',
                   })}
@@ -388,7 +390,7 @@ const AdminServicesEditor = () => {
               }}
               className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-500 hover:text-slate-800 dark:hover:text-slate-100 flex items-center justify-center font-bold"
             >
-              <Text>✕</Text>
+              <Text className="text-slate-500">✕</Text>
             </TouchableOpacity>
 
             <View className="p-6 sm:p-8 space-y-6">
@@ -411,6 +413,7 @@ const AdminServicesEditor = () => {
                   })}
                   className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
+
                 <TextInput
                   value={icon}
                   onChangeText={setIcon}
@@ -419,6 +422,7 @@ const AdminServicesEditor = () => {
                   })}
                   className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
+
                 <TextInput
                   value={descKey}
                   onChangeText={setDescKey}
@@ -427,6 +431,7 @@ const AdminServicesEditor = () => {
                   })}
                   className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
+
                 <TextInput
                   value={ptsKeys}
                   onChangeText={setPtsKeys}

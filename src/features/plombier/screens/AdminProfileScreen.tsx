@@ -80,11 +80,40 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
   );
 
   const availableZones = [
-    'Grand Tunis', 'Sahel', 'Ariana', 'Béja', 'Ben Arous', 'Bizerte', 'Gabès', 'Gafsa', 'Jendouba', 'Kairouan', 'Kasserine', 'Kébili', 'Le Kef', 'Mahdia', 'La Manouba', 'Médenine', 'Monastir', 'Nabeul', 'Sfax', 'Sidi Bouzid', 'Siliana', 'Sousse', 'Tataouine', 'Tozeur', 'Tunis', 'Zaghouan'
+    'Grand Tunis',
+    'Sahel',
+    'Ariana',
+    'Béja',
+    'Ben Arous',
+    'Bizerte',
+    'Gabès',
+    'Gafsa',
+    'Jendouba',
+    'Kairouan',
+    'Kasserine',
+    'Kébili',
+    'Le Kef',
+    'Mahdia',
+    'La Manouba',
+    'Médenine',
+    'Monastir',
+    'Nabeul',
+    'Sfax',
+    'Sidi Bouzid',
+    'Siliana',
+    'Sousse',
+    'Tataouine',
+    'Tozeur',
+    'Tunis',
+    'Zaghouan',
   ];
 
   const getZoneTranslationKey = (zone: string) => {
-    return `zones.${zone.toLowerCase().replace(/ /g, '_').replace(/é/g, 'e').replace(/è/g, 'e')}`;
+    return `zones.${zone
+      .toLowerCase()
+      .replace(/ /g, '_')
+      .replace(/é/g, 'e')
+      .replace(/è/g, 'e')}`;
   };
 
   useEffect(() => {
@@ -219,7 +248,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
 
   return (
     <View className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
-      <Text className="text-3xl font-black tracking-tight">
+      <Text className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
         {tr('admin.adminProfileTitle')}
       </Text>
       <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-medium">
@@ -241,25 +270,33 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
           </View>
           <View className="text-left text-xs font-semibold text-slate-400 space-y-2 border-t border-slate-100 dark:border-slate-700 pt-4">
             <View className="flex-row flex-wrap items-center">
-              <Text className="text-xs font-semibold text-slate-400">{tr('common.email')}:{' '}</Text>
+              <Text className="text-xs font-semibold text-slate-400 dark:text-slate-300">
+                {tr('common.email')}:{' '}
+              </Text>
               <Text className="font-black text-slate-700 dark:text-slate-200 ml-1">
                 {profileEmail}
               </Text>
             </View>
             <View className="flex-row flex-wrap items-center">
-              <Text className="text-xs font-semibold text-slate-400">{tr('support.whatsapp')}:{' '}</Text>
+              <Text className="text-xs font-semibold text-slate-400 dark:text-slate-300">
+                {tr('support.whatsapp')}:{' '}
+              </Text>
               <Text className="font-black text-slate-700 dark:text-slate-200 ml-1">
                 {plombierSettings?.supportPhone || profilePhone}
               </Text>
             </View>
             <View className="flex-row flex-wrap items-center">
-              <Text className="text-xs font-semibold text-slate-400">{tr('support.email_label')}:{' '}</Text>
+              <Text className="text-xs font-semibold text-slate-400 dark:text-slate-300">
+                {tr('support.email_label')}:{' '}
+              </Text>
               <Text className="font-black text-slate-700 dark:text-slate-200 ml-1">
                 {plombierSettings?.supportEmail || profileEmail}
               </Text>
             </View>
             <View className="flex-row flex-wrap items-center">
-              <Text className="text-xs font-semibold text-slate-400">{tr('admin.status')}:{' '}</Text>
+              <Text className="text-xs font-semibold text-slate-400 dark:text-slate-300">
+                {tr('admin.status')}:{' '}
+              </Text>
               <Text className="font-black text-emerald-500 ml-1">
                 {tr('admin.active')}
               </Text>
@@ -268,13 +305,13 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
         </View>
 
         <View className="md:col-span-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
-          <Text className="text-sm font-black uppercase tracking-wider">
+          <Text className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-slate-100">
             {tr('admin.contactSecurity')}
           </Text>
 
           <View className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.businessNameLabel')}
               </Text>
               <TextInput
@@ -285,7 +322,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.businessNameArLabel')}
               </Text>
               <TextInput
@@ -297,7 +334,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.experienceYearsLabel')}
               </Text>
               <TextInput
@@ -308,7 +345,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.dispoValLabel')}
               </Text>
               <TextInput
@@ -318,7 +355,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.govValLabel')}
               </Text>
               <TextInput
@@ -332,7 +369,9 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 onPress={() => handleAdminBrandSettingsUpdate({} as any)}
                 className="bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center px-6 py-3.5 rounded-xl transition shadow-sm"
               >
-                <Text className="text-white text-xs font-black uppercase tracking-wider">{tr('admin.saveBrandIdentity')}</Text>
+                <Text className="text-white text-xs font-black uppercase tracking-wider">
+                  {tr('admin.saveBrandIdentity')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -340,14 +379,14 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
           <View className="space-y-6 border-b border-slate-100 dark:border-slate-700 pb-6">
             <View className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <View>
-                <Text className="text-sm font-black uppercase tracking-wider">
+                <Text className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-slate-100">
                   {tr('admin.interventionZones')}
                 </Text>
                 <Text className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
                   {tr('admin.interventionZonesDescription')}
                 </Text>
               </View>
-              <Text className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <Text className="text-[10px] font-black uppercase tracking-widest text-slate-400 dark:text-slate-300">
                 {zones.length} {tr('admin.zonesLabel')}
               </Text>
             </View>
@@ -383,7 +422,9 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                     onPress={handleCancelZoneEdit}
                     className="bg-slate-100 dark:bg-slate-900 flex items-center justify-center px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 transition hover:bg-slate-200 dark:hover:bg-slate-800"
                   >
-                    <Text className="text-slate-700 dark:text-slate-200 text-xs font-black">{tr('common.cancel')}</Text>
+                    <Text className="text-slate-700 dark:text-slate-200 text-xs font-black">
+                      {tr('common.cancel')}
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -400,15 +441,17 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                       {getTranslation(getZoneTranslationKey(zone)) || zone}
                     </Text>
                     <View className="flex-row items-center gap-2">
-                      <TouchableOpacity
-                        onPress={() => handleEditZone(index)}
-                      >
-                        <Text className="text-[10px] font-black uppercase tracking-wider text-[#1E3A5F] hover:underline">{tr('common.edit')}</Text>
+                      <TouchableOpacity onPress={() => handleEditZone(index)}>
+                        <Text className="text-[10px] font-black uppercase tracking-wider text-[#1E3A5F] hover:underline">
+                          {tr('common.edit')}
+                        </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleDeleteZoneClick(index)}
                       >
-                        <Text className="text-[10px] font-black uppercase tracking-wider text-rose-500 hover:underline">{tr('common.delete')}</Text>
+                        <Text className="text-[10px] font-black uppercase tracking-wider text-rose-500 hover:underline">
+                          {tr('common.delete')}
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>
@@ -423,7 +466,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
 
           <View className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-slate-100 dark:border-slate-700 pb-6">
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {getTranslation('admin.admin_edit_email')}
               </Text>
               <TextInput
@@ -434,7 +477,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {getTranslation('admin.admin_edit_phone')}
               </Text>
               <TextInput
@@ -445,7 +488,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {getTranslation('support.email_label')}
               </Text>
               <TextInput
@@ -457,7 +500,7 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {getTranslation('support.whatsapp')}
               </Text>
               <TextInput
@@ -473,30 +516,32 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 onPress={() => handleAdminProfileUpdate({} as any)}
                 className="bg-[#F97316] hover:bg-[#e0630b] flex items-center justify-center px-6 py-3.5 rounded-xl transition shadow-sm"
               >
-                <Text className="text-white text-xs font-black uppercase tracking-wider">{tr('admin.saveContactDetails')}</Text>
+                <Text className="text-white text-xs font-black uppercase tracking-wider">
+                  {tr('admin.saveContactDetails')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
 
           <View className="space-y-4">
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.newAdminPassword')}
               </Text>
               <TextInput
                 secureTextEntry
                 placeholder="Ex: admin123"
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
               />
             </View>
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-400 uppercase tracking-widest dark:text-slate-300">
                 {tr('admin.confirmPassword')}
               </Text>
               <TextInput
                 secureTextEntry
                 placeholder="Ex: admin123"
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
               />
             </View>
             <TouchableOpacity
@@ -505,7 +550,9 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
               }
               className="bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center px-6 py-3.5 rounded-xl transition shadow-sm"
             >
-              <Text className="text-white text-xs font-black uppercase tracking-wider">{tr('admin.updateSecurity')}</Text>
+              <Text className="text-white text-xs font-black uppercase tracking-wider">
+                {tr('admin.updateSecurity')}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -527,13 +574,17 @@ const AdminProfileScreen = ({ t }: AdminProfileScreenProps) => {
                 onPress={cancelDeleteZone}
                 className="flex-1 bg-slate-200 dark:bg-slate-700 rounded-xl px-4 py-3 hover:bg-slate-300 dark:hover:bg-slate-600 transition flex items-center justify-center"
               >
-                <Text className="text-slate-700 dark:text-slate-200 font-black">{tr('admin.cancelButton')}</Text>
+                <Text className="text-slate-700 dark:text-slate-200 font-black">
+                  {tr('admin.cancelButton')}
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={confirmDeleteZone}
                 className="flex-1 bg-rose-600 rounded-xl px-4 py-3 hover:bg-rose-700 transition flex items-center justify-center"
               >
-                <Text className="text-white font-black">{tr('admin.deleteButton')}</Text>
+                <Text className="text-white font-black">
+                  {tr('admin.deleteButton')}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>

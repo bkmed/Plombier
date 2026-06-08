@@ -157,7 +157,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
         </Text>
       </TouchableOpacity>
 
-      <Text className="text-3xl font-black tracking-tight">
+      <Text className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
         {tCommon('adminUsers.title', 'Gestion des Comptes Membres')}
       </Text>
       <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
@@ -171,7 +171,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
         <View className="mt-8 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm">
           <View className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <View>
-              <Text className="text-xl font-black">
+              <Text className="text-xl font-black text-slate-900 dark:text-slate-100">
                 {tCommon('adminUsers.editUserTitle', 'Modifier un utilisateur')}
               </Text>
               <Text className="text-slate-500 dark:text-slate-400 text-sm mt-1">
@@ -199,6 +199,7 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
               )}
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             />
+
             <TextInput
               keyboardType="email-address"
               value={editUserEmail}
@@ -206,12 +207,14 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
               placeholder="Email"
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             />
+
             <TextInput
               value={editUserPhone}
               onChangeText={setEditUserPhone}
               placeholder={tCommon('adminUsers.phonePlaceholder', 'Téléphone')}
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             />
+
             <select
               value={editUserRole}
               onChange={e =>
@@ -219,8 +222,12 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
               }
               className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
             >
-              <option value="user">{tCommon('adminUsers.roleUser', 'Utilisateur')}</option>
-              <option value="admin">{tCommon('adminUsers.roleAdmin', 'Administrateur')}</option>
+              <option value="user">
+                {tCommon('adminUsers.roleUser', 'Utilisateur')}
+              </option>
+              <option value="admin">
+                {tCommon('adminUsers.roleAdmin', 'Administrateur')}
+              </option>
             </select>
             <View className="md:col-span-2 flex justify-end gap-3">
               <TouchableOpacity
@@ -240,12 +247,24 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
           <table className="w-full text-xs text-left font-semibold">
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400">
               <tr>
-                <th className="px-6 py-4">{tCommon('adminUsers.tableFullName', 'Nom complet')}</th>
-                <th className="px-6 py-4">{tCommon('adminUsers.tableEmail', 'Adresse Email')}</th>
-                <th className="px-6 py-4">{tCommon('adminUsers.tablePhone', 'Téléphone')}</th>
-                <th className="px-6 py-4">{tCommon('adminUsers.tableRole', 'Rôle')}</th>
-                <th className="px-6 py-4">{tCommon('adminUsers.tableStatus', 'Statut')}</th>
-                <th className="px-6 py-4 text-center">{tCommon('adminUsers.tableActions', 'Actions')}</th>
+                <th className="px-6 py-4">
+                  {tCommon('adminUsers.tableFullName', 'Nom complet')}
+                </th>
+                <th className="px-6 py-4">
+                  {tCommon('adminUsers.tableEmail', 'Adresse Email')}
+                </th>
+                <th className="px-6 py-4">
+                  {tCommon('adminUsers.tablePhone', 'Téléphone')}
+                </th>
+                <th className="px-6 py-4">
+                  {tCommon('adminUsers.tableRole', 'Rôle')}
+                </th>
+                <th className="px-6 py-4">
+                  {tCommon('adminUsers.tableStatus', 'Statut')}
+                </th>
+                <th className="px-6 py-4 text-center">
+                  {tCommon('adminUsers.tableActions', 'Actions')}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
@@ -309,7 +328,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                         onPress={() => handleToggleUserRole(u.id, u.role)}
                         className="bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-white px-2.5 py-1 rounded transition"
                       >
-                        {u.role === 'admin' ? tCommon('adminUsers.btnDemote', 'Rétrograder') : tCommon('adminUsers.btnPromote', 'Promouvoir')}
+                        {u.role === 'admin'
+                          ? tCommon('adminUsers.btnDemote', 'Rétrograder')
+                          : tCommon('adminUsers.btnPromote', 'Promouvoir')}
                       </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleToggleUserStatus(u.id, u.status)}
@@ -319,7 +340,9 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                             : 'bg-emerald-600 hover:bg-emerald-700'
                         }`}
                       >
-                        {u.status === 'active' ? tCommon('adminUsers.btnBlock', 'Bloquer') : tCommon('adminUsers.btnActivate', 'Activer')}
+                        {u.status === 'active'
+                          ? tCommon('adminUsers.btnBlock', 'Bloquer')
+                          : tCommon('adminUsers.btnActivate', 'Activer')}
                       </TouchableOpacity>
                     </View>
                   </td>

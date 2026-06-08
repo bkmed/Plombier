@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, Linking } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { trackPageView, trackShare } from '../../../store/slices/analyticsSlice';
+import {
+  trackPageView,
+  trackShare,
+} from '../../../store/slices/analyticsSlice';
 import {
   selectGalleryItems,
   GalleryItem,
@@ -17,20 +20,27 @@ const GalleryScreen = () => {
     dispatch(trackPageView('Gallery'));
   }, [dispatch]);
 
-  const handleShare = (item: GalleryItem, platform: 'facebook' | 'whatsapp') => {
+  const handleShare = (
+    item: GalleryItem,
+    platform: 'facebook' | 'whatsapp',
+  ) => {
     dispatch(trackShare({ platform, item: item.title }));
-    
+
     // Use the current domain or a default one
-    const url = encodeURIComponent(window.location?.href || 'https://plombier.example.com/gallery');
-    const text = encodeURIComponent(`Regardez ceci : ${item.title} - ${item.subtitle || ''}`);
-    
+    const url = encodeURIComponent(
+      window.location?.href || 'https://plombier.example.com/gallery',
+    );
+    const text = encodeURIComponent(
+      `Regardez ceci : ${item.title} - ${item.subtitle || ''}`,
+    );
+
     let shareUrl = '';
     if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     } else {
       shareUrl = `https://wa.me/?text=${text}%20${url}`;
     }
-    
+
     Linking.openURL(shareUrl);
   };
 
@@ -80,20 +90,24 @@ const GalleryScreen = () => {
                     {item.description}
                   </Text>
                 )}
-                
+
                 {/* Share Buttons */}
                 <View className="mt-6 flex flex-row gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
                   <TouchableOpacity
                     onPress={() => handleShare(item, 'facebook')}
                     className="flex-1 bg-[#1877F2] text-white rounded-xl py-2 flex items-center justify-center transition hover:bg-[#166FE5]"
                   >
-                    <Text className="text-white text-xs font-black">Facebook</Text>
+                    <Text className="text-white text-xs font-black">
+                      Facebook
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => handleShare(item, 'whatsapp')}
                     className="flex-1 bg-[#25D366] text-white rounded-xl py-2 flex items-center justify-center transition hover:bg-[#20BD5A]"
                   >
-                    <Text className="text-white text-xs font-black">WhatsApp</Text>
+                    <Text className="text-white text-xs font-black">
+                      WhatsApp
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>

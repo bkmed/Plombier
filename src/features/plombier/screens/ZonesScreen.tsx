@@ -16,39 +16,45 @@ const ALL_CITIES_BY_ZONE: Record<string, { city: string; area: string }[]> = {
     { city: 'Ben Arous', area: 'Grand Tunis' },
     { city: 'La Manouba', area: 'Grand Tunis' },
   ],
+
   Sahel: [
     { city: 'Sousse', area: 'Sahel' },
     { city: 'Monastir', area: 'Sahel' },
     { city: 'Mahdia', area: 'Sahel' },
   ],
+
   Sfax: [{ city: 'Sfax', area: 'Sfax' }],
-  'Ariana': [{ city: 'Ariana', area: 'Ariana' }],
-  'Béja': [{ city: 'Béja', area: 'Béja' }],
+  Ariana: [{ city: 'Ariana', area: 'Ariana' }],
+  Béja: [{ city: 'Béja', area: 'Béja' }],
   'Ben Arous': [{ city: 'Ben Arous', area: 'Ben Arous' }],
-  'Bizerte': [{ city: 'Bizerte', area: 'Bizerte' }],
-  'Gabès': [{ city: 'Gabès', area: 'Gabès' }],
-  'Gafsa': [{ city: 'Gafsa', area: 'Gafsa' }],
-  'Jendouba': [{ city: 'Jendouba', area: 'Jendouba' }],
-  'Kairouan': [{ city: 'Kairouan', area: 'Kairouan' }],
-  'Kasserine': [{ city: 'Kasserine', area: 'Kasserine' }],
-  'Kébili': [{ city: 'Kébili', area: 'Kébili' }],
+  Bizerte: [{ city: 'Bizerte', area: 'Bizerte' }],
+  Gabès: [{ city: 'Gabès', area: 'Gabès' }],
+  Gafsa: [{ city: 'Gafsa', area: 'Gafsa' }],
+  Jendouba: [{ city: 'Jendouba', area: 'Jendouba' }],
+  Kairouan: [{ city: 'Kairouan', area: 'Kairouan' }],
+  Kasserine: [{ city: 'Kasserine', area: 'Kasserine' }],
+  Kébili: [{ city: 'Kébili', area: 'Kébili' }],
   'Le Kef': [{ city: 'Le Kef', area: 'Le Kef' }],
-  'Mahdia': [{ city: 'Mahdia', area: 'Mahdia' }],
+  Mahdia: [{ city: 'Mahdia', area: 'Mahdia' }],
   'La Manouba': [{ city: 'La Manouba', area: 'La Manouba' }],
-  'Médenine': [{ city: 'Médenine', area: 'Médenine' }],
-  'Monastir': [{ city: 'Monastir', area: 'Monastir' }],
-  'Nabeul': [{ city: 'Nabeul', area: 'Nabeul' }],
+  Médenine: [{ city: 'Médenine', area: 'Médenine' }],
+  Monastir: [{ city: 'Monastir', area: 'Monastir' }],
+  Nabeul: [{ city: 'Nabeul', area: 'Nabeul' }],
   'Sidi Bouzid': [{ city: 'Sidi Bouzid', area: 'Sidi Bouzid' }],
-  'Siliana': [{ city: 'Siliana', area: 'Siliana' }],
-  'Sousse': [{ city: 'Sousse', area: 'Sousse' }],
-  'Tataouine': [{ city: 'Tataouine', area: 'Tataouine' }],
-  'Tozeur': [{ city: 'Tozeur', area: 'Tozeur' }],
-  'Tunis': [{ city: 'Tunis', area: 'Tunis' }],
-  'Zaghouan': [{ city: 'Zaghouan', area: 'Zaghouan' }],
+  Siliana: [{ city: 'Siliana', area: 'Siliana' }],
+  Sousse: [{ city: 'Sousse', area: 'Sousse' }],
+  Tataouine: [{ city: 'Tataouine', area: 'Tataouine' }],
+  Tozeur: [{ city: 'Tozeur', area: 'Tozeur' }],
+  Tunis: [{ city: 'Tunis', area: 'Tunis' }],
+  Zaghouan: [{ city: 'Zaghouan', area: 'Zaghouan' }],
 };
 
 const getZoneTranslationKey = (zone: string) => {
-  return `zones.${zone.toLowerCase().replace(/ /g, '_').replace(/é/g, 'e').replace(/è/g, 'e')}`;
+  return `zones.${zone
+    .toLowerCase()
+    .replace(/ /g, '_')
+    .replace(/é/g, 'e')
+    .replace(/è/g, 'e')}`;
 };
 
 const ZonesScreen = ({
@@ -103,7 +109,7 @@ const ZonesScreen = ({
         <Text className="bg-[#1E3A5F] text-white font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest leading-none">
           {t.zones_directes}
         </Text>
-        <Text className="text-3xl sm:text-4xl font-black tracking-tight mt-6">
+        <Text className="text-3xl sm:text-4xl font-black tracking-tight mt-6 text-slate-900 dark:text-slate-100">
           {t.zones}
         </Text>
         <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-3 font-semibold">
@@ -117,7 +123,7 @@ const ZonesScreen = ({
             <Text className="text-base font-black text-slate-800 dark:text-slate-100">
               {t.carte_interactive}
             </Text>
-            <Text className="text-slate-400 text-xs mt-1 font-semibold">
+            <Text className="text-slate-400 text-xs mt-1 font-semibold dark:text-slate-300">
               {t.zone_map_instructions}
             </Text>
           </View>
@@ -138,6 +144,7 @@ const ZonesScreen = ({
                 className="cursor-pointer transition hover:opacity-85"
                 onClick={() => setSelectedGovernorat('Grand Tunis')}
               />
+
               <path
                 d="M48 20 C 53 18, 55 24, 52 28 L 45 26 Z"
                 fill={
@@ -146,24 +153,28 @@ const ZonesScreen = ({
                 className="cursor-pointer transition hover:scale-105 transform origin-center"
                 onClick={() => setSelectedGovernorat('Grand Tunis')}
               />
+
               <path
                 d="M53 23 C 58 18, 68 20, 61 31 L 52 28 Z"
                 fill={selectedGovernorat === 'Sahel' ? '#F97316' : '#3B82F6'}
                 className="cursor-pointer transition hover:opacity-85"
                 onClick={() => setSelectedGovernorat('Sahel')}
               />
+
               <path
                 d="M52 30 C 58 31, 62 42, 57 52 L 48 40 Z"
                 fill={selectedGovernorat === 'Sahel' ? '#F97316' : '#1D4ED8'}
                 className="cursor-pointer transition hover:scale-105 transform origin-center"
                 onClick={() => setSelectedGovernorat('Sahel')}
               />
+
               <path
                 d="M46 54 C 54 58, 58 70, 52 82 L 38 72 Z"
                 fill={selectedGovernorat === 'Sfax' ? '#F97316' : '#60A5FA'}
                 className="cursor-pointer transition hover:opacity-85"
                 onClick={() => setSelectedGovernorat('Sfax')}
               />
+
               <path
                 d="M36 24 L44 38 L38 52 L36 68 L22 88 L14 118 L24 140 L38 170 L52 145 L48 112 L44 86 L40 70 Z"
                 fill="#E2E8F0"
@@ -174,9 +185,10 @@ const ZonesScreen = ({
             {selectedGovernorat && (
               <View className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-slate-900/95 text-white p-4 rounded-2xl border border-[#F97316]/30 shadow-xl max-w-[220px] backdrop-blur-sm animate-fade-in text-center">
                 <Text className="text-[10px] font-black text-[#F97316] uppercase tracking-wider">
-                  {t[getZoneTranslationKey(selectedGovernorat)] || selectedGovernorat}
+                  {t[getZoneTranslationKey(selectedGovernorat)] ||
+                    selectedGovernorat}
                 </Text>
-                <Text className="text-xs font-black mt-1">
+                <Text className="text-xs font-black mt-1 text-white">
                   Intervention Express
                 </Text>
                 <Text className="text-[10.5px] text-slate-300 mt-1 leading-relaxed">
@@ -227,7 +239,7 @@ const ZonesScreen = ({
                   <Text className="text-xs font-black text-slate-800 dark:text-slate-100">
                     {t[getZoneTranslationKey(item.city)] || item.city}
                   </Text>
-                  <Text className="text-[9px] font-bold uppercase tracking-wide text-slate-400">
+                  <Text className="text-[9px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-300">
                     {t[getZoneTranslationKey(item.area)] || item.area}
                   </Text>
                 </View>
@@ -236,7 +248,7 @@ const ZonesScreen = ({
           </View>
 
           <View className="border-t border-slate-100 dark:border-slate-700 pt-5 flex items-center justify-between">
-            <Text className="text-xs font-bold text-slate-500">
+            <Text className="text-xs font-bold text-slate-500 dark:text-slate-400">
               * {t.urgentCoverageText}
             </Text>
             <TouchableOpacity
@@ -262,32 +274,32 @@ const ZonesScreen = ({
 
           <View className="space-y-4 font-semibold text-xs">
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                 {t.nom_complet} *
               </Text>
               <TextInput
                 placeholder="Ex: Mohamed Ben Khedher"
                 value={interventionName}
                 onChangeText={setInterventionName}
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316] text-slate-900 dark:text-slate-100"
               />
             </View>
 
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                 {t.telephone} *
               </Text>
               <TextInput
                 placeholder={supportWhatsAppNumber || '+216 22 456 789'}
                 value={interventionPhone}
                 onChangeText={setInterventionPhone}
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316] text-slate-900 dark:text-slate-100"
               />
             </View>
 
             <View className="grid grid-cols-2 gap-4">
               <View className="space-y-2">
-                <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                   {t.ville}
                 </Text>
                 <select
@@ -304,7 +316,7 @@ const ZonesScreen = ({
               </View>
 
               <View className="space-y-2">
-                <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                   Type Problème
                 </Text>
                 <select
@@ -321,7 +333,7 @@ const ZonesScreen = ({
             </View>
 
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                 Description
               </Text>
               <TextInput
@@ -329,7 +341,7 @@ const ZonesScreen = ({
                 placeholder="Précisez votre adresse, étage, ou problème..."
                 value={interventionDetails}
                 onChangeText={setInterventionDetails}
-                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316]"
+                className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none focus:border-[#F97316] text-slate-900 dark:text-slate-100"
               />
             </View>
 

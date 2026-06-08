@@ -6,7 +6,10 @@ import {
   toggleFavoriteAction,
   type Product,
 } from '../../../store/slices/partsSlice';
-import { trackPageView, trackShare } from '../../../store/slices/analyticsSlice';
+import {
+  trackPageView,
+  trackShare,
+} from '../../../store/slices/analyticsSlice';
 import { useToast } from '../../../context/ToastContext';
 
 interface MarketplaceScreenProps {
@@ -38,6 +41,7 @@ const ProductVisual = ({
           strokeWidth="6"
           stroke="#64748B"
         />
+
         <path d="M70 20 v8" strokeWidth="5" stroke="#94A3B8" />
         <path d="M66 28 h8" strokeWidth="2" stroke="#475569" />
         <path d="M32 50 h12" strokeWidth="4.5" stroke="#334155" />
@@ -73,6 +77,7 @@ const ProductVisual = ({
           stroke="#334155"
           strokeWidth="3"
         />
+
         <rect x="42" y="24" width="16" height="4" rx="1" fill="#1E3A5F" />
         <rect
           x="38"
@@ -84,6 +89,7 @@ const ProductVisual = ({
           stroke="#475569"
           strokeWidth="1.5"
         />
+
         <circle cx="44" cy="72" r="2.5" fill="#64748B" />
         <circle cx="56" cy="72" r="2.5" fill="#64748B" />
         <path d="M35 81 v10" stroke="#B45309" strokeWidth="4.5" />
@@ -110,6 +116,7 @@ const ProductVisual = ({
         strokeWidth="8"
         strokeLinecap="square"
       />
+
       <circle cx="22" cy="28" r="5" fill="#C2410C" />
       <circle cx="54" cy="60" r="5" fill="#C2410C" />
       <path d="M52 35 h32 M68 35 v30" stroke="#EA580C" strokeWidth="7" />
@@ -134,7 +141,8 @@ const MarketplaceScreen = ({
   t,
   setSelectedProduct,
 }: MarketplaceScreenProps) => {
-  const tCommon = (key: string, defaultValue?: string) => t(key, { defaultValue: defaultValue || key });
+  const tCommon = (key: string, defaultValue?: string) =>
+    t(key, { defaultValue: defaultValue || key });
 
   const getCategoryKey = (catName: string) => {
     return `categories.${catName.toLowerCase().replace(/[- ]/g, '_')}`;
@@ -145,9 +153,11 @@ const MarketplaceScreen = ({
     const map: Record<string, string> = {
       'comme neuf': 'comme_neuf',
       'bon état': 'bon_etat',
-      'pour pièces': 'pour_pieces'
+      'pour pièces': 'pour_pieces',
     };
-    return `web.conditions.${map[cond] || cond.toLowerCase().replace(/ /g, '_')}`;
+    return `web.conditions.${
+      map[cond] || cond.toLowerCase().replace(/ /g, '_')
+    }`;
   };
 
   const dispatch = useDispatch();
@@ -157,20 +167,28 @@ const MarketplaceScreen = ({
     dispatch(trackPageView('Marketplace'));
   }, [dispatch]);
 
-  const handleShare = (product: Product, platform: 'facebook' | 'whatsapp', event: any) => {
+  const handleShare = (
+    product: Product,
+    platform: 'facebook' | 'whatsapp',
+    event: any,
+  ) => {
     event.stopPropagation();
     dispatch(trackShare({ platform, item: product.title }));
-    
-    const url = encodeURIComponent(window.location?.href || 'https://plombier.example.com/marketplace');
-    const text = encodeURIComponent(`Découvrez cette pièce : ${product.title} - ${product.price} TND`);
-    
+
+    const url = encodeURIComponent(
+      window.location?.href || 'https://plombier.example.com/marketplace',
+    );
+    const text = encodeURIComponent(
+      `Découvrez cette pièce : ${product.title} - ${product.price} TND`,
+    );
+
     let shareUrl = '';
     if (platform === 'facebook') {
       shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
     } else {
       shareUrl = `https://wa.me/?text=${text}%20${url}`;
     }
-    
+
     Linking.openURL(shareUrl);
   };
 
@@ -240,7 +258,7 @@ const MarketplaceScreen = ({
     <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in text-left">
       <View className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
         <View>
-          <Text className="text-3xl font-black tracking-tight">
+          <Text className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
             {tCommon('pieces')}
           </Text>
           <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 font-semibold">
@@ -249,7 +267,7 @@ const MarketplaceScreen = ({
         </View>
 
         <View className="flex items-center gap-3">
-          <Text className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+          <Text className="text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
             {tCommon('tri')} :
           </Text>
           <select
@@ -267,12 +285,12 @@ const MarketplaceScreen = ({
       <View className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         <View className="lg:col-span-3 space-y-6">
           <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm space-y-6">
-            <Text className="text-sm font-black uppercase tracking-wider">
+            <Text className="text-sm font-black uppercase tracking-wider text-slate-900 dark:text-slate-100">
               {tCommon('filtres')}
             </Text>
 
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                 {tCommon('rechercher')}
               </Text>
               <TextInput
@@ -284,7 +302,7 @@ const MarketplaceScreen = ({
             </View>
 
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                 {tCommon('web.categories')}
               </Text>
               <View className="space-y-1.5">
@@ -331,7 +349,7 @@ const MarketplaceScreen = ({
             </View>
 
             <View className="space-y-2">
-              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+              <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                 {tCommon('etat')}
               </Text>
               <View className="grid grid-cols-2 gap-2 text-center">
@@ -363,7 +381,7 @@ const MarketplaceScreen = ({
 
             <View className="space-y-3">
               <View className="flex justify-between items-center text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                <Text>
+                <Text className="text-[10px] text-slate-400">
                   {tCommon('prix')} {tCommon('web.maxLabel')}
                 </Text>
                 <Text className="text-[#F97316]">
@@ -383,7 +401,7 @@ const MarketplaceScreen = ({
         <View className="lg:col-span-9">
           {sortedProducts.length === 0 ? (
             <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-12 text-center shadow-sm">
-              <Text className="text-sm text-slate-400 font-bold">
+              <Text className="text-sm text-slate-400 font-bold dark:text-slate-300">
                 {tCommon('aucun_produit')}
               </Text>
             </View>
@@ -426,13 +444,13 @@ const MarketplaceScreen = ({
 
                   <View className="p-4 text-left flex-1 flex flex-col justify-between">
                     <View>
-                      <Text className="text-[9px] font-black text-slate-500 uppercase tracking-wider">
+                      <Text className="text-[9px] font-black text-slate-500 uppercase tracking-wider dark:text-slate-400">
                         {tCommon(getCategoryKey(prod.category), prod.category)}
                       </Text>
                       <Text className="text-xs sm:text-sm font-black text-slate-800 dark:text-slate-100 mt-1 leading-tight group-hover:text-[#F97316] transition-colors">
                         {prod.title}
                       </Text>
-                      <Text className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold">
+                      <Text className="text-[10.5px] text-slate-400 mt-0.5 line-clamp-1 font-semibold dark:text-slate-300">
                         {prod.subtitle}
                       </Text>
                     </View>
@@ -451,20 +469,24 @@ const MarketplaceScreen = ({
                         </Text>
                       </View>
                     </View>
-                    
+
                     {/* Share Buttons */}
                     <View className="mt-3 flex flex-row gap-2 border-t border-slate-100 dark:border-slate-700 pt-3">
                       <TouchableOpacity
-                        onPress={(e) => handleShare(prod, 'facebook', e)}
+                        onPress={e => handleShare(prod, 'facebook', e)}
                         className="flex-1 bg-[#1877F2] rounded-lg py-1.5 flex items-center justify-center"
                       >
-                        <Text className="text-white text-[9px] font-black">Facebook</Text>
+                        <Text className="text-white text-[9px] font-black">
+                          Facebook
+                        </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
-                        onPress={(e) => handleShare(prod, 'whatsapp', e)}
+                        onPress={e => handleShare(prod, 'whatsapp', e)}
                         className="flex-1 bg-[#25D366] rounded-lg py-1.5 flex items-center justify-center"
                       >
-                        <Text className="text-white text-[9px] font-black">WhatsApp</Text>
+                        <Text className="text-white text-[9px] font-black">
+                          WhatsApp
+                        </Text>
                       </TouchableOpacity>
                     </View>
                   </View>

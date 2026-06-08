@@ -61,13 +61,13 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           <View className="p-6 sm:p-8 flex flex-col justify-between">
             <View className="space-y-4">
               <View>
-                <Text className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                <Text className="text-[9px] font-black text-slate-500 uppercase tracking-widest dark:text-slate-400">
                   {selectedProduct.category}
                 </Text>
                 <Text className="text-xl font-black text-slate-800 dark:text-slate-100 mt-1">
                   {selectedProduct.title}
                 </Text>
-                <Text className="text-xs text-slate-500 mt-1 leading-relaxed font-semibold">
+                <Text className="text-xs text-slate-500 mt-1 leading-relaxed font-semibold dark:text-slate-400">
                   {selectedProduct.subtitle}
                 </Text>
               </View>

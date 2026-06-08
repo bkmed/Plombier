@@ -205,7 +205,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
         </Text>
       </TouchableOpacity>
 
-      <Text className="text-3xl font-black tracking-tight">
+      <Text className="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100">
         {tCommon('adminCategories.title', 'Gestion des Catégories')}
       </Text>
       <Text className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-1 font-semibold">
@@ -217,7 +217,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
 
       <View className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 shadow-sm mt-8">
         <View>
-          <Text className="text-xs font-black uppercase tracking-widest text-slate-500 mb-2">
+          <Text className="text-xs font-black uppercase tracking-widest text-slate-500 mb-2 dark:text-slate-400">
             {editingCategory
               ? tCommon('adminCategories.editHeading', 'Modifier la catégorie')
               : tCommon(
@@ -261,9 +261,21 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
           <table className="w-full min-w-[600px] text-xs text-left font-semibold">
             <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400 whitespace-nowrap">
               <tr>
-                <th className="px-6 py-4">{tCommon('adminCategories.tableCategoryName', 'Nom de la Catégorie')}</th>
-                <th className="px-6 py-4">{tCommon('adminCategories.tableArticleCount', "Nombre d'Articles")}</th>
-                <th className="px-6 py-4 text-center">{tCommon('adminCategories.tableActions', 'Actions')}</th>
+                <th className="px-6 py-4">
+                  {tCommon(
+                    'adminCategories.tableCategoryName',
+                    'Nom de la Catégorie',
+                  )}
+                </th>
+                <th className="px-6 py-4">
+                  {tCommon(
+                    'adminCategories.tableArticleCount',
+                    "Nombre d'Articles",
+                  )}
+                </th>
+                <th className="px-6 py-4 text-center">
+                  {tCommon('adminCategories.tableActions', 'Actions')}
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
@@ -287,7 +299,9 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                         ) : (
                           <View className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
                         )}
-                        <Text className="font-black">{cat.name}</Text>
+                        <Text className="font-black text-slate-700 dark:text-slate-200">
+                          {cat.name}
+                        </Text>
                       </View>
                     </td>
                     <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
@@ -460,7 +474,7 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
 
               <View className="space-y-4 text-xs font-semibold">
                 <View className="space-y-2">
-                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                     {tCommon(
                       'adminCategories.categoryNameLabel',
                       'Nom de la catégorie',
@@ -478,12 +492,12 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                         ? setEditCategoryName(text)
                         : setNewCategoryName(text)
                     }
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none"
+                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold focus:outline-none text-slate-900 dark:text-slate-100"
                   />
                 </View>
 
                 <View className="space-y-2">
-                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                  <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                     {tCommon(
                       'adminCategories.imageLabel',
                       'Image de catégorie (optionnel)',

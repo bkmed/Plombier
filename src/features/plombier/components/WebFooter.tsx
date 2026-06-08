@@ -53,7 +53,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({
             <Text className="text-lg font-black text-slate-800 dark:text-slate-100 flex items-center gap-2">
               🛠️ {businessName}
             </Text>
-            <Text className="text-xs leading-relaxed font-semibold">
+            <Text className="text-xs leading-relaxed font-semibold text-slate-900 dark:text-slate-100">
               {tc(
                 'web.foot_desc',
                 'Votre expert en plomberie, climatisation et gaz en Tunisie.',
@@ -71,7 +71,7 @@ export const WebFooter: React.FC<WebFooterProps> = ({
         </View>
 
         <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-slate-200 dark:border-slate-800 mt-10 pt-6 text-center text-xs font-bold">
-          <Text>
+          <Text className="text-slate-900 dark:text-slate-100">
             {tc(
               'web.credits',
               `© ${new Date().getFullYear()} ${businessName}. Tous droits réservés.`,
@@ -86,7 +86,12 @@ export const WebFooter: React.FC<WebFooterProps> = ({
           accessibilityLabel="WhatsApp Support Urgent"
           className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-emerald-500 hover:bg-emerald-600 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-110 active:scale-95"
         >
-          <Text style={{ fontSize: 22 }}>💬</Text>
+          <Text
+            style={{ fontSize: 22 }}
+            className="text-slate-900 dark:text-slate-100"
+          >
+            💬
+          </Text>
         </TouchableOpacity>
       )}
     </View>
