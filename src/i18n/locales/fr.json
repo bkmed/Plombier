@@ -1617,7 +1617,8 @@
     },
     "maxLabel": "Max",
     "categories": "Catégories",
-    "sslTestsInProgress": "Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT."
+    "sslTestsInProgress": "Tests d'homologation de sécurité SSL et cryptage en cours avec la SMT.",
+    "email_placeholder": "votre.email@domaine.tn"
   },
   "auth_hardcoded": {
     "signin_title": "Connexion",

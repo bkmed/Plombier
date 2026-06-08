@@ -1369,7 +1369,8 @@
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
     "maxLabel": "Max",
     "categories": "Categorie",
-    "sslTestsInProgress": "Test di approvazione della sicurezza SSL e crittografia in corso con la SMT."
+    "sslTestsInProgress": "Test di approvazione della sicurezza SSL e crittografia in corso con la SMT.",
+    "email_placeholder": "la.tua.email@dominio.com"
   },
   "demander_devis": "Request a Quote",
   "devis_msg": "Hello, I would like to request a quote for: ",

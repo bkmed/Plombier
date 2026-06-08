@@ -1516,7 +1516,8 @@
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
     "maxLabel": "最大",
     "categories": "分类",
-    "sslTestsInProgress": "与 SMT 正在进行 SSL 安全批准测试和加密。"
+    "sslTestsInProgress": "与 SMT 正在进行 SSL 安全批准测试和加密。",
+    "email_placeholder": "your.email@domain.com"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",

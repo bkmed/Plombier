@@ -1516,7 +1516,8 @@
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
     "maxLabel": "Máx",
     "categories": "Categorías",
-    "sslTestsInProgress": "Pruebas de aprobación de seguridad SSL y cifrado en progreso con la SMT."
+    "sslTestsInProgress": "Pruebas de aprobación de seguridad SSL y cifrado en progreso con la SMT.",
+    "email_placeholder": "tu.email@dominio.com"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",

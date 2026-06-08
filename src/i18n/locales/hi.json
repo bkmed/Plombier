@@ -1516,7 +1516,8 @@
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
     "maxLabel": "अधिकतम",
     "categories": "श्रेणियां",
-    "sslTestsInProgress": "SMT के साथ SSL सुरक्षा अनुमोदन परीक्षण और एन्क्रिप्शन प्रगति पर है।"
+    "sslTestsInProgress": "SMT के साथ SSL सुरक्षा अनुमोदन परीक्षण और एन्क्रिप्शन प्रगति पर है।",
+    "email_placeholder": "आपका.ईमेल@डोमेन.com"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",

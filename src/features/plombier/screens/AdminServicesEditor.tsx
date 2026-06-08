@@ -156,7 +156,7 @@ const AdminServicesEditor = () => {
         style={{ alignSelf: 'flex-start' }}
       >
         <Text className="text-xs font-black text-slate-600 dark:text-slate-200">
-          ← Retour à Manage
+          {translate('backToManage', { defaultValue: '← Retour à Manage' })}
         </Text>
       </TouchableOpacity>
 

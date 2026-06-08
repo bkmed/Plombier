@@ -1617,7 +1617,8 @@
     },
     "maxLabel": "أقصى",
     "categories": "الأصناف",
-    "sslTestsInProgress": "تجري حاليًا اختبارات الموافقة الأمنية لـ SSL والتشفير مع SMT."
+    "sslTestsInProgress": "تجري حاليًا اختبارات الموافقة الأمنية لـ SSL والتشفير مع SMT.",
+    "email_placeholder": "بريدك.الإلكتروني@نطاق.tn"
   },
   "auth_hardcoded": {
     "signin_title": "تسجيل الدخول",

@@ -1617,7 +1617,8 @@
     },
     "maxLabel": "Max",
     "categories": "Categories",
-    "sslTestsInProgress": "SSL security approval tests and encryption in progress with the SMT."
+    "sslTestsInProgress": "SSL security approval tests and encryption in progress with the SMT.",
+    "email_placeholder": "your.email@domain.com"
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",

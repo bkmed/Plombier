@@ -241,7 +241,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                   <View className="mt-3 flex gap-2">
                     <TextInput
                       keyboardType="email-address"
-                      placeholder="votre.email@domaine.tn"
+                      placeholder={tCommon('web.email_placeholder', 'votre.email@domaine.tn')}
                       value={newsletterEmail}
                       onChangeText={setNewsletterEmail}
                       className="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-xs font-semibold text-slate-800 dark:text-slate-100 focus:outline-none"

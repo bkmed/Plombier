@@ -1323,7 +1323,8 @@
     "buy_piece_msg": "Hello, I am interested in purchasing the used spare part: {{title}} - {{price}} DT.",
     "maxLabel": "Maks",
     "categories": "Kategoriler",
-    "sslTestsInProgress": "SMT ile SSL güvenlik onay testleri ve şifreleme devam ediyor."
+    "sslTestsInProgress": "SMT ile SSL güvenlik onay testleri ve şifreleme devam ediyor.",
+    "email_placeholder": "epostaniz@alanadi.com"
   },
   "demander_devis": "Request a Quote",
   "devis_msg": "Hello, I would like to request a quote for: ",
