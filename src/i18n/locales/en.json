@@ -1663,7 +1663,16 @@
     "zone_sahel_info": "Quick intervention in Sahel",
     "zone_other_info": "Intervention available",
     "request_name_phone_required": "Name and phone required",
-    "request_submitted": "Request submitted successfully"
+    "request_submitted": "Request submitted successfully",
+    "branding_services": "Plumbing · AC · Gas · Heating",
+    "branding_platform": "ARTISAN PLATFORM & MARKETPLACE",
+    "branding_leader": "The leader in express plumbing in Tunisia.",
+    "branding_description": "Benefit from immediate sanitary repairs by certified plumbers and a premium marketplace to buy tested and guaranteed used spare parts.",
+    "branding_24h": "24/7",
+    "branding_urgentIntervention": "Urgent Intervention",
+    "branding_tested": "100% tested",
+    "branding_partsWarranty": "Parts Warranty",
+    "branding_copyright": "© 2026 {{businessName}}. Developed for individuals and professionals."
   },
   "auth_hardcoded": {
     "signin_title": "Sign In",

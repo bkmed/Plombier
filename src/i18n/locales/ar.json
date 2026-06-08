@@ -1663,7 +1663,16 @@
     "zone_sahel_info": "تدخل سريع في الساحل",
     "zone_other_info": "التدخل متاح",
     "request_name_phone_required": "الاسم ورقم الهاتف مطلوبان",
-    "request_submitted": "تم إرسال الطلب بنجاح"
+    "request_submitted": "تم إرسال الطلب بنجاح",
+    "branding_services": "سباكة · تكييف · غاز · تدفئة",
+    "branding_platform": "منصة حرفية وسوق إلكتروني",
+    "branding_leader": "الرائد في خدمات السباكة السريعة في تونس.",
+    "branding_description": "استفد من خدمات إصلاح صحي فورية بواسطة سباكين معتمدين وسوق ممتاز لشراء قطع غيار مستعملة تم فحصها ومضمونة.",
+    "branding_24h": "24/24 ساعة",
+    "branding_urgentIntervention": "تدخل سريع",
+    "branding_tested": "تم اختباره 100%",
+    "branding_partsWarranty": "ضمان قطع الغيار",
+    "branding_copyright": "© 2026 {{businessName}}. تم التطوير للأفراد والمهنيين."
   },
   "auth_hardcoded": {
     "signin_title": "تسجيل الدخول",

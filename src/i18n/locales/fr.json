@@ -1663,7 +1663,16 @@
     "zone_sahel_info": "Intervention rapide au Sahel",
     "zone_other_info": "Intervention disponible",
     "request_name_phone_required": "Nom et téléphone requis",
-    "request_submitted": "Demande envoyée avec succès"
+    "request_submitted": "Demande envoyée avec succès",
+    "branding_services": "Plomberie · Climatisation · Gaz · Chauffage",
+    "branding_platform": "PLATEFORME ARTISANALE & MARKETPLACE",
+    "branding_leader": "Le leader de la plomberie express en Tunisie.",
+    "branding_description": "Bénéficiez de dépannages sanitaires immédiats par des plombiers agréés et d'un marketplace premium pour acheter des pièces détachées d'occasion révisées et garanties.",
+    "branding_24h": "24h/24",
+    "branding_urgentIntervention": "Intervention Urgente",
+    "branding_tested": "100% testé",
+    "branding_partsWarranty": "Garantie Pièces",
+    "branding_copyright": "© 2026 {{businessName}}. Développé pour les particuliers et professionnels."
   },
   "auth_hardcoded": {
     "signin_title": "Connexion",

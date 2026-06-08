@@ -33,8 +33,8 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
   setSessionUser,
   setActiveTab,
 }) => {
-  const tCommon = (key: string, defaultValue: string) =>
-    t(key, { defaultValue });
+  const tCommon = (key: string, defaultValue: string, options?: any) =>
+    t(key, { defaultValue, ...options });
   const [authTab, setAuthTab] = React.useState<'signin' | 'signup' | 'forgot'>(
     'signin',
   );
@@ -155,44 +155,43 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
               {businessName}
             </Text>
             <Text className="text-[9px] text-[#F97316] font-extrabold tracking-widest uppercase mt-0.5">
-              Plomberie · Climatisation · Gaz · Chauffage
+              {tCommon('web.branding_services', 'Plomberie · Climatisation · Gaz · Chauffage')}
             </Text>
           </View>
         </View>
 
         <View className="my-auto space-y-6 relative z-10 text-left">
           <Text className="bg-[#F97316] text-white text-[9px] font-black px-3.5 py-1.5 rounded-full uppercase tracking-wider leading-none">
-            PLATEFORME ARTISANALE & MARKETPLACE
+            {tCommon('web.branding_platform', 'PLATEFORME ARTISANALE & MARKETPLACE')}
           </Text>
           <Text className="text-4xl sm:text-5xl font-black text-white leading-tight">
-            Le leader de la plomberie express en Tunisie.
+            {tCommon('web.branding_leader', 'Le leader de la plomberie express en Tunisie.')}
           </Text>
           <Text className="text-slate-300 text-sm leading-relaxed font-semibold">
-            Bénéficiez de dépannages sanitaires immédiats par des plombiers
-            agréés et d'un marketplace premium pour acheter des pièces détachées
-            d'occasion révisées et garanties.
+            {tCommon('web.branding_description', "Bénéficiez de dépannages sanitaires immédiats par des plombiers agréés et d'un marketplace premium pour acheter des pièces détachées d'occasion révisées et garanties.")}
           </Text>
           <View className="grid grid-cols-2 gap-6 pt-6">
             <View>
-              <Text className="text-2xl font-black text-[#F97316]">24h/24</Text>
+              <Text className="text-2xl font-black text-[#F97316]">
+                {tCommon('web.branding_24h', '24h/24')}
+              </Text>
               <Text className="text-[10px] text-slate-400 font-extrabold uppercase mt-1 dark:text-slate-300">
-                Intervention Urgente
+                {tCommon('web.branding_urgentIntervention', 'Intervention Urgente')}
               </Text>
             </View>
             <View>
               <Text className="text-2xl font-black text-[#F97316]">
-                100% testé
+                {tCommon('web.branding_tested', '100% testé')}
               </Text>
               <Text className="text-[10px] text-slate-400 font-extrabold uppercase mt-1 dark:text-slate-300">
-                Garantie Pièces
+                {tCommon('web.branding_partsWarranty', 'Garantie Pièces')}
               </Text>
             </View>
           </View>
         </View>
 
         <Text className="text-xs text-slate-500 font-bold relative z-10 dark:text-slate-400">
-          © 2026 {businessName}. Développé pour les particuliers et
-          professionnels.
+          {tCommon('web.branding_copyright', '© 2026 {{businessName}}. Développé pour les particuliers et professionnels.', { businessName })}
         </Text>
       </View>
 
