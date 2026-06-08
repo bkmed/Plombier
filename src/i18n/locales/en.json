@@ -212,7 +212,12 @@
       "detail": "Reclamation Detail",
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
-    }
+    },
+    "confirmDeleteZone": "Are you sure you want to delete this zone?",
+    "dispoValLabel": "Availability",
+    "govValLabel": "Covered governorates",
+    "saveZoneLabel": "Save",
+    "addZoneLabel": "Add"
   },
   "adminAnnonces": {
     "title": "Gestion des Annonces",
@@ -918,7 +923,17 @@
     "resetMessage": "This cannot be undone",
     "resetConfirm": "Reset",
     "resetAllData": "Reset All Data",
-    "signOut": "Sign Out"
+    "signOut": "Sign Out",
+    "title": "Profile",
+    "dark_mode": "Dark Mode",
+    "hide_balances": "Hide Balances",
+    "budget": "Budget",
+    "monthly_budget": "Monthly Budget",
+    "daily_budget": "Daily Budget",
+    "export": "Export CSV",
+    "reset_all": "Reset All Data",
+    "about": "About",
+    "version": "Version"
   },
   "users": {
     "title": "User Management",

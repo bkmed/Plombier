@@ -212,7 +212,12 @@
       "detail": "Reclamation Detail",
       "edit": "Edit Reclamation",
       "actions": "Reclamation Actions"
-    }
+    },
+    "confirmDeleteZone": "هل أنت متأكد أنك تريد حذف هذه المنطقة؟",
+    "dispoValLabel": "التوفر",
+    "govValLabel": "الولايات المغطاة",
+    "saveZoneLabel": "حفظ",
+    "addZoneLabel": "إضافة"
   },
   "adminAnnonces": {
     "title": "إدارة الإعلانات",
@@ -918,7 +923,17 @@
     "resetMessage": "لا يمكن التراجع عن هذا",
     "resetConfirm": "إعادة تعيين",
     "resetAllData": "إعادة تعيين جميع البيانات",
-    "signOut": "تسجيل الخروج"
+    "signOut": "تسجيل الخروج",
+    "title": "الملف الشخصي",
+    "dark_mode": "الوضع الداكن",
+    "hide_balances": "إخفاء الأرصدة",
+    "budget": "الميزانية",
+    "monthly_budget": "الميزانية الشهرية",
+    "daily_budget": "الميزانية اليومية",
+    "export": "تصدير CSV",
+    "reset_all": "إعادة تعيين كافة البيانات",
+    "about": "حول",
+    "version": "الإصدار"
   },
   "users": {
     "title": "إدارة المستخدمين",

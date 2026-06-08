@@ -212,7 +212,12 @@
       "detail": "Détail de la réclamation",
       "edit": "Modifier la réclamation",
       "actions": "Actions de réclamation"
-    }
+    },
+    "confirmDeleteZone": "Êtes-vous sûr de vouloir supprimer cette zone ?",
+    "dispoValLabel": "Disponibilité",
+    "govValLabel": "Gouvernorats couverts",
+    "saveZoneLabel": "Enregistrer",
+    "addZoneLabel": "Ajouter"
   },
   "adminAnnonces": {
     "title": "Gestion des Annonces",
@@ -918,7 +923,17 @@
     "resetMessage": "Cette action est irréversible",
     "resetConfirm": "Réinitialiser",
     "resetAllData": "Supprimer toutes les données",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "title": "Profil",
+    "dark_mode": "Mode sombre",
+    "hide_balances": "Masquer les soldes",
+    "budget": "Budget",
+    "monthly_budget": "Budget mensuel",
+    "daily_budget": "Budget quotidien",
+    "export": "Exporter CSV",
+    "reset_all": "Réinitialiser toutes les données",
+    "about": "À propos",
+    "version": "Version"
   },
   "users": {
     "title": "Gestion des utilisateurs",
