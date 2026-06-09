@@ -21,5 +21,6 @@
         "**/dist": true
     },
     "typescript.validate.enable": true,
-    "javascript.validate.enable": true
+    "javascript.validate.enable": true,
+    "java.compile.nullAnalysis.mode": "disabled"
 }

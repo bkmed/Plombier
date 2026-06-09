@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Platform, Image } from 'react-native';
 import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectServices } from '../../../store/slices/servicesSlice';
@@ -166,32 +166,36 @@ const ServicesScreen = ({
             </View>
 
             <View className="grid grid-cols-2 gap-4">
-              <View className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
-                <Text className="absolute top-2.5 left-2.5 bg-slate-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
+              <View className="bg-slate-100 dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col min-h-[170px]">
+                {service.imgBefore && (service.imgBefore.startsWith('data:') || service.imgBefore.startsWith('http')) ? (
+                  <Image source={{ uri: service.imgBefore }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }} resizeMode="cover" />
+                ) : (
+                  <View className="flex-1 flex items-center justify-center p-2 mt-6 z-10">
+                    <Text className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight text-center">
+                      {service.imgBefore ? translateServiceField(service.imgBefore) : ''}
+                    </Text>
+                  </View>
+                )}
+                <Text className="absolute top-2.5 left-2.5 bg-slate-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase overflow-hidden z-20">
                   {t('services_local.before_intervention')}
                 </Text>
-                <View className="flex-1 flex items-center justify-center p-2 mt-6">
-                  <Text className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight text-center">
-                    {service.imgBefore
-                      ? translateServiceField(service.imgBefore)
-                      : ''}
-                  </Text>
-                </View>
-                <View className="h-1 bg-amber-500 rounded-full w-full" />
+                <View className="h-1 bg-amber-500 absolute bottom-0 left-0 right-0 z-20" />
               </View>
 
-              <View className="bg-slate-100 dark:bg-slate-800 rounded-3xl p-4.5 border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col justify-between min-h-[170px]">
-                <Text className="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase">
+              <View className="bg-slate-100 dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col min-h-[170px]">
+                {service.imgAfter && (service.imgAfter.startsWith('data:') || service.imgAfter.startsWith('http')) ? (
+                  <Image source={{ uri: service.imgAfter }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }} resizeMode="cover" />
+                ) : (
+                  <View className="flex-1 flex items-center justify-center p-2 mt-6 z-10">
+                    <Text className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight text-center">
+                      {service.imgAfter ? translateServiceField(service.imgAfter) : ''}
+                    </Text>
+                  </View>
+                )}
+                <Text className="absolute top-2.5 left-2.5 bg-emerald-500 text-white text-[7.5px] font-black px-2 py-0.5 rounded uppercase overflow-hidden z-20">
                   {t('services_local.after_intervention')}
                 </Text>
-                <View className="flex-1 flex items-center justify-center p-2 mt-6">
-                  <Text className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight text-center">
-                    {service.imgAfter
-                      ? translateServiceField(service.imgAfter)
-                      : ''}
-                  </Text>
-                </View>
-                <View className="h-1 bg-emerald-500 rounded-full w-full" />
+                <View className="h-1 bg-emerald-500 absolute bottom-0 left-0 right-0 z-20" />
               </View>
             </View>
           </View>

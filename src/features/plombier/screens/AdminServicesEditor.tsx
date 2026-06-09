@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { launchImageLibrary } from 'react-native-image-picker';
 import {
   addService,
   updateService,
@@ -23,6 +24,8 @@ const AdminServicesEditor = () => {
   const [ptsKeys, setPtsKeys] = useState(
     'plomberie_desc_1,plomberie_desc_2,plomberie_desc_3',
   );
+  const [imgBefore, setImgBefore] = useState<string | undefined>(undefined);
+  const [imgAfter, setImgAfter] = useState<string | undefined>(undefined);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -57,6 +60,8 @@ const AdminServicesEditor = () => {
     setIcon('plumbing');
     setDescKey('plomberie_desc_long');
     setPtsKeys('plomberie_desc_1,plomberie_desc_2,plomberie_desc_3');
+    setImgBefore(undefined);
+    setImgAfter(undefined);
     setEditingId(null);
     if (clearStatus) {
       setStatusMessage(null);
@@ -82,6 +87,8 @@ const AdminServicesEditor = () => {
         .map(s => s.trim())
         .filter(Boolean),
       whatsappText: 'devis_msg',
+      imgBefore,
+      imgAfter,
       createdAt:
         services.find(service => service.id === editingId)?.createdAt ||
         new Date().toISOString(),
@@ -112,6 +119,8 @@ const AdminServicesEditor = () => {
     setIcon(s.icon);
     setDescKey(s.desc || '');
     setPtsKeys((s.pts || []).join(','));
+    setImgBefore(s.imgBefore);
+    setImgAfter(s.imgAfter);
     setStatusMessage(null);
     setShowModal(true);
   };
@@ -440,6 +449,60 @@ const AdminServicesEditor = () => {
                   })}
                   className="w-full px-4 py-3 rounded-3xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-[#F97316]"
                 />
+
+                <View className="flex flex-col gap-2">
+                  <Text className="text-slate-700 dark:text-slate-200 text-sm font-bold">
+                    {translate('admin.imageBeforeTitle', { defaultValue: 'Image Before (Avant)' })}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      const result = await launchImageLibrary({ mediaType: 'photo', includeBase64: true });
+                      if (result.assets && result.assets.length > 0) {
+                        const asset = result.assets[0];
+                        if (asset.base64) {
+                          setImgBefore(`data:${asset.type || 'image/jpeg'};base64,${asset.base64}`);
+                        } else if (asset.uri) {
+                          setImgBefore(asset.uri);
+                        }
+                      }
+                    }}
+                    className="bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-3xl flex items-center justify-center border border-slate-300 dark:border-slate-600"
+                  >
+                    <Text className="text-slate-800 dark:text-slate-200 font-bold">
+                      {imgBefore 
+                        ? translate('admin.changeImageButton', { defaultValue: 'Changer Image' }) 
+                        : translate('admin.chooseImageButton', { defaultValue: 'Choisir Image' })}
+                    </Text>
+                  </TouchableOpacity>
+                  {imgBefore ? <Image source={{ uri: imgBefore }} className="w-full h-24 rounded-xl mt-2" resizeMode="cover" /> : null}
+                </View>
+
+                <View className="flex flex-col gap-2">
+                  <Text className="text-slate-700 dark:text-slate-200 text-sm font-bold">
+                    {translate('admin.imageAfterTitle', { defaultValue: 'Image After (Après)' })}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      const result = await launchImageLibrary({ mediaType: 'photo', includeBase64: true });
+                      if (result.assets && result.assets.length > 0) {
+                        const asset = result.assets[0];
+                        if (asset.base64) {
+                          setImgAfter(`data:${asset.type || 'image/jpeg'};base64,${asset.base64}`);
+                        } else if (asset.uri) {
+                          setImgAfter(asset.uri);
+                        }
+                      }
+                    }}
+                    className="bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-3xl flex items-center justify-center border border-slate-300 dark:border-slate-600"
+                  >
+                    <Text className="text-slate-800 dark:text-slate-200 font-bold">
+                      {imgAfter 
+                        ? translate('admin.changeImageButton', { defaultValue: 'Changer Image' }) 
+                        : translate('admin.chooseImageButton', { defaultValue: 'Choisir Image' })}
+                    </Text>
+                  </TouchableOpacity>
+                  {imgAfter ? <Image source={{ uri: imgAfter }} className="w-full h-24 rounded-xl mt-2" resizeMode="cover" /> : null}
+                </View>
 
                 <View className="flex flex-row gap-3 items-center justify-end md:col-span-2 pt-4">
                   <TouchableOpacity
