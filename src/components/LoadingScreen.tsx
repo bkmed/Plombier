@@ -9,19 +9,17 @@ export const LoadingScreen = () => {
   const styles = createStyles(theme);
   
   const [businessName, setBusinessName] = useState(() => {
-    return store.getState()?.appSettings?.businessName || 'Plombier';
+    return store.getState()?.plombierSettings?.businessName || 'Plombier';
   });
 
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
       const state = store.getState();
-      const currentBusinessName = state?.appSettings?.businessName || 'Plombier';
-      if (currentBusinessName !== businessName) {
-        setBusinessName(currentBusinessName);
-      }
+      const currentBusinessName = state?.plombierSettings?.businessName || 'Plombier';
+      setBusinessName(currentBusinessName);
     });
     return unsubscribe;
-  }, [businessName]);
+  }, []);
 
   return (
     <View style={styles.container}>
