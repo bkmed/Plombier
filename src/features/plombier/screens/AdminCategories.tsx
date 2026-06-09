@@ -259,9 +259,27 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
       <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
         {/* Header row */}
         <View className="flex-row bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-4 py-3">
-          <View style={{ flex: 2 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminCategories.tableCategoryName', 'Nom de la Catégorie')}</Text></View>
-          <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminCategories.tableArticleCount', "Nombre d'Articles")}</Text></View>
-          <View style={{ flex: 1, alignItems: 'center' }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminCategories.tableActions', 'Actions')}</Text></View>
+          <View style={{ flex: 2 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon(
+                'adminCategories.tableCategoryName',
+                'Nom de la Catégorie',
+              )}
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon(
+                'adminCategories.tableArticleCount',
+                "Nombre d'Articles",
+              )}
+            </Text>
+          </View>
+          <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminCategories.tableActions', 'Actions')}
+            </Text>
+          </View>
         </View>
         {/* Data rows */}
         {paginatedCategories.map(cat => {
@@ -282,11 +300,15 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                   ) : (
                     <View className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
                   )}
-                  <Text className="font-black text-slate-700 dark:text-slate-200 text-xs">{cat.name}</Text>
+                  <Text className="font-black text-slate-700 dark:text-slate-200 text-xs">
+                    {cat.name}
+                  </Text>
                 </View>
               </View>
               <View style={{ flex: 1 }}>
-                <Text className="text-xs text-slate-500 dark:text-slate-400">{count} {tCommon('adminCategories.articles', 'articles')}</Text>
+                <Text className="text-xs text-slate-500 dark:text-slate-400">
+                  {count} {tCommon('adminCategories.articles', 'articles')}
+                </Text>
               </View>
               <View style={{ flex: 1 }}>
                 <View className="flex flex-row justify-center gap-2">
@@ -294,13 +316,17 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
                     onPress={() => openEditCategoryModal(cat)}
                     className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
                   >
-                    <Text className="text-white text-xs font-black">{tCommon('adminCategories.rename', 'Renommer')}</Text>
+                    <Text className="text-white text-xs font-black">
+                      {tCommon('adminCategories.rename', 'Renommer')}
+                    </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => handleDeleteCategoryClick(cat.id, cat.name)}
                     className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
                   >
-                    <Text className="text-white text-xs font-black">{tCommon('adminCategories.delete', 'Supprimer')}</Text>
+                    <Text className="text-white text-xs font-black">
+                      {tCommon('adminCategories.delete', 'Supprimer')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -312,19 +338,32 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
           <View className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-200">
             <View className="flex flex-row items-center gap-2">
               <Text className="text-xs text-slate-500 dark:text-slate-400">
-                {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
+                {translate('admin.itemsPerPage', {
+                  defaultValue: 'Éléments par page :',
+                })}
               </Text>
               {[5, 10, 20, 50].map(val => (
                 <TouchableOpacity
                   key={val}
-                  onPress={() => { setItemsPerPage(val); setCurrentPage(1); }}
+                  onPress={() => {
+                    setItemsPerPage(val);
+                    setCurrentPage(1);
+                  }}
                   className={`px-2 py-1 rounded-lg text-xs font-bold border ${
                     itemsPerPage === val
                       ? 'bg-[#F97316] border-[#F97316]'
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  <Text className={`text-xs font-bold ${itemsPerPage === val ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{val}</Text>
+                  <Text
+                    className={`text-xs font-bold ${
+                      itemsPerPage === val
+                        ? 'text-white'
+                        : 'text-slate-700 dark:text-slate-200'
+                    }`}
+                  >
+                    {val}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>

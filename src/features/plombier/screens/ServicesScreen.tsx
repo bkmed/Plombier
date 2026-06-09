@@ -1,5 +1,12 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, Linking, Platform, Image } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Linking,
+  Platform,
+  Image,
+} from 'react-native';
 import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectServices } from '../../../store/slices/servicesSlice';
@@ -32,7 +39,8 @@ const ServicesScreen = ({
     dispatch(trackShare({ platform, item: serviceName }));
     const pageUrl =
       Platform.OS === 'web' && typeof window !== 'undefined'
-        ? (window as any).location?.href || 'https://plombier.example.com/services'
+        ? (window as any).location?.href ||
+          'https://plombier.example.com/services'
         : 'https://plombier.example.com/services';
     const url = encodeURIComponent(pageUrl);
     const text = encodeURIComponent(`Découvrez nos services : ${serviceName}`);
@@ -103,8 +111,20 @@ const ServicesScreen = ({
               <View style={{ gap: 10 }}>
                 {service.pts &&
                   service.pts.map((point: string, idx2: number) => (
-                    <View key={idx2} style={{ flexDirection: 'row', gap: 8, alignItems: 'flex-start' }}>
-                      <Text className="text-emerald-500 font-black" style={{ lineHeight: 18 }}>•</Text>
+                    <View
+                      key={idx2}
+                      style={{
+                        flexDirection: 'row',
+                        gap: 8,
+                        alignItems: 'flex-start',
+                      }}
+                    >
+                      <Text
+                        className="text-emerald-500 font-black"
+                        style={{ lineHeight: 18 }}
+                      >
+                        •
+                      </Text>
                       <Text className="text-slate-600 dark:text-slate-300 flex-1 text-xs font-bold">
                         {translateServiceField(point)}
                       </Text>
@@ -167,12 +187,28 @@ const ServicesScreen = ({
 
             <View className="grid grid-cols-2 gap-4">
               <View className="bg-slate-100 dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col min-h-[170px]">
-                {service.imgBefore && (service.imgBefore.startsWith('data:') || service.imgBefore.startsWith('http')) ? (
-                  <Image source={{ uri: service.imgBefore }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }} resizeMode="cover" />
+                {service.imgBefore &&
+                (service.imgBefore.startsWith('data:') ||
+                  service.imgBefore.startsWith('http')) ? (
+                  <Image
+                    source={{ uri: service.imgBefore }}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    resizeMode="cover"
+                  />
                 ) : (
                   <View className="flex-1 flex items-center justify-center p-2 mt-6 z-10">
                     <Text className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight text-center">
-                      {service.imgBefore ? translateServiceField(service.imgBefore) : ''}
+                      {service.imgBefore
+                        ? translateServiceField(service.imgBefore)
+                        : ''}
                     </Text>
                   </View>
                 )}
@@ -183,12 +219,28 @@ const ServicesScreen = ({
               </View>
 
               <View className="bg-slate-100 dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 text-center relative overflow-hidden flex flex-col min-h-[170px]">
-                {service.imgAfter && (service.imgAfter.startsWith('data:') || service.imgAfter.startsWith('http')) ? (
-                  <Image source={{ uri: service.imgAfter }} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%' }} resizeMode="cover" />
+                {service.imgAfter &&
+                (service.imgAfter.startsWith('data:') ||
+                  service.imgAfter.startsWith('http')) ? (
+                  <Image
+                    source={{ uri: service.imgAfter }}
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    resizeMode="cover"
+                  />
                 ) : (
                   <View className="flex-1 flex items-center justify-center p-2 mt-6 z-10">
                     <Text className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 font-bold uppercase leading-tight text-center">
-                      {service.imgAfter ? translateServiceField(service.imgAfter) : ''}
+                      {service.imgAfter
+                        ? translateServiceField(service.imgAfter)
+                        : ''}
                     </Text>
                   </View>
                 )}

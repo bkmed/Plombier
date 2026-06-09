@@ -298,7 +298,14 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                     onPress={e => toggleFavorite(prod.id, e as any)}
                     className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
                   >
-                    <Text style={{ fontSize: 14, color: favorites.includes(prod.id) ? '#f43f5e' : '#94a3b8' }}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: favorites.includes(prod.id)
+                          ? '#f43f5e'
+                          : '#94a3b8',
+                      }}
+                    >
                       {favorites.includes(prod.id) ? '♥' : '♡'}
                     </Text>
                   </TouchableOpacity>

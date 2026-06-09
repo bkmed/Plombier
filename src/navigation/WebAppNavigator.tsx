@@ -54,7 +54,7 @@ import {
 import { User } from '../services/authService';
 
 export const AppNavigator = () => {
-  const { colorScheme, setColorScheme } = useColorScheme();
+  const { setColorScheme } = useColorScheme();
   const { user: authUser, signIn, signOut } = useAuth();
   const { showToast } = useToast();
   const { t: translate, i18n } = useTranslation();
@@ -99,7 +99,10 @@ export const AppNavigator = () => {
     defaultValue: 'Gérer la galerie',
   });
   const isRTL = i18n.language === 'ar';
-  const businessName = (isRTL && plombierSettings.businessNameAr) ? plombierSettings.businessNameAr : (plombierSettings.businessName || 'Plombier Tunisie');
+  const businessName =
+    isRTL && plombierSettings.businessNameAr
+      ? plombierSettings.businessNameAr
+      : plombierSettings.businessName || 'Plombier Tunisie';
   const experienceYears = plombierSettings.experienceYears || 15;
   const dispoVal =
     plombierSettings.dispoVal ||

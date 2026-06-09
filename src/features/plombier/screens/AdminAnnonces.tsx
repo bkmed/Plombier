@@ -228,12 +228,36 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
         <View className="hidden lg:flex lg:flex-col w-full overflow-x-auto">
           {/* Header row */}
           <View className="flex-row bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-4 py-3">
-            <View style={{ flex: 2 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnPiece', 'Pièce')}</Text></View>
-            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnCategory', 'Catégorie')}</Text></View>
-            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnPrice', 'Prix')}</Text></View>
-            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnCondition', 'État')}</Text></View>
-            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnStatus', 'Statut')}</Text></View>
-            <View style={{ flex: 1, alignItems: 'center' }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">Actions</Text></View>
+            <View style={{ flex: 2 }}>
+              <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+                {tCommon('adminAnnonces.columnPiece', 'Pièce')}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+                {tCommon('adminAnnonces.columnCategory', 'Catégorie')}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+                {tCommon('adminAnnonces.columnPrice', 'Prix')}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+                {tCommon('adminAnnonces.columnCondition', 'État')}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+                {tCommon('adminAnnonces.columnStatus', 'Statut')}
+              </Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'center' }}>
+              <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+                Actions
+              </Text>
+            </View>
           </View>
           {/* Data rows */}
           {paginatedProducts.map(prod => (
@@ -247,15 +271,29 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     <ProductVisual image={prod.image} className="w-6 h-6" />
                   </View>
                   <View>
-                    <Text className="font-black text-slate-800 dark:text-slate-100 text-xs">{prod.title}</Text>
-                    <Text className="text-[10px] text-slate-400 font-semibold dark:text-slate-300">{prod.subtitle}</Text>
+                    <Text className="font-black text-slate-800 dark:text-slate-100 text-xs">
+                      {prod.title}
+                    </Text>
+                    <Text className="text-[10px] text-slate-400 font-semibold dark:text-slate-300">
+                      {prod.subtitle}
+                    </Text>
                   </View>
                 </View>
               </View>
-              <View style={{ flex: 1 }}><Text className="text-xs text-slate-500 dark:text-slate-400">{prod.category}</Text></View>
-              <View style={{ flex: 1 }}><Text className="text-xs font-black text-slate-800 dark:text-slate-100">{prod.price} TND</Text></View>
               <View style={{ flex: 1 }}>
-                <Text className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-300">{prod.condition}</Text>
+                <Text className="text-xs text-slate-500 dark:text-slate-400">
+                  {prod.category}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text className="text-xs font-black text-slate-800 dark:text-slate-100">
+                  {prod.price} TND
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-300">
+                  {prod.condition}
+                </Text>
               </View>
               <View style={{ flex: 1 }}>
                 <Text
@@ -265,16 +303,28 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-500/10'
                   }`}
                 >
-                  {prod.isAvailable ? tCommon('adminAnnonces.available', 'Disponible') : tCommon('adminAnnonces.sold', 'Vendu')}
+                  {prod.isAvailable
+                    ? tCommon('adminAnnonces.available', 'Disponible')
+                    : tCommon('adminAnnonces.sold', 'Vendu')}
                 </Text>
               </View>
               <View style={{ flex: 1 }}>
                 <View className="flex flex-row justify-center gap-2">
-                  <TouchableOpacity onPress={() => openEditAnnonce(prod)} className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition">
-                    <Text className="text-white text-xs font-black">{tCommon('adminAnnonces.edit', 'Modifier')}</Text>
+                  <TouchableOpacity
+                    onPress={() => openEditAnnonce(prod)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition"
+                  >
+                    <Text className="text-white text-xs font-black">
+                      {tCommon('adminAnnonces.edit', 'Modifier')}
+                    </Text>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => handleDeleteAnnonceClick(prod.id)} className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition">
-                    <Text className="text-white text-xs font-black">{tCommon('adminAnnonces.delete', 'Supprimer')}</Text>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteAnnonceClick(prod.id)}
+                    className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition"
+                  >
+                    <Text className="text-white text-xs font-black">
+                      {tCommon('adminAnnonces.delete', 'Supprimer')}
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -349,19 +399,32 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
           <View className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-200">
             <View className="flex flex-row items-center gap-2">
               <Text className="text-xs text-slate-500 dark:text-slate-400">
-                {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
+                {translate('admin.itemsPerPage', {
+                  defaultValue: 'Éléments par page :',
+                })}
               </Text>
               {[5, 10, 20, 50].map(val => (
                 <TouchableOpacity
                   key={val}
-                  onPress={() => { setItemsPerPage(val); setCurrentPage(1); }}
+                  onPress={() => {
+                    setItemsPerPage(val);
+                    setCurrentPage(1);
+                  }}
                   className={`px-2 py-1 rounded-lg text-xs font-bold border ${
                     itemsPerPage === val
                       ? 'bg-[#F97316] border-[#F97316]'
                       : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
                   }`}
                 >
-                  <Text className={`text-xs font-bold ${itemsPerPage === val ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{val}</Text>
+                  <Text
+                    className={`text-xs font-bold ${
+                      itemsPerPage === val
+                        ? 'text-white'
+                        : 'text-slate-700 dark:text-slate-200'
+                    }`}
+                  >
+                    {val}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -521,7 +584,15 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                               : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
                           }`}
                         >
-                          <Text className={`text-xs font-bold ${annonceCategory === c.name ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{c.name}</Text>
+                          <Text
+                            className={`text-xs font-bold ${
+                              annonceCategory === c.name
+                                ? 'text-white'
+                                : 'text-slate-700 dark:text-slate-200'
+                            }`}
+                          >
+                            {c.name}
+                          </Text>
                         </TouchableOpacity>
                       ))}
                     </View>
@@ -544,19 +615,29 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       État
                     </Text>
                     <View className="flex-row gap-2">
-                      {(['comme neuf', 'bon état', 'pour pièces'] as const).map(cond => (
-                        <TouchableOpacity
-                          key={cond}
-                          onPress={() => setAnnonceCondition(cond)}
-                          className={`flex-1 py-2 px-2 rounded-xl text-center border ${
-                            annonceCondition === cond
-                              ? 'bg-[#1E3A5F] border-[#1E3A5F]'
-                              : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
-                          }`}
-                        >
-                          <Text className={`text-[10px] font-bold ${annonceCondition === cond ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{cond}</Text>
-                        </TouchableOpacity>
-                      ))}
+                      {(['comme neuf', 'bon état', 'pour pièces'] as const).map(
+                        cond => (
+                          <TouchableOpacity
+                            key={cond}
+                            onPress={() => setAnnonceCondition(cond)}
+                            className={`flex-1 py-2 px-2 rounded-xl text-center border ${
+                              annonceCondition === cond
+                                ? 'bg-[#1E3A5F] border-[#1E3A5F]'
+                                : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                            }`}
+                          >
+                            <Text
+                              className={`text-[10px] font-bold ${
+                                annonceCondition === cond
+                                  ? 'text-white'
+                                  : 'text-slate-700 dark:text-slate-200'
+                              }`}
+                            >
+                              {cond}
+                            </Text>
+                          </TouchableOpacity>
+                        ),
+                      )}
                     </View>
                   </View>
                 </View>
@@ -567,7 +648,11 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                       Représentation Visuelle
                     </Text>
                     <View className="flex-row flex-wrap gap-2">
-                      {[{ value: 'faucet', label: 'Robinet' }, { value: 'boiler', label: 'Chauffe-eau' }, { value: 'copper_fittings', label: 'Canalisation' }].map(opt => (
+                      {[
+                        { value: 'faucet', label: 'Robinet' },
+                        { value: 'boiler', label: 'Chauffe-eau' },
+                        { value: 'copper_fittings', label: 'Canalisation' },
+                      ].map(opt => (
                         <TouchableOpacity
                           key={opt.value}
                           onPress={() => setAnnonceImage(opt.value)}
@@ -577,7 +662,15 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                               : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
                           }`}
                         >
-                          <Text className={`text-[10px] font-bold ${annonceImage === opt.value ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{opt.label}</Text>
+                          <Text
+                            className={`text-[10px] font-bold ${
+                              annonceImage === opt.value
+                                ? 'text-white'
+                                : 'text-slate-700 dark:text-slate-200'
+                            }`}
+                          >
+                            {opt.label}
+                          </Text>
                         </TouchableOpacity>
                       ))}
                     </View>

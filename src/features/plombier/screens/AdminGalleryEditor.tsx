@@ -84,7 +84,11 @@ const AdminGalleryEditor = () => {
       return;
     }
 
-    const arTranslation: { title?: string; subtitle?: string; description?: string } = {};
+    const arTranslation: {
+      title?: string;
+      subtitle?: string;
+      description?: string;
+    } = {};
     if (titleAr.trim()) arTranslation.title = titleAr.trim();
     if (subtitleAr.trim()) arTranslation.subtitle = subtitleAr.trim();
     if (descriptionAr.trim()) arTranslation.description = descriptionAr.trim();
@@ -272,7 +276,10 @@ const AdminGalleryEditor = () => {
                   key={item.id}
                   className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 shadow-sm"
                 >
-                  <View className="overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800" style={{ height: 150 }}>
+                  <View
+                    className="overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800"
+                    style={{ height: 150 }}
+                  >
                     <Image
                       source={{ uri: item.imageUri }}
                       style={{ width: '100%', height: '100%' }}
@@ -335,14 +342,24 @@ const AdminGalleryEditor = () => {
                   {[5, 10, 20, 50].map(val => (
                     <TouchableOpacity
                       key={val}
-                      onPress={() => { setItemsPerPage(val); setCurrentPage(1); }}
+                      onPress={() => {
+                        setItemsPerPage(val);
+                        setCurrentPage(1);
+                      }}
                       className={`px-2 py-1 rounded-lg text-xs font-bold border ${
                         itemsPerPage === val
                           ? 'bg-[#F97316] text-white border-[#F97316]'
                           : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200'
                       }`}
                     >
-                      <Text style={{ color: itemsPerPage === val ? '#fff' : undefined }} className="font-bold text-xs">{val}</Text>
+                      <Text
+                        style={{
+                          color: itemsPerPage === val ? '#fff' : undefined,
+                        }}
+                        className="font-bold text-xs"
+                      >
+                        {val}
+                      </Text>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -562,7 +579,9 @@ const AdminGalleryEditor = () => {
                 <View className="grid gap-4 md:grid-cols-[1.4fr_0.8fr] items-start">
                   <View>
                     <Text className="block text-sm font-semibold mb-2 text-slate-900 dark:text-slate-100">
-                      {translate('admin.galleryImageLabel', { defaultValue: 'Image de la galerie' })}
+                      {translate('admin.galleryImageLabel', {
+                        defaultValue: 'Image de la galerie',
+                      })}
                     </Text>
                     <View className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
                       <CategoryImageInput
@@ -579,26 +598,35 @@ const AdminGalleryEditor = () => {
                     </Text>
                     <View style={{ gap: 8 }}>
                       <View style={{ flexDirection: 'row', gap: 6 }}>
-                        <Text className="text-slate-500 dark:text-slate-400 text-xs">•</Text>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs">
+                          •
+                        </Text>
                         <Text className="text-slate-500 dark:text-slate-400 text-xs flex-1">
                           {translate('admin.tip.chooseImage', {
-                            defaultValue: 'Choisissez une image claire et représentative.',
+                            defaultValue:
+                              'Choisissez une image claire et représentative.',
                           })}
                         </Text>
                       </View>
                       <View style={{ flexDirection: 'row', gap: 6 }}>
-                        <Text className="text-slate-500 dark:text-slate-400 text-xs">•</Text>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs">
+                          •
+                        </Text>
                         <Text className="text-slate-500 dark:text-slate-400 text-xs flex-1">
                           {translate('admin.tip.addTitle', {
-                            defaultValue: 'Ajoutez un titre court et un sous-titre pertinent.',
+                            defaultValue:
+                              'Ajoutez un titre court et un sous-titre pertinent.',
                           })}
                         </Text>
                       </View>
                       <View style={{ flexDirection: 'row', gap: 6 }}>
-                        <Text className="text-slate-500 dark:text-slate-400 text-xs">•</Text>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs">
+                          •
+                        </Text>
                         <Text className="text-slate-500 dark:text-slate-400 text-xs flex-1">
                           {translate('admin.tip.descriptionHelp', {
-                            defaultValue: 'La description aide vos clients à comprendre la réalisation.',
+                            defaultValue:
+                              'La description aide vos clients à comprendre la réalisation.',
                           })}
                         </Text>
                       </View>

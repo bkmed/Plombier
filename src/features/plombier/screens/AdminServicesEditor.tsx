@@ -452,15 +452,24 @@ const AdminServicesEditor = () => {
 
                 <View className="flex flex-col gap-2">
                   <Text className="text-slate-700 dark:text-slate-200 text-sm font-bold">
-                    {translate('admin.imageBeforeTitle', { defaultValue: 'Image Before (Avant)' })}
+                    {translate('admin.imageBeforeTitle', {
+                      defaultValue: 'Image Before (Avant)',
+                    })}
                   </Text>
                   <TouchableOpacity
                     onPress={async () => {
-                      const result = await launchImageLibrary({ mediaType: 'photo', includeBase64: true });
+                      const result = await launchImageLibrary({
+                        mediaType: 'photo',
+                        includeBase64: true,
+                      });
                       if (result.assets && result.assets.length > 0) {
                         const asset = result.assets[0];
                         if (asset.base64) {
-                          setImgBefore(`data:${asset.type || 'image/jpeg'};base64,${asset.base64}`);
+                          setImgBefore(
+                            `data:${asset.type || 'image/jpeg'};base64,${
+                              asset.base64
+                            }`,
+                          );
                         } else if (asset.uri) {
                           setImgBefore(asset.uri);
                         }
@@ -469,25 +478,44 @@ const AdminServicesEditor = () => {
                     className="bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-3xl flex items-center justify-center border border-slate-300 dark:border-slate-600"
                   >
                     <Text className="text-slate-800 dark:text-slate-200 font-bold">
-                      {imgBefore 
-                        ? translate('admin.changeImageButton', { defaultValue: 'Changer Image' }) 
-                        : translate('admin.chooseImageButton', { defaultValue: 'Choisir Image' })}
+                      {imgBefore
+                        ? translate('admin.changeImageButton', {
+                            defaultValue: 'Changer Image',
+                          })
+                        : translate('admin.chooseImageButton', {
+                            defaultValue: 'Choisir Image',
+                          })}
                     </Text>
                   </TouchableOpacity>
-                  {imgBefore ? <Image source={{ uri: imgBefore }} className="w-full h-24 rounded-xl mt-2" resizeMode="cover" /> : null}
+                  {imgBefore ? (
+                    <Image
+                      source={{ uri: imgBefore }}
+                      className="w-full h-24 rounded-xl mt-2"
+                      resizeMode="cover"
+                    />
+                  ) : null}
                 </View>
 
                 <View className="flex flex-col gap-2">
                   <Text className="text-slate-700 dark:text-slate-200 text-sm font-bold">
-                    {translate('admin.imageAfterTitle', { defaultValue: 'Image After (Après)' })}
+                    {translate('admin.imageAfterTitle', {
+                      defaultValue: 'Image After (Après)',
+                    })}
                   </Text>
                   <TouchableOpacity
                     onPress={async () => {
-                      const result = await launchImageLibrary({ mediaType: 'photo', includeBase64: true });
+                      const result = await launchImageLibrary({
+                        mediaType: 'photo',
+                        includeBase64: true,
+                      });
                       if (result.assets && result.assets.length > 0) {
                         const asset = result.assets[0];
                         if (asset.base64) {
-                          setImgAfter(`data:${asset.type || 'image/jpeg'};base64,${asset.base64}`);
+                          setImgAfter(
+                            `data:${asset.type || 'image/jpeg'};base64,${
+                              asset.base64
+                            }`,
+                          );
                         } else if (asset.uri) {
                           setImgAfter(asset.uri);
                         }
@@ -496,12 +524,22 @@ const AdminServicesEditor = () => {
                     className="bg-slate-200 dark:bg-slate-700 px-4 py-3 rounded-3xl flex items-center justify-center border border-slate-300 dark:border-slate-600"
                   >
                     <Text className="text-slate-800 dark:text-slate-200 font-bold">
-                      {imgAfter 
-                        ? translate('admin.changeImageButton', { defaultValue: 'Changer Image' }) 
-                        : translate('admin.chooseImageButton', { defaultValue: 'Choisir Image' })}
+                      {imgAfter
+                        ? translate('admin.changeImageButton', {
+                            defaultValue: 'Changer Image',
+                          })
+                        : translate('admin.chooseImageButton', {
+                            defaultValue: 'Choisir Image',
+                          })}
                     </Text>
                   </TouchableOpacity>
-                  {imgAfter ? <Image source={{ uri: imgAfter }} className="w-full h-24 rounded-xl mt-2" resizeMode="cover" /> : null}
+                  {imgAfter ? (
+                    <Image
+                      source={{ uri: imgAfter }}
+                      className="w-full h-24 rounded-xl mt-2"
+                      resizeMode="cover"
+                    />
+                  ) : null}
                 </View>
 
                 <View className="flex flex-row gap-3 items-center justify-end md:col-span-2 pt-4">

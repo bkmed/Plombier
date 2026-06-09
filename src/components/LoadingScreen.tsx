@@ -7,7 +7,7 @@ import { store } from '../store';
 export const LoadingScreen = () => {
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  
+
   const [businessName, setBusinessName] = useState(() => {
     return store.getState()?.plombierSettings?.businessName || 'Plombier';
   });
@@ -15,7 +15,8 @@ export const LoadingScreen = () => {
   useEffect(() => {
     const unsubscribe = store.subscribe(() => {
       const state = store.getState();
-      const currentBusinessName = state?.plombierSettings?.businessName || 'Plombier';
+      const currentBusinessName =
+        state?.plombierSettings?.businessName || 'Plombier';
       setBusinessName(currentBusinessName);
     });
     return unsubscribe;
@@ -29,9 +30,7 @@ export const LoadingScreen = () => {
           style={styles.logo}
           resizeMode="contain"
         />
-        <Text style={styles.businessName}>
-          {businessName}
-        </Text>
+        <Text style={styles.businessName}>{businessName}</Text>
       </View>
       <ActivityIndicator size="large" color="#005994" style={styles.spinner} />
     </View>

@@ -226,10 +226,16 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                       : 'bg-white dark:bg-slate-950 border-slate-300 dark:border-slate-700'
                   }`}
                 >
-                  <Text className={`text-sm font-bold ${
-                    editUserRole === role ? 'text-white' : 'text-slate-900 dark:text-slate-100'
-                  }`}>
-                    {role === 'user' ? tCommon('adminUsers.roleUser', 'Utilisateur') : tCommon('adminUsers.roleAdmin', 'Administrateur')}
+                  <Text
+                    className={`text-sm font-bold ${
+                      editUserRole === role
+                        ? 'text-white'
+                        : 'text-slate-900 dark:text-slate-100'
+                    }`}
+                  >
+                    {role === 'user'
+                      ? tCommon('adminUsers.roleUser', 'Utilisateur')
+                      : tCommon('adminUsers.roleAdmin', 'Administrateur')}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -250,12 +256,36 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
       <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
         {/* Header row */}
         <View className="flex-row bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-4 py-3">
-          <View style={{ flex: 1.5 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminUsers.tableFullName', 'Nom complet')}</Text></View>
-          <View style={{ flex: 2 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminUsers.tableEmail', 'Adresse Email')}</Text></View>
-          <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminUsers.tablePhone', 'Téléphone')}</Text></View>
-          <View style={{ flex: 0.8 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminUsers.tableRole', 'Rôle')}</Text></View>
-          <View style={{ flex: 0.8 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminUsers.tableStatus', 'Statut')}</Text></View>
-          <View style={{ flex: 2, alignItems: 'center' }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminUsers.tableActions', 'Actions')}</Text></View>
+          <View style={{ flex: 1.5 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminUsers.tableFullName', 'Nom complet')}
+            </Text>
+          </View>
+          <View style={{ flex: 2 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminUsers.tableEmail', 'Adresse Email')}
+            </Text>
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminUsers.tablePhone', 'Téléphone')}
+            </Text>
+          </View>
+          <View style={{ flex: 0.8 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminUsers.tableRole', 'Rôle')}
+            </Text>
+          </View>
+          <View style={{ flex: 0.8 }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminUsers.tableStatus', 'Statut')}
+            </Text>
+          </View>
+          <View style={{ flex: 2, alignItems: 'center' }}>
+            <Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">
+              {tCommon('adminUsers.tableActions', 'Actions')}
+            </Text>
+          </View>
         </View>
         {/* Data rows */}
         {usersList.map(u => (
@@ -263,27 +293,52 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
             key={u.id}
             className="flex-row items-center px-4 py-3 border-b border-slate-100 dark:border-slate-700"
           >
-            <View style={{ flex: 1.5 }}><Text className="text-xs font-black text-slate-800 dark:text-slate-100">{u.name}</Text></View>
-            <View style={{ flex: 2 }}><Text className="text-xs text-slate-500 dark:text-slate-400">{u.email}</Text></View>
-            <View style={{ flex: 1 }}><Text className="text-xs text-slate-700 dark:text-slate-200">{u.phone || 'N/A'}</Text></View>
+            <View style={{ flex: 1.5 }}>
+              <Text className="text-xs font-black text-slate-800 dark:text-slate-100">
+                {u.name}
+              </Text>
+            </View>
+            <View style={{ flex: 2 }}>
+              <Text className="text-xs text-slate-500 dark:text-slate-400">
+                {u.email}
+              </Text>
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text className="text-xs text-slate-700 dark:text-slate-200">
+                {u.phone || 'N/A'}
+              </Text>
+            </View>
             <View style={{ flex: 0.8 }}>
               <Text
                 className={`px-2.5 py-1 rounded text-[9.5px] font-black uppercase ${
-                  u.role === 'admin' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700'
+                  u.role === 'admin'
+                    ? 'bg-amber-100 text-amber-700'
+                    : 'bg-blue-100 text-blue-700'
                 }`}
-              >{u.role}</Text>
+              >
+                {u.role}
+              </Text>
             </View>
             <View style={{ flex: 0.8 }}>
               <Text
                 className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
-                  u.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+                  u.status === 'active'
+                    ? 'bg-emerald-50 text-emerald-600'
+                    : 'bg-rose-50 text-rose-600'
                 }`}
-              >{u.status}</Text>
+              >
+                {u.status}
+              </Text>
             </View>
             <View style={{ flex: 2 }}>
               <View className="flex flex-wrap justify-center gap-1">
-                <TouchableOpacity onPress={() => handleStartEditUser(u)} className="bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded transition">
-                  <Text className="text-slate-700 dark:text-white text-xs">{tCommon('adminUsers.btnEdit', 'Modifier')}</Text>
+                <TouchableOpacity
+                  onPress={() => handleStartEditUser(u)}
+                  className="bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded transition"
+                >
+                  <Text className="text-slate-700 dark:text-white text-xs">
+                    {tCommon('adminUsers.btnEdit', 'Modifier')}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleDeleteUserClick(u.id, u.role)}
@@ -294,20 +349,39 @@ export const AdminUsers: React.FC<AdminUsersProps> = ({ showToast, t }) => {
                       : 'bg-rose-600 hover:bg-rose-700'
                   }`}
                 >
-                  <Text className={`text-xs font-black ${u.role === 'admin' ? 'text-slate-400' : 'text-white'}`}>
-                    {u.role === 'admin' ? tCommon('adminUsers.protectedAdmin', 'Admin protégé') : tCommon('adminUsers.delete', 'Supprimer')}
+                  <Text
+                    className={`text-xs font-black ${
+                      u.role === 'admin' ? 'text-slate-400' : 'text-white'
+                    }`}
+                  >
+                    {u.role === 'admin'
+                      ? tCommon('adminUsers.protectedAdmin', 'Admin protégé')
+                      : tCommon('adminUsers.delete', 'Supprimer')}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleToggleUserRole(u.id, u.role)} className="bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded transition">
-                  <Text className="text-slate-700 dark:text-white text-xs">{u.role === 'admin' ? tCommon('adminUsers.btnDemote', 'Rétrograder') : tCommon('adminUsers.btnPromote', 'Promouvoir')}</Text>
+                <TouchableOpacity
+                  onPress={() => handleToggleUserRole(u.id, u.role)}
+                  className="bg-slate-100 dark:bg-slate-700 px-2.5 py-1 rounded transition"
+                >
+                  <Text className="text-slate-700 dark:text-white text-xs">
+                    {u.role === 'admin'
+                      ? tCommon('adminUsers.btnDemote', 'Rétrograder')
+                      : tCommon('adminUsers.btnPromote', 'Promouvoir')}
+                  </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => handleToggleUserStatus(u.id, u.status)}
                   className={`px-2.5 py-1 rounded text-white transition font-black ${
-                    u.status === 'active' ? 'bg-rose-600 hover:bg-rose-700' : 'bg-emerald-600 hover:bg-emerald-700'
+                    u.status === 'active'
+                      ? 'bg-rose-600 hover:bg-rose-700'
+                      : 'bg-emerald-600 hover:bg-emerald-700'
                   }`}
                 >
-                  <Text className="text-white text-xs font-black">{u.status === 'active' ? tCommon('adminUsers.btnBlock', 'Bloquer') : tCommon('adminUsers.btnActivate', 'Activer')}</Text>
+                  <Text className="text-white text-xs font-black">
+                    {u.status === 'active'
+                      ? tCommon('adminUsers.btnBlock', 'Bloquer')
+                      : tCommon('adminUsers.btnActivate', 'Activer')}
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
