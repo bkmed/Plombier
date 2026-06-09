@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { setActiveTab } from '../../../store/slices/uiSlice';
@@ -255,104 +255,78 @@ export const AdminCategories: React.FC<AdminCategoriesProps> = ({
         </View>
       </View>
 
-      {/* Categories list table */}
+      {/* Categories list */}
       <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
-        <View className="overflow-x-auto w-full">
-          <table className="w-full min-w-[600px] text-xs text-left font-semibold">
-            <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400 whitespace-nowrap">
-              <tr>
-                <th className="px-6 py-4">
-                  {tCommon(
-                    'adminCategories.tableCategoryName',
-                    'Nom de la Catégorie',
-                  )}
-                </th>
-                <th className="px-6 py-4">
-                  {tCommon(
-                    'adminCategories.tableArticleCount',
-                    "Nombre d'Articles",
-                  )}
-                </th>
-                <th className="px-6 py-4 text-center">
-                  {tCommon('adminCategories.tableActions', 'Actions')}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
-              {paginatedCategories.map(cat => {
-                const count = products.filter(
-                  p => p.category === cat.name,
-                ).length;
-                return (
-                  <tr
-                    key={cat.id}
-                    className="hover:bg-slate-50/50 dark:hover:bg-slate-700/30 transition whitespace-nowrap"
-                  >
-                    <td className="px-6 py-4">
-                      <View className="flex flex-row items-center gap-3">
-                        {cat.imageUri ? (
-                          <img
-                            src={cat.imageUri}
-                            alt={cat.name}
-                            className="h-10 w-10 rounded-xl object-cover border border-slate-200 dark:border-slate-700"
-                          />
-                        ) : (
-                          <View className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
-                        )}
-                        <Text className="font-black text-slate-700 dark:text-slate-200">
-                          {cat.name}
-                        </Text>
-                      </View>
-                    </td>
-                    <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                      {count} {tCommon('adminCategories.articles', 'articles')}
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <View className="flex flex-row justify-center gap-2">
-                        <TouchableOpacity
-                          onPress={() => openEditCategoryModal(cat)}
-                          className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
-                        >
-                          {tCommon('adminCategories.rename', 'Renommer')}
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() =>
-                            handleDeleteCategoryClick(cat.id, cat.name)
-                          }
-                          className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
-                        >
-                          {tCommon('adminCategories.delete', 'Supprimer')}
-                        </TouchableOpacity>
-                      </View>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        {/* Header row */}
+        <View className="flex-row bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-4 py-3">
+          <View style={{ flex: 2 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminCategories.tableCategoryName', 'Nom de la Catégorie')}</Text></View>
+          <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminCategories.tableArticleCount', "Nombre d'Articles")}</Text></View>
+          <View style={{ flex: 1, alignItems: 'center' }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminCategories.tableActions', 'Actions')}</Text></View>
         </View>
+        {/* Data rows */}
+        {paginatedCategories.map(cat => {
+          const count = products.filter(p => p.category === cat.name).length;
+          return (
+            <View
+              key={cat.id}
+              className="flex-row items-center px-4 py-3 border-b border-slate-100 dark:border-slate-700"
+            >
+              <View style={{ flex: 2 }}>
+                <View className="flex flex-row items-center gap-3">
+                  {cat.imageUri ? (
+                    <Image
+                      source={{ uri: cat.imageUri }}
+                      style={{ height: 40, width: 40, borderRadius: 12 }}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View className="h-10 w-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700" />
+                  )}
+                  <Text className="font-black text-slate-700 dark:text-slate-200 text-xs">{cat.name}</Text>
+                </View>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text className="text-xs text-slate-500 dark:text-slate-400">{count} {tCommon('adminCategories.articles', 'articles')}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <View className="flex flex-row justify-center gap-2">
+                  <TouchableOpacity
+                    onPress={() => openEditCategoryModal(cat)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1 rounded-lg transition"
+                  >
+                    <Text className="text-white text-xs font-black">{tCommon('adminCategories.rename', 'Renommer')}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteCategoryClick(cat.id, cat.name)}
+                    className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1 rounded-lg transition"
+                  >
+                    <Text className="text-white text-xs font-black">{tCommon('adminCategories.delete', 'Supprimer')}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          );
+        })}
 
         {totalPages > 1 || reduxCategories.length > 5 ? (
           <View className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-200">
             <View className="flex flex-row items-center gap-2">
               <Text className="text-xs text-slate-500 dark:text-slate-400">
-                {translate('admin.itemsPerPage', {
-                  defaultValue: 'Éléments par page :',
-                })}
+                {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
               </Text>
-              <select
-                value={itemsPerPage}
-                onChange={e => {
-                  setItemsPerPage(Number(e.target.value));
-                  setCurrentPage(1);
-                }}
-                className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold focus:outline-none text-slate-700 dark:text-slate-200"
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-              </select>
+              {[5, 10, 20, 50].map(val => (
+                <TouchableOpacity
+                  key={val}
+                  onPress={() => { setItemsPerPage(val); setCurrentPage(1); }}
+                  className={`px-2 py-1 rounded-lg text-xs font-bold border ${
+                    itemsPerPage === val
+                      ? 'bg-[#F97316] border-[#F97316]'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  <Text className={`text-xs font-bold ${itemsPerPage === val ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{val}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
 
             <View className="flex flex-row items-center gap-4">

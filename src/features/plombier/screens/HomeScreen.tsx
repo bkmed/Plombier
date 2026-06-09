@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Image } from 'react-native';
 import { ServiceIcon, ServiceIconName } from '../../../components/ServiceIcon';
 import { ProductVisual } from '../components/ProductSVGs';
 
@@ -59,7 +59,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
   return (
     <View className="animate-fade-in text-left bg-slate-50 text-slate-800 dark:bg-[#0B0F19] dark:text-slate-100">
       {/* Premium Hero Banner */}
-      <section className="relative bg-[#0F172A] text-white py-24 sm:py-32 overflow-hidden">
+      <View className="relative bg-[#0F172A] text-white py-24 sm:py-32 overflow-hidden">
         <View className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_30%,#F97316_0%,transparent_50%)] pointer-events-none" />
         <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <View className="max-w-3xl">
@@ -101,10 +101,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             </View>
           </View>
         </View>
-      </section>
+      </View>
 
       {/* Trust Stats Bar */}
-      <section className="bg-slate-100 dark:bg-slate-900/60 py-10 border-y border-slate-200 dark:border-slate-800">
+      <View className="bg-slate-100 dark:bg-slate-900/60 py-10 border-y border-slate-200 dark:border-slate-800">
         <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <View className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
             {stats.map((stat, idx) => (
@@ -121,10 +121,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             ))}
           </View>
         </View>
-      </section>
+      </View>
 
       {/* Technical Services Key Cards */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
+      <View className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-transparent">
         <View className="text-center max-w-2xl mx-auto mb-16">
           <Text className="text-3xl font-black tracking-tight text-slate-800 dark:text-slate-100">
             {t('webServices.nos_services')}
@@ -195,10 +195,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             </Text>
           </TouchableOpacity>
         </View>
-      </section>
+      </View>
 
       {/* Real Photo Gallery Preview */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
+      <View className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
         <View className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
           <View>
             <Text className="text-xs font-black uppercase tracking-[0.25em] text-[#F97316]">
@@ -226,10 +226,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
               className="rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 shadow-sm"
             >
               <View className="h-56 overflow-hidden">
-                <img
-                  src={item.imageUri}
-                  alt={item.title}
-                  className="h-full w-full object-cover"
+                <Image
+                  source={{ uri: item.imageUri }}
+                  style={{ width: '100%', height: '100%' }}
+                  resizeMode="cover"
                 />
               </View>
               <View className="p-5">
@@ -256,10 +256,10 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             </View>
           )}
         </View>
-      </section>
+      </View>
 
       {/* Used Parts Showcase Grid */}
-      <section className="bg-slate-100 dark:bg-slate-900/60 py-20 border-t border-slate-200 dark:border-slate-800">
+      <View className="bg-slate-100 dark:bg-slate-900/60 py-20 border-t border-slate-200 dark:border-slate-800">
         <View className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <View className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <View>
@@ -298,21 +298,9 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                     onPress={e => toggleFavorite(prod.id, e as any)}
                     className="absolute top-3 left-3 z-10 w-8 h-8 bg-white dark:bg-slate-800 shadow-sm border border-slate-200 dark:border-slate-700 rounded-full flex items-center justify-center text-slate-400 hover:text-rose-500 transition"
                   >
-                    <svg
-                      width="14"
-                      height="14"
-                      viewBox="0 0 24 24"
-                      fill={
-                        favorites.includes(prod.id) ? 'currentColor' : 'none'
-                      }
-                      stroke="currentColor"
-                      strokeWidth="2.5"
-                      className={
-                        favorites.includes(prod.id) ? 'text-rose-500' : ''
-                      }
-                    >
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                    </svg>
+                    <Text style={{ fontSize: 14, color: favorites.includes(prod.id) ? '#f43f5e' : '#94a3b8' }}>
+                      {favorites.includes(prod.id) ? '♥' : '♡'}
+                    </Text>
                   </TouchableOpacity>
 
                   <ProductVisual image={prod.image} />
@@ -353,7 +341,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
             ))}
           </View>
         </View>
-      </section>
+      </View>
     </View>
   );
 };

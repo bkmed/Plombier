@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveTab } from '../../../store/slices/uiSlice';
@@ -272,11 +272,11 @@ const AdminGalleryEditor = () => {
                   key={item.id}
                   className="grid gap-4 md:grid-cols-[150px_1fr_180px] rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 shadow-sm"
                 >
-                  <View className="overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800 h-full">
-                    <img
-                      src={item.imageUri}
-                      alt={item.title}
-                      className="h-full w-full object-cover"
+                  <View className="overflow-hidden rounded-3xl bg-slate-100 dark:bg-slate-800" style={{ height: 150 }}>
+                    <Image
+                      source={{ uri: item.imageUri }}
+                      style={{ width: '100%', height: '100%' }}
+                      resizeMode="cover"
                     />
                   </View>
                   <View className="space-y-2">
@@ -332,19 +332,19 @@ const AdminGalleryEditor = () => {
                       defaultValue: 'Éléments par page :',
                     })}
                   </Text>
-                  <select
-                    value={itemsPerPage}
-                    onChange={e => {
-                      setItemsPerPage(Number(e.target.value));
-                      setCurrentPage(1);
-                    }}
-                    className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold focus:outline-none text-slate-700 dark:text-slate-200"
-                  >
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={50}>50</option>
-                  </select>
+                  {[5, 10, 20, 50].map(val => (
+                    <TouchableOpacity
+                      key={val}
+                      onPress={() => { setItemsPerPage(val); setCurrentPage(1); }}
+                      className={`px-2 py-1 rounded-lg text-xs font-bold border ${
+                        itemsPerPage === val
+                          ? 'bg-[#F97316] text-white border-[#F97316]'
+                          : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200'
+                      }`}
+                    >
+                      <Text style={{ color: itemsPerPage === val ? '#fff' : undefined }} className="font-bold text-xs">{val}</Text>
+                    </TouchableOpacity>
+                  ))}
                 </View>
 
                 <View className="flex flex-row items-center gap-4">
@@ -571,32 +571,38 @@ const AdminGalleryEditor = () => {
                       />
                     </View>
                   </View>
-                  <View className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4 text-sm text-slate-500 dark:text-slate-400">
+                  <View className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-4">
                     <Text className="font-black text-sm mb-2 text-slate-500 dark:text-slate-400">
                       {translate('admin.tipTitle', {
                         defaultValue: 'Conseil :',
                       })}
                     </Text>
-                    <ul className="list-disc pl-5 space-y-2">
-                      <li>
-                        {translate('admin.tip.chooseImage', {
-                          defaultValue:
-                            'Choisissez une image claire et représentative.',
-                        })}
-                      </li>
-                      <li>
-                        {translate('admin.tip.addTitle', {
-                          defaultValue:
-                            'Ajoutez un titre court et un sous-titre pertinent.',
-                        })}
-                      </li>
-                      <li>
-                        {translate('admin.tip.descriptionHelp', {
-                          defaultValue:
-                            'La description aide vos clients à comprendre la réalisation.',
-                        })}
-                      </li>
-                    </ul>
+                    <View style={{ gap: 8 }}>
+                      <View style={{ flexDirection: 'row', gap: 6 }}>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs">•</Text>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs flex-1">
+                          {translate('admin.tip.chooseImage', {
+                            defaultValue: 'Choisissez une image claire et représentative.',
+                          })}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', gap: 6 }}>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs">•</Text>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs flex-1">
+                          {translate('admin.tip.addTitle', {
+                            defaultValue: 'Ajoutez un titre court et un sous-titre pertinent.',
+                          })}
+                        </Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', gap: 6 }}>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs">•</Text>
+                        <Text className="text-slate-500 dark:text-slate-400 text-xs flex-1">
+                          {translate('admin.tip.descriptionHelp', {
+                            defaultValue: 'La description aide vos clients à comprendre la réalisation.',
+                          })}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
 

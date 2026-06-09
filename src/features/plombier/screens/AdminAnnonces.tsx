@@ -225,91 +225,61 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
       {/* Listings Admin Table */}
       <View className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-sm overflow-hidden mt-8">
         {/* Desktop Table View */}
-        <View className="hidden lg:block overflow-x-auto w-full">
-          <table className="w-full min-w-[800px] text-xs text-left font-semibold">
-            <thead className="bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 uppercase tracking-widest text-[9.5px] text-slate-400 whitespace-nowrap">
-              <tr>
-                <th className="px-6 py-4">
-                  {tCommon('adminAnnonces.columnPiece', 'Pièce')}
-                </th>
-                <th className="px-6 py-4">
-                  {tCommon('adminAnnonces.columnCategory', 'Catégorie')}
-                </th>
-                <th className="px-6 py-4">
-                  {tCommon('adminAnnonces.columnPrice', 'Prix')}
-                </th>
-                <th className="px-6 py-4">
-                  {tCommon('adminAnnonces.columnCondition', 'État')}
-                </th>
-                <th className="px-6 py-4">
-                  {tCommon('adminAnnonces.columnStatus', 'Statut')}
-                </th>
-                <th className="px-6 py-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-700 text-slate-700 dark:text-slate-200">
-              {paginatedProducts.map(prod => (
-                <tr
-                  key={prod.id}
-                  className="hover:bg-slate-50/55 dark:hover:bg-slate-700/30 transition whitespace-nowrap"
+        <View className="hidden lg:flex lg:flex-col w-full overflow-x-auto">
+          {/* Header row */}
+          <View className="flex-row bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700 px-4 py-3">
+            <View style={{ flex: 2 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnPiece', 'Pièce')}</Text></View>
+            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnCategory', 'Catégorie')}</Text></View>
+            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnPrice', 'Prix')}</Text></View>
+            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnCondition', 'État')}</Text></View>
+            <View style={{ flex: 1 }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">{tCommon('adminAnnonces.columnStatus', 'Statut')}</Text></View>
+            <View style={{ flex: 1, alignItems: 'center' }}><Text className="text-[9.5px] font-black uppercase tracking-widest text-slate-400">Actions</Text></View>
+          </View>
+          {/* Data rows */}
+          {paginatedProducts.map(prod => (
+            <View
+              key={prod.id}
+              className="flex-row items-center px-4 py-3 border-b border-slate-100 dark:border-slate-700"
+            >
+              <View style={{ flex: 2 }}>
+                <View className="flex flex-row items-center gap-3">
+                  <View className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+                    <ProductVisual image={prod.image} className="w-6 h-6" />
+                  </View>
+                  <View>
+                    <Text className="font-black text-slate-800 dark:text-slate-100 text-xs">{prod.title}</Text>
+                    <Text className="text-[10px] text-slate-400 font-semibold dark:text-slate-300">{prod.subtitle}</Text>
+                  </View>
+                </View>
+              </View>
+              <View style={{ flex: 1 }}><Text className="text-xs text-slate-500 dark:text-slate-400">{prod.category}</Text></View>
+              <View style={{ flex: 1 }}><Text className="text-xs font-black text-slate-800 dark:text-slate-100">{prod.price} TND</Text></View>
+              <View style={{ flex: 1 }}>
+                <Text className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-300">{prod.condition}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
+                    prod.isAvailable
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-500/10'
+                      : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-500/10'
+                  }`}
                 >
-                  <td className="px-6 py-4">
-                    <View className="flex flex-row items-center gap-3">
-                      <View className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
-                        <ProductVisual image={prod.image} className="w-6 h-6" />
-                      </View>
-                      <View>
-                        <View className="font-black text-slate-800 dark:text-slate-100">
-                          {prod.title}
-                        </View>
-                        <Text className="text-[10px] text-slate-400 font-semibold dark:text-slate-300">
-                          {prod.subtitle}
-                        </Text>
-                      </View>
-                    </View>
-                  </td>
-                  <td className="px-6 py-4 text-slate-500 dark:text-slate-400">
-                    {prod.category}
-                  </td>
-                  <td className="px-6 py-4 font-black">{prod.price} TND</td>
-                  <td className="px-6 py-4">
-                    <Text className="bg-slate-100 dark:bg-slate-700 px-2 py-0.5 rounded text-[10px] font-black uppercase text-slate-600 dark:text-slate-300">
-                      {prod.condition}
-                    </Text>
-                  </td>
-                  <td className="px-6 py-4">
-                    <Text
-                      className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase ${
-                        prod.isAvailable
-                          ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 border border-emerald-500/10'
-                          : 'bg-rose-50 dark:bg-rose-950/40 text-rose-600 border border-rose-500/10'
-                      }`}
-                    >
-                      {prod.isAvailable
-                        ? tCommon('adminAnnonces.available', 'Disponible')
-                        : tCommon('adminAnnonces.sold', 'Vendu')}
-                    </Text>
-                  </td>
-                  <td className="px-6 py-4 text-center">
-                    <View className="flex flex-row justify-center gap-2">
-                      <TouchableOpacity
-                        onPress={() => openEditAnnonce(prod)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition"
-                      >
-                        {tCommon('adminAnnonces.edit', 'Modifier')}
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => handleDeleteAnnonceClick(prod.id)}
-                        className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition"
-                      >
-                        {tCommon('adminAnnonces.delete', 'Supprimer')}
-                      </TouchableOpacity>
-                    </View>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  {prod.isAvailable ? tCommon('adminAnnonces.available', 'Disponible') : tCommon('adminAnnonces.sold', 'Vendu')}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <View className="flex flex-row justify-center gap-2">
+                  <TouchableOpacity onPress={() => openEditAnnonce(prod)} className="bg-blue-600 hover:bg-blue-700 text-white font-black px-3 py-1.5 rounded-lg transition">
+                    <Text className="text-white text-xs font-black">{tCommon('adminAnnonces.edit', 'Modifier')}</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => handleDeleteAnnonceClick(prod.id)} className="bg-rose-600 hover:bg-rose-700 text-white font-black px-3 py-1.5 rounded-lg transition">
+                    <Text className="text-white text-xs font-black">{tCommon('adminAnnonces.delete', 'Supprimer')}</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          ))}
         </View>
 
         {/* Mobile Card View */}
@@ -379,23 +349,21 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
           <View className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/50 text-slate-700 dark:text-slate-200">
             <View className="flex flex-row items-center gap-2">
               <Text className="text-xs text-slate-500 dark:text-slate-400">
-                {translate('admin.itemsPerPage', {
-                  defaultValue: 'Éléments par page :',
-                })}
+                {translate('admin.itemsPerPage', { defaultValue: 'Éléments par page :' })}
               </Text>
-              <select
-                value={itemsPerPage}
-                onChange={e => {
-                  setItemsPerPage(Number(e.target.value));
-                  setCurrentPage(1);
-                }}
-                className="bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-2 py-1 text-xs font-bold focus:outline-none text-slate-700 dark:text-slate-200"
-              >
-                <option value={5}>5</option>
-                <option value={10}>10</option>
-                <option value={20}>20</option>
-                <option value={50}>50</option>
-              </select>
+              {[5, 10, 20, 50].map(val => (
+                <TouchableOpacity
+                  key={val}
+                  onPress={() => { setItemsPerPage(val); setCurrentPage(1); }}
+                  className={`px-2 py-1 rounded-lg text-xs font-bold border ${
+                    itemsPerPage === val
+                      ? 'bg-[#F97316] border-[#F97316]'
+                      : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                  }`}
+                >
+                  <Text className={`text-xs font-bold ${itemsPerPage === val ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{val}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
 
             <View className="flex flex-row items-center gap-4">
@@ -542,17 +510,21 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Catégorie
                     </Text>
-                    <select
-                      value={annonceCategory}
-                      onChange={e => setAnnonceCategory(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
-                    >
+                    <View className="flex-row flex-wrap gap-2">
                       {reduxCategories.map(c => (
-                        <option key={c.id} value={c.name}>
-                          {c.name}
-                        </option>
+                        <TouchableOpacity
+                          key={c.id}
+                          onPress={() => setAnnonceCategory(c.name)}
+                          className={`px-3 py-2 rounded-xl text-xs font-bold border ${
+                            annonceCategory === c.name
+                              ? 'bg-[#1E3A5F] border-[#1E3A5F]'
+                              : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          <Text className={`text-xs font-bold ${annonceCategory === c.name ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{c.name}</Text>
+                        </TouchableOpacity>
                       ))}
-                    </select>
+                    </View>
                   </View>
 
                   <View className="space-y-2">
@@ -571,15 +543,21 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       État
                     </Text>
-                    <select
-                      value={annonceCondition}
-                      onChange={e => setAnnonceCondition(e.target.value as any)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
-                    >
-                      <option value="comme neuf">Comme neuf</option>
-                      <option value="bon état">Bon état</option>
-                      <option value="pour pièces">Pour pièces</option>
-                    </select>
+                    <View className="flex-row gap-2">
+                      {(['comme neuf', 'bon état', 'pour pièces'] as const).map(cond => (
+                        <TouchableOpacity
+                          key={cond}
+                          onPress={() => setAnnonceCondition(cond)}
+                          className={`flex-1 py-2 px-2 rounded-xl text-center border ${
+                            annonceCondition === cond
+                              ? 'bg-[#1E3A5F] border-[#1E3A5F]'
+                              : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          <Text className={`text-[10px] font-bold ${annonceCondition === cond ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{cond}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
                   </View>
                 </View>
 
@@ -588,21 +566,21 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
                     <Text className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest dark:text-slate-400">
                       Représentation Visuelle
                     </Text>
-                    <select
-                      value={annonceImage}
-                      onChange={e => setAnnonceImage(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none"
-                    >
-                      <option value="faucet">
-                        Haut-de-gamme Robinet (Faucet)
-                      </option>
-                      <option value="boiler">
-                        Chauffe-eau / Chaudière (Boiler)
-                      </option>
-                      <option value="copper_fittings">
-                        Canalisation / Raccords (Pipes)
-                      </option>
-                    </select>
+                    <View className="flex-row flex-wrap gap-2">
+                      {[{ value: 'faucet', label: 'Robinet' }, { value: 'boiler', label: 'Chauffe-eau' }, { value: 'copper_fittings', label: 'Canalisation' }].map(opt => (
+                        <TouchableOpacity
+                          key={opt.value}
+                          onPress={() => setAnnonceImage(opt.value)}
+                          className={`flex-1 py-2 px-2 rounded-xl text-center border ${
+                            annonceImage === opt.value
+                              ? 'bg-[#1E3A5F] border-[#1E3A5F]'
+                              : 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700'
+                          }`}
+                        >
+                          <Text className={`text-[10px] font-bold ${annonceImage === opt.value ? 'text-white' : 'text-slate-700 dark:text-slate-200'}`}>{opt.label}</Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
                   </View>
 
                   <View className="flex flex-row gap-4 items-center justify-around h-full pt-5">
