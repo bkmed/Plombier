@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Platform, View, Image, Text, TouchableOpacity } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +15,7 @@ const CategoryImageInput = ({
 }: Props) => {
   const { t } = useTranslation();
   const tCommon = (key: string) => t(key, { defaultValue: key });
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files && e.target.files[0];
@@ -27,62 +28,54 @@ const CategoryImageInput = ({
     reader.readAsDataURL(file);
   };
 
-  const handleNativePress = () => {
-    // Native image picker is not configured in this repo yet.
-    // This placeholder keeps the file cross-platform and allows future integration.
+  const handleChooseImage = () => {
+    if (Platform.OS === 'web') {
+      inputRef.current?.click();
+      return;
+    }
+
     alert(tCommon('categoryImageInput.unavailableMobile'));
   };
 
-  if (Platform.OS === 'web') {
-    return (
-      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-        <input type="file" accept={accept} onChange={handleFileChange} />
-        {imageUri ? (
-          <img
-            src={imageUri}
-            alt={tCommon('categoryImageInput.previewAlt')}
-            style={{
-              width: 64,
-              height: 64,
-              objectFit: 'cover',
-              borderRadius: 8,
-              marginLeft: 12,
-            }}
-          />
-        ) : (
-          <View
-            style={{
-              width: 64,
-              height: 64,
-              backgroundColor: '#f3f4f6',
-              borderRadius: 8,
-              marginLeft: 12,
-            }}
-          />
-        )}
-      </View>
-    );
-  }
-
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+      {Platform.OS === 'web' && (
+        <input
+          ref={inputRef}
+          type="file"
+          accept={accept}
+          onChange={handleFileChange}
+          style={{ display: 'none' }}
+        />
+      )}
+
       <TouchableOpacity
-        onPress={handleNativePress}
+        onPress={handleChooseImage}
         style={{
-          padding: 12,
+          paddingHorizontal: 14,
+          paddingVertical: 12,
           backgroundColor: '#e5e7eb',
           borderRadius: 12,
           marginRight: 12,
+          minWidth: 140,
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <Text className="text-slate-900 dark:text-slate-100">
+        <Text className="text-slate-900 dark:text-slate-100 font-semibold text-xs uppercase tracking-wider">
           {tCommon('categoryImageInput.chooseImage')}
         </Text>
       </TouchableOpacity>
+
       {imageUri ? (
         <Image
           source={{ uri: imageUri }}
-          style={{ width: 64, height: 64, borderRadius: 8 }}
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: 8,
+            resizeMode: 'cover',
+          }}
         />
       ) : (
         <View

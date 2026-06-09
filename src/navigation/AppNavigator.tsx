@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
+import { useColorScheme } from 'nativewind';
 import { RootState } from '../store';
 import {
   setActiveTab as setActiveTabAction,
@@ -384,15 +385,18 @@ export const AppNavigator = () => {
     }
   }, [authUser]);
 
+  const { setColorScheme } = useColorScheme();
+
   useEffect(() => {
     if (Platform.OS === 'web') {
+      setColorScheme(currentTheme);
       if (currentTheme === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
       }
     }
-  }, [currentTheme]);
+  }, [currentTheme, setColorScheme]);
 
   useEffect(() => {
     if (Platform.OS === 'web') {
