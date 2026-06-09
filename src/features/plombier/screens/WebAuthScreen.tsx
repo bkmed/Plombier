@@ -322,7 +322,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <TouchableOpacity
                 onPress={handleSignIn}
-                className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
+                className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
               >
                 <Text className="text-white text-xs font-black text-center">
                   {tCommon('web.secureLoginButton', 'Connexion Sécurisée')}
@@ -462,7 +462,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <TouchableOpacity
                 onPress={handleForgotSubmit}
-                className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
+                className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black py-4 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
               >
                 <Text className="text-white text-xs font-black text-center">
                   {tCommon('web.sendResetLinkButton', 'Send reset link')}
@@ -574,7 +574,7 @@ export const WebAuthScreen: React.FC<WebAuthScreenProps> = ({
 
               <TouchableOpacity
                 onPress={handleSignUp}
-                className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-3.5 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
+                className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black py-3.5 rounded-xl transition shadow-lg uppercase tracking-wider hover:scale-[1.01] transform"
               >
                 <Text className="text-white text-xs font-black text-center">
                   {tCommon(

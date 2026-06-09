@@ -397,7 +397,7 @@ const ZonesScreen = ({
 
             <TouchableOpacity
               onPress={handleSubmit}
-              className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider hover:scale-[1.01] transform"
+              className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider hover:scale-[1.01] transform"
             >
               <Text className="text-white text-center font-bold">
                 {tCommon('zones.envoyer_demande', 'Envoyer la demande')}

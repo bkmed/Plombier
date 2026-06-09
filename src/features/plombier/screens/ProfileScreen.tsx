@@ -71,7 +71,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                 setSigninEmail('');
                 setSigninPassword('');
               }}
-              className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
+              className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
             >
               {tCommon(
                 'web.profileLoginButton',
@@ -192,7 +192,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                       setCurrentMdp('');
                       setNewMdp('');
                     }}
-                    className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[11px] font-black py-3 rounded-xl transition shadow-sm uppercase tracking-wider"
+                    className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-[11px] font-black py-3 rounded-xl transition shadow-sm uppercase tracking-wider"
                   >
                     {tCommon('web.mettre_a_jour', 'Mettre à jour')}
                   </TouchableOpacity>
@@ -267,7 +267,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
                         );
                         setNewsletterEmail('');
                       }}
-                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black px-4 py-3 rounded-xl transition"
+                      className="bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black px-4 py-3 rounded-xl transition"
                     >
                       {tCommon('web.avertir', "M'avertir")}
                     </TouchableOpacity>
@@ -345,7 +345,7 @@ export const ProfileScreenWeb: React.FC<ProfileScreenWebProps> = ({
 
                           <TouchableOpacity
                             onPress={() => setSelectedProduct(prod)}
-                            className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black py-2.5 rounded-lg transition"
+                            className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-[10px] font-black py-2.5 rounded-lg transition"
                           >
                             {tCommon('web.consulter', 'Consulter')}
                           </TouchableOpacity>

@@ -473,7 +473,7 @@ const MarketplaceScreen = ({
                         </Text>
                       </Text>
 
-                      <View className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition">
+                      <View className="bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-[10px] font-black px-3 py-1.5 rounded-lg transition">
                         <Text className="text-white font-black text-[10px]">
                           {tCommon('web.home.call_to_buy')}
                         </Text>

@@ -738,7 +738,7 @@ export const AdminAnnonces: React.FC<AdminAnnoncesProps> = ({
 
                 <TouchableOpacity
                   onPress={() => handleSaveAnnonce({} as any)}
-                  className="w-full bg-[#1E3A5F] hover:bg-[#152a47] text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
+                  className="w-full bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-xs font-black py-4 rounded-xl transition shadow-md uppercase tracking-wider"
                 >
                   {tCommon(
                     'adminAnnonces.modalSubmit',

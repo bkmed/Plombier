@@ -336,7 +336,7 @@ export const HomeScreenWeb: React.FC<HomeScreenWebProps> = ({
                         e.stopPropagation();
                         setSelectedProduct(prod);
                       }}
-                      className="bg-[#1E3A5F] hover:bg-[#152a47] text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
+                      className="bg-[#1E3A5F] hover:bg-[#152a47] flex items-center justify-center text-center text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg transition"
                     >
                       <Text className="text-white font-black">
                         {tCommon('web.home.call_to_buy')}
